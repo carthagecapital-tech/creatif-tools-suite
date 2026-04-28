@@ -2645,77 +2645,69 @@ init();
 </script>
 <!-- ===== END STORAGE ENGINE ===== -->
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <script>
 (function() {
-    const CFG = { U: "https://caring-sheepdog-97206.upstash.io", T: "gQAAAAAAAXu2AAIgcDJjYjViMGRlYTJiOGU0MjdkOWM4MDc3NTEyYTYwMTg1ZA", S: "bf2026", P: "BF" };
-    let isSyncing = false;
+    // 1. YOUR KEYS
+    var u = "https://caring-sheepdog-97206.upstash.io";
+    var t = "gQAAAAAAAXu2AAIgcDJjYjViMGRlYTJiOGU0MjdkOWM4MDc3NTEyYTYwMTg1ZA";
+    
+    // 2. CONFIG
+    var url = u.replace(/\/$/, ""); 
+    var CFG = { U: url, T: t, S: "bf2026", P: "BF" };
+    var syncing = false;
 
-    // --- CORE SYNC ENGINE ---
-    async function cloudGet(pin) {
-        const r = await fetch(CFG.U + '/get/' + CFG.P + '-' + pin, {headers:{Authorization:'Bearer '+CFG.T}});
-        const res = await r.json();
-        if(!res.result) return null;
-        const b = CryptoJS.AES.decrypt(res.result, pin + CFG.S);
-        return JSON.parse(b.toString(CryptoJS.enc.Utf8));
+    async function cloud(cmd, pin, data) {
+        var h = { "Authorization": "Bearer " + CFG.T };
+        var addr = CFG.U + "/" + cmd + "/" + CFG.P + "-" + pin;
+        var o = data ? { method: "POST", headers: h, body: data } : { headers: h };
+        try { var r = await fetch(addr, o); return await r.json(); } catch(e) { return null; }
     }
 
-    async function cloudSet(pin, data) {
-        if(isSyncing) return;
-        isSyncing = true;
-        const enc = CryptoJS.AES.encrypt(JSON.stringify(data), pin + CFG.S).toString();
-        await fetch(CFG.U + '/set/' + CFG.P + '-' + pin, {method:'POST', headers:{Authorization:'Bearer '+CFG.T}, body:enc});
-        isSyncing = false;
-        console.log("☁️ Auto-Synced to Cloud");
-    }
-
-    // --- HOOK INTO BUDGETFLOW STORAGE ---
-    function initAutoSync() {
-        if(!window.BudgetFlowStorage) return setTimeout(initAutoSync, 500);
+    async function startSync() {
+        var s = window.BudgetFlowStorage || window.AppStorage || window.DataStorage;
+        if (!s) return setTimeout(startSync, 500);
         
-        // 1. Intercept the Save function
-        const originalSave = window.BudgetFlowStorage.save;
-        window.BudgetFlowStorage.save = async function(data) {
-            const result = await originalSave(data);
-            const pin = localStorage.getItem('c_pin');
-            if(pin) cloudSet(pin, data); // Silent Push
-            return result;
+        var pin = localStorage.getItem("c_pin");
+        if (!pin) return;
+
+        var os = s.save;
+        s.save = async function(d) {
+            var res = await os(d);
+            if (!syncing) {
+                var enc = CryptoJS.AES.encrypt(JSON.stringify(d), pin + CFG.S).toString();
+                await cloud("set", pin, enc);
+            }
+            return res;
         };
 
-        // 2. Initial Startup Pull
-        const pin = localStorage.getItem('c_pin');
-        if(pin) {
-            setTimeout(async () => {
-                const cloudData = await cloudGet(pin);
-                if(cloudData) {
-                    const localData = await window.BudgetFlowStorage.load();
-                    if(JSON.stringify(cloudData) !== JSON.stringify(localData)) {
-                        if(confirm("New data found in the cloud! Update your charts?")) {
-                            await originalSave(cloudData);
-                            window.location.reload();
-                        }
+        var c = await cloud("get", pin);
+        if (c && c.result && c.result !== "OK") {
+            try {
+                var b = CryptoJS.AES.decrypt(c.result, pin + CFG.S);
+                var d = JSON.parse(b.toString(CryptoJS.enc.Utf8));
+                var l = await s.load();
+                if (JSON.stringify(d) !== JSON.stringify(l)) {
+                    if (confirm("New data found in cloud! Update now?")) {
+                        syncing = true;
+                        await os(d);
+                        window.location.reload();
                     }
                 }
-            }, 1500);
+            } catch(e) {}
         }
     }
 
-    // --- UI CONTROLS ---
     window.openSyncMenu = function() {
-        const pin = prompt("Enter 6-digit Sync PIN:", localStorage.getItem('c_pin') || "");
-        if(pin && pin.length === 6) {
-            localStorage.setItem('c_pin', pin);
-            alert("Sync Active! Changes will now save automatically.");
-            window.location.reload();
-        }
+        var p = prompt("6-digit PIN:", localStorage.getItem("c_pin") || "");
+        if (p && p.length === 6) { localStorage.setItem("c_pin", p); window.location.reload(); }
     };
 
-    window.addEventListener('load', () => {
-        initAutoSync();
-        const b = document.createElement('div');
-        b.innerHTML = '☁️';
-        b.style = "position:fixed; bottom:20px; right:20px; width:45px; height:45px; background:#00d4aa; color:#000; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; cursor:pointer; box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index:999999;";
+    window.addEventListener("load", function() {
+        startSync();
+        var b = document.createElement("div");
+        b.innerHTML = "☁️";
+        b.style = "position:fixed;bottom:20px;right:20px;width:45px;height:45px;background:#00d4aa;color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;z-index:999999;box-shadow:0 4px 15px rgba(0,0,0,0.3);";
         b.onclick = window.openSyncMenu;
         document.body.appendChild(b);
     });
