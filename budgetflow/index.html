@@ -3395,5 +3395,173 @@ window.BudgetFlowStorage = (function() {
 </script>
 </body>
 </html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<style>
+    /* SYNC PILL & OVERLAY */
+    #sync-pill {
+        position: fixed; bottom: 20px; right: 20px; padding: 10px 18px; border-radius: 40px;
+        display: flex; align-items: center; gap: 8px; font-family: sans-serif; font-size: 11px; font-weight: 800;
+        cursor: pointer; z-index: 99999; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;
+    }
+    .pill-local { background: #2d1616; color: #ff5f5f; }
+    .pill-synced { background: #0a2d21; color: #00d4aa; }
+    .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    
+    #sync-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+        background: rgba(15,17,23,0.9); z-index: 100000;
+        display: none; flex-direction: column; align-items: center; justify-content: center;
+        font-family: sans-serif; color: #00d4aa;
+    }
+    .spinner { border: 3px solid rgba(0,212,170,0.1); border-top: 3px solid #00d4aa; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin-bottom: 15px; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
+
+<div id="sync-overlay">
+    <div class="spinner"></div>
+    <div id="sync-msg">Synchronizing Data...</div>
+</div>
+
+<script>
+(function() {
+    const CFG = {
+        U: "https://caring-sheepdog-97206.upstash.io".replace(/\/$/, ""),
+        T: "gQAAAAAAAXu2AAIgcDJjYjViMGRlYTJiOGU0MjdkOWM4MDc3NTEyYTYwMTg1ZA",
+        S: "bf_production_2026",
+        P: "BF"
+    };
+
+    let pushEnabled = false; 
+    let isSyncing = false;
+
+    // --- STORAGE ENGINE ---
+    window.BudgetFlowStorage = (function() {
+        const DB = "BudgetFlowDB", STORE = "AppData";
+        const open = () => new Promise(res => {
+            const r = indexedDB.open(DB, 1);
+            r.onupgradeneeded = e => e.target.result.createObjectStore(STORE);
+            r.onsuccess = e => res(e.target.result);
+        });
+        return {
+            save: async (d) => {
+                const db = await open();
+                const tx = db.transaction(STORE, "readwrite");
+                tx.objectStore(STORE).put(d, "state");
+                return new Promise(r => tx.oncomplete = () => { db.close(); r(true); });
+            },
+            load: async () => {
+                const db = await open();
+                const tx = db.transaction(STORE, "readonly");
+                const req = tx.objectStore(STORE).get("state");
+                return new Promise(r => req.onsuccess = () => { db.close(); r(req.result || null); });
+            },
+            clear: async () => {
+                const db = await open();
+                const tx = db.transaction(STORE, "readwrite");
+                tx.objectStore(STORE).clear();
+                return new Promise(r => tx.oncomplete = () => { db.close(); r(true); });
+            }
+        };
+    })();
+
+    // --- CLOUD ENGINE ---
+    async function api(cmd, pin, data = null) {
+        const h = { "Authorization": "Bearer " + CFG.T };
+        const addr = `${CFG.U}/${cmd}/${CFG.P}-${pin}`;
+        const o = data ? { method: "POST", headers: h, body: data } : { headers: h };
+        try { const r = await fetch(addr, o); return await r.json(); } catch(e) { return null; }
+    }
+
+    async function syncNow(pin, isInitial = false) {
+        if (isSyncing) return;
+        if (isInitial) document.getElementById('sync-overlay').style.display = 'flex';
+        
+        const cloudData = await api("get", pin);
+        if (cloudData && cloudData.result && cloudData.result !== "OK") {
+            try {
+                const bytes = CryptoJS.AES.decrypt(cloudData.result, pin + CFG.S);
+                const decrypted = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+                const local = await window.BudgetFlowStorage.load();
+
+                // If cloud is different, overwrite local
+                if (JSON.stringify(decrypted) !== JSON.stringify(local)) {
+                    isSyncing = true;
+                    await window.BudgetFlowStorage.save(decrypted);
+                    window.location.reload(); 
+                    return;
+                }
+            } catch(e) { console.error("Sync Decryption Fail"); }
+        }
+        
+        pushEnabled = true; // Safe to push now
+        document.getElementById('sync-overlay').style.display = 'none';
+    }
+
+    async function init() {
+        const pin = localStorage.getItem("c_pin");
+        const s = window.BudgetFlowStorage;
+        const pill = document.getElementById("sync-pill");
+
+        if (!pin) {
+            pill.className = "pill-local";
+            pill.innerHTML = `<div class="sync-dot"></div> LOCAL MODE`;
+            return;
+        }
+
+        pill.className = "pill-synced";
+        pill.innerHTML = `<div class="sync-dot"></div> SYNCED: ${pin}`;
+
+        // Initial Auto-Sync
+        await syncNow(pin, true);
+
+        // Heartbeat (Check for cloud changes every 60s)
+        setInterval(() => syncNow(pin, false), 60000);
+
+        // Hook into Saves
+        const originalSave = s.save;
+        s.save = async function(d) {
+            const res = await originalSave(d);
+            if (!isSyncing && pushEnabled && pin && navigator.onLine) {
+                const enc = CryptoJS.AES.encrypt(JSON.stringify(d), pin + CFG.S).toString();
+                await api("set", pin, enc);
+            }
+            return res;
+        };
+    }
+
+    window.openSyncMenu = function() {
+        const pin = localStorage.getItem("c_pin");
+        const choice = prompt("CLOUD SETTINGS\n1. Link PIN\n2. Generate PIN\n3. Manual Push (Laptop -> Cloud)\n4. Logout\n\nEnter choice:");
+        
+        if (choice === "1") {
+            const p = prompt("6-digit PIN:");
+            if (p) { localStorage.setItem("c_pin", p); window.location.reload(); }
+        } else if (choice === "2") {
+            const n = Math.floor(100000 + Math.random() * 900000).toString();
+            if (confirm("New PIN: " + n + ". Upload current data?")) {
+                localStorage.setItem("c_pin", n); 
+                window.location.reload();
+            }
+        } else if (choice === "3" && pin) {
+            pushEnabled = true;
+            window.BudgetFlowStorage.load().then(d => {
+                const enc = CryptoJS.AES.encrypt(JSON.stringify(d), pin + CFG.S).toString();
+                api("set", pin, enc).then(() => alert("Cloud Updated."));
+            });
+        } else if (choice === "4") {
+            localStorage.removeItem("c_pin");
+            window.location.reload();
+        }
+    };
+
+    window.addEventListener("load", () => {
+        const b = document.createElement("div");
+        b.id = "sync-pill"; b.onclick = window.openSyncMenu;
+        document.body.appendChild(b);
+        init();
+    });
+})();
+</script>
+
 </body>
 </html>
