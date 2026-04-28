@@ -1157,7 +1157,7 @@ tbody tr:hover { background: var(--bg-hover); }
 
 <script>
 // ============================================================
-//  DATA LAYER
+//  DATA LAYER (fix: reads from IndexedDB first, falls back to localStorage)
 // ============================================================
 const DB_KEY = 'budgetflow_pro_v2';
 const MAX_REASONABLE_AMOUNT = 1000000000;
@@ -1169,11 +1169,34 @@ const DEFAULT_CATEGORIES = [
 
 const CURRENCY_SYMBOLS = { USD:'$', EUR:'€', GBP:'£', CAD:'CA$', AUD:'A$', JPY:'¥', INR:'₹' };
 
-function loadDB() {
+// Async load – tries IndexedDB first, then localStorage
+async function loadDB() {
+  // 1. Try IndexedDB via BudgetFlowStorage
+  try {
+    if (window.BudgetFlowStorage && window.BudgetFlowStorage.isReady()) {
+      const data = await window.BudgetFlowStorage.load();
+      if (data) {
+        // Keep localStorage in sync for quick access
+        localStorage.setItem(DB_KEY, JSON.stringify(data));
+        return data;
+      }
+    }
+  } catch (e) { /* ignore */ }
+
+  // 2. Fallback to localStorage
   try {
     const raw = localStorage.getItem(DB_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch { return null; }
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      // Sync back to IndexedDB if available
+      if (window.BudgetFlowStorage && window.BudgetFlowStorage.isReady()) {
+        window.BudgetFlowStorage.save(parsed);
+      }
+      return parsed;
+    }
+  } catch (e) { /* ignore */ }
+
+  return null;
 }
 
 function getDefaultDB() {
@@ -1193,10 +1216,14 @@ function getDefaultDB() {
   };
 }
 
-let DB = loadDB() || getDefaultDB();
+let DB; // will be set after async init
 
+// Save to both localStorage and IndexedDB
 function saveDB() {
   localStorage.setItem(DB_KEY, JSON.stringify(DB));
+  if (window.BudgetFlowStorage && window.BudgetFlowStorage.isReady()) {
+    window.BudgetFlowStorage.save(DB);
+  }
 }
 
 // ============================================================
@@ -1223,10 +1250,10 @@ function escapeAttr(str) {
 }
 
 function fmt(amount, forceSign = false) {
-  const sym = CURRENCY_SYMBOLS[DB.settings.currency] || '$';
+  const sym = CURRENCY_SYMBOLS[DB.settings?.currency] || '$';
   const n = Math.abs(amount);
   let str;
-  if (DB.settings.currency === 'JPY') {
+  if (DB.settings?.currency === 'JPY') {
     str = sym + Math.round(n).toLocaleString();
   } else {
     str = sym + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -1238,7 +1265,7 @@ function fmt(amount, forceSign = false) {
 function fmtDate(dateStr) {
   if (!dateStr) return '';
   const [y, m, d] = dateStr.split('-');
-  const fmt = DB.settings.dateFormat;
+  const fmt = DB.settings?.dateFormat || 'MM/DD/YYYY';
   if (fmt === 'DD/MM/YYYY') return `${d}/${m}/${y}`;
   if (fmt === 'YYYY-MM-DD') return `${y}-${m}-${d}`;
   return `${m}/${d}/${y}`;
@@ -1369,8 +1396,8 @@ function toggleTheme() {
 }
 
 function applyTheme() {
-  document.documentElement.dataset.theme = DB.settings.theme || 'dark';
-  document.getElementById('themeBtn').textContent = DB.settings.theme === 'light' ? '🌙' : '☀️';
+  document.documentElement.dataset.theme = DB.settings?.theme || 'dark';
+  document.getElementById('themeBtn').textContent = DB.settings?.theme === 'light' ? '🌙' : '☀️';
 }
 
 // ============================================================
@@ -2560,20 +2587,33 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ============================================================
-//  INIT
+//  INIT (now async because loadDB is async)
 // ============================================================
-function init() {
+async function init() {
+  DB = await loadDB() || getDefaultDB();
   applyTheme();
   renderDashboard();
-  // Populate budget month filter on init
   const sel = document.getElementById('budgetMonthFilter');
   if (sel) sel.value = currentMonthKey();
 }
 
-init();
+// Start the app once the DOM and storage are ready
+window.addEventListener('load', () => {
+  // Wait until BudgetFlowStorage is ready, then init
+  if (window.BudgetFlowStorage && window.BudgetFlowStorage.isReady()) {
+    init();
+  } else {
+    const checkStorage = setInterval(() => {
+      if (window.BudgetFlowStorage && window.BudgetFlowStorage.isReady()) {
+        clearInterval(checkStorage);
+        init();
+      }
+    }, 100);
+  }
+});
 </script>
 
-<!-- ===== INDEXEDDB STORAGE ENGINE ===== -->
+<!-- ===== INDEXEDDB STORAGE ENGINE (kept as is) ===== -->
 <script>
 (function(){
   "use strict";
@@ -2622,7 +2662,7 @@ init();
 })();
 </script>
 
-<!-- ===== PROFESSIONAL CLOUD SYNC (modal, no prompts) ===== -->
+<!-- ===== PROFESSIONAL CLOUD SYNC (modal, no prompts, hideModal global fix) ===== -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <style>
   #sync-pill {
@@ -2729,16 +2769,16 @@ init();
     return !!res;
   }
 
-  // ---- Modal UI ----
+  // ---- Modal UI (global hideModal) ----
+  window.hideModal = function() {
+    document.getElementById("sync-modal").classList.remove("open");
+  };
+
   function showModal(title, bodyHTML, actionsHTML) {
     document.getElementById("sync-modal-title").textContent = title;
     document.getElementById("sync-modal-body").innerHTML = bodyHTML;
     document.getElementById("sync-modal-actions").innerHTML = actionsHTML;
     document.getElementById("sync-modal").classList.add("open");
-  }
-
-  function hideModal() {
-    document.getElementById("sync-modal").classList.remove("open");
   }
 
   // Open the sync menu via the pill
@@ -2761,7 +2801,6 @@ init();
         var p = document.getElementById("pin-input").value.trim();
         if (!p || p.length !== 6) { alert("Please enter a 6-digit PIN."); return; }
         hideModal();
-        // check cloud
         var cloudExists = await cloud("get", p);
         if (cloudExists && cloudExists.result && cloudExists.result !== "OK") {
           if (confirm("Cloud vault found. Pull data from cloud? (This will replace local data.)")) {
