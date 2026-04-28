@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creatif.tools | Professional Utility Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0a0a; --card: #161616; --accent: #00d4aa; --text: #ffffff; --text-dim: #888; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        
+        header { width: 100%; max-width: 1000px; padding: 60px 20px; text-align: center; }
+        h1 { font-size: 3rem; font-weight: 800; margin: 0; letter-spacing: -2px; }
+        h1 span { color: var(--accent); }
+        p.subtitle { color: var(--text-dim); margin-top: 10px; font-size: 1.1rem; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; width: 100%; max-width: 1000px; padding: 20px; box-sizing: border-box; }
+        
+        .card { background: var(--card); border: 1px solid #222; padding: 30px; border-radius: 16px; transition: 0.3s; text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+        .card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0, 212, 170, 0.1); }
+        .card h3 { margin: 0; font-size: 1.4rem; font-weight: 700; }
+        .card p { color: var(--text-dim); font-size: 0.9rem; margin: 10px 0 20px; line-height: 1.5; }
+        .card .btn { align-self: flex-start; font-size: 0.85rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+
+        .status-badge { position: absolute; top: 15px; right: 15px; font-size: 10px; padding: 4px 8px; border-radius: 20px; background: rgba(0,212,170,0.1); color: var(--accent); font-weight: bold; }
+        .locked { filter: grayscale(1); opacity: 0.6; cursor: not-allowed; }
+
+        footer { margin-top: auto; padding: 40px; color: var(--text-dim); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>creatif<span>.</span>tools</h1>
+        <p class="subtitle">Minimalist, local-first microtools for professionals.</p>
+    </header>
+
+    <main class="grid">
+        <a href="/budgetflow/" class="card">
+            <span class="status-badge">READY</span>
+            <div>
+                <h3>BudgetFlow Pro</h3>
+                <p>Personal finance tracker with privacy-first local storage and cloud sync.</p>
+            </div>
+            <div class="btn">Launch App →</div>
+        </a>
+
+        <a href="#" class="card locked">
+            <span class="status-badge" style="background:#333; color:#888;">COMING SOON</span>
+            <div>
+                <h3>WeddingFlow</h3>
+                <p>Advanced planning and invoice suite for coordinators and wedding professionals.</p>
+            </div>
+            <div class="btn">Deploying...</div>
+        </a>
+
+        <a href="#" class="card locked">
+            <span class="status-badge" style="background:#333; color:#888;">COMING SOON</span>
+            <div>
+                <h3>ProjectFlow</h3>
+                <p>High-speed task estimation and project management for contractors.</p>
+            </div>
+            <div class="btn">Deploying...</div>
+        </a>
+    </main>
+
+    <footer>
+        &copy; 2026 Creatif.tools — All data stays private.
+    </footer>
+
+</body>
+</html>
