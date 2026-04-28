@@ -3090,5 +3090,124 @@ init();
     });
 })();
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<style>
+    #sync-pill {
+        position: fixed; bottom: 20px; right: 20px; padding: 8px 16px; border-radius: 30px;
+        display: flex; align-items: center; gap: 8px; font-family: sans-serif; font-size: 12px; font-weight: bold;
+        cursor: pointer; z-index: 999999; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;
+    }
+    .status-local { background: #331a1a; color: #ff4d4d; }
+    .status-synced { background: #0a2d25; color: #00d4aa; }
+    .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+</style>
+
+<script>
+(function() {
+    var u = "https://caring-sheepdog-97206.upstash.io";
+    var t = "gQAAAAAAAXu2AAIgcDJjYjViMGRlYTJiOGU0MjdkOWM4MDc3NTEyYTYwMTg1ZA";
+    var CFG = { U: u.replace(/\/$/, ""), T: t, S: "bf2026", P: "BF" };
+    var syncing = false;
+
+    async function cloud(cmd, pin, data) {
+        var h = { "Authorization": "Bearer " + CFG.T };
+        var addr = CFG.U + "/" + cmd + "/" + CFG.P + "-" + pin;
+        var o = data ? { method: "POST", headers: h, body: data } : { headers: h };
+        try { 
+            var r = await fetch(addr, o); 
+            return await r.json();
+        } catch(e) { return null; }
+    }
+
+    async function hardPull(pin, storage) {
+        var c = await cloud("get", pin);
+        if (c && c.result && c.result !== "OK") {
+            try {
+                var b = CryptoJS.AES.decrypt(c.result, pin + CFG.S);
+                var d = JSON.parse(b.toString(CryptoJS.enc.Utf8));
+                if (d) {
+                    syncing = true;
+                    // --- NUCLEAR STEP: CLEAR EXISTING DATA FIRST ---
+                    if(storage.clear) await storage.clear(); 
+                    await storage.save(d);
+                    alert("✅ NUCLEAR SYNC COMPLETE: Local data replaced with Cloud data.");
+                    window.location.reload();
+                }
+            } catch(e) { alert("❌ Decryption failed."); }
+        }
+    }
+
+    async function init() {
+        var s = window.BudgetFlowStorage || window.AppStorage || window.DataStorage;
+        if (!s) return setTimeout(init, 500);
+        
+        var pin = localStorage.getItem("c_pin");
+        var pill = document.getElementById("sync-pill");
+        if (pin) {
+            pill.className = "status-synced";
+            pill.innerHTML = '<div class="sync-dot"></div> SYNCED: ' + pin;
+        } else {
+            pill.className = "status-local";
+            pill.innerHTML = '<div class="sync-dot"></div> LOCAL MODE';
+        }
+
+        // Auto-Push Hook
+        var os = s.save;
+        s.save = async function(d) {
+            var res = await os(d); 
+            if (!syncing && pin) {
+                var enc = CryptoJS.AES.encrypt(JSON.stringify(d), pin + CFG.S).toString();
+                await cloud("set", pin, enc);
+            }
+            return res;
+        };
+    }
+
+    window.openSyncMenu = async function() {
+        var s = window.BudgetFlowStorage || window.AppStorage || window.DataStorage;
+        var pin = localStorage.getItem("c_pin");
+        var choice = prompt("--- CREATIF SYNC ---\n1. Enter PIN\n2. Generate NEW PIN\n3. NUCLEAR PULL (Cloud Overwrites Phone)\n4. FORCE PUSH (Laptop -> Cloud)\n5. Logout");
+
+        if (choice === "1") {
+            var p = prompt("6-digit PIN:");
+            if (p && p.length === 6) { localStorage.setItem("c_pin", p); window.location.reload(); }
+        } 
+        else if (choice === "2") {
+            var newPin = Math.floor(100000 + Math.random() * 900000).toString();
+            if (confirm("New PIN: " + newPin)) {
+                var data = await s.load();
+                var enc = CryptoJS.AES.encrypt(JSON.stringify(data), newPin + CFG.S).toString();
+                await cloud("set", newPin, enc);
+                localStorage.setItem("c_pin", newPin);
+                window.location.reload();
+            }
+        }
+        else if (choice === "3") { // NUCLEAR PULL
+            if (pin && confirm("WARNING: This will delete ALL local data on this phone and replace it with cloud data. Continue?")) {
+                await hardPull(pin, s);
+            }
+        }
+        else if (choice === "4") { // FORCE PUSH
+            if (pin) {
+                var data = await s.load();
+                var enc = CryptoJS.AES.encrypt(JSON.stringify(data), pin + CFG.S).toString();
+                await cloud("set", pin, enc);
+                alert("✅ Cloud Updated.");
+            }
+        }
+        else if (choice === "5") {
+            localStorage.removeItem("c_pin"); window.location.reload();
+        }
+    };
+
+    window.addEventListener("load", function() {
+        var b = document.createElement("div");
+        b.id = "sync-pill"; b.onclick = window.openSyncMenu;
+        document.body.appendChild(b);
+        init();
+    });
+})();
+</script>
 </body>
 </html>
