@@ -3714,5 +3714,144 @@ window.BudgetFlowStorage = (function() {
     });
 })();
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<style>
+    #sync-pill {
+        position: fixed; bottom: 20px; left: 20px; padding: 10px 16px; border-radius: 12px;
+        display: flex; align-items: center; gap: 10px; font-family: 'Inter', sans-serif; 
+        font-size: 11px; font-weight: 800; cursor: pointer; z-index: 99999; 
+        border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.4); backdrop-filter: blur(10px);
+    }
+    .pill-local { background: rgba(45, 22, 22, 0.9); color: #ff5f5f; }
+    .pill-synced { background: rgba(10, 45, 33, 0.9); color: #00d4aa; }
+    .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; box-shadow: 0 0 10px currentColor; }
+    
+    #sync-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+        background: rgba(15,17,23,0.98); z-index: 100000;
+        display: none; flex-direction: column; align-items: center; justify-content: center;
+        font-family: sans-serif; color: #00d4aa;
+    }
+    .spinner { border: 3px solid rgba(0,212,170,0.1); border-top: 3px solid #00d4aa; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin-bottom: 15px; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
+
+<div id="sync-overlay">
+    <div class="spinner"></div>
+    <div id="sync-msg" style="font-weight:bold; letter-spacing:1px; font-size:12px;">SYNCHRONIZING...</div>
+</div>
+
+<script>
+(function() {
+    const CFG = {
+        U: "https://caring-sheepdog-97206.upstash.io".replace(/\/$/, ""),
+        T: "gQAAAAAAAXu2AAIgcDJjYjViMGRlYTJiOGU0MjdkOWM4MDc3NTEyYTYwMTg1ZA",
+        S: "creatif_production_v10", 
+        P: "BF"
+    };
+
+    let canPush = false; 
+    let isUpdating = false;
+    const s = window.BudgetFlowStorage || window.AppStorage || window.DataStorage;
+
+    async function api(cmd, pin, data = null) {
+        const h = { "Authorization": "Bearer " + CFG.T };
+        const addr = `${CFG.U}/${cmd}/${CFG.P}-${pin}`;
+        const o = data ? { method: "POST", headers: h, body: data } : { headers: h };
+        try { const r = await fetch(addr, o); return await r.json(); } catch(e) { return null; }
+    }
+
+    async function performSync(pin, silent = false) {
+        if (isUpdating) return;
+        
+        // LOOP PREVENTION: Check if we just reloaded in the last 10 seconds
+        const lastSync = sessionStorage.getItem('last_sync_time');
+        const now = Date.now();
+        if (lastSync && (now - lastSync < 10000)) return;
+
+        if (!silent) document.getElementById('sync-overlay').style.display = 'flex';
+        
+        const cloud = await api("get", pin);
+        const local = await s.load();
+        
+        if (cloud && cloud.result && cloud.result !== "OK" && cloud.result !== null) {
+            try {
+                const bytes = CryptoJS.AES.decrypt(cloud.result, pin + CFG.S);
+                const decrypted = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+                
+                // Compare only the CORE data to avoid looping over minor timestamps
+                const cloudContent = JSON.stringify(decrypted);
+                const localContent = JSON.stringify(local);
+
+                if (cloudContent !== localContent) {
+                    isUpdating = true;
+                    sessionStorage.setItem('last_sync_time', Date.now()); // Mark the sync time
+                    if (s.clear) await s.clear();
+                    await s.save(decrypted);
+                    setTimeout(() => window.location.reload(), 500); 
+                    return;
+                }
+            } catch(e) { console.error("Sync Decryption Error"); }
+        }
+        
+        canPush = true; 
+        document.getElementById('sync-overlay').style.display = 'none';
+    }
+
+    async function init() {
+        const pin = localStorage.getItem("c_pin");
+        const pill = document.getElementById("sync-pill");
+        if (!pin) { pill.className = "pill-local"; pill.innerHTML = `<div class="sync-dot"></div> LOCAL MODE`; return; }
+
+        pill.className = "pill-synced";
+        pill.innerHTML = `<div class="sync-dot"></div> SYNCED: ${pin}`;
+        await performSync(pin, false);
+
+        // Auto-Save Hook
+        const originalSave = s.save;
+        s.save = async function(d) {
+            const res = await originalSave(d);
+            if (!isUpdating && canPush && pin && navigator.onLine) {
+                // Only push if there's actual user data
+                if (d && (d.transactions?.length > 0 || d.balance !== 0)) {
+                    const enc = CryptoJS.AES.encrypt(JSON.stringify(d), pin + CFG.S).toString();
+                    await api("set", pin, enc);
+                }
+            }
+            return res;
+        };
+        // Heartbeat check every 2 mins
+        setInterval(() => performSync(pin, true), 120000);
+    }
+
+    window.openSyncMenu = function() {
+        const pin = localStorage.getItem("c_pin");
+        const choice = prompt("SYNC MENU\n1. Link PIN\n2. Generate PIN\n3. Force Push\n4. Logout");
+        if (choice === "1") {
+            const p = prompt("6-digit PIN:");
+            if (p) { localStorage.setItem("c_pin", p); window.location.reload(); }
+        } else if (choice === "2") {
+            const n = Math.floor(100000 + Math.random() * 900000).toString();
+            if (confirm("New PIN: " + n)) { localStorage.setItem("c_pin", n); canPush = true; window.location.reload(); }
+        } else if (choice === "3" && pin) {
+            s.load().then(d => {
+                const enc = CryptoJS.AES.encrypt(JSON.stringify(d), pin + CFG.S).toString();
+                api("set", pin, enc).then(() => alert("Cloud Vault Updated."));
+            });
+        } else if (choice === "4") {
+            localStorage.removeItem("c_pin"); window.location.reload();
+        }
+    };
+
+    window.addEventListener("load", () => {
+        const b = document.createElement("div");
+        b.id = "sync-pill"; b.onclick = window.openSyncMenu;
+        document.body.appendChild(b);
+        if (s) { init(); } else { setTimeout(init, 800); }
+    });
+})();
+</script>
 </body>
 </html>
