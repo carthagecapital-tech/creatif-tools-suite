@@ -1169,21 +1169,26 @@ const DEFAULT_CATEGORIES = [
 
 const CURRENCY_SYMBOLS = { USD:'$', EUR:'€', GBP:'£', CAD:'CA$', AUD:'A$', JPY:'¥', INR:'₹' };
 
+// Async load – tries IndexedDB first, then localStorage
 async function loadDB() {
+  // 1. Try IndexedDB via BudgetFlowStorage
   try {
     if (window.BudgetFlowStorage && window.BudgetFlowStorage.isReady()) {
       const data = await window.BudgetFlowStorage.load();
       if (data) {
+        // Keep localStorage in sync for quick access
         localStorage.setItem(DB_KEY, JSON.stringify(data));
         return data;
       }
     }
   } catch (e) { /* ignore */ }
 
+  // 2. Fallback to localStorage
   try {
     const raw = localStorage.getItem(DB_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
+      // Sync back to IndexedDB if available
       if (window.BudgetFlowStorage && window.BudgetFlowStorage.isReady()) {
         window.BudgetFlowStorage.save(parsed);
       }
@@ -1211,8 +1216,9 @@ function getDefaultDB() {
   };
 }
 
-let DB;
+let DB; // will be set after async init
 
+// Save to both localStorage and IndexedDB
 function saveDB() {
   localStorage.setItem(DB_KEY, JSON.stringify(DB));
   if (window.BudgetFlowStorage && window.BudgetFlowStorage.isReady()) {
@@ -2591,7 +2597,9 @@ async function init() {
   if (sel) sel.value = currentMonthKey();
 }
 
+// Start the app once the DOM and storage are ready
 window.addEventListener('load', () => {
+  // Wait until BudgetFlowStorage is ready, then init
   if (window.BudgetFlowStorage && window.BudgetFlowStorage.isReady()) {
     init();
   } else {
@@ -2605,7 +2613,7 @@ window.addEventListener('load', () => {
 });
 </script>
 
-<!-- ===== INDEXEDDB STORAGE ENGINE ===== -->
+<!-- ===== INDEXEDDB STORAGE ENGINE (kept as is) ===== -->
 <script>
 (function(){
   "use strict";
@@ -2654,7 +2662,7 @@ window.addEventListener('load', () => {
 })();
 </script>
 
-<!-- ===== PROFESSIONAL CLOUD SYNC (improved modal, no prompts) ===== -->
+<!-- ===== PROFESSIONAL CLOUD SYNC (modal, no prompts, hideModal global fix) ===== -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <style>
   #sync-pill {
@@ -2673,18 +2681,17 @@ window.addEventListener('load', () => {
   }
   #sync-modal.open { display: flex; }
   .sync-modal-content {
-    background: var(--bg-card, #1a1d27); border: 1px solid var(--border, #2a2d3e); border-radius: 16px;
-    padding: 28px; max-width: 420px; width: 90%; color: var(--text, #f1f5f9); font-family: 'Inter', sans-serif;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.6); position: relative;
+    background: var(--bg-card, #1a1d27); border: 1px solid var(--border, #2a2d3e); border-radius: 12px;
+    padding: 24px; max-width: 400px; width: 90%; color: var(--text, #f1f5f9); font-family: 'Inter', sans-serif;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
   }
-  .sync-modal-content h3 { margin-bottom: 20px; font-size: 18px; }
+  .sync-modal-content h3 { margin-bottom: 16px; font-size: 16px; }
   .sync-modal-content input {
-    width: 100%; padding: 12px; border: 1px solid var(--border, #333649); border-radius: 8px;
-    background: var(--bg-input, #252837); color: var(--text, #f1f5f9); margin-bottom: 16px; font-size: 16px;
-    text-align: center; letter-spacing: 2px;
+    width: 100%; padding: 10px; border: 1px solid var(--border, #333649); border-radius: 8px;
+    background: var(--bg-input, #252837); color: var(--text, #f1f5f9); margin-bottom: 12px; font-size: 14px;
   }
   .sync-modal-content button {
-    display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: 8px;
+    display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 8px;
     border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s;
   }
   .sync-modal-content button.primary {
@@ -2699,17 +2706,7 @@ window.addEventListener('load', () => {
     background: rgba(239,68,68,0.1); color: var(--red, #ef4444); border: 1px solid rgba(239,68,68,0.2);
   }
   .sync-modal-content button.danger:hover { background: rgba(239,68,68,0.2); }
-  .sync-modal-content .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
-  .sync-modal-content .confirm-zone {
-    margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border, #2a2d3e);
-    font-size: 14px; color: var(--amber, #f59e0b);
-  }
-  .sync-modal-content .confirm-zone .confirm-buttons {
-    display: flex; gap: 8px; margin-top: 10px;
-  }
-  .sync-modal-content .last-sync {
-    font-size: 12px; color: var(--text-muted, #8892b0); margin-bottom: 12px;
-  }
+  .sync-modal-content .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
 </style>
 
 <div id="sync-modal">
@@ -2717,7 +2714,6 @@ window.addEventListener('load', () => {
     <h3 id="sync-modal-title">Cloud Sync</h3>
     <div id="sync-modal-body"></div>
     <div class="actions" id="sync-modal-actions"></div>
-    <div class="confirm-zone" id="sync-confirm" style="display:none;"></div>
   </div>
 </div>
 
@@ -2770,134 +2766,115 @@ window.addEventListener('load', () => {
     if (!data) return false;
     var enc = CryptoJS.AES.encrypt(JSON.stringify(data), pin + CFG.S).toString();
     var res = await cloud("set", pin, enc);
-    if (res) {
-      localStorage.setItem("c_last_push", Date.now());
-    }
     return !!res;
   }
 
-  function getLastSyncTime() {
-    var ts = localStorage.getItem("c_last_push");
-    if (!ts) return "never";
-    return new Date(parseInt(ts)).toLocaleString();
-  }
-
+  // ---- Modal UI (global hideModal) ----
   window.hideModal = function() {
     document.getElementById("sync-modal").classList.remove("open");
-    document.getElementById("sync-confirm").style.display = "none";
   };
-
-  function showConfirm(message, onYes) {
-    var confirmZone = document.getElementById("sync-confirm");
-    confirmZone.style.display = "block";
-    confirmZone.innerHTML = '<div>' + message + '</div>' +
-      '<div class="confirm-buttons">' +
-        '<button class="secondary" onclick="window.hideModal()">Cancel</button>' +
-        '<button class="danger" id="confirm-yes">Confirm</button>' +
-      '</div>';
-    document.getElementById("confirm-yes").onclick = function() {
-      confirmZone.style.display = "none";
-      onYes();
-    };
-  }
 
   function showModal(title, bodyHTML, actionsHTML) {
     document.getElementById("sync-modal-title").textContent = title;
     document.getElementById("sync-modal-body").innerHTML = bodyHTML;
     document.getElementById("sync-modal-actions").innerHTML = actionsHTML;
-    document.getElementById("sync-confirm").style.display = "none";
     document.getElementById("sync-modal").classList.add("open");
   }
 
+  // Open the sync menu via the pill
   window.openSyncMenu = async function() {
     var s = window.BudgetFlowStorage;
     var pin = localStorage.getItem("c_pin");
 
     if (!pin) {
+      // Not synced yet -> show entry / generation options
       showModal(
         "Connect to Cloud",
-        '<p style="font-size:14px;margin-bottom:16px;">Enter an existing PIN to sync your data across devices, or create a brand‑new vault.</p>' +
-        '<input type="text" id="pin-input" placeholder="6-digit PIN" maxlength="6" inputmode="numeric" pattern="[0-9]*">',
-        '<button class="secondary" onclick="window.hideModal()">Cancel</button>' +
-        '<button class="primary" id="btn-enter-pin">Connect</button>' +
-        '<button class="secondary" id="btn-generate">New Vault</button>'
+        `<p style="margin-bottom:12px;font-size:14px;">Enter an existing PIN to sync your data, or generate a new one.</p>
+         <input type="text" id="pin-input" placeholder="6-digit PIN" maxlength="6" style="text-align:center;letter-spacing:2px;">`,
+        `<button class="secondary" onclick="hideModal()">Cancel</button>
+         <button class="primary" id="btn-enter-pin">Use PIN</button>
+         <button class="secondary" id="btn-generate">Generate New</button>`
       );
 
       document.getElementById("btn-enter-pin").onclick = async function() {
         var p = document.getElementById("pin-input").value.trim();
-        if (!p || p.length !== 6) { toast("Please enter a valid 6‑digit PIN.", "warning"); return; }
-        window.hideModal();
+        if (!p || p.length !== 6) { alert("Please enter a 6-digit PIN."); return; }
+        hideModal();
         var cloudExists = await cloud("get", p);
         if (cloudExists && cloudExists.result && cloudExists.result !== "OK") {
-          showConfirm("Cloud vault found. Replace local data with cloud data?", async function() {
+          if (confirm("Cloud vault found. Pull data from cloud? (This will replace local data.)")) {
             if (await pullData(p, s)) {
               localStorage.setItem("c_pin", p);
-              toast("Data pulled from cloud. Reloading…");
+              toast("Data pulled from cloud.");
               window.location.reload();
             } else {
               toast("Failed to decrypt cloud data.", "error");
             }
-          });
+          }
         } else {
-          showConfirm("No cloud data found. Push your local data to this PIN?", async function() {
+          if (confirm("No cloud data found. Push your local data to the cloud?")) {
             if (await pushData(p, s)) {
               localStorage.setItem("c_pin", p);
-              toast("New vault created. Sync active.");
+              toast("Data pushed to cloud.");
               window.location.reload();
             } else {
               toast("Push failed.", "error");
             }
-          });
+          }
         }
       };
 
       document.getElementById("btn-generate").onclick = async function() {
+        hideModal();
         var newPin = Math.floor(100000 + Math.random() * 900000).toString();
-        showConfirm("Your new PIN will be: <strong>" + newPin + "</strong><br>Save it safely! Continue?", async function() {
+        if (confirm("Your new PIN is: " + newPin + ".\nSave it safely! Continue?")) {
           if (await pushData(newPin, s)) {
             localStorage.setItem("c_pin", newPin);
-            toast("New vault created. Sync active.");
+            toast("New vault created.");
             window.location.reload();
           } else {
             toast("Failed to push data.", "error");
           }
-        });
+        }
       };
     } else {
-      var lastSync = getLastSyncTime();
+      // Already synced -> show management options
       showModal(
         "Sync Management",
-        '<p style="font-size:14px;">You are synced with PIN: <strong>' + pin + '</strong></p>' +
-        '<div class="last-sync">Last push to cloud: ' + lastSync + '</div>',
-        '<button class="secondary" onclick="window.hideModal()">Close</button>' +
-        '<button class="primary" id="btn-pull">Pull from Cloud</button>' +
-        '<button class="primary" id="btn-push">Push to Cloud</button>' +
-        '<button class="danger" id="btn-disconnect">Disconnect</button>'
+        `<p style="font-size:14px;">You are synced with PIN: <strong>${pin}</strong></p>`,
+        `<button class="secondary" onclick="hideModal()">Close</button>
+         <button class="primary" id="btn-pull">Pull from Cloud</button>
+         <button class="primary" id="btn-push">Push to Cloud</button>
+         <button class="danger" id="btn-disconnect">Disconnect</button>`
       );
 
       document.getElementById("btn-pull").onclick = async function() {
-        showConfirm("Replace all local data with the cloud version? This cannot be undone.", async function() {
+        hideModal();
+        if (confirm("Replace local data with cloud data?")) {
           if (await pullData(pin, s)) {
-            toast("Data pulled from cloud. Reloading…");
+            toast("Data pulled from cloud.");
             window.location.reload();
           } else {
             toast("No cloud data found or decryption error.", "error");
           }
-        });
+        }
       };
       document.getElementById("btn-push").onclick = async function() {
-        showConfirm("Overwrite cloud data with your local data?", async function() {
+        hideModal();
+        if (confirm("Overwrite cloud data with your local data?")) {
           if (await pushData(pin, s)) toast("Data pushed to cloud.");
           else toast("Push failed.", "error");
-        });
+        }
       };
       document.getElementById("btn-disconnect").onclick = function() {
-        showConfirm("Disconnect from cloud? You can reconnect later with the same PIN.", function() {
+        hideModal();
+        if (confirm("Disconnect from cloud? You can reconnect later.")) {
           localStorage.removeItem("c_pin");
           pushEnabled = false;
           toast("Disconnected from cloud.");
           window.location.reload();
-        });
+        }
       };
     }
   };
@@ -2918,7 +2895,6 @@ window.addEventListener('load', () => {
       if (pushEnabled && !syncing) {
         var enc = CryptoJS.AES.encrypt(JSON.stringify(d), pin + CFG.S).toString();
         await cloud("set", pin, enc);
-        localStorage.setItem("c_last_push", Date.now());
       }
       return res;
     };
