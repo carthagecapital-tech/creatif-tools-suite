@@ -162,7 +162,7 @@
       .stats-grid { grid-template-columns: 1fr; }
     }
 
-    /* Cloud Sync Pill & Modal */
+    /* Sync pill & modal */
     #sync-pill {
       position: fixed; bottom: 20px; left: 20px; padding: 8px 16px; border-radius: 30px;
       display: flex; align-items: center; gap: 8px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: bold;
@@ -192,9 +192,7 @@
       display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 8px;
       border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s;
     }
-    .sync-modal-content button.primary {
-      background: var(--accent); color: #000;
-    }
+    .sync-modal-content button.primary { background: var(--accent); color: #000; }
     .sync-modal-content button.primary:hover { background: var(--accent-hover); }
     .sync-modal-content button.secondary {
       background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border);
@@ -210,7 +208,8 @@
 <body>
 <div class="app" id="app"></div>
 
-<!-- Sync Modal -->
+<!-- Sync pill (always visible) -->
+<div id="sync-pill" class="status-local"><div class="sync-dot"></div> LOCAL MODE</div>
 <div id="sync-modal">
   <div class="sync-modal-content">
     <h3 id="sync-modal-title">Cloud Sync</h3>
@@ -1085,7 +1084,7 @@
           const inRange = i>=range.bs&&i<=range.be;
           html += '<td style="background:var(--bg-secondary);padding:2px;position:relative;border:' + (i%7===6?'2px':'1px') + ' solid var(--border);height:32px;">'
             + (inRange?'<div style="position:absolute;left:2px;right:2px;top:4px;bottom:4px;background:' + color + ';border-radius:3px;"></div>':'')
-            + '</td>';
+            + '<tr>';
         });
         html += '</tr>';
       });
@@ -1359,6 +1358,7 @@
       + renderToast();
   };
 
+  // ======================== EVENT HANDLERS (original) ========================
   window.setView = function(v) { state.currentView = v; save(); render(); closeMobileMenu(); };
   window.openTaskModal = function(id) { editingTask = id || null; taskModalOpen = true; render(); };
   window.closeTaskModal = function() { taskModalOpen = false; editingTask = null; render(); };
@@ -1970,37 +1970,200 @@
     }
   });
 
-  // ================== INITIAL LOAD & STORAGE ==================
-  const loadFromStorage = () => {
-    try {
-      const s = localStorage.getItem('apexflow');
-      if (s) {
-        const p = JSON.parse(s);
-        if (p && p.tasks) {
-          state = { ...state, ...p };
-          pomodoroTime = p.pomodoroTime || (25 * 60);
-          pomodoroDuration = p.pomodoroDuration || 25;
-          pomodoroMinimized = p.pomodoroMinimized || false;
-          pomodoroPhase = p.pomodoroPhase || 'work';
-          window.taskFilter = p.taskFilter || 'all';
-          generateRecurringTasks();
+  // ======================== CLOUD SYNC (AF prefix) ========================
+  (function() {
+    const CFG = {
+      U: "https://caring-sheepdog-97206.upstash.io",
+      T: "gQAAAAAAAXu2AAIgcDJjYjViMGRlYTJiOGU0MjdkOWM4MDc3NTEyYTYwMTg1ZA",
+      S: "apex2026",
+      P: "AF"
+    };
+    let pushEnabled = false;
+    let syncing = false;
+
+    async function cloud(cmd, pin, data) {
+      const h = { "Authorization": "Bearer " + CFG.T };
+      const addr = CFG.U.replace(/\/$/, "") + "/" + cmd + "/" + CFG.P + "-" + pin;
+      const o = data ? { method: "POST", headers: h, body: data } : { headers: h };
+      try { const r = await fetch(addr, o); return await r.json(); } catch(e) { return null; }
+    }
+
+    function updatePill() {
+      const pin = localStorage.getItem("c_pin");
+      const pill = document.getElementById("sync-pill");
+      if (pill) {
+        if (pin) {
+          pill.className = "status-synced";
+          pill.innerHTML = '<div class="sync-dot"></div> SYNCED: AF-' + pin;
+        } else {
+          pill.className = "status-local";
+          pill.innerHTML = '<div class="sync-dot"></div> LOCAL MODE';
         }
       }
-    } catch(e) {}
-    render();
-  };
+    }
 
-  // Create the sync pill element dynamically
-  (function addSyncPill() {
-    const div = document.createElement('div');
-    div.id = 'sync-pill';
-    div.onclick = () => window.openSyncMenu && window.openSyncMenu();
-    document.body.appendChild(div);
+    async function pullData(pin) {
+      const c = await cloud("get", pin);
+      if (c && c.result && c.result !== "OK") {
+        try {
+          const bytes = CryptoJS.AES.decrypt(c.result, pin + CFG.S);
+          const d = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+          if (d) {
+            syncing = true;
+            // Merge cloud state into current state
+            Object.assign(state, d);
+            if (typeof save === 'function') save();
+            if (typeof render === 'function') render();
+            syncing = false;
+            return true;
+          }
+        } catch(e) { console.error("Pull decrypt error", e); }
+      }
+      return false;
+    }
+
+    async function pushData(pin) {
+      const data = state;
+      if (!data) return false;
+      const enc = CryptoJS.AES.encrypt(JSON.stringify(data), pin + CFG.S).toString();
+      const res = await cloud("set", pin, enc);
+      return !!res;
+    }
+
+    window.hideModal = function() { document.getElementById("sync-modal").classList.remove("open"); };
+
+    function showModal(title, bodyHTML, actionsHTML) {
+      document.getElementById("sync-modal-title").textContent = title;
+      document.getElementById("sync-modal-body").innerHTML = bodyHTML;
+      document.getElementById("sync-modal-actions").innerHTML = actionsHTML;
+      document.getElementById("sync-modal").classList.add("open");
+    }
+
+    window.openSyncMenu = async function() {
+      const pin = localStorage.getItem("c_pin");
+      if (!pin) {
+        showModal(
+          "Connect to Cloud",
+          `<p style="margin-bottom:12px;">Enter PIN or generate new:</p>
+           <input type="text" id="pin-input" placeholder="6-digit PIN" maxlength="6" style="text-align:center;">`,
+          `<button class="secondary" onclick="hideModal()">Cancel</button>
+           <button class="primary" id="btn-enter-pin">Use PIN</button>
+           <button class="primary" id="btn-generate">Generate New</button>`
+        );
+        document.getElementById("btn-enter-pin").onclick = async function() {
+          const p = document.getElementById("pin-input").value.trim();
+          if (!p || p.length !== 6) { alert("Enter 6-digit PIN"); return; }
+          hideModal();
+          const cloudExists = await cloud("get", p);
+          if (cloudExists && cloudExists.result && cloudExists.result !== "OK") {
+            if (confirm("Cloud vault found. Pull data from cloud? (This will replace local data.)")) {
+              if (await pullData(p)) {
+                localStorage.setItem("c_pin", p);
+                updatePill();
+                showToast("Data pulled from cloud.");
+              } else {
+                alert("Failed to decrypt cloud data.");
+              }
+            }
+          } else {
+            if (confirm("No cloud data found. Push your local data to the cloud?")) {
+              if (await pushData(p)) {
+                localStorage.setItem("c_pin", p);
+                updatePill();
+                showToast("Data pushed to cloud.");
+              } else {
+                alert("Push failed.");
+              }
+            }
+          }
+        };
+        document.getElementById("btn-generate").onclick = async function() {
+          hideModal();
+          const newPin = Math.floor(100000 + Math.random() * 900000).toString();
+          if (confirm("Your new PIN is: " + newPin + ".\nSave it safely! Continue?")) {
+            if (await pushData(newPin)) {
+              localStorage.setItem("c_pin", newPin);
+              updatePill();
+              showToast("New vault created.");
+            } else {
+              alert("Failed to push data.");
+            }
+          }
+        };
+      } else {
+        showModal(
+          "Sync Management",
+          `<p>You are synced with PIN: <strong>${pin}</strong></p>`,
+          `<button class="secondary" onclick="hideModal()">Close</button>
+           <button class="primary" id="btn-pull">Pull from Cloud</button>
+           <button class="primary" id="btn-push">Push to Cloud</button>
+           <button class="danger" id="btn-disconnect">Disconnect</button>`
+        );
+        document.getElementById("btn-pull").onclick = async function() {
+          hideModal();
+          if (confirm("Replace local data with cloud data?")) {
+            if (await pullData(pin)) {
+              updatePill();
+              showToast("Data pulled from cloud.");
+            } else {
+              alert("No cloud data found or decryption error.");
+            }
+          }
+        };
+        document.getElementById("btn-push").onclick = async function() {
+          hideModal();
+          if (confirm("Overwrite cloud data with your local data?")) {
+            if (await pushData(pin)) {
+              showToast("Data pushed to cloud.");
+            } else {
+              alert("Push failed.");
+            }
+          }
+        };
+        document.getElementById("btn-disconnect").onclick = function() {
+          hideModal();
+          if (confirm("Disconnect from cloud? You can reconnect later.")) {
+            localStorage.removeItem("c_pin");
+            pushEnabled = false;
+            updatePill();
+            showToast("Disconnected from cloud.");
+          }
+        };
+      }
+    };
+
+    // Auto-push on save when synced
+    const originalSave = save;
+    if (originalSave) {
+      window.save = function() {
+        const result = originalSave.apply(this, arguments);
+        const pin = localStorage.getItem("c_pin");
+        if (pushEnabled && !syncing && pin && navigator.onLine) {
+          pushData(pin).catch(e => console.warn("Auto-push failed", e));
+        }
+        return result;
+      };
+    }
+
+    function initSync() {
+      updatePill();
+      const pin = localStorage.getItem("c_pin");
+      if (pin) pushEnabled = true;
+      // Attach click handler to the static pill
+      document.getElementById("sync-pill").onclick = function() { window.openSyncMenu(); };
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSync);
+    } else {
+      initSync();
+    }
   })();
 
-  // Start the app
-  loadFromStorage();
+  // ======================== INITIAL LOAD & RENDER ========================
+  load();
   checkFirstTime();
+  render();
 </script>
 
 <!-- IndexedDB storage engine (same as original) -->
