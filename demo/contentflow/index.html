@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; connect-src 'self' data:; worker-src 'self' blob:; child-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none';">
 <meta name="color-scheme" content="dark light">
 <title>ContentFlow Pro — Social Media Content Manager | Plan, Create, Publish</title>
-<meta name="description" content="ContentFlow Pro is an all-in-one social media content manager. Plan, schedule, and publish across Instagram, TikTok, YouTube, LinkedIn, Twitter/X, Pinterest, and Facebook with a powerful calendar, kanban pipeline, idea bank, caption library, hashtag sets, and cross-platform analytics.">
+<meta name="description" content="ContfentFlow Pro is an all-in-one social media content manager. Plan, schedule, and publish across Instagram, TikTok, YouTube, LinkedIn, Twitter/X, Pinterest, and Facebook with a powerful calendar, kanban pipeline, idea bank, caption library, hashtag sets, and cross-platform analytics.">
 <meta name="keywords" content="social media planner, content calendar, post scheduler, instagram planner, tiktok scheduler, social media manager, content pipeline, kanban content, hashtag manager, caption library">
 <meta name="author" content="ContentFlow Pro">
 <meta name="robots" content="index, follow">
@@ -3646,6 +3646,53 @@ window.CFProStorage = (function() {
 </script>
 
 <script>
+  // --- ⚡️ CREATIF.TOOLS DEMO PROTECTOR ⚡️ ---
+(function() {
+    // This looks for "/demo/" in your website address
+    const isDemo = window.location.pathname.includes('/demo/');
+
+    if (isDemo) {
+        console.log("Demo Mode Active: Pro features restricted.");
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // These are the buttons we will lock in the demo
+            const proSelectors = [
+                '#save-btn',           // For ContentFlow
+                '#export-pdf',         // For ContentFlow
+                '.btn-save',           // For PoolPro
+                '#generate-invoice',   // For PoolPro
+                '.download-json',      // Data backups
+                '[onclick*="save"]',   // Generic save buttons
+                '[onclick*="download"]' // Generic download buttons
+            ];
+
+            proSelectors.forEach(selector => {
+                const buttons = document.querySelectorAll(selector);
+                buttons.forEach(btn => {
+                    // Visually disable the button
+                    btn.style.opacity = '0.3';
+                    btn.style.filter = 'grayscale(1)';
+                    btn.style.pointerEvents = 'none';
+                    btn.title = "Purchase the Pro version to unlock this feature";
+                    
+                    // Update the text to show it's locked
+                    if(btn.innerText.length < 20) {
+                        btn.innerHTML = "🔒 Pro Only";
+                    }
+                });
+            });
+
+            // Block common save shortcuts (Ctrl+S / Cmd+S)
+            window.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    alert("Local saving is disabled in Demo Mode. Get the full version at Creatif.tools!");
+                }
+            });
+        });
+    }
+})();
+// --- END PROTECTOR ---
 /**
  * ContentFlow Pro — Self-contained Social Media Content Manager
  * ---------------------------------------------------------------------------
