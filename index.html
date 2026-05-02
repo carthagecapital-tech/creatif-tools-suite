@@ -3,49 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creatif.tools | Professional Local-First Utilities</title>
+    <meta name="description" content="High-performance, privacy-first local tools for modern professionals.">
     
-    <title>Creatif.tools | Privacy-First Local Microtools for Professionals</title>
-    <meta name="description" content="Minimalist, local-first utility suite featuring ContentFlow Pro, PoolPro Manager, and WeddingFlow Pro. High-performance professional tools that prioritize user privacy.">
-    <link rel="canonical" href="https://creatif.tools/">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg: #0a0a0a;
-            --card-bg: #111;
-            --text: #eee;
-            --text-dim: #888;
-            --accent: #00d4aa; /* Mint/Teal */
-            --accent-pool: #00b4d8; /* Blue */
-            --accent-wedding: #b8960c; /* Champagne Gold */
-            --border: #222;
-            --nav-bg: rgba(10, 10, 10, 0.8);
+            --bg: #050505;
+            --card-bg: #0f0f0f;
+            --text: #ffffff;
+            --text-dim: #a1a1a1;
+            --accent: #00d4aa; /* Your signature Teal */
+            --border: #1a1a1a;
+            --nav-bg: rgba(5, 5, 5, 0.7);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
         }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: var(--bg);
             color: var(--text);
             margin: 0;
             padding: 0;
-            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
+        /* --- CENTERED NAVIGATION --- */
         header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            position: fixed;
+            top: 20px;
+            z-index: 1000;
             background: var(--nav-bg);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
-            padding: 0.75rem 2rem;
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            padding: 0.6rem 1.5rem;
+            border-radius: 100px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .logo {
             font-weight: 800;
-            font-size: 1.2rem;
+            font-size: 1rem;
             letter-spacing: -0.5px;
             color: var(--accent);
             text-decoration: none;
@@ -54,7 +62,7 @@
         nav ul {
             list-style: none;
             display: flex;
-            gap: 1.5rem;
+            gap: 1.2rem;
             margin: 0;
             padding: 0;
         }
@@ -62,104 +70,134 @@
         nav a {
             text-decoration: none;
             color: var(--text-dim);
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: color 0.2s;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
         }
 
         nav a:hover, nav a.active {
-            color: var(--text);
+            color: var(--accent);
         }
 
+        /* --- HERO SECTION --- */
         main {
-            max-width: 1100px;
-            margin: 3rem auto;
-            padding: 0 2rem;
+            max-width: 1000px;
+            width: 90%;
+            margin-top: 120px;
+            text-align: center;
         }
 
         .hero {
-            margin-bottom: 4rem;
+            margin-bottom: 5rem;
         }
 
         .hero h1 {
-            font-size: 2.5rem;
+            font-size: clamp(2.5rem, 8vw, 4rem);
             font-weight: 800;
             margin-bottom: 1rem;
+            letter-spacing: -2px;
+            background: linear-gradient(180deg, #fff 0%, #888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero p {
             color: var(--text-dim);
             max-width: 600px;
+            margin: 0 auto;
             font-size: 1.1rem;
+            line-height: 1.6;
         }
 
+        /* --- CENTERED GRID --- */
         .tools-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding-bottom: 5rem;
         }
 
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2rem;
+            border-radius: 24px;
+            padding: 2.5rem;
             text-decoration: none;
             color: inherit;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            height: 220px;
-            transition: transform 0.2s, border-color 0.2s;
+            text-align: left;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            overflow: hidden;
         }
 
         .card:hover {
-            transform: translateY(-4px);
             border-color: var(--accent);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 212, 170, 0.1);
         }
 
         .status-badge {
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 5px 12px;
+            border-radius: 50px;
+            background: rgba(0, 212, 170, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(0, 212, 170, 0.2);
             align-self: flex-start;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            margin-bottom: 1.5rem;
         }
 
         .card h3 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1.4rem;
+            margin: 0 0 0.75rem 0;
+            font-size: 1.5rem;
+            font-weight: 700;
         }
 
         .card p {
             color: var(--text-dim);
             font-size: 0.95rem;
-            margin: 0;
+            margin-bottom: 2rem;
+            line-height: 1.5;
         }
 
-        .btn {
-            margin-top: 1.5rem;
+        .card-footer {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 0.85rem;
             font-weight: 600;
             color: var(--accent);
+            opacity: 0.8;
         }
 
+        /* --- FOOTER --- */
         footer {
-            margin-top: 6rem;
-            padding: 2rem;
-            text-align: center;
+            width: 100%;
+            padding: 4rem 0;
             border-top: 1px solid var(--border);
+            text-align: center;
             color: var(--text-dim);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
-        @media (max-width: 600px) {
-            header { padding: 1rem; flex-direction: column; gap: 1rem; }
-            nav ul { gap: 0.8rem; flex-wrap: wrap; justify-content: center; }
-            .hero h1 { font-size: 2rem; }
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            header { 
+                width: 95%;
+                top: 10px;
+                flex-direction: column; 
+                gap: 0.5rem; 
+                border-radius: 20px;
+                padding: 1rem;
+            }
+            nav ul { gap: 0.8rem; }
+            .hero h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
@@ -167,87 +205,66 @@
 <body>
 
     <header>
-        <a href="/" class="logo">Creatif.tools</a>
+        <a href="/" class="logo">CREATIF.TOOLS</a>
         <nav>
             <ul>
-                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/" class="active">Hub</a></li>
                 <li><a href="/contentflow/">Content</a></li>
-                <li><a href="/poolpro/">PoolPro</a></li>
-                <li><a href="/weddingflow/">WeddingFlow</a></li>
-                <li><a href="/budgetflow/">Budget</a></li>
-                <li><a href="/apexflow/">Apex</a></li>
+                <li><a href="/poolpro/">Pool</a></li>
+                <li><a href="/weddingflow/">Wedding</a></li>
+                <li><a href="/budgetflow/">Finance</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
         <section class="hero">
-            <h1>Professional Microtools</h1>
-            <p>High-performance, local-first applications built for efficiency. No cloud dependencies, no subscriptions, just pure utility.</p>
+            <h1>Built for Pros.</h1>
+            <p>A curated suite of high-performance, local-first applications. Secure, private, and exceptionally fast.</p>
         </section>
 
         <section class="tools-grid">
             
-            <article>
-                <a href="/contentflow/" class="card">
-                    <span class="status-badge" style="background:var(--accent); color:#000;">READY</span>
-                    <div>
-                        <h3>ContentFlow Pro</h3>
-                        <p>Comprehensive social media manager for content planning, scheduling, and multi-platform analytics.</p>
-                    </div>
-                    <div class="btn">Launch Application →</div>
-                </a>
-            </article>
+            <a href="/contentflow/" class="card">
+                <span class="status-badge">ACTIVE</span>
+                <h3>ContentFlow Pro</h3>
+                <p>Social media orchestration with a local-first calendar and cross-platform analytics.</p>
+                <div class="card-footer">Open Tool <span>→</span></div>
+            </a>
 
-            <article>
-                <a href="/poolpro/" class="card">
-                    <span class="status-badge" style="background:var(--accent-pool); color:#fff;">READY</span>
-                    <div>
-                        <h3>PoolPro Manager</h3>
-                        <p>Professional suite for pool service estimating, maintenance contracts, and streamlined invoicing.</p>
-                    </div>
-                    <div class="btn">Launch Application →</div>
-                </a>
-            </article>
+            <a href="/poolpro/" class="card">
+                <span class="status-badge">ACTIVE</span>
+                <h3>PoolPro Manager</h3>
+                <p>Heavy-duty estimating and invoicing suite for field service professionals.</p>
+                <div class="card-footer">Open Tool <span>→</span></div>
+            </a>
 
-            <article>
-                <a href="/weddingflow/" class="card">
-                    <span class="status-badge" style="background:var(--accent-wedding); color:#fff;">READY</span>
-                    <div>
-                        <h3>WeddingFlow Pro</h3>
-                        <p>Luxury planning and management suite designed specifically for coordinators and wedding professionals.</p>
-                    </div>
-                    <div class="btn" style="color:var(--accent-wedding);">Launch Application →</div>
-                </a>
-            </article>
+            <a href="/weddingflow/" class="card">
+                <span class="status-badge">ACTIVE</span>
+                <h3>WeddingFlow Pro</h3>
+                <p>High-end coordinator suite for event timelines, vendor management, and luxury planning.</p>
+                <div class="card-footer">Open Tool <span>→</span></div>
+            </a>
 
-            <article>
-                <a href="/budgetflow/" class="card">
-                    <span class="status-badge" style="background:#8b5cf6; color:#fff;">READY</span>
-                    <div>
-                        <h3>BudgetFlow Pro</h3>
-                        <p>Advanced personal finance tracker featuring privacy-first local storage and data portability.</p>
-                    </div>
-                    <div class="btn">Launch Application →</div>
-                </a>
-            </article>
+            <a href="/budgetflow/" class="card">
+                <span class="status-badge">ACTIVE</span>
+                <h3>BudgetFlow Pro</h3>
+                <p>A minimalist powerhouse for personal finance and secure data tracking.</p>
+                <div class="card-footer">Open Tool <span>→</span></div>
+            </a>
 
-            <article>
-                <a href="/apexflow/" class="card">
-                    <span class="status-badge" style="background:#10b981; color:#fff;">READY</span>
-                    <div>
-                        <h3>ApexFlow Pro</h3>
-                        <p>High-speed project management and task estimation suite built for contractors and agile teams.</p>
-                    </div>
-                    <div class="btn">Launch Application →</div>
-                </a>
-            </article>
+            <a href="/apexflow/" class="card">
+                <span class="status-badge">ACTIVE</span>
+                <h3>ApexFlow Pro</h3>
+                <p>Agile project management for developers and small utility builders.</p>
+                <div class="card-footer">Open Tool <span>→</span></div>
+            </a>
 
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 Creatif.tools — Privacy-first utilities. Your data never leaves your device.</p>
+        <p>&copy; 2026 Creatif.tools — All data stays in your browser. No cloud, no catch.</p>
     </footer>
 
 </body>
