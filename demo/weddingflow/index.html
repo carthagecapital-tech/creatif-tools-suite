@@ -1,1 +1,2080 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none';">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeddingFlow Pro — Wedding Planning & Vendor Management Suite</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #fdf6ec;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #f7ede0;
+      --bg-hover: #f1e4d2;
+      --text-primary: #3a2a1a;
+      --text-secondary: #7a6450;
+      --text-muted: #a08a74;
+      --border: #e8d9c4;
+      --accent: #c9737a;
+      --accent-hover: #a85b62;
+      --gold: #b8960c;
+      --gold-soft: #e0c45c;
+      --success: #6a8e57;
+      --warning: #b8960c;
+      --danger: #b94a4a;
+      --category-venue: #c9737a;
+      --category-catering: #b8960c;
+      --category-photo: #8b6f9d;
+      --category-floral: #d18a85;
+      --category-music: #6f8eaa;
+      --category-beauty: #c47b9d;
+      --category-cake: #d4a574;
+      --category-transport: #7a8a6a;
+      --category-officiant: #9c7a5c;
+      --category-stationery: #b89a7c;
+      --category-lighting: #a89270;
+      --category-coord: #8a6a8a;
+    }
+    body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+    .app { display: flex; min-height: 100vh; }
+    .sidebar { width: 250px; background: var(--bg-secondary); border-right: 1px solid var(--border); padding: 20px 16px; display: flex; flex-direction: column; position: fixed; height: 100vh; overflow-y: auto; }
+    .logo { display: flex; align-items: center; gap: 12px; padding-bottom: 24px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+    .logo-icon { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #000; }
+    .logo-text { font-size: 18px; font-weight: 600; }
+    .logo-sub { font-size: 11px; color: var(--accent); }
+    .hamburger { display: none; width: 24px; height: 24px; flex-direction: column; justify-content: center; gap: 4px; cursor: pointer; background: none; border: none; color: var(--text-primary); margin-left: auto; }
+    .hamburger span { height: 3px; background: currentColor; border-radius: 2px; }
+    nav { display: flex; flex-direction: column; flex: 1; }
+    .nav-section { margin-bottom: 24px; }
+    .nav-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 12px; }
+    .nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px; cursor: pointer; color: var(--text-secondary); transition: all 0.15s; border: none; background: none; width: 100%; text-align: left; font-size: 14px; font-family: inherit; }
+    .nav-item:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .nav-item.active { background: var(--accent); color: #000; font-weight: 500; }
+    .nav-item svg { width: 18px; height: 18px; }
+    .main { flex: 1; margin-left: 250px; padding: 24px 32px; min-height: 100vh; }
+    .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .main-title { font-size: 24px; font-weight: 600; }
+    .main-subtitle { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; border: none; transition: all 0.15s; font-family: inherit; }
+    .btn svg { width: 16px; height: 16px; }
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary { background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: var(--bg-hover); }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 20px; position: relative; }
+    .stat-label { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+    .stat-value { font-size: 28px; font-weight: 600; }
+    .card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+    .card-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+    .task-list { display: flex; flex-direction: column; gap: 8px; }
+    .task-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-tertiary); border-radius: 8px; cursor: pointer; transition: all 0.15s; border-left: 4px solid var(--border); }
+    .task-item.priority-high { border-left-color: var(--danger); }
+    .task-item.priority-medium { border-left-color: var(--warning); }
+    .task-item.priority-low { border-left-color: var(--success); }
+    .task-item.overdue { background: rgba(239,68,68,0.1); }
+    .task-item:hover { background: var(--bg-hover); transform: translateY(-2px); }
+    .task-checkbox { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .task-checkbox.checked { background: var(--accent); border-color: var(--accent); }
+    .task-checkbox svg { width: 12px; height: 12px; color: #000; display: none; }
+    .task-checkbox.checked svg { display: block; }
+    .task-title { flex: 1; font-size: 14px; }
+    .task-title.done { text-decoration: line-through; color: var(--text-muted); }
+    .tag { font-size: 11px; padding: 4px 8px; border-radius: 4px; font-weight: 500; }
+    .tag-high { background: rgba(239,68,68,0.2); color: #ef4444; }
+    .tag-medium { background: rgba(245,158,11,0.2); color: #f59e0b; }
+    .tag-low { background: rgba(16,185,129,0.2); color: #10b981; }
+    .tag-todo { background: rgba(148,163,184,0.2); color: #94a3b8; }
+    .tag-in-progress { background: rgba(184,150,12,0.15); color: #b8960c; }
+    .tag-confirmed { background: rgba(184,150,12,0.25); color: #8a6e00; font-weight: 600; }
+    .tag-done { background: rgba(106,142,87,0.2); color: #4a7a37; }
+    .kanban-board { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 16px; }
+    .kanban-column { min-width: 280px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    .kanban-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .kanban-title { font-size: 14px; font-weight: 600; }
+    .kanban-count { font-size: 12px; color: var(--text-muted); background: var(--bg-tertiary); padding: 2px 8px; border-radius: 10px; }
+    .kanban-cards { min-height: 200px; display: flex; flex-direction: column; gap: 8px; }
+    .kanban-card { background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 8px; padding: 12px; cursor: grab; }
+    .kanban-card:hover { border-color: var(--accent); }
+    .kanban-card-title { font-size: 14px; margin-bottom: 8px; }
+    .kanban-card-meta { display: flex; gap: 8px; }
+    .matrix-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 16px; min-height: 500px; }
+    .matrix-quadrant { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    .matrix-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .q1 .matrix-title { color: var(--danger); }
+    .q2 .matrix-title { color: var(--accent); }
+    .q3 .matrix-title { color: var(--gold); }
+    .q4 .matrix-title { color: var(--text-muted); }
+    /* Budget tracker */
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .budget-table th { background: var(--bg-tertiary); padding: 10px 12px; text-align: left; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid var(--border); }
+    .budget-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .budget-table tr:hover td { background: var(--bg-hover); }
+    .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 10px; }
+    .badge-unpaid { background: rgba(185,74,74,0.15); color: var(--danger); }
+    .badge-deposit { background: rgba(184,150,12,0.18); color: var(--gold); }
+    .badge-paid { background: rgba(106,142,87,0.18); color: var(--success); }
+    .badge-none { background: var(--bg-tertiary); color: var(--text-muted); }
+    .badge-negotiating { background: rgba(184,150,12,0.12); color: var(--gold); }
+    .badge-signed { background: rgba(106,142,87,0.15); color: var(--success); }
+    /* Loading screen */
+    #loading-screen { position:fixed;inset:0;background:var(--bg-primary);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999; }
+    .loading-logo { width:56px;height:56px;background:var(--accent);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff;margin-bottom:20px;animation:pulse 1.4s infinite; }
+    .loading-text { font-size:20px;font-weight:600;color:var(--text-primary);margin-bottom:8px; }
+    .loading-sub { font-size:13px;color:var(--gold); }
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .team-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+    .team-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .team-avatar { width: 48px; height: 48px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #000; }
+    .team-name { font-size: 16px; font-weight: 600; }
+    .team-role { font-size: 13px; color: var(--text-secondary); }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 16px; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--border); }
+    .modal-title { font-size: 18px; font-weight: 600; }
+    .modal-body { padding: 20px; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 20px; border-top: 1px solid var(--border); }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--text-secondary); }
+    .form-input, .form-select { width: 100%; padding: 10px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 14px; font-family: inherit; }
+    .form-input:focus, .form-select:focus { outline: none; border-color: var(--accent); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .pomodoro { position: fixed; bottom: 24px; right: 24px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 16px; padding: 20px; width: 260px; z-index: 100; }
+    .pomodoro-header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; color: var(--text-secondary); font-size: 14px; font-weight: 500; }
+    .pomodoro-time { font-size: 48px; font-weight: 600; color: var(--accent); text-align: center; margin-bottom: 16px; font-variant-numeric: tabular-nums; }
+    .pomodoro-controls { display: flex; gap: 8px; margin-bottom: 12px; }
+    .pomodoro-controls .btn { flex: 1; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes confetti { 0% { transform: translate(0,0) rotate(0deg); opacity: 1; } 100% { transform: translate(var(--tx),200px) rotate(360deg); opacity: 0; } }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; height: auto; position: fixed; top: 0; left: 0; right: 0; border-right: none; border-bottom: 1px solid var(--border); padding: 12px 16px; z-index: 100; flex-direction: row; }
+      .hamburger { display: flex; }
+      .logo { padding-bottom: 0; border-bottom: none; margin-bottom: 0; gap: 8px; flex: 1; }
+      .logo-icon { width: 32px; height: 32px; }
+      .logo-text { font-size: 14px; }
+      .logo-sub { display: none; }
+      nav { display: none; position: absolute; top: 60px; left: 0; right: 0; background: var(--bg-secondary); flex-direction: column; border-bottom: 1px solid var(--border); max-height: calc(100vh - 60px); overflow-y: auto; padding: 12px 0; }
+      nav.mobile-open { display: flex; }
+      .nav-section { margin-bottom: 0; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+      .nav-label { padding: 0; margin-bottom: 8px; }
+      .nav-item { padding: 8px 16px; border-radius: 0; }
+      .main { margin-left: 0; margin-top: 60px; padding: 16px; }
+      .main-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .main-title { font-size: 20px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .kanban-board { overflow-x: auto; }
+      .kanban-column { min-width: 240px; }
+      .matrix-grid { grid-template-columns: 1fr; gap: 12px; min-height: auto; }
+      .team-grid { grid-template-columns: 1fr; }
+      .pomodoro { width: calc(100% - 32px); right: 16px; left: 16px; bottom: 16px; }
+      .btn { font-size: 13px; padding: 8px 12px; }
+      .form-row { grid-template-columns: 1fr; }
+      .modal { width: 95%; max-width: 100%; }
+      .filter-bar { flex-wrap: wrap; }
+    }
+    @media (max-width: 480px) {
+      .main { padding: 12px; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Print / PDF export ───────────────────────────────── */
+    .print-header { display: none; }
+    .no-print {}
+
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      body { background: #fff !important; font-size: 11pt; }
+
+      /* hide navigation & widgets */
+      .sidebar, .pomodoro, .hamburger, .modal-overlay { display: none !important; }
+      .no-print { display: none !important; }
+
+      /* reset main content to full width */
+      .main { margin-left: 0 !important; padding: 16px 24px !important; min-height: auto !important; }
+
+      /* show branded print header */
+      .print-header { display: flex !important; align-items: center; justify-content: space-between;
+        border-bottom: 2px solid #c9737a; padding-bottom: 10px; margin-bottom: 18px; }
+      .print-header-title { font-size: 18pt; font-weight: 700; color: #3a2a1a; }
+      .print-header-meta { font-size: 9pt; color: #7a6450; text-align: right; }
+      .print-header-logo { font-size: 10pt; color: #b8960c; font-weight: 600; }
+
+      /* hide all action buttons */
+      .btn, button { display: none !important; }
+      /* but keep checkbox appearance (it's a div) */
+      .task-checkbox { flex-shrink: 0; }
+
+      /* cards & items: clean borders, avoid page breaks inside */
+      .card, .stat-card, .kanban-column, .team-card { border: 1px solid #ccc !important; box-shadow: none !important; }
+      .card, .kanban-card, .task-item, .team-card { page-break-inside: avoid; break-inside: avoid; }
+      .stats-grid { grid-template-columns: repeat(4, 1fr) !important; margin-bottom: 16px !important; }
+      .main-header { margin-bottom: 12px !important; }
+
+      /* kanban: wrap columns vertically for print */
+      .kanban-board { flex-wrap: wrap !important; overflow: visible !important; }
+      .kanban-column { min-width: 46% !important; margin-bottom: 12px; }
+
+      /* matrix: single column */
+      .matrix-grid { grid-template-columns: 1fr 1fr !important; }
+
+      /* print footer */
+      .print-footer { display: block !important; text-align: center; font-size: 8pt;
+        color: #a08a74; border-top: 1px solid #e8d9c4; margin-top: 24px; padding-top: 8px; }
+    }
+    .print-footer { display: none; }
+  </style>
+</head>
+<body>
+<div id="loading-screen">
+  <div class="loading-logo">W</div>
+  <div class="loading-text">WeddingFlow Pro</div>
+  <div class="loading-sub">creatif.tools</div>
+</div>
+<div class="app" id="app"></div>
+<script>
+  // --- ⚡️ CREATIF.TOOLS DEMO PROTECTOR ⚡️ ---
+(function() {
+    const isDemo = window.location.pathname.includes('/demo/');
+
+    if (isDemo) {
+        document.addEventListener('DOMContentLoaded', () => {
+            // These selectors cover the buttons in your current tools
+            const proFeatures = [
+                '#save-btn', '#export-pdf', '.btn-save', 
+                '#generate-invoice', '.download-json', 
+                '[onclick*="save"]', '[onclick*="download"]'
+            ];
+
+            proFeatures.forEach(selector => {
+                document.querySelectorAll(selector).forEach(btn => {
+                    btn.style.opacity = '0.3';
+                    btn.style.filter = 'grayscale(1)';
+                    btn.style.pointerEvents = 'none';
+                    if(btn.innerText.length < 15) btn.innerHTML = "🔒 Pro";
+                });
+            });
+
+            // Prevent Ctrl+S / Cmd+S
+            window.addEventListener('keydown', e => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    alert("Saving is disabled in Demo Mode. Get the full version at Creatif.tools!");
+                }
+            });
+        });
+    }
+})();
+  const icons = {
+    dashboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
+    list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>',
+    kanban: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="12" rx="1"/><rect x="17" y="3" width="5" height="15" rx="1"/></svg>',
+    matrix: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>',
+    calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+    gantt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h12M3 18h16"/></svg>',
+    users: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>',
+    settings: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>',
+    x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>',
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>',
+    clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+    play: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
+    pause: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>',
+    refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>',
+    download: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>',
+    upload: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>',
+    trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>',
+    minimize: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg>',
+    chevronLeft: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>',
+    chevronRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>',
+    star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+    target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+    focus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+    printer: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>',
+  };
+
+  // helper: date N months from today
+  const fd = function(m, d) {
+    const dt = new Date();
+    dt.setMonth(dt.getMonth() + m);
+    if (d) dt.setDate(dt.getDate() + d);
+    return dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0');
+  };
+
+  let state = {
+    currentView: 'dashboard',
+    tasks: [
+      { id: '1', title: 'Book ceremony venue',            description: 'Tour and secure the ceremony space; confirm availability and deposit', status: 'in-progress', priority: 'high',   assignee: '1', dueDate: fd(2),    quadrant: 'q1', category: 'venue',      progress: 60,  recurrence: 'none', startDate: fd(0) },
+      { id: '2', title: 'Hire lead photographer',         description: 'Review portfolios, meet candidates, sign contract',                   status: 'todo',        priority: 'high',   assignee: '2', dueDate: fd(2,14), quadrant: 'q1', category: 'photo',      progress: 0,   recurrence: 'none', startDate: null },
+      { id: '3', title: 'Schedule catering tasting',      description: 'Arrange menu tasting with shortlisted caterers',                      status: 'todo',        priority: 'medium', assignee: '1', dueDate: fd(3),    quadrant: 'q2', category: 'catering',   progress: 20,  recurrence: 'none', startDate: null },
+      { id: '4', title: 'Order bridal floral arrangement',description: 'Choose blooms and finalize floral design with florist',               status: 'in-progress', priority: 'medium', assignee: '3', dueDate: fd(3,14), quadrant: 'q2', category: 'floral',     progress: 40,  recurrence: 'none', startDate: null },
+      { id: '5', title: 'Book hair & makeup artist',      description: 'Trial session and booking for wedding day beauty team',               status: 'confirmed',   priority: 'high',   assignee: '4', dueDate: fd(1,14), quadrant: 'q1', category: 'beauty',     progress: 100, recurrence: 'none', startDate: null },
+      { id: '6', title: 'Select wedding cake design',     description: 'Tasting and design selection with bakery; confirm delivery logistics', status: 'todo',        priority: 'low',    assignee: '5', dueDate: fd(4),    quadrant: 'q3', category: 'cake',       progress: 0,   recurrence: 'none', startDate: null },
+      { id: '7', title: 'Finalize guest list',            description: 'Compile final guest count for ceremony and reception',                 status: 'done',        priority: 'high',   assignee: '1', dueDate: fd(0,7),  quadrant: 'q1', category: 'coord',      progress: 100, recurrence: 'none', startDate: null },
+      { id: '8', title: 'Design & print invitations',     description: 'Proof stationery, approve print run, address and post envelopes',     status: 'todo',        priority: 'medium', assignee: '2', dueDate: fd(3,20), quadrant: 'q2', category: 'stationery', progress: 10,  recurrence: 'none', startDate: null },
+      { id: '9', title: 'Book ceremony musician / DJ',    description: 'Audition bands or DJs; sign contract and set playlist preferences',   status: 'todo',        priority: 'medium', assignee: null,dueDate: fd(3),    quadrant: 'q2', category: 'music',      progress: 0,   recurrence: 'none', startDate: null },
+      { id:'10', title: 'Arrange wedding transport',      description: 'Book cars for wedding party and shuttle for guests',                   status: 'todo',        priority: 'low',    assignee: null,dueDate: fd(5),    quadrant: 'q3', category: 'transport',  progress: 0,   recurrence: 'none', startDate: null },
+    ],
+    categories: [
+      { id: 'venue',       name: 'Venue & Ceremony Space',      color: '--category-venue' },
+      { id: 'catering',   name: 'Catering & Bar Service',       color: '--category-catering' },
+      { id: 'photo',      name: 'Photography & Videography',    color: '--category-photo' },
+      { id: 'floral',     name: 'Floral & Decor',               color: '--category-floral' },
+      { id: 'music',      name: 'Music & Entertainment',        color: '--category-music' },
+      { id: 'beauty',     name: 'Hair & Makeup',                color: '--category-beauty' },
+      { id: 'cake',       name: 'Wedding Cake & Desserts',      color: '--category-cake' },
+      { id: 'transport',  name: 'Transportation',               color: '--category-transport' },
+      { id: 'officiant',  name: 'Officiant & Ceremony',         color: '--category-officiant' },
+      { id: 'stationery', name: 'Stationery & Signage',         color: '--category-stationery' },
+      { id: 'lighting',   name: 'Lighting & AV',                color: '--category-lighting' },
+      { id: 'coord',      name: 'Coordinator Services',         color: '--category-coord' },
+    ],
+    habits: [],
+    goals: [],
+    budget: [],
+    settings: {
+      weekStartDay: 'monday', pomodoroWork: 25, pomodoroBreak: 5,
+      weddingDate: '', ceremonyVenue: '', receptionVenue: '',
+      guestCountCeremony: '', guestCountReception: '',
+      weddingStyle: '', colorPalette: '', budgetTotal: '',
+      engagementDate: '', plannerRole: '', cateringStyle: '',
+    },
+    teamMembers: [
+      { id: '1', name: 'Venue Coordinator',  role: 'Ceremony & Reception Venue', avatar: 'VC', phone: '', email: '', website: '', contractStatus: 'negotiating', paymentStatus: 'deposit', budgetEstimate: 8000,  budgetActual: 8500,  notes: 'Site visit booked for next week.' },
+      { id: '2', name: 'Lead Photographer',  role: 'Photography & Videography',  avatar: 'LP', phone: '', email: '', website: '', contractStatus: 'none',        paymentStatus: 'unpaid',  budgetEstimate: 3500,  budgetActual: 0,     notes: '' },
+      { id: '3', name: 'Head Florist',        role: 'Floral & Decor',             avatar: 'HF', phone: '', email: '', website: '', contractStatus: 'none',        paymentStatus: 'unpaid',  budgetEstimate: 2000,  budgetActual: 0,     notes: '' },
+      { id: '4', name: 'Lead Makeup Artist', role: 'Hair & Makeup',              avatar: 'MA', phone: '', email: '', website: '', contractStatus: 'signed',      paymentStatus: 'deposit', budgetEstimate: 800,   budgetActual: 800,   notes: 'Trial session complete. Deposit paid.' },
+      { id: '5', name: 'Executive Caterer',  role: 'Catering & Bar Service',     avatar: 'EC', phone: '', email: '', website: '', contractStatus: 'negotiating', paymentStatus: 'unpaid',  budgetEstimate: 12000, budgetActual: 0,     notes: 'Awaiting final menu quote.' },
+    ],
+  };
+
+  let taskModalOpen = false;
+  let settingsModalOpen = false;
+  let teamModalOpen = false;
+  let editingTeamMemberId = null;
+  let habitModalOpen = false;
+  let goalModalOpen = false;
+  let budgetModalOpen = false;
+  let editingBudgetId = null;
+  let editingTask = null;
+  let pomodoroTime = 25 * 60;
+  let pomodoroRunning = false;
+  let pomodoroInterval = null;
+  let pomodoroDuration = 25;
+  let pomodoroMinimized = false;
+  let plannerDate = (function() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); })();
+  let toastMessage = '';
+  let toastTimeout = null;
+  let pendingDeleteTaskId = null;
+  let pendingDeleteTeamMemberId = null;
+  let pendingResetData = false;
+  let searchQuery = '';
+  let focusTaskId = null;
+
+  const catColorMap = {
+    venue:'#c9737a', catering:'#b8960c', photo:'#8b6f9d',
+    floral:'#d18a85', music:'#6f8eaa', beauty:'#c47b9d',
+    cake:'#d4a574', transport:'#7a8a6a', officiant:'#9c7a5c',
+    stationery:'#b89a7c', lighting:'#a89270', coord:'#8a6a8a',
+  };
+
+  // ── IndexedDB persistence layer ──────────────────────────────────────────
+  const IDB_NAME    = 'wf_v1_db';
+  const IDB_VERSION = 1;
+  const IDB_STORE   = 'kv';
+  let db = null;
+
+  const openDB = function() {
+    return new Promise(function(resolve, reject) {
+      const req = indexedDB.open(IDB_NAME, IDB_VERSION);
+      req.onupgradeneeded = function(e) {
+        const d = e.target.result;
+        if (!d.objectStoreNames.contains(IDB_STORE)) {
+          d.createObjectStore(IDB_STORE);
+        }
+      };
+      req.onsuccess = function(e) { db = e.target.result; resolve(db); };
+      req.onerror   = function(e) { reject(e.target.error); };
+    });
+  };
+
+  const dbGet = function(key) {
+    return new Promise(function(resolve, reject) {
+      const tx  = db.transaction(IDB_STORE, 'readonly');
+      const req = tx.objectStore(IDB_STORE).get(key);
+      req.onsuccess = function() { resolve(req.result); };
+      req.onerror   = function() { reject(req.error); };
+    });
+  };
+
+  const dbSet = function(key, value) {
+    return new Promise(function(resolve, reject) {
+      const tx  = db.transaction(IDB_STORE, 'readwrite');
+      const req = tx.objectStore(IDB_STORE).put(value, key);
+      req.onsuccess = function() { resolve(); };
+      req.onerror   = function() { reject(req.error); };
+    });
+  };
+
+  const dbDelete = function(key) {
+    return new Promise(function(resolve, reject) {
+      const tx  = db.transaction(IDB_STORE, 'readwrite');
+      const req = tx.objectStore(IDB_STORE).delete(key);
+      req.onsuccess = function() { resolve(); };
+      req.onerror   = function() { reject(req.error); };
+    });
+  };
+  // ─────────────────────────────────────────────────────────────────────────
+
+
+  const save = function() {
+    if (!db) return;
+    const payload = Object.assign({}, state, {
+      pomodoroTime:     pomodoroTime,
+      pomodoroDuration: pomodoroDuration,
+      pomodoroRunning:  false,
+      pomodoroMinimized: pomodoroMinimized,
+      taskFilter:       window.taskFilter || 'all',
+    });
+    dbSet('mainState', payload).catch(function() {});
+  };
+
+  const load = function() {
+    return dbGet('mainState').then(function(p) {
+      if (p && p.tasks) {
+        state             = Object.assign({}, state, p);
+        pomodoroTime      = p.pomodoroTime      || (25 * 60);
+        pomodoroDuration  = p.pomodoroDuration  || 25;
+        pomodoroMinimized = p.pomodoroMinimized  || false;
+        window.taskFilter = p.taskFilter         || 'all';
+      }
+    }).catch(function() {});
+  };
+
+  const generateRecurringTasks = function() {
+    const today    = new Date();
+    const todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+    return dbGet('recurring').then(function(lastGen) {
+      if (lastGen === todayStr) return;
+      state.tasks.forEach(function(task) {
+        if (!task.recurrence || task.recurrence === 'none' || !task.dueDate || task.status !== 'done') return;
+        const parts    = task.dueDate.split('-');
+        const taskDate = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+        const dayDiff  = Math.floor((today - taskDate) / 86400000);
+        if (dayDiff < 0) return;
+        let newDueDate = new Date(taskDate);
+        let shouldCreate = false;
+        if (task.recurrence === 'daily' && dayDiff > 0) { newDueDate.setDate(taskDate.getDate() + dayDiff + 1); shouldCreate = true; }
+        else if (task.recurrence === 'weekly' && dayDiff >= 7) { newDueDate.setDate(taskDate.getDate() + 7 * (Math.floor(dayDiff/7)+1)); shouldCreate = true; }
+        else if (task.recurrence === 'monthly' && dayDiff >= 28) { newDueDate.setMonth(taskDate.getMonth() + Math.floor(dayDiff/28)+1); shouldCreate = true; }
+        if (shouldCreate) {
+          const nd = newDueDate;
+          state.tasks.push(Object.assign({}, task, {
+            id: Date.now().toString() + Math.random(),
+            status: 'todo', progress: 0,
+            dueDate: nd.getFullYear() + '-' + String(nd.getMonth()+1).padStart(2,'0') + '-' + String(nd.getDate()).padStart(2,'0'),
+          }));
+        }
+      });
+      return dbSet('recurring', todayStr);
+    }).catch(function() {});
+  };
+
+  const escapeHtml = function(text) {
+    const map = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+    return (text||'').replace(/[&<>"']/g, function(m){return map[m];});
+  };
+
+  const showToast = function(msg, duration) {
+    duration = duration || 3000;
+    toastMessage = msg;
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(function(){ toastMessage = ''; render(); }, duration);
+    render();
+  };
+
+  const renderToast = function() {
+    if (!toastMessage) return '';
+    return '<div style="position:fixed;bottom:20px;right:20px;background:var(--bg-secondary);border:1px solid var(--accent);color:var(--text-primary);padding:14px 18px;border-radius:8px;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:1100;animation:slideIn 0.3s ease;">' + escapeHtml(toastMessage) + '</div>';
+  };
+
+  const getAssignee = function(id) {
+    const m = state.teamMembers.find(function(m){return m.id===id;});
+    return m ? m.name : 'Unassigned';
+  };
+
+  const localDate = function(d) {
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  };
+
+  const todayStr = function() { return localDate(new Date()); };
+
+  const getRelativeDate = function(dateStr) {
+    if (!dateStr) return '';
+    const parts = dateStr.split('-');
+    const taskDate = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+    const today = new Date(); today.setHours(0,0,0,0); taskDate.setHours(0,0,0,0);
+    const diff = Math.floor((taskDate - today) / 86400000);
+    if (diff === 0) return 'Today';
+    if (diff === 1) return 'Tomorrow';
+    if (diff === -1) return '1 day overdue';
+    if (diff < 0) return Math.abs(diff) + ' days overdue';
+    if (diff <= 7) return 'In ' + diff + ' days';
+    return dateStr;
+  };
+
+  const isOverdue = function(task) {
+    if (!task.dueDate || task.status === 'done') return false;
+    const parts = task.dueDate.split('-');
+    const due = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+    const today = new Date(); today.setHours(0,0,0,0);
+    return due < today;
+  };
+
+  const progressBar = function(pct, height) {
+    height = height || 3;
+    return '<div style="height:' + height + 'px;background:var(--border);border-radius:2px;margin-top:4px;overflow:hidden;"><div style="height:100%;background:var(--accent);width:' + pct + '%;"></div></div>';
+  };
+
+  const progressCircle = function(percent, size) {
+    size = size || 60;
+    const r = (size-8)/2;
+    const circ = 2 * Math.PI * r;
+    const offset = circ - (percent/100)*circ;
+    return '<div style="position:relative;width:' + size + 'px;height:' + size + 'px;">'
+      + '<svg width="' + size + '" height="' + size + '" style="transform:rotate(-90deg);">'
+      + '<circle cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="var(--border)" stroke-width="3"/>'
+      + '<circle cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="var(--accent)" stroke-width="3" stroke-dasharray="' + circ + '" stroke-dashoffset="' + offset + '" stroke-linecap="round"/>'
+      + '</svg>'
+      + '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;">' + percent + '%</div>'
+      + '</div>';
+  };
+
+  const taskItemHTML = function(t, extraStyle) {
+    extraStyle = extraStyle || '';
+    const overdue = isOverdue(t);
+    return '<div class="task-item priority-' + t.priority + (overdue?' overdue':'') + '" onclick="openTaskModal(\'' + t.id + '\')" style="' + extraStyle + '">'
+      + '<div class="task-checkbox ' + (t.status==='done'?'checked':'') + '" onclick="event.stopPropagation();toggleTask(\'' + t.id + '\')">' + icons.check + '</div>'
+      + '<div style="flex:1;">'
+      + '<span class="task-title ' + (t.status==='done'?'done':'') + '">' + escapeHtml(t.title) + '</span>'
+      + (t.progress > 0 ? progressBar(t.progress) : '')
+      + '</div>'
+      + '<span class="tag tag-' + t.priority + '">' + t.priority + '</span>'
+      + (overdue
+        ? '<span style="font-size:11px;color:var(--danger);font-weight:500;">' + getRelativeDate(t.dueDate) + '</span>'
+        : (t.dueDate ? '<span style="font-size:11px;color:var(--text-muted);">' + getRelativeDate(t.dueDate) + '</span>' : ''))
+      + '</div>';
+  };
+
+  // SIDEBAR
+  const renderSidebar = function() {
+    const sections = [
+      { label: 'Overview', items: [
+        {id:'dashboard',icon:'dashboard',label:'Dashboard'},
+        {id:'tasks',icon:'list',label:'Planning Checklist'},
+      ]},
+      { label: 'Planners', items: [
+        {id:'daily',icon:'calendar',label:'Daily Planner'},
+        {id:'weekly',icon:'calendar',label:'Weekly Planner'},
+        {id:'monthly',icon:'calendar',label:'Monthly Planner'},
+      ]},
+      { label: 'Progress', items: [
+        {id:'habits',icon:'star',label:'Habits Tracker'},
+        {id:'goals',icon:'target',label:'Goals Tracker'},
+        {id:'focus',icon:'focus',label:'Focus Mode'},
+      ]},
+      { label: 'Views', items: [
+        {id:'kanban',icon:'kanban',label:'Kanban Board'},
+        {id:'matrix',icon:'matrix',label:'Priority Matrix'},
+        {id:'planner',icon:'calendar',label:'Planner'},
+        {id:'gantt',icon:'gantt',label:'Timeline'},
+      ]},
+      { label: 'Vendors', items: [
+        {id:'team',   icon:'users',   label:'Vendor Tracker'},
+        {id:'budget', icon:'download',label:'Budget Tracker'},
+      ]},
+      { label: 'Resources', items: [
+        {id:'guide',  icon:'star',    label:'Planning Guide'},
+      ]},
+    ];
+    let html = '<aside class="sidebar"><div class="logo"><div class="logo-icon">W</div><div><div class="logo-text">WeddingFlow</div><div class="logo-sub">Pro v1.0</div></div></div>'
+      + '<button class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>'
+      + '<nav>';
+    sections.forEach(function(sec) {
+      html += '<div class="nav-section"><div class="nav-label">' + sec.label + '</div>';
+      sec.items.forEach(function(i) {
+        html += '<button class="nav-item' + (state.currentView===i.id?' active':'') + '" onclick="setView(\'' + i.id + '\')">' + (icons[i.icon]||'') + i.label + '</button>';
+      });
+      html += '</div>';
+    });
+    html += '<div class="nav-section" style="margin-top:auto;"><button class="nav-item" onclick="openSettings()">' + icons.settings + 'Settings</button>'
+      + '<div style="padding:12px;font-size:11px;color:var(--text-muted);text-align:center;border-top:1px solid var(--border);margin-top:12px;">'
+      + '<div style="font-weight:600;color:var(--text-primary);">WeddingFlow Pro</div>'
+      + '<div style="color:var(--gold);font-weight:600;margin-top:2px;"><a href="https://creatif.tools" style="color:inherit;text-decoration:none;">creatif.tools</a></div>'
+      + '</div>'
+      + '</div></nav></aside>';
+    return html;
+  };
+
+  // SVG DONUT CHART helper
+  const donutChart = function(segments, size, label, sublabel) {
+    // segments: [{value, color, title}]
+    size = size || 120;
+    const cx = size/2, cy = size/2, r = size*0.38, stroke = size*0.13;
+    const total = segments.reduce(function(s,x){return s+x.value;},0);
+    if (!total) {
+      return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+        + '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="var(--border)" stroke-width="' + stroke + '"/>'
+        + '<text x="' + cx + '" y="' + (cy-4) + '" text-anchor="middle" fill="var(--text-muted)" font-size="' + (size*0.13) + '" font-family="Georgia,serif" font-weight="600">-</text>'
+        + '</svg>';
+    }
+    const circ = 2 * Math.PI * r;
+    let offset = 0;
+    let paths = '';
+    segments.forEach(function(seg) {
+      if (!seg.value) return;
+      const dash = (seg.value / total) * circ;
+      const gap = circ - dash;
+      paths += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + seg.color + '" stroke-width="' + stroke + '"'
+        + ' stroke-dasharray="' + dash + ' ' + gap + '"'
+        + ' stroke-dashoffset="' + (-offset) + '"'
+        + ' style="transform:rotate(-90deg);transform-origin:' + cx + 'px ' + cy + 'px;" >'
+        + (seg.title ? '<title>' + escapeHtml(seg.title) + ': ' + seg.value + '</title>' : '')
+        + '</circle>';
+      offset += dash;
+    });
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+      + '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="var(--border)" stroke-width="' + stroke + '"/>'
+      + paths
+      + '<text x="' + cx + '" y="' + (cy+3) + '" text-anchor="middle" fill="var(--text-primary)" font-size="' + (size*0.16) + '" font-family="Georgia,serif" font-weight="700">' + escapeHtml(String(label)) + '</text>'
+      + (sublabel ? '<text x="' + cx + '" y="' + (cy + size*0.14) + '" text-anchor="middle" fill="var(--text-muted)" font-size="' + (size*0.09) + '" font-family="Georgia,serif">' + escapeHtml(sublabel) + '</text>' : '')
+      + '</svg>';
+  };
+
+  const chartLegend = function(items) {
+    let html = '<div style="display:flex;flex-direction:column;gap:6px;justify-content:center;">';
+    items.forEach(function(item) {
+      html += '<div style="display:flex;align-items:center;gap:8px;font-size:12px;">'
+        + '<div style="width:10px;height:10px;border-radius:50%;background:' + item.color + ';flex-shrink:0;"></div>'
+        + '<span style="color:var(--text-secondary);">' + escapeHtml(item.label) + '</span>'
+        + '<span style="color:var(--text-primary);font-weight:600;margin-left:auto;padding-left:8px;">' + item.value + '</span>'
+        + '</div>';
+    });
+    html += '</div>';
+    return html;
+  };
+
+  // DASHBOARD
+  const renderDashboard = function() {
+    const total = state.tasks.length;
+    const done = state.tasks.filter(function(t){return t.status==='done';}).length;
+    const inProg = state.tasks.filter(function(t){return t.status==='in-progress';}).length;
+    const confirmed = state.tasks.filter(function(t){return t.status==='confirmed';}).length;
+    const todo = state.tasks.filter(function(t){return t.status==='todo';}).length;
+    const overdueCnt = state.tasks.filter(isOverdue).length;
+    const highCnt = state.tasks.filter(function(t){return t.priority==='high'&&t.status!=='done';}).length;
+    const medCnt = state.tasks.filter(function(t){return t.priority==='medium'&&t.status!=='done';}).length;
+    const lowCnt = state.tasks.filter(function(t){return t.priority==='low'&&t.status!=='done';}).length;
+    const pct = total === 0 ? 0 : Math.round(done/total*100);
+
+    // Tasks by category
+    const catCounts = {};
+    state.tasks.forEach(function(t){
+      if(t.category){ catCounts[t.category] = (catCounts[t.category]||0)+1; }
+    });
+    const recent = state.tasks.slice().sort(function(a,b){
+      if(isOverdue(a)&&!isOverdue(b)) return -1;
+      if(!isOverdue(a)&&isOverdue(b)) return 1;
+      if(a.status==='done'&&b.status!=='done') return 1;
+      if(a.status!=='done'&&b.status==='done') return -1;
+      const p={high:0,medium:1,low:2};
+      return (p[a.priority]||2)-(p[b.priority]||2);
+    }).slice(0,5);
+
+    // Status donut
+    const statusSegs = [
+      {value:done,      color:'var(--success)',  title:'Done'},
+      {value:inProg,    color:'var(--warning)',  title:'In Progress'},
+      {value:confirmed, color:'var(--gold)',      title:'Confirmed'},
+      {value:todo,      color:'var(--text-muted)',title:'To Do'},
+    ];
+
+    // Priority donut (active tasks only)
+    const prioSegs = [
+      {value:highCnt, color:'var(--danger)', title:'High'},
+      {value:medCnt, color:'var(--warning)', title:'Medium'},
+      {value:lowCnt, color:'var(--success)', title:'Low'},
+    ];
+
+    // Category donut
+    const catKeys = Object.keys(catCounts);
+    const catSegs = catKeys.map(function(k){
+      const cat = state.categories.find(function(c){return c.id===k;});
+      return {value:catCounts[k], color:catColorMap[k]||'#a08a74', title:cat?cat.name:k};
+    });
+
+    const weddingDate = state.settings && state.settings.weddingDate;
+    const daysToWedding = weddingDate ? Math.ceil((new Date(weddingDate) - new Date(todayStr())) / 86400000) : null;
+
+    let html = '<div class="main-header"><div><h1 class="main-title">Dashboard</h1><p class="main-subtitle">Wedding planning overview & progress</p></div>'
+      + '<button class="btn btn-primary" onclick="openTaskModal()">' + icons.plus + ' New Task</button></div>'
+      + '<div class="stats-grid">';
+    if (daysToWedding !== null) {
+      const countdownColor = daysToWedding < 30 ? 'var(--danger)' : daysToWedding < 90 ? 'var(--warning)' : 'var(--gold)';
+      html += '<div class="stat-card" style="border-left:4px solid ' + countdownColor + ';">'
+        + '<div class="stat-label">Days Until Wedding</div>'
+        + '<div class="stat-value" style="color:' + countdownColor + ';">' + (daysToWedding >= 0 ? daysToWedding : 0) + '</div>'
+        + '<div style="font-size:11px;color:var(--text-muted);margin-top:8px;">' + (weddingDate) + '</div></div>';
+    }
+    html += '<div class="stat-card"><div style="position:absolute;top:16px;right:16px;">' + progressCircle(pct) + '</div><div class="stat-label">Total Tasks</div><div class="stat-value">' + total + '</div><div style="font-size:11px;color:var(--text-muted);margin-top:8px;">' + done + ' completed</div></div>'
+      + '<div class="stat-card"><div style="position:absolute;top:16px;right:16px;">' + progressCircle(total?Math.round(done/total*100):0) + '</div><div class="stat-label">Completed</div><div class="stat-value" style="color:var(--success)">' + done + '</div><div style="font-size:11px;color:var(--text-muted);margin-top:8px;">' + pct + '% done</div></div>'
+      + '<div class="stat-card"><div style="position:absolute;top:16px;right:16px;">' + progressCircle(total?Math.round(confirmed/total*100):0) + '</div><div class="stat-label">Confirmed</div><div class="stat-value" style="color:var(--gold)">' + confirmed + '</div></div>';
+    if (overdueCnt > 0) {
+      html += '<div class="stat-card" style="border-left:4px solid var(--danger);"><div style="position:absolute;top:16px;right:16px;">' + progressCircle(total?Math.round(overdueCnt/total*100):0) + '</div><div class="stat-label">Overdue</div><div class="stat-value" style="color:var(--danger)">' + overdueCnt + '</div><div style="font-size:11px;color:var(--danger);margin-top:8px;">Needs attention</div></div>';
+    }
+    html += '</div>';
+
+    // Charts row
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:16px;">';
+
+    // Status chart
+    html += '<div class="card" style="margin-bottom:0;">'
+      + '<h3 class="card-title">Tasks by Status</h3>'
+      + '<div style="display:flex;align-items:center;gap:20px;">'
+      + donutChart(statusSegs, 110, pct+'%', 'complete')
+      + chartLegend([
+          {color:'var(--success)',  label:'Done',        value:done},
+          {color:'var(--warning)',  label:'In Progress', value:inProg},
+          {color:'var(--gold)',     label:'Confirmed',   value:confirmed},
+          {color:'var(--text-muted)',label:'To Do',      value:todo},
+        ])
+      + '</div></div>';
+
+    // Priority chart
+    html += '<div class="card" style="margin-bottom:0;">'
+      + '<h3 class="card-title">Tasks by Priority</h3>'
+      + '<div style="display:flex;align-items:center;gap:20px;">'
+      + donutChart(prioSegs, 110, highCnt+medCnt+lowCnt+'', 'active')
+      + chartLegend([
+          {color:'var(--danger)',label:'High',value:highCnt},
+          {color:'var(--warning)',label:'Medium',value:medCnt},
+          {color:'var(--success)',label:'Low',value:lowCnt},
+        ])
+      + '</div></div>';
+
+    // Category chart
+    if (catKeys.length) {
+      const catLegendItems = catKeys.map(function(k){
+        const cat = state.categories.find(function(c){return c.id===k;});
+        return {color:catColorMap[k]||'#a08a74', label:cat?cat.name:k, value:catCounts[k]};
+      });
+      html += '<div class="card" style="margin-bottom:0;">'
+        + '<h3 class="card-title">Tasks by Category</h3>'
+        + '<div style="display:flex;align-items:center;gap:20px;">'
+        + donutChart(catSegs, 110, catKeys.length+'', 'categories')
+        + chartLegend(catLegendItems)
+        + '</div></div>';
+    }
+
+    html += '</div>';
+
+    // Recent tasks
+    html += '<div class="card"><h3 class="card-title">Priority Tasks</h3><div class="task-list">';
+    if (recent.length) {
+      recent.forEach(function(t){ html += taskItemHTML(t); });
+    } else {
+      html += '<div style="color:var(--text-muted);padding:16px;">No tasks. Create one to get started!</div>';
+    }
+    html += '</div></div>';
+    return html;
+  };
+
+  // TASK TRACKER
+  const renderTasks = function() {
+    const filters = ['all','todo','in-progress','confirmed','done','high','medium','low'];
+    const tf = window.taskFilter || 'all';
+    let filtered = state.tasks.slice();
+    if (['todo','in-progress','confirmed','done'].indexOf(tf) >= 0) filtered = filtered.filter(function(t){return t.status===tf;});
+    else if (['high','medium','low'].indexOf(tf) >= 0) filtered = filtered.filter(function(t){return t.priority===tf;});
+    filtered.sort(function(a,b){
+      if(isOverdue(a)&&!isOverdue(b)) return -1;
+      if(!isOverdue(a)&&isOverdue(b)) return 1;
+      const p={high:0,medium:1,low:2};
+      return (p[a.priority]||2)-(p[b.priority]||2);
+    });
+    let html = '<div class="main-header"><div><h1 class="main-title">Planning Checklist</h1><p class="main-subtitle">Manage all wedding tasks</p></div>'
+      + '<button class="btn btn-primary" onclick="openTaskModal()">' + icons.plus + ' New Task</button></div>'
+      + '<div class="card" style="margin-bottom:16px;"><div class="filter-bar" style="display:flex;gap:8px;flex-wrap:wrap;">';
+    filters.forEach(function(f) {
+      const cnt = ['all','todo','in-progress','confirmed','done'].indexOf(f)>=0 ? ' (' + state.tasks.filter(function(t){return f==='all'||t.status===f;}).length + ')' : '';
+      const label = f==='all'?'All':f==='in-progress'?'In Progress':f.charAt(0).toUpperCase()+f.slice(1);
+      html += '<button class="btn ' + (tf===f?'btn-primary':'btn-secondary') + '" onclick="setTaskFilter(\'' + f + '\')" style="font-size:12px;">' + label + cnt + '</button>';
+    });
+    html += '</div></div><div class="card"><h3 class="card-title">Tasks (' + filtered.length + ')</h3><div class="task-list">';
+    if (filtered.length) {
+      filtered.forEach(function(t) {
+        const overdue = isOverdue(t);
+        html += '<div class="task-item priority-' + t.priority + (overdue?' overdue':'') + '" onclick="openTaskModal(\'' + t.id + '\')">'
+          + '<div class="task-checkbox ' + (t.status==='done'?'checked':'') + '" onclick="event.stopPropagation();toggleTask(\'' + t.id + '\')">' + icons.check + '</div>'
+          + '<div style="flex:1;"><span class="task-title ' + (t.status==='done'?'done':'') + '">' + escapeHtml(t.title) + '</span>'
+          + (t.progress>0?progressBar(t.progress):'') + '</div>'
+          + '<span class="tag tag-' + t.priority + '">' + t.priority + '</span>'
+          + '<span class="tag tag-' + t.status + '">' + t.status.replace('-',' ') + '</span>'
+          + (overdue?'<span style="font-size:11px;color:var(--danger);font-weight:500;">' + getRelativeDate(t.dueDate) + '</span>'
+            :(t.dueDate?'<span style="font-size:11px;color:var(--text-muted);">' + getRelativeDate(t.dueDate) + '</span>':''))
+          + '<span style="color:var(--text-muted);font-size:12px;">' + getAssignee(t.assignee) + '</span>'
+          + '</div>';
+      });
+    } else {
+      html += '<div style="color:var(--text-muted);padding:16px;">No tasks match this filter</div>';
+    }
+    html += '</div></div>';
+    return html;
+  };
+
+  // DAILY PLANNER
+  const renderDailyPlanner = function() {
+    const ts = todayStr();
+    const today = new Date();
+    const dayTasks = state.tasks.filter(function(t){return t.dueDate===ts;}).sort(function(a,b){
+      const p={high:0,medium:1,low:2}; return (p[a.priority]||2)-(p[b.priority]||2);
+    });
+    const doneCnt = dayTasks.filter(function(t){return t.status==='done';}).length;
+    const pct = dayTasks.length ? Math.round(doneCnt/dayTasks.length*100) : 0;
+    let html = '<div class="main-header"><div><h1 class="main-title">Daily Planner</h1><p class="main-subtitle">'
+      + today.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}) + '</p></div>'
+      + '<button class="btn btn-primary" onclick="openTaskModal()">' + icons.plus + ' Add Task</button></div>'
+      + '<div class="card" style="margin-bottom:16px;"><div style="display:flex;justify-content:space-between;align-items:center;">'
+      + '<div style="font-size:14px;color:var(--text-muted);">Today\'s Progress</div>'
+      + '<div style="display:flex;align-items:center;gap:12px;"><div style="width:120px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div style="height:100%;background:var(--accent);width:' + pct + '%;"></div></div>'
+      + '<span style="font-weight:600;">' + pct + '%</span></div></div></div>'
+      + '<div class="card"><h3 class="card-title">Today\'s Tasks (' + dayTasks.length + ')</h3><div class="task-list">';
+    if (dayTasks.length) {
+      dayTasks.forEach(function(t) {
+        html += '<div class="task-item priority-' + t.priority + '" onclick="openTaskModal(\'' + t.id + '\')">'
+          + '<div class="task-checkbox ' + (t.status==='done'?'checked':'') + '" onclick="event.stopPropagation();toggleTask(\'' + t.id + '\')">' + icons.check + '</div>'
+          + '<div style="flex:1;"><span class="task-title ' + (t.status==='done'?'done':'') + '">' + escapeHtml(t.title) + '</span>'
+          + (t.description?'<div style="font-size:12px;color:var(--text-muted);margin-top:2px;">' + escapeHtml(t.description.slice(0,60)) + (t.description.length>60?'...':'') + '</div>':'')
+          + '</div><span class="tag tag-' + t.priority + '">' + t.priority + '</span></div>';
+      });
+    } else {
+      html += '<div style="color:var(--text-muted);padding:16px;">No tasks scheduled for today.</div>';
+    }
+    html += '</div></div>';
+    return html;
+  };
+
+  // WEEKLY PLANNER
+  const renderWeeklyPlanner = function() {
+    const today = new Date();
+    const dow = today.getDay();
+    const startDay = state.settings && state.settings.weekStartDay === 'sunday' ? 0 : 1;
+    const offset = dow >= startDay ? dow - startDay : 7 - startDay + dow;
+    const weekStart = new Date(today); weekStart.setDate(today.getDate() - offset);
+    const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const ts = todayStr();
+    let html = '<div class="main-header"><div><h1 class="main-title">Weekly Planner</h1><p class="main-subtitle">Week of ' + weekStart.toLocaleDateString() + '</p></div>'
+      + '<button class="btn btn-primary" onclick="openTaskModal()">' + icons.plus + ' Add Task</button></div>'
+      + '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:12px;">';
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(weekStart); d.setDate(weekStart.getDate() + i);
+      const ds = localDate(d);
+      const dayTasks = state.tasks.filter(function(t){return t.dueDate===ds;});
+      const doneCnt = dayTasks.filter(function(t){return t.status==='done';}).length;
+      const pct = dayTasks.length ? Math.round(doneCnt/dayTasks.length*100) : 0;
+      const isToday = ds === ts;
+      html += '<div class="card" style="padding:12px;border:' + (isToday?'2px solid var(--accent)':'1px solid var(--border)') + ';">'
+        + '<div style="font-weight:600;font-size:13px;margin-bottom:4px;">' + dayNames[d.getDay()] + '</div>'
+        + '<div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">' + d.toLocaleDateString('en-US',{month:'short',day:'numeric'}) + '</div>'
+        + '<div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:8px;"><div style="height:100%;background:var(--accent);width:' + pct + '%;"></div></div>'
+        + '<div style="font-size:11px;color:var(--text-muted);">' + doneCnt + '/' + dayTasks.length + ' done</div>';
+      dayTasks.slice(0,3).forEach(function(t) {
+        html += '<div style="font-size:10px;padding:3px 6px;border-radius:3px;margin-top:4px;background:var(--bg-tertiary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;border-left:3px solid ' + (t.priority==='high'?'var(--danger)':t.priority==='medium'?'var(--warning)':'var(--success)') + ';" onclick="openTaskModal(\'' + t.id + '\')">' + escapeHtml(t.title) + '</div>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+    return html;
+  };
+
+  // MONTHLY PLANNER
+  const renderMonthlyPlanner = function() {
+    const today = new Date();
+    const year = today.getFullYear(), month = today.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const startDate = new Date(firstDay); startDate.setDate(startDate.getDate() - (firstDay.getDay()||0));
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const ts = todayStr();
+    let html = '<div class="main-header"><div><h1 class="main-title">' + monthNames[month] + ' ' + year + '</h1><p class="main-subtitle">Monthly overview</p></div>'
+      + '<button class="btn btn-primary" onclick="openTaskModal()">' + icons.plus + ' Add Task</button></div>'
+      + '<div class="card"><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);padding:1px;">';
+    dayNames.forEach(function(d){ html += '<div style="background:var(--bg-secondary);padding:8px;text-align:center;font-weight:600;font-size:12px;color:var(--text-muted);">' + d + '</div>'; });
+    for (let i = 0; i < 42; i++) {
+      const d = new Date(startDate); d.setDate(startDate.getDate() + i);
+      const ds = localDate(d);
+      const dayTasks = state.tasks.filter(function(t){return t.dueDate===ds;});
+      const isCurrentMonth = d.getMonth() === month;
+      const isToday = ds === ts;
+      html += '<div style="background:' + (isCurrentMonth?'var(--bg-secondary)':'var(--bg-tertiary)') + ';padding:8px;min-height:80px;border:' + (isToday?'2px solid var(--accent)':'1px solid var(--border)') + ';cursor:pointer;" onclick="openTaskModal()">'
+        + '<div style="font-weight:' + (isToday?'700':'500') + ';font-size:12px;color:' + (isToday?'var(--accent)':'var(--text-primary)') + ';margin-bottom:4px;">' + d.getDate() + '</div>';
+      dayTasks.slice(0,3).forEach(function(t) {
+        html += '<div style="font-size:9px;padding:2px 4px;border-radius:2px;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-muted);background:rgba(0,212,170,0.15);">' + escapeHtml(t.title) + '</div>';
+      });
+      if (dayTasks.length > 3) html += '<div style="font-size:9px;color:var(--text-muted);">+' + (dayTasks.length-3) + ' more</div>';
+      html += '</div>';
+    }
+    html += '</div></div>';
+    return html;
+  };
+
+  // HABITS TRACKER
+  const renderHabitsTracker = function() {
+    const today = new Date();
+    const days = [];
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(today); d.setDate(today.getDate() - i);
+      days.push(d);
+    }
+    let html = '<div class="main-header"><div><h1 class="main-title">Habits Tracker</h1><p class="main-subtitle">Build streaks & stay consistent</p></div>'
+      + '<button class="btn btn-primary" onclick="openAddHabitModal()">' + icons.plus + ' Add Habit</button></div>';
+    if (!state.habits.length) {
+      html += '<div class="card" style="text-align:center;padding:40px;"><div style="font-size:32px;margin-bottom:12px;">🎯</div>'
+        + '<div style="font-size:16px;font-weight:600;margin-bottom:8px;">No habits yet</div>'
+        + '<p style="color:var(--text-muted);margin-bottom:16px;">Start building better habits today.</p>'
+        + '<button class="btn btn-primary" onclick="openAddHabitModal()">Create First Habit</button></div>';
+    } else {
+      html += '<div style="overflow-x:auto;"><table style="border-collapse:collapse;min-width:max-content;width:100%;">';
+      html += '<tr><th style="background:var(--bg-secondary);padding:10px 12px;text-align:left;font-size:12px;color:var(--text-muted);border:1px solid var(--border);min-width:140px;">Habit</th>';
+      days.forEach(function(d) {
+        html += '<th style="background:var(--bg-secondary);padding:6px 4px;text-align:center;font-size:9px;color:var(--text-muted);border:1px solid var(--border);min-width:32px;">'
+          + d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'}) + '</th>';
+      });
+      html += '</tr>';
+      state.habits.forEach(function(h) {
+        html += '<tr><td style="background:var(--bg-secondary);padding:10px 12px;font-size:12px;border:1px solid var(--border);">'
+          + (h.emoji||'') + ' ' + escapeHtml(h.name)
+          + ' <button onclick="deleteHabit(\'' + h.id + '\')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:10px;margin-left:4px;">✕</button></td>';
+        days.forEach(function(d) {
+          const ds = localDate(d);
+          const done = h.completed && h.completed.indexOf(ds) >= 0;
+          html += '<td style="background:var(--bg-tertiary);border:1px solid var(--border);text-align:center;cursor:pointer;" onclick="toggleHabitComplete(\'' + h.id + '\',\'' + ds + '\')">'
+            + (done ? '<div style="width:20px;height:20px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-size:10px;margin:auto;">✓</div>'
+              : '<div style="width:8px;height:8px;background:var(--border);border-radius:50%;margin:auto;"></div>')
+            + '</td>';
+        });
+        html += '</tr>';
+      });
+      html += '</table></div>';
+    }
+    return html;
+  };
+
+  // GOALS TRACKER
+  const renderGoalsTracker = function() {
+    const now = new Date();
+    const active = (state.goals||[]).filter(function(g){return new Date(g.targetDate) >= now;});
+    let html = '<div class="main-header"><div><h1 class="main-title">Goals Tracker</h1><p class="main-subtitle">Track your aspirations</p></div>'
+      + '<button class="btn btn-primary" onclick="openAddGoalModal()">' + icons.plus + ' Add Goal</button></div>';
+    if (!active.length) {
+      html += '<div class="card" style="text-align:center;padding:40px;"><div style="font-size:32px;margin-bottom:12px;">🎯</div>'
+        + '<div style="font-size:16px;font-weight:600;margin-bottom:8px;">No active goals</div>'
+        + '<p style="color:var(--text-muted);margin-bottom:16px;">Set ambitious goals to drive your progress.</p>'
+        + '<button class="btn btn-primary" onclick="openAddGoalModal()">Create First Goal</button></div>';
+    } else {
+      html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">';
+      active.forEach(function(g) {
+        const daysLeft = Math.ceil((new Date(g.targetDate) - now) / 86400000);
+        html += '<div class="card"><div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;">'
+          + '<div style="font-weight:600;font-size:15px;flex:1;">' + escapeHtml(g.title) + '</div>'
+          + '<button class="btn btn-secondary" style="padding:4px 8px;font-size:11px;" onclick="deleteGoal(\'' + g.id + '\')">Delete</button></div>'
+          + '<p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">' + escapeHtml(g.description||'') + '</p>'
+          + '<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>Progress</span><span style="font-weight:600;">' + (g.progress||0) + '%</span></div>'
+          + '<div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div style="height:100%;background:var(--accent);width:' + (g.progress||0) + '%;"></div></div></div>'
+          + '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);"><span>' + daysLeft + ' days left</span><span>' + escapeHtml(g.category||'') + '</span></div></div>';
+      });
+      html += '</div>';
+    }
+    return html;
+  };
+
+  // FOCUS MODE
+  const renderFocusMode = function() {
+    const task = focusTaskId ? state.tasks.find(function(t){return t.id===focusTaskId;}) : null;
+    const activeTasks = state.tasks.filter(function(t){return t.status!=='done';}).slice(0,10);
+    const m = Math.floor(pomodoroTime/60), s = pomodoroTime%60;
+    const timeStr = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    let html = '<div style="min-height:80vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px;">'
+      + '<div style="font-size:14px;color:var(--text-muted);margin-bottom:20px;">Currently working on:</div>';
+    if (task) {
+      html += '<h1 style="font-size:36px;font-weight:700;margin-bottom:30px;max-width:600px;">' + escapeHtml(task.title) + '</h1>'
+        + '<div style="font-size:72px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;font-family:monospace;margin-bottom:30px;" id="focus-timer">' + timeStr + '</div>'
+        + '<div style="display:flex;gap:12px;margin-bottom:30px;">'
+        + '<button class="btn ' + (pomodoroRunning?'btn-secondary':'btn-primary') + '" style="padding:12px 24px;font-size:16px;" onclick="toggleFocusPomo()">' + (pomodoroRunning?'Pause':'Start') + '</button>'
+        + '<button class="btn btn-secondary" style="padding:12px 24px;font-size:16px;" onclick="resetFocusPomo()">Reset</button>'
+        + '<button class="btn btn-secondary" style="padding:12px 24px;font-size:16px;" onclick="completeFocusTask()">Done ✓</button>'
+        + '</div>';
+    } else {
+      html += '<div style="margin-bottom:30px;"><select class="form-select" style="font-size:16px;padding:12px;width:300px;" onchange="selectFocusTask(this.value)">'
+        + '<option value="">Select a task to focus on...</option>';
+      activeTasks.forEach(function(t){ html += '<option value="' + t.id + '">' + escapeHtml(t.title) + '</option>'; });
+      html += '</select></div>';
+    }
+    html += '<button class="btn btn-secondary" onclick="exitFocusMode()">Exit Focus Mode</button></div>';
+    return html;
+  };
+
+  // KANBAN
+  const renderKanban = function() {
+    const cols = [{id:'todo',title:'To Do'},{id:'in-progress',title:'In Progress'},{id:'confirmed',title:'Confirmed'},{id:'done',title:'Done'}];
+    let html = '<div class="main-header"><div><h1 class="main-title">Kanban Board</h1><p class="main-subtitle">Drag & drop workflow</p></div>'
+      + '<button class="btn btn-primary" onclick="openTaskModal()">' + icons.plus + ' New Task</button></div>'
+      + '<div class="kanban-board">';
+    cols.forEach(function(c) {
+      const tasks = state.tasks.filter(function(t){return t.status===c.id;});
+      html += '<div class="kanban-column" ondragover="event.preventDefault()" ondrop="dropTask(event,\'' + c.id + '\')">'
+        + '<div class="kanban-header"><span class="kanban-title">' + c.title + '</span><span class="kanban-count">' + tasks.length + '</span></div>'
+        + '<div class="kanban-cards">';
+      if (tasks.length) {
+        tasks.forEach(function(t) {
+          const assignee = state.teamMembers.find(function(m){return m.id===t.assignee;});
+          const overdue = isOverdue(t);
+          html += '<div class="kanban-card" draggable="true" ondragstart="dragTask(event,\'' + t.id + '\')" ondragend="dragEnd()" onclick="openTaskModal(\'' + t.id + '\')" style="border:' + (overdue?'2px solid var(--danger)':'1px solid var(--border)') + ';">'
+            + '<div class="kanban-card-title">' + escapeHtml(t.title) + '</div>'
+            + (t.progress>0?progressBar(t.progress,3):'')
+            + '<div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-top:8px;">'
+            + '<div><span class="tag tag-' + t.priority + '">' + t.priority + '</span>' + (overdue?'<span style="background:rgba(239,68,68,0.2);color:#ef4444;padding:2px 6px;border-radius:3px;margin-left:4px;">Overdue</span>':'') + '</div>'
+            + (assignee?'<div style="width:20px;height:20px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-size:10px;font-weight:700;" title="' + escapeHtml(assignee.name) + '">' + assignee.avatar + '</div>':'')
+            + '</div>'
+            + (t.dueDate?'<div style="font-size:10px;color:var(--text-muted);margin-top:4px;">' + getRelativeDate(t.dueDate) + '</div>':'')
+            + '</div>';
+        });
+      } else {
+        html += '<div style="color:var(--text-muted);font-size:13px;padding:16px;text-align:center;">No tasks</div>';
+      }
+      html += '<button class="btn btn-secondary" style="width:100%;margin-top:8px;font-size:12px;" onclick="openTaskModal()">' + icons.plus + ' Add</button>'
+        + '</div></div>';
+    });
+    html += '</div>';
+    return html;
+  };
+
+  // MATRIX
+  const renderMatrix = function() {
+    const quads = [
+      {id:'q1',title:'Urgent & Important',sub:'Do First'},
+      {id:'q2',title:'Important, Not Urgent',sub:'Schedule'},
+      {id:'q3',title:'Urgent, Not Important',sub:'Delegate'},
+      {id:'q4',title:'Neither',sub:'Eliminate'}
+    ];
+    let html = '<div class="main-header"><div><h1 class="main-title">Eisenhower Matrix</h1><p class="main-subtitle">Prioritize by importance & urgency</p></div>'
+      + '<button class="btn btn-primary" onclick="openTaskModal()">' + icons.plus + ' New Task</button></div>'
+      + '<div class="matrix-grid">';
+    quads.forEach(function(q) {
+      const tasks = state.tasks.filter(function(t){return t.quadrant===q.id;});
+      const done = tasks.filter(function(t){return t.status==='done';}).length;
+      const pct = tasks.length ? Math.round(done/tasks.length*100) : 0;
+      html += '<div class="matrix-quadrant ' + q.id + '" ondragover="event.preventDefault()" ondrop="dropQuadrant(event,\'' + q.id + '\')">'
+        + '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px;">'
+        + '<div><div class="matrix-title">' + q.title + '</div><div style="font-size:12px;color:var(--text-muted);">' + q.sub + '</div></div>'
+        + '<div style="font-weight:600;font-size:18px;color:var(--accent);">' + tasks.length + '</div></div>';
+      if (tasks.length) {
+        html += '<div style="margin-bottom:12px;font-size:12px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Completion</span><span>' + pct + '%</span></div>'
+          + '<div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden;"><div style="height:100%;background:var(--accent);width:' + pct + '%;"></div></div></div>';
+      }
+      html += '<div class="task-list">';
+      if (tasks.length) {
+        tasks.forEach(function(t) {
+          html += '<div class="task-item priority-' + t.priority + '" draggable="true" ondragstart="dragTask(event,\'' + t.id + '\')" ondragend="dragEnd()" onclick="openTaskModal(\'' + t.id + '\')">'
+            + '<div class="task-checkbox ' + (t.status==='done'?'checked':'') + '" onclick="event.stopPropagation();toggleTask(\'' + t.id + '\')">' + icons.check + '</div>'
+            + '<span class="task-title ' + (t.status==='done'?'done':'') + '">' + escapeHtml(t.title) + '</span>'
+            + '<span class="tag tag-' + t.priority + '">' + t.priority + '</span>'
+            + (t.dueDate?'<span style="font-size:11px;color:var(--text-muted);">' + getRelativeDate(t.dueDate) + '</span>':'')
+            + '</div>';
+        });
+      } else {
+        html += '<div style="color:var(--text-muted);font-size:12px;padding:8px;text-align:center;">No tasks</div>';
+      }
+      html += '</div></div>';
+    });
+    html += '</div>';
+    return html;
+  };
+
+  // PLANNER (week nav)
+  const renderPlanner = function() {
+    const parts = plannerDate.split('-');
+    const date = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+    const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const weekStart = new Date(date); weekStart.setDate(date.getDate() - date.getDay());
+    const ts = todayStr();
+    let html = '<div class="main-header"><div><h1 class="main-title">Planner</h1><p class="main-subtitle">' + monthNames[date.getMonth()] + ' ' + date.getFullYear() + '</p></div>'
+      + '<button class="btn btn-primary" onclick="openTaskModal()">' + icons.plus + ' New Task</button></div>'
+      + '<div class="card" style="margin-bottom:16px;"><div style="display:flex;justify-content:space-between;align-items:center;">'
+      + '<button class="btn btn-secondary" onclick="navigatePlanner(-7)">' + icons.chevronLeft + ' Prev Week</button>'
+      + '<button class="btn btn-secondary" onclick="goToToday()">Today</button>'
+      + '<button class="btn btn-secondary" onclick="navigatePlanner(7)">Next Week ' + icons.chevronRight + '</button>'
+      + '</div></div>'
+      + '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:12px;">';
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(weekStart); d.setDate(weekStart.getDate() + i);
+      const ds = localDate(d);
+      const isToday = ds === ts;
+      const dayTasks = state.tasks.filter(function(t){return t.dueDate===ds;});
+      html += '<div class="card" style="padding:12px;' + (isToday?'border-color:var(--accent);':'')+'">'
+        + '<div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">' + dayNames[d.getDay()] + '</div>'
+        + '<div style="font-size:18px;font-weight:600;margin-bottom:12px;' + (isToday?'color:var(--accent);':'') + '">' + d.getDate() + '</div>'
+        + '<div style="display:flex;flex-direction:column;gap:6px;min-height:80px;">';
+      if (dayTasks.length) {
+        dayTasks.forEach(function(t) {
+          html += '<div style="background:var(--bg-tertiary);padding:6px 8px;border-radius:6px;font-size:12px;cursor:pointer;border-left:3px solid ' + (t.priority==='high'?'var(--danger)':t.priority==='medium'?'var(--warning)':'var(--success)') + ';" onclick="openTaskModal(\'' + t.id + '\')">' + escapeHtml(t.title) + '</div>';
+        });
+      } else {
+        html += '<div style="color:var(--text-muted);font-size:11px;text-align:center;">No tasks</div>';
+      }
+      html += '</div></div>';
+    }
+    html += '</div>';
+    return html;
+  };
+
+  // GANTT
+  const renderGantt = function() {
+    const today = new Date();
+    const startDate = new Date(today); startDate.setDate(today.getDate() - 5);
+    const days = [];
+    for (let i = 0; i < 30; i++) {
+      const d = new Date(startDate); d.setDate(startDate.getDate() + i);
+      days.push(d);
+    }
+    const ts = todayStr();
+    const tasks = state.tasks.filter(function(t){return (t.dueDate||t.startDate)&&t.status!=='done';});
+    tasks.sort(function(a,b){const p={high:0,medium:1,low:2};return (p[a.priority]||2)-(p[b.priority]||2);});
+
+    const getRange = function(t) {
+      const pd = function(s) {
+        if (!s) return null;
+        const p = s.split('-');
+        return new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2]));
+      };
+      const start = pd(t.startDate)||pd(t.dueDate);
+      const end = pd(t.dueDate)||pd(t.startDate);
+      if (!start||!end) return null;
+      const sd = Math.floor((start-startDate)/86400000);
+      const ed = Math.floor((end-startDate)/86400000);
+      if ((sd<0&&ed<0)||(sd>29&&ed>29)) return null;
+      const bs = Math.max(0,Math.min(29,sd));
+      const be = Math.max(bs,Math.min(29,ed));
+      return {bs:bs,be:be};
+    };
+
+    let html = '<div class="main-header"><div><h1 class="main-title">Gantt Chart</h1><p class="main-subtitle">30-day project timeline</p></div>'
+      + '<button class="btn btn-primary" onclick="openTaskModal()">' + icons.plus + ' New Task</button></div>'
+      + '<div class="card" style="overflow-x:auto;">'
+      + '<table style="border-collapse:collapse;min-width:1100px;width:100%;">'
+      + '<tr><th style="background:var(--bg-tertiary);padding:8px 10px;text-align:left;font-size:12px;border:1px solid var(--border);min-width:160px;">Task</th>';
+    days.forEach(function(d,i) {
+      const isToday = localDate(d) === ts;
+      const isWeekend = d.getDay()===0||d.getDay()===6;
+      html += '<th style="background:' + (isToday?'var(--accent)':isWeekend?'var(--bg-hover)':'var(--bg-tertiary)') + ';padding:4px 2px;text-align:center;font-size:9px;color:' + (isToday?'#000':'var(--text-muted)') + ';border:' + (i%7===6?'2px':'1px') + ' solid var(--border);min-width:28px;">'
+        + ['Su','Mo','Tu','We','Th','Fr','Sa'][d.getDay()] + '<br>' + d.getDate() + '</th>';
+    });
+    html += '</tr>';
+    if (tasks.length) {
+      tasks.forEach(function(t) {
+        const range = getRange(t);
+        if (!range) return;
+        const color = t.status==='in-progress'?'var(--warning)':t.status==='confirmed'?'var(--gold)':'var(--success)';
+        html += '<tr><td style="background:var(--bg-secondary);padding:8px 10px;font-size:12px;cursor:pointer;border:1px solid var(--border);" onclick="openTaskModal(\'' + t.id + '\')" title="' + escapeHtml(t.title) + '">'
+          + '<span class="tag tag-' + t.priority + '" style="font-size:9px;padding:1px 4px;">' + t.priority[0].toUpperCase() + '</span> '
+          + escapeHtml(t.title.length>16?t.title.slice(0,16)+'...':t.title) + '</td>';
+        days.forEach(function(d,i) {
+          const inRange = i>=range.bs&&i<=range.be;
+          html += '<td style="background:var(--bg-secondary);padding:2px;position:relative;border:' + (i%7===6?'2px':'1px') + ' solid var(--border);height:32px;">'
+            + (inRange?'<div style="position:absolute;left:2px;right:2px;top:4px;bottom:4px;background:' + color + ';border-radius:3px;"></div>':'')
+            + '</td>';
+        });
+        html += '</tr>';
+      });
+    } else {
+      html += '<tr><td colspan="31" style="background:var(--bg-secondary);padding:20px;text-align:center;color:var(--text-muted);border:1px solid var(--border);">No active tasks with dates.</td></tr>';
+    }
+    html += '</table></div>';
+    return html;
+  };
+
+  // VENDOR TRACKER
+  const contractBadge = function(s) {
+    const map = {none:'badge-none',negotiating:'badge-negotiating',signed:'badge-signed'};
+    const lbl = {none:'No Contract',negotiating:'Negotiating',signed:'Signed ✓'};
+    return '<span class="badge ' + (map[s]||'badge-none') + '">' + (lbl[s]||s) + '</span>';
+  };
+  const paymentBadge = function(s) {
+    const map = {unpaid:'badge-unpaid',deposit:'badge-deposit',paid:'badge-paid'};
+    const lbl = {unpaid:'Unpaid',deposit:'Deposit Paid',paid:'Fully Paid ✓'};
+    return '<span class="badge ' + (map[s]||'badge-unpaid') + '">' + (lbl[s]||s) + '</span>';
+  };
+  const renderTeam = function() {
+    const totalBudget = state.teamMembers.reduce(function(s,m){return s+(m.budgetEstimate||0);},0);
+    const totalActual = state.teamMembers.reduce(function(s,m){return s+(m.budgetActual||0);},0);
+    const fmt = function(n){return '$'+(n||0).toLocaleString();};
+    let html = '<div class="main-header"><div><h1 class="main-title">Vendor Tracker</h1><p class="main-subtitle">Manage your wedding vendors, contracts & payments</p></div>'
+      + '<button class="btn btn-primary" onclick="openTeamModal()">' + icons.plus + ' Add Vendor</button></div>'
+      + '<div class="stats-grid" style="margin-bottom:20px;">'
+      + '<div class="stat-card"><div class="stat-label">Total Vendors</div><div class="stat-value">' + state.teamMembers.length + '</div></div>'
+      + '<div class="stat-card"><div class="stat-label">Contracts Signed</div><div class="stat-value" style="color:var(--success)">' + state.teamMembers.filter(function(m){return m.contractStatus==='signed';}).length + '</div></div>'
+      + '<div class="stat-card"><div class="stat-label">Est. Vendor Cost</div><div class="stat-value" style="color:var(--gold);font-size:22px;">' + fmt(totalBudget) + '</div></div>'
+      + '<div class="stat-card"><div class="stat-label">Actual Spent</div><div class="stat-value" style="color:var(--accent);font-size:22px;">' + fmt(totalActual) + '</div></div>'
+      + '</div>'
+      + '<div class="team-grid">';
+    state.teamMembers.forEach(function(m) {
+      const tasks = state.tasks.filter(function(t){return t.assignee===m.id;});
+      const done  = tasks.filter(function(t){return t.status==='done'||t.status==='confirmed';}).length;
+      const over  = tasks.filter(isOverdue).length;
+      html += '<div class="team-card">'
+        + '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">'
+        + '<div class="team-header" style="margin-bottom:0;flex:1;">'
+        + '<div class="team-avatar">' + escapeHtml(m.avatar) + '</div>'
+        + '<div><div class="team-name">' + escapeHtml(m.name) + '</div><div class="team-role">' + escapeHtml(m.role) + '</div></div></div>'
+        + '<div style="display:flex;gap:6px;">'
+        + '<button class="btn btn-secondary" style="padding:4px 10px;font-size:12px;" onclick="openTeamModal(\'' + m.id + '\')">Edit</button>'
+        + '<button class="btn btn-secondary" style="padding:4px 8px;font-size:12px;" onclick="deleteTeamMember(\'' + m.id + '\')">' + icons.x + '</button>'
+        + '</div></div>'
+        + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">'
+        + contractBadge(m.contractStatus||'none') + ' ' + paymentBadge(m.paymentStatus||'unpaid')
+        + '</div>'
+        + (m.phone||m.email||m.website ? '<div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;display:flex;flex-direction:column;gap:3px;">'
+          + (m.phone ? '<span>📞 ' + escapeHtml(m.phone) + '</span>' : '')
+          + (m.email ? '<span>✉️ <a href="mailto:' + escapeHtml(m.email) + '" style="color:var(--accent);">' + escapeHtml(m.email) + '</a></span>' : '')
+          + (m.website && /^https?:\/\//i.test(m.website) ? '<span>🌐 <a href="' + escapeHtml(m.website) + '" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">' + escapeHtml(m.website) + '</a></span>' : (m.website ? '<span>🌐 ' + escapeHtml(m.website) + '</span>' : ''))
+          + '</div>' : '')
+        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;font-size:12px;">'
+        + '<div style="background:var(--bg-tertiary);padding:8px;border-radius:6px;"><div style="color:var(--text-muted);margin-bottom:2px;">Estimated</div><div style="font-weight:600;color:var(--gold);">' + fmt(m.budgetEstimate) + '</div></div>'
+        + '<div style="background:var(--bg-tertiary);padding:8px;border-radius:6px;"><div style="color:var(--text-muted);margin-bottom:2px;">Actual</div><div style="font-weight:600;color:var(--accent);">' + fmt(m.budgetActual) + '</div></div>'
+        + '</div>'
+        + (m.notes ? '<div style="font-size:12px;color:var(--text-secondary);background:var(--bg-tertiary);padding:8px;border-radius:6px;margin-bottom:10px;font-style:italic;">' + escapeHtml(m.notes) + '</div>' : '')
+        + '<div style="font-size:12px;color:var(--text-secondary);">' + done + '/' + tasks.length + ' tasks complete'
+        + (over ? ' &nbsp;<span style="color:var(--danger);font-weight:600;">' + over + ' overdue</span>' : '') + '</div>'
+        + '<div style="height:4px;background:var(--border);border-radius:2px;margin-top:6px;overflow:hidden;"><div style="height:100%;background:var(--accent);width:' + (tasks.length?Math.round(done/tasks.length*100):0) + '%;"></div></div>'
+        + '</div>';
+    });
+    if (!state.teamMembers.length) {
+      html += '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);">No vendors yet. Add your first vendor to get started.</div>';
+    }
+    html += '</div>';
+    return html;
+  };
+
+  // BUDGET TRACKER
+  const renderBudget = function() {
+    const budget = state.budget || [];
+    const settings = state.settings || {};
+    const totalBudget = parseFloat(settings.budgetTotal) || 0;
+    const totalEst = budget.reduce(function(s,b){return s+(b.estimatedCost||0);},0);
+    const totalActual = budget.reduce(function(s,b){return s+(b.actualCost||0);},0);
+    const totalPaid = budget.reduce(function(s,b){return s+(b.amountPaid||0);},0);
+    const remaining = totalBudget - totalActual;
+    const fmt = function(n){return '$'+(n||0).toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:0});};
+    const pct = totalBudget ? Math.min(100,Math.round(totalActual/totalBudget*100)) : 0;
+
+    let html = '<div class="main-header"><div><h1 class="main-title">Budget Tracker</h1><p class="main-subtitle">Track estimated vs actual wedding costs</p></div>'
+      + '<button class="btn btn-primary" onclick="openBudgetModal()">' + icons.plus + ' Add Entry</button></div>'
+      + '<div class="stats-grid" style="margin-bottom:20px;">'
+      + '<div class="stat-card"><div class="stat-label">Total Budget</div><div class="stat-value" style="color:var(--gold);font-size:22px;">' + (totalBudget?fmt(totalBudget):'—') + '</div><div style="font-size:11px;color:var(--text-muted);margin-top:4px;">' + (totalBudget?'Set in Settings':'Set in Settings') + '</div></div>'
+      + '<div class="stat-card"><div class="stat-label">Estimated Total</div><div class="stat-value" style="font-size:22px;">' + fmt(totalEst) + '</div></div>'
+      + '<div class="stat-card"><div class="stat-label">Actual Spent</div><div class="stat-value" style="color:var(--accent);font-size:22px;">' + fmt(totalActual) + '</div></div>'
+      + '<div class="stat-card" style="border-left:4px solid ' + (remaining<0?'var(--danger)':'var(--success)') + ';"><div class="stat-label">Remaining</div><div class="stat-value" style="color:' + (remaining<0?'var(--danger)':'var(--success)') + ';font-size:22px;">' + (totalBudget?fmt(remaining):'—') + '</div></div>'
+      + '</div>';
+
+    if (totalBudget) {
+      html += '<div class="card" style="margin-bottom:16px;">'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span class="card-title" style="margin-bottom:0;">Budget Used</span><span style="font-weight:600;color:' + (pct>100?'var(--danger)':'var(--text-primary)') + ';">' + pct + '%</span></div>'
+        + '<div style="height:12px;background:var(--border);border-radius:6px;overflow:hidden;"><div style="height:100%;background:' + (pct>100?'var(--danger)':pct>80?'var(--warning)':'var(--success)') + ';width:' + Math.min(100,pct) + '%;transition:width 0.4s;"></div></div>'
+        + '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:4px;"><span>' + fmt(totalActual) + ' spent</span><span>' + fmt(totalBudget) + ' budget</span></div>'
+        + '</div>';
+    }
+
+    if (!budget.length) {
+      html += '<div class="card" style="text-align:center;padding:48px;">'
+        + '<div style="font-size:40px;margin-bottom:12px;">💰</div>'
+        + '<div style="font-size:16px;font-weight:600;margin-bottom:8px;">No budget entries yet</div>'
+        + '<p style="color:var(--text-muted);margin-bottom:20px;">Add your first budget line to start tracking costs.</p>'
+        + '<button class="btn btn-primary" onclick="openBudgetModal()">Add First Entry</button></div>';
+    } else {
+      html += '<div class="card" style="padding:0;overflow:hidden;"><table class="budget-table"><thead><tr>'
+        + '<th>Category</th><th>Vendor / Item</th><th>Estimated</th><th>Actual</th><th>Paid</th><th>Status</th><th style="width:60px;"></th>'
+        + '</tr></thead><tbody>';
+      budget.forEach(function(b) {
+        const cat = state.categories.find(function(c){return c.id===b.categoryId;});
+        const catColor = catColorMap[b.categoryId]||'var(--text-muted)';
+        html += '<tr>'
+          + '<td><span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:' + catColor + ';flex-shrink:0;"></span>' + escapeHtml(cat?cat.name:b.categoryId||'—') + '</span></td>'
+          + '<td><div style="font-weight:500;">' + escapeHtml(b.vendorName||'—') + '</div>' + (b.description?'<div style="font-size:11px;color:var(--text-muted);">' + escapeHtml(b.description) + '</div>':'') + '</td>'
+          + '<td style="color:var(--gold);font-weight:500;">' + fmt(b.estimatedCost) + '</td>'
+          + '<td style="color:var(--accent);font-weight:500;">' + fmt(b.actualCost) + '</td>'
+          + '<td style="color:var(--success);font-weight:500;">' + fmt(b.amountPaid) + '</td>'
+          + '<td>' + paymentBadge(b.status||'unpaid') + '</td>'
+          + '<td><button class="btn btn-secondary" style="padding:3px 8px;font-size:11px;" onclick="openBudgetModal(\'' + b.id + '\')">Edit</button>'
+          + ' <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:14px;" onclick="deleteBudgetEntry(\'' + b.id + '\')">✕</button></td>'
+          + '</tr>';
+      });
+      html += '</tbody><tfoot><tr style="background:var(--bg-tertiary);font-weight:600;">'
+        + '<td colspan="2" style="padding:10px 12px;">Totals</td>'
+        + '<td style="padding:10px 12px;color:var(--gold);">' + fmt(totalEst) + '</td>'
+        + '<td style="padding:10px 12px;color:var(--accent);">' + fmt(totalActual) + '</td>'
+        + '<td style="padding:10px 12px;color:var(--success);">' + fmt(totalPaid) + '</td>'
+        + '<td colspan="2"></td></tr></tfoot></table></div>';
+    }
+    return html;
+  };
+
+  // PLANNING GUIDE
+  const renderGuide = function() {
+    const phases = [
+      { emoji:'💍', title:'12+ Months Out', color:'var(--accent)', items:[
+        'Set your overall wedding budget','Choose your wedding date and time','Draft your initial guest list','Research and shortlist venues','Hire a wedding coordinator or planner','Decide on your wedding style and colour palette','Announce engagement and set up a wedding website',
+      ]},
+      { emoji:'📸', title:'9–12 Months Out', color:'var(--category-photo)', items:[
+        'Book your ceremony and reception venue','Hire your photographer and videographer','Book your officiant','Begin researching caterers','Send save-the-dates','Start shopping for wedding dress / attire','Book live band or DJ',
+      ]},
+      { emoji:'🌸', title:'6–9 Months Out', color:'var(--category-floral)', items:[
+        'Book florist and discuss floral design','Schedule catering tastings','Book honeymoon travel and accommodation','Choose wedding party roles and attire','Register for gifts','Plan transportation for guests and wedding party','Research hair and makeup artists',
+      ]},
+      { emoji:'🎂', title:'4–6 Months Out', color:'var(--category-cake)', items:[
+        'Order wedding cake or dessert table','Book hair & makeup artist — schedule trial','Arrange guest accommodation blocks','Finalise ceremony structure and vows','Book wedding night hotel','Order wedding stationery (invitations, menus, signage)','Confirm all vendor contracts',
+      ]},
+      { emoji:'💌', title:'2–4 Months Out', color:'var(--category-stationery)', items:[
+        'Send invitations (6–8 weeks before)','Create wedding day timeline','Plan seating chart','Schedule dress fittings','Organise rehearsal dinner','Confirm menu with caterer','Arrange all payment schedules',
+      ]},
+      { emoji:'✅', title:'Final Month', color:'var(--success)', items:[
+        'Chase outstanding RSVPs','Finalise seating chart','Confirm all vendors with day-of timeline','Complete final dress fitting','Collect marriage licence','Prepare payments / tips for vendors','Pack for honeymoon',
+      ]},
+      { emoji:'💒', title:'Wedding Week', color:'var(--gold)', items:[
+        'Deliver vendor payments and gratuities','Rehearsal ceremony run-through','Deliver décor items to venue','Break-in your wedding shoes!','Send final guest numbers to caterer','Prepare emergency kit (safety pins, stain remover, etc.)','Rest — you\'ve planned everything perfectly.',
+      ]},
+    ];
+    let html = '<div class="main-header"><div><h1 class="main-title">Wedding Planning Guide</h1><p class="main-subtitle">Your comprehensive month-by-month planning checklist</p></div></div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">';
+    phases.forEach(function(ph) {
+      html += '<div class="card" style="border-top:3px solid ' + ph.color + ';">'
+        + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">'
+        + '<span style="font-size:24px;">' + ph.emoji + '</span>'
+        + '<h3 style="font-size:15px;font-weight:700;color:' + ph.color + ';">' + ph.title + '</h3></div>'
+        + '<ul style="list-style:none;display:flex;flex-direction:column;gap:7px;">';
+      ph.items.forEach(function(item) {
+        html += '<li style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--text-secondary);">'
+          + '<span style="color:' + ph.color + ';flex-shrink:0;margin-top:1px;">✦</span>'
+          + escapeHtml(item) + '</li>';
+      });
+      html += '</ul></div>';
+    });
+    html += '</div>';
+    return html;
+  };
+
+  // BUDGET MODAL
+  const renderBudgetModal = function() {
+    if (!budgetModalOpen) return '';
+    const b = editingBudgetId ? (state.budget||[]).find(function(x){return x.id===editingBudgetId;}) : null;
+    const g = function(f){ return b ? (b[f]||'') : ''; };
+    const cats = state.categories || [];
+    return '<div class="modal-overlay active" onclick="closeBudgetModal()">'
+      + '<div class="modal" onclick="event.stopPropagation()">'
+      + '<div class="modal-header"><h2 class="modal-title">' + (b?'Edit Budget Entry':'Add Budget Entry') + '</h2>'
+      + '<button class="btn btn-secondary" style="padding:8px;" onclick="closeBudgetModal()">' + icons.x + '</button></div>'
+      + '<div class="modal-body" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">'
+      + '<div style="grid-column:1/-1;"><label class="form-label">Category</label>'
+      + '<select id="bgt-cat" class="form-select">'
+      + cats.map(function(c){return '<option value="'+c.id+'"'+(g('categoryId')===c.id?' selected':'')+'>'+escapeHtml(c.name)+'</option>';}).join('')
+      + '</select></div>'
+      + '<div style="grid-column:1/-1;"><label class="form-label">Vendor / Item Name *</label>'
+      + '<input id="bgt-vendor" class="form-input" placeholder="e.g. Grand Ballroom Venue" value="'+escapeHtml(g('vendorName'))+'"></div>'
+      + '<div style="grid-column:1/-1;"><label class="form-label">Description</label>'
+      + '<input id="bgt-desc" class="form-input" placeholder="Optional detail" value="'+escapeHtml(g('description'))+'"></div>'
+      + '<div><label class="form-label">Estimated Cost ($)</label>'
+      + '<input id="bgt-est" class="form-input" type="number" min="0" step="0.01" placeholder="0.00" value="'+escapeHtml(String(g('estimatedCost')))+'"></div>'
+      + '<div><label class="form-label">Actual Cost ($)</label>'
+      + '<input id="bgt-actual" class="form-input" type="number" min="0" step="0.01" placeholder="0.00" value="'+escapeHtml(String(g('actualCost')))+'"></div>'
+      + '<div><label class="form-label">Amount Paid ($)</label>'
+      + '<input id="bgt-paid" class="form-input" type="number" min="0" step="0.01" placeholder="0.00" value="'+escapeHtml(String(g('amountPaid')))+'"></div>'
+      + '<div><label class="form-label">Payment Status</label>'
+      + '<select id="bgt-status" class="form-select">'
+      + ['unpaid','deposit','paid'].map(function(s){return '<option value="'+s+'"'+(g('status')===s?' selected':'')+'>'+s.charAt(0).toUpperCase()+s.slice(1)+'</option>';}).join('')
+      + '</select></div>'
+      + '<div style="grid-column:1/-1;" id="bgt-error" style="display:none;color:var(--danger);font-size:13px;"></div>'
+      + '</div>'
+      + '<div class="modal-footer">'
+      + '<button class="btn btn-secondary" onclick="closeBudgetModal()">Cancel</button>'
+      + '<button class="btn btn-primary" onclick="saveBudgetEntry()">' + (b?'Save Changes':'Add Entry') + '</button>'
+      + '</div></div></div>';
+  };
+
+  // SEARCH RESULTS
+  const renderSearchResults = function() {
+    const q = searchQuery.toLowerCase();
+    const results = state.tasks.filter(function(t){
+      return t.title.toLowerCase().indexOf(q)>=0 || (t.description||'').toLowerCase().indexOf(q)>=0;
+    });
+    let html = '<div class="card"><h3 class="card-title">Search Results (' + results.length + ')</h3><div class="task-list">';
+    if (results.length) {
+      results.forEach(function(t) {
+        html += '<div class="task-item priority-' + t.priority + (isOverdue(t)?' overdue':'') + '" onclick="openTaskModal(\'' + t.id + '\')">'
+          + '<div class="task-checkbox ' + (t.status==='done'?'checked':'') + '" onclick="event.stopPropagation();toggleTask(\'' + t.id + '\')">' + icons.check + '</div>'
+          + '<div style="flex:1;"><span class="task-title ' + (t.status==='done'?'done':'') + '">' + escapeHtml(t.title) + '</span>'
+          + (t.description?'<div style="font-size:12px;color:var(--text-muted);margin-top:2px;">' + escapeHtml((t.description||'').slice(0,60)) + ((t.description||'').length>60?'...':'') + '</div>':'')
+          + '</div><span class="tag tag-' + t.priority + '">' + t.priority + '</span>'
+          + '<span class="tag tag-' + t.status + '">' + t.status.replace('-',' ') + '</span></div>';
+      });
+    } else {
+      html += '<div style="color:var(--text-muted);padding:16px;">No results found for "' + escapeHtml(searchQuery) + '"</div>';
+    }
+    html += '</div></div>';
+    return html;
+  };
+
+  // TASK MODAL
+  const renderTaskModal = function() {
+    const t = editingTask ? state.tasks.find(function(x){return x.id===editingTask;}) : null;
+    return '<div class="modal-overlay ' + (taskModalOpen?'active':'') + '" onclick="closeTaskModal()">'
+      + '<div class="modal" onclick="event.stopPropagation()">'
+      + '<div class="modal-header"><h2 class="modal-title">' + (t?'Edit Task':'New Task') + '</h2>'
+      + '<button class="btn btn-secondary" style="padding:8px;" onclick="closeTaskModal()">' + icons.x + '</button></div>'
+      + '<form class="modal-body" onsubmit="saveTask(event)">'
+      + '<input type="hidden" name="id" value="' + (t?escapeHtml(t.id):'') + '">'
+      + '<div class="form-group"><label class="form-label">Title</label>'
+      + '<input type="text" name="title" class="form-input" value="' + escapeHtml(t?t.title:'') + '" required></div>'
+      + '<div class="form-group"><label class="form-label">Description</label>'
+      + '<textarea name="description" class="form-input" style="resize:vertical;min-height:80px;" placeholder="Enter task description">' + escapeHtml(t?t.description||'':'') + '</textarea></div>'
+      + '<div class="form-row">'
+      + '<div class="form-group"><label class="form-label">Status</label><select name="status" class="form-select">'
+      + [{v:'todo',l:'To Do'},{v:'in-progress',l:'In Progress'},{v:'confirmed',l:'Confirmed'},{v:'done',l:'Done'}].map(function(o){return '<option value="' + o.v + '"' + (t&&t.status===o.v?' selected':'') + '>' + o.l + '</option>';}).join('')
+      + '</select></div>'
+      + '<div class="form-group"><label class="form-label">Priority</label><select name="priority" class="form-select">'
+      + ['low','medium','high'].map(function(p){return '<option value="' + p + '"' + (t&&t.priority===p?' selected':'') + '>' + p.charAt(0).toUpperCase()+p.slice(1) + '</option>';}).join('')
+      + '</select></div></div>'
+      + '<div class="form-row">'
+      + '<div class="form-group"><label class="form-label">Start Date</label><input type="date" name="startDate" class="form-input" value="' + (t&&t.startDate?t.startDate:'') + '"></div>'
+      + '<div class="form-group"><label class="form-label">Due Date</label><input type="date" name="dueDate" class="form-input" value="' + (t&&t.dueDate?t.dueDate:'') + '"></div></div>'
+      + '<div class="form-row">'
+      + '<div class="form-group"><label class="form-label">Assignee</label><select name="assignee" class="form-select"><option value="">Unassigned</option>'
+      + state.teamMembers.map(function(m){return '<option value="' + m.id + '"' + (t&&t.assignee===m.id?' selected':'') + '>' + escapeHtml(m.name) + '</option>';}).join('')
+      + '</select></div>'
+      + '<div class="form-group"><label class="form-label">Category</label><select name="category" class="form-select"><option value="">None</option>'
+      + state.categories.map(function(c){return '<option value="' + c.id + '"' + (t&&t.category===c.id?' selected':'') + '>' + escapeHtml(c.name) + '</option>';}).join('')
+      + '</select></div></div>'
+      + '<div class="form-row">'
+      + '<div class="form-group"><label class="form-label">Progress: <span id="prog-label">' + (t?t.progress||0:0) + '</span>%</label>'
+      + '<input type="range" name="progress" class="form-input" min="0" max="100" value="' + (t?t.progress||0:0) + '" oninput="document.getElementById(\'prog-label\').textContent=this.value" style="height:24px;cursor:pointer;"></div>'
+      + '<div class="form-group"><label class="form-label">Recurrence</label><select name="recurrence" class="form-select">'
+      + ['none','daily','weekly','monthly'].map(function(r){return '<option value="' + r + '"' + (t&&t.recurrence===r?' selected':'') + '>' + r.charAt(0).toUpperCase()+r.slice(1) + '</option>';}).join('')
+      + '</select></div></div>'
+      + '<div class="form-group"><label class="form-label">Eisenhower Quadrant</label><select name="quadrant" class="form-select">'
+      + [{v:'q1',l:'Q1 - Urgent & Important'},{v:'q2',l:'Q2 - Important, Not Urgent'},{v:'q3',l:'Q3 - Urgent, Not Important'},{v:'q4',l:'Q4 - Neither'}].map(function(q){return '<option value="' + q.v + '"' + (t&&t.quadrant===q.v?' selected':'') + '>' + q.l + '</option>';}).join('')
+      + '</select></div>'
+      + '<div class="modal-footer" style="padding:0;border:none;margin-top:20px;">'
+      + (t?'<button type="button" class="btn" style="background:transparent;border:1px solid var(--danger);color:var(--danger);margin-right:auto;" onclick="deleteTask(\'' + t.id + '\')">Delete</button>':'')
+      + '<button type="button" class="btn btn-secondary" onclick="closeTaskModal()">Cancel</button>'
+      + '<button type="submit" class="btn btn-primary">' + (t?'Update':'Create') + '</button></div>'
+      + '</form></div></div>';
+  };
+
+  // SETTINGS MODAL
+  const renderSettingsModal = function() {
+    const s = state.settings || {};
+    return '<div class="modal-overlay ' + (settingsModalOpen?'active':'') + '" onclick="closeSettings()">'
+      + '<div class="modal" style="max-height:85vh;overflow-y:auto;" onclick="event.stopPropagation()">'
+      + '<div class="modal-header"><h2 class="modal-title">Settings</h2><button class="btn btn-secondary" style="padding:8px;" onclick="closeSettings()">' + icons.x + '</button></div>'
+      + '<div class="modal-body">'
+      + '<div style="font-size:13px;font-weight:600;color:var(--gold);margin-bottom:12px;">Wedding Details</div>'
+      + '<div class="form-group"><label class="form-label">Event Title / Couple Names</label><input type="text" id="project-name" class="form-input" value="' + escapeHtml(s.projectName||'Our Wedding') + '" onchange="updateSettings()"></div>'
+      + '<div class="form-row">'
+      + '<div class="form-group"><label class="form-label">Wedding Date</label><input type="date" id="wedding-date" class="form-input" value="' + escapeHtml(s.weddingDate||'') + '" onchange="updateSettings()"></div>'
+      + '<div class="form-group"><label class="form-label">Engagement Date</label><input type="date" id="engagement-date" class="form-input" value="' + escapeHtml(s.engagementDate||'') + '" onchange="updateSettings()"></div>'
+      + '</div>'
+      + '<div class="form-group"><label class="form-label">Ceremony Venue</label><input type="text" id="ceremony-venue" class="form-input" placeholder="e.g. St. Mary\'s Cathedral" value="' + escapeHtml(s.ceremonyVenue||'') + '" onchange="updateSettings()"></div>'
+      + '<div class="form-group"><label class="form-label">Reception Venue</label><input type="text" id="reception-venue" class="form-input" placeholder="e.g. The Grand Ballroom" value="' + escapeHtml(s.receptionVenue||'') + '" onchange="updateSettings()"></div>'
+      + '<div class="form-row">'
+      + '<div class="form-group"><label class="form-label">Guest Count (Ceremony)</label><input type="number" id="guest-ceremony" class="form-input" min="1" value="' + escapeHtml(String(s.guestCountCeremony||'')) + '" onchange="updateSettings()"></div>'
+      + '<div class="form-group"><label class="form-label">Guest Count (Reception)</label><input type="number" id="guest-reception" class="form-input" min="1" value="' + escapeHtml(String(s.guestCountReception||'')) + '" onchange="updateSettings()"></div>'
+      + '</div>'
+      + '<div class="form-row">'
+      + '<div class="form-group"><label class="form-label">Wedding Style</label><input type="text" id="wedding-style" class="form-input" placeholder="e.g. Romantic Garden" value="' + escapeHtml(s.weddingStyle||'') + '" onchange="updateSettings()"></div>'
+      + '<div class="form-group"><label class="form-label">Colour Palette</label><input type="text" id="color-palette" class="form-input" placeholder="e.g. Blush & Gold" value="' + escapeHtml(s.colorPalette||'') + '" onchange="updateSettings()"></div>'
+      + '</div>'
+      + '<div class="form-row">'
+      + '<div class="form-group"><label class="form-label">Total Budget ($)</label><input type="number" id="budget-total" class="form-input" min="0" value="' + escapeHtml(String(s.budgetTotal||'')) + '" onchange="updateSettings()"></div>'
+      + '<div class="form-group"><label class="form-label">Catering Style</label><input type="text" id="catering-style" class="form-input" placeholder="e.g. Plated Dinner" value="' + escapeHtml(s.cateringStyle||'') + '" onchange="updateSettings()"></div>'
+      + '</div>'
+      + '<div class="form-group"><label class="form-label">Your Role</label><select id="planner-role" class="form-select" onchange="updateSettings()">'
+      + ['Bride','Groom','Partner','Wedding Planner','Coordinator','Other'].map(function(r){return '<option value="' + r + '"' + (s.plannerRole===r?' selected':'') + '>' + r + '</option>';}).join('')
+      + '</select></div>'
+      + '<div style="font-size:13px;font-weight:600;color:var(--gold);margin-bottom:12px;margin-top:16px;border-top:1px solid var(--border);padding-top:16px;">App Settings</div>'
+      + '<div class="form-row">'
+      + '<div class="form-group"><label class="form-label">Week Start</label><select class="form-select" id="week-start" onchange="updateSettings()">'
+      + '<option value="monday"' + (s.weekStartDay==='monday'?' selected':'') + '>Monday</option>'
+      + '<option value="sunday"' + (s.weekStartDay==='sunday'?' selected':'') + '>Sunday</option>'
+      + '</select></div>'
+      + '<div class="form-group"><label class="form-label">Pomodoro Work (min)</label><input type="number" id="pomo-work" class="form-input" min="1" max="60" value="' + (s.pomodoroWork||25) + '" onchange="updateSettings()"></div>'
+      + '</div>'
+      + '<div class="form-group" style="border-top:1px solid var(--border);padding-top:16px;margin-top:16px;"><label class="form-label">Vendor Categories</label>'
+      + '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">'
+      + state.categories.map(function(c){return '<div style="background:var(--bg-tertiary);padding:8px 12px;border-radius:6px;display:flex;align-items:center;gap:8px;">' + escapeHtml(c.name) + '<button style="background:none;border:none;color:var(--text-muted);cursor:pointer;" onclick="deleteCategory(\'' + c.id + '\')">×</button></div>';}).join('')
+      + '</div><div style="display:flex;gap:8px;"><input type="text" id="category-name" class="form-input" placeholder="New category" style="flex:1;"><button class="btn btn-secondary" onclick="addCategory()">Add</button></div></div>'
+      + '<div class="form-group" style="border-top:1px solid var(--border);padding-top:16px;margin-top:16px;"><label class="form-label">Data</label>'
+      + '<button class="btn btn-secondary" style="width:100%;margin-bottom:8px;" onclick="exportData()">' + icons.download + ' Export Backup</button>'
+      + '<input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">'
+      + '<button class="btn btn-secondary" style="width:100%;" onclick="document.getElementById(\'import-file\').click()">' + icons.upload + ' Import Backup</button></div>'
+      + '<div class="form-group" style="border-top:1px solid var(--border);padding-top:16px;margin-top:16px;">'
+      + '<label class="form-label" style="color:var(--danger);">Danger Zone</label>'
+      + '<button class="btn" style="width:100%;background:transparent;border:1px solid var(--danger);color:var(--danger);" onclick="resetData()">' + icons.trash + ' Reset All Data</button></div>'
+      + '<div style="border-top:1px solid var(--border);padding-top:16px;margin-top:16px;font-size:12px;color:var(--text-muted);text-align:center;">WeddingFlow Pro &mdash; <a href="https://creatif.tools" style="color:var(--gold);font-weight:600;text-decoration:none;">creatif.tools</a></div>'
+      + '</div></div></div>';
+  };
+
+  // VENDOR MODAL
+  const renderTeamModal = function() {
+    const m = editingTeamMemberId ? state.teamMembers.find(function(x){return x.id===editingTeamMemberId;}) : null;
+    const v = function(field, fallback){ return escapeHtml(String((m&&m[field]!=null?m[field]:'')||fallback||'')); };
+    const sel = function(field, val){ return (m&&m[field]===val)?' selected':''; };
+    return '<div class="modal-overlay ' + (teamModalOpen?'active':'') + '" onclick="closeTeamModal()">'
+      + '<div class="modal" style="max-width:560px;max-height:90vh;overflow-y:auto;" onclick="event.stopPropagation()">'
+      + '<div class="modal-header"><h2 class="modal-title">' + (m?'Edit Vendor':'Add Vendor') + '</h2><button class="btn btn-secondary" style="padding:8px;" onclick="closeTeamModal()">' + icons.x + '</button></div>'
+      + '<div class="modal-body">'
+      + '<div id="team-error" style="display:none;background:rgba(185,74,74,0.15);color:var(--danger);padding:10px;border-radius:6px;margin-bottom:16px;font-size:13px;"></div>'
+      + '<div class="form-row">'
+      + '<div class="form-group"><label class="form-label">Vendor / Business Name *</label><input type="text" id="team-name" class="form-input" placeholder="e.g. Grand Ballroom" value="' + v('name') + '"></div>'
+      + '<div class="form-group"><label class="form-label">Category / Role *</label><input type="text" id="team-role" class="form-input" placeholder="e.g. Venue & Ceremony Space" value="' + v('role') + '"></div>'
+      + '</div>'
+      + '<div class="form-row">'
+      + '<div class="form-group"><label class="form-label">Phone</label><input type="tel" id="team-phone" class="form-input" placeholder="+1 555 000 0000" value="' + v('phone') + '"></div>'
+      + '<div class="form-group"><label class="form-label">Email</label><input type="email" id="team-email" class="form-input" placeholder="vendor@example.com" value="' + v('email') + '"></div>'
+      + '</div>'
+      + '<div class="form-group"><label class="form-label">Website</label><input type="url" id="team-website" class="form-input" placeholder="https://" value="' + v('website') + '"></div>'
+      + '<div class="form-row">'
+      + '<div class="form-group"><label class="form-label">Contract Status</label><select id="team-contract" class="form-select">'
+      + '<option value="none"' + sel('contractStatus','none') + '>No Contract Yet</option>'
+      + '<option value="negotiating"' + sel('contractStatus','negotiating') + '>Negotiating</option>'
+      + '<option value="signed"' + sel('contractStatus','signed') + '>Signed ✓</option>'
+      + '</select></div>'
+      + '<div class="form-group"><label class="form-label">Payment Status</label><select id="team-payment" class="form-select">'
+      + '<option value="unpaid"' + sel('paymentStatus','unpaid') + '>Unpaid</option>'
+      + '<option value="deposit"' + sel('paymentStatus','deposit') + '>Deposit Paid</option>'
+      + '<option value="paid"' + sel('paymentStatus','paid') + '>Fully Paid ✓</option>'
+      + '</select></div>'
+      + '</div>'
+      + '<div class="form-row">'
+      + '<div class="form-group"><label class="form-label">Estimated Cost ($)</label><input type="number" id="team-estimate" class="form-input" min="0" placeholder="0" value="' + v('budgetEstimate','0') + '"></div>'
+      + '<div class="form-group"><label class="form-label">Actual Cost ($)</label><input type="number" id="team-actual" class="form-input" min="0" placeholder="0" value="' + v('budgetActual','0') + '"></div>'
+      + '</div>'
+      + '<div class="form-group"><label class="form-label">Notes</label><textarea id="team-notes" class="form-input" style="min-height:60px;resize:vertical;" placeholder="Contract details, special requirements…">' + v('notes') + '</textarea></div>'
+      + '</div>'
+      + '<div class="modal-footer"><button class="btn btn-secondary" onclick="closeTeamModal()">Cancel</button><button class="btn btn-primary" onclick="saveTeamMember()">' + (m?'Save Changes':'Add Vendor') + '</button></div>'
+      + '</div></div>';
+  };
+
+  // HABIT MODAL
+  const renderHabitModal = function() {
+    if (!habitModalOpen) return '';
+    return '<div class="modal-overlay active" onclick="closeHabitModal()">'
+      + '<div class="modal" onclick="event.stopPropagation()">'
+      + '<div class="modal-header"><h2 class="modal-title">Add Habit</h2><button class="btn btn-secondary" style="padding:8px;" onclick="closeHabitModal()">' + icons.x + '</button></div>'
+      + '<div class="modal-body">'
+      + '<div class="form-group"><label class="form-label">Habit Name</label><input type="text" id="habit-name" class="form-input" placeholder="e.g. Morning Exercise"></div>'
+      + '<div class="form-group"><label class="form-label">Emoji</label><input type="text" id="habit-emoji" class="form-input" placeholder="e.g. 💪" maxlength="4"></div>'
+      + '</div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeHabitModal()">Cancel</button><button class="btn btn-primary" onclick="saveHabit()">Create Habit</button></div>'
+      + '</div></div>';
+  };
+
+  // GOAL MODAL
+  const renderGoalModal = function() {
+    if (!goalModalOpen) return '';
+    return '<div class="modal-overlay active" onclick="closeGoalModal()">'
+      + '<div class="modal" onclick="event.stopPropagation()">'
+      + '<div class="modal-header"><h2 class="modal-title">Add Goal</h2><button class="btn btn-secondary" style="padding:8px;" onclick="closeGoalModal()">' + icons.x + '</button></div>'
+      + '<div class="modal-body">'
+      + '<div class="form-group"><label class="form-label">Title</label><input type="text" id="goal-title" class="form-input" placeholder="e.g. Learn Spanish"></div>'
+      + '<div class="form-group"><label class="form-label">Description</label><textarea id="goal-desc" class="form-input" style="min-height:60px;resize:vertical;" placeholder="Describe your goal"></textarea></div>'
+      + '<div class="form-row">'
+      + '<div class="form-group"><label class="form-label">Target Date</label><input type="date" id="goal-date" class="form-input"></div>'
+      + '<div class="form-group"><label class="form-label">Category</label><input type="text" id="goal-cat" class="form-input" placeholder="e.g. Personal"></div>'
+      + '</div>'
+      + '</div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeGoalModal()">Cancel</button><button class="btn btn-primary" onclick="saveGoal()">Create Goal</button></div>'
+      + '</div></div>';
+  };
+
+
+  // DELETE CONFIRM MODAL
+  const renderDeleteConfirmModal = function() {
+    const active = pendingDeleteTaskId || pendingDeleteTeamMemberId || pendingResetData;
+    if (!active) return '';
+    const msg = pendingResetData ? 'All data will be permanently deleted. This cannot be undone.'
+      : pendingDeleteTaskId ? 'This task will be permanently deleted.'
+      : 'This team member will be removed.';
+    const action = pendingResetData ? 'confirmResetData' : 'confirmDelete';
+    return '<div class="modal-overlay active" onclick="cancelDelete()">'
+      + '<div class="modal" onclick="event.stopPropagation()">'
+      + '<div class="modal-header"><h2 class="modal-title">Confirm</h2></div>'
+      + '<div class="modal-body"><p style="color:var(--text-secondary);">' + msg + '</p></div>'
+      + '<div class="modal-footer"><button class="btn btn-secondary" onclick="cancelDelete()">Cancel</button>'
+      + '<button class="btn" style="background:var(--danger);color:#fff;border:none;" onclick="' + action + '()">Delete</button></div>'
+      + '</div></div>';
+  };
+
+  // POMODORO WIDGET
+  const renderPomodoro = function() {
+    const m = Math.floor(pomodoroTime/60), s = pomodoroTime%60;
+    const timeStr = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    if (pomodoroMinimized) {
+      return '<div class="pomodoro" style="padding:12px;width:auto;cursor:pointer;" onclick="togglePomoMinimize()">'
+        + '<div style="display:flex;align-items:center;gap:12px;">' + icons.clock
+        + '<span id="pomo-display" style="font-size:18px;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums;">' + timeStr + '</span>'
+        + (pomodoroRunning?'<span style="width:8px;height:8px;background:var(--success);border-radius:50%;animation:pulse 1s infinite;"></span>':'')
+        + '</div></div>';
+    }
+    return '<div class="pomodoro">'
+      + '<div class="pomodoro-header" style="display:flex;justify-content:space-between;align-items:center;">'
+      + '<div style="display:flex;align-items:center;gap:8px;">' + icons.clock + ' Focus Timer</div>'
+      + '<button class="btn btn-secondary" style="padding:4px 8px;" onclick="togglePomoMinimize()">' + icons.minimize + '</button></div>'
+      + '<div class="pomodoro-time" id="pomo-display">' + timeStr + '</div>'
+      + '<div style="margin-bottom:12px;"><select class="form-select" onchange="setDuration(this.value)" ' + (pomodoroRunning?'disabled':'') + '>'
+      + [5,15,25,45,60].map(function(v){return '<option value="' + v + '"' + (pomodoroDuration===v?' selected':'') + '>' + v + ' min</option>';}).join('')
+      + '</select></div>'
+      + '<div class="pomodoro-controls">'
+      + '<button class="btn ' + (pomodoroRunning?'btn-secondary':'btn-primary') + '" onclick="togglePomo()">' + (pomodoroRunning?icons.pause:icons.play) + ' ' + (pomodoroRunning?'Pause':'Start') + '</button>'
+      + '<button class="btn btn-secondary" onclick="resetPomo()">' + icons.refresh + ' Reset</button>'
+      + '</div></div>';
+  };
+
+  // VIEW ROUTER
+  const renderView = function() {
+    switch(state.currentView) {
+      case 'dashboard': return renderDashboard();
+      case 'tasks': return renderTasks();
+      case 'daily': return renderDailyPlanner();
+      case 'weekly': return renderWeeklyPlanner();
+      case 'monthly': return renderMonthlyPlanner();
+      case 'habits': return renderHabitsTracker();
+      case 'goals': return renderGoalsTracker();
+      case 'focus': return renderFocusMode();
+      case 'kanban': return renderKanban();
+      case 'matrix': return renderMatrix();
+      case 'planner': return renderPlanner();
+      case 'gantt': return renderGantt();
+      case 'team':   return renderTeam();
+      case 'budget': return renderBudget();
+      case 'guide':  return renderGuide();
+      default: return renderDashboard();
+    }
+  };
+
+  // PRINT HEADER (screen: hidden; print: shown)
+  const renderPrintHeader = function() {
+    const s = state.settings || {};
+    const title = s.projectName || 'WeddingFlow Pro';
+    const date = s.weddingDate ? ' · Wedding: ' + s.weddingDate : '';
+    const venue = s.ceremonyVenue ? ' · ' + escapeHtml(s.ceremonyVenue) : '';
+    return '<div class="print-header">'
+      + '<div><div class="print-header-title">' + escapeHtml(title) + '</div>'
+      + '<div style="font-size:9pt;color:#7a6450;margin-top:2px;">' + escapeHtml(date + venue) + '</div></div>'
+      + '<div style="text-align:right;">'
+      + '<div class="print-header-logo">creatif.tools</div>'
+      + '<div style="font-size:8pt;color:#a08a74;margin-top:2px;">Printed ' + new Date().toLocaleDateString() + '</div>'
+      + '</div></div>'
+      + '<div class="print-footer">WeddingFlow Pro &mdash; creatif.tools &mdash; All data stored locally on your device.</div>';
+  };
+
+  // MAIN RENDER
+  const render = function() {
+    document.getElementById('app').innerHTML =
+      renderSidebar()
+      + '<main class="main">'
+      + renderPrintHeader()
+      + '<div class="no-print" style="display:flex;gap:12px;margin-bottom:20px;align-items:center;flex-wrap:wrap;">'
+      + '<input type="text" placeholder="Search planning items..." class="form-input" style="flex:1;min-width:180px;max-width:360px;" value="' + escapeHtml(searchQuery) + '" oninput="updateSearch(this.value)"/>'
+      + (searchQuery ? '<button class="btn btn-secondary" onclick="clearSearch()" style="font-size:12px;">Clear</button>' : '')
+      + '<div style="margin-left:auto;display:flex;gap:8px;">'
+      + '<button class="btn btn-secondary" style="font-size:12px;" onclick="exportData()" title="Download JSON backup">' + icons.download + ' Download Data</button>'
+      + '<button class="btn btn-secondary" style="font-size:12px;" onclick="printPDF()" title="Print or save as PDF">' + icons.printer + ' Print / PDF</button>'
+      + '</div></div>'
+      + (searchQuery ? renderSearchResults() : renderView())
+      + '</main>'
+      + renderTaskModal()
+      + renderSettingsModal()
+      + renderTeamModal()
+      + renderHabitModal()
+      + renderGoalModal()
+      + renderBudgetModal()
+      + renderDeleteConfirmModal()
+      + renderPomodoro()
+      + renderToast();
+  };
+
+  // ACTIONS
+  window.setView = function(v) { state.currentView = v; save(); render(); closeMobileMenu(); };
+  window.openTaskModal = function(id) { editingTask = id || null; taskModalOpen = true; render(); };
+  window.closeTaskModal = function() { taskModalOpen = false; editingTask = null; render(); };
+  window.openSettings = function() { settingsModalOpen = true; render(); };
+  window.closeSettings = function() { settingsModalOpen = false; render(); };
+  window.openTeamModal = function(id) { editingTeamMemberId = id||null; teamModalOpen = true; render(); };
+  window.closeTeamModal = function() { teamModalOpen = false; editingTeamMemberId = null; render(); };
+  window.openAddHabitModal = function() { habitModalOpen = true; render(); };
+  window.closeHabitModal = function() { habitModalOpen = false; render(); };
+  window.openAddGoalModal = function() { goalModalOpen = true; render(); };
+  window.closeGoalModal = function() { goalModalOpen = false; render(); };
+  window.addTeamMember = function() { openTeamModal(); };
+
+  window.openBudgetModal = function(id) { editingBudgetId = id||null; budgetModalOpen = true; render(); };
+  window.closeBudgetModal = function() { budgetModalOpen = false; editingBudgetId = null; render(); };
+  window.saveBudgetEntry = function() {
+    const gv = function(id){ return ((document.getElementById(id)||{}).value||'').trim(); };
+    const vendor = gv('bgt-vendor');
+    const errEl = document.getElementById('bgt-error');
+    if (!vendor) { if(errEl){errEl.textContent='Please enter a vendor or item name.';errEl.style.display='block';} return; }
+    if (errEl) errEl.style.display = 'none';
+    const entry = {
+      categoryId:    gv('bgt-cat'),
+      vendorName:    vendor,
+      description:   gv('bgt-desc'),
+      estimatedCost: parseFloat(gv('bgt-est'))||0,
+      actualCost:    parseFloat(gv('bgt-actual'))||0,
+      amountPaid:    parseFloat(gv('bgt-paid'))||0,
+      status:        gv('bgt-status')||'unpaid',
+    };
+    if (!state.budget) state.budget = [];
+    if (editingBudgetId) {
+      state.budget = state.budget.map(function(b){ return b.id===editingBudgetId ? Object.assign({},b,entry) : b; });
+      showToast('Budget entry updated.');
+    } else {
+      state.budget.push(Object.assign({id:Date.now().toString()},entry));
+      showToast('Budget entry added.');
+    }
+    closeBudgetModal(); save();
+  };
+  window.deleteBudgetEntry = function(id) {
+    state.budget = (state.budget||[]).filter(function(b){return b.id!==id;});
+    save(); render(); showToast('Entry removed.');
+  };
+
+  window.saveTask = function(e) {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const task = {
+      id: fd.get('id') || Date.now().toString(),
+      title: fd.get('title'), description: fd.get('description')||'',
+      status: fd.get('status'), priority: fd.get('priority'),
+      assignee: fd.get('assignee')||null, dueDate: fd.get('dueDate')||null,
+      startDate: fd.get('startDate')||null, quadrant: fd.get('quadrant')||'q1',
+      category: fd.get('category')||'', progress: parseInt(fd.get('progress'))||0,
+      recurrence: fd.get('recurrence')||'none',
+    };
+    if (editingTask) {
+      const existing = state.tasks.find(function(t){return t.id===editingTask;})||{};
+      state.tasks = state.tasks.map(function(t){return t.id===editingTask?Object.assign({},existing,task):t;});
+    } else {
+      state.tasks.push(task);
+    }
+    save(); closeTaskModal();
+  };
+
+  window.deleteTask = function(id) { pendingDeleteTaskId = id; render(); };
+  window.confirmDelete = function() {
+    if (pendingDeleteTaskId) {
+      state.tasks = state.tasks.filter(function(t){return t.id!==pendingDeleteTaskId;});
+      taskModalOpen = false; editingTask = null;
+      showToast('Task deleted');
+    }
+    if (pendingDeleteTeamMemberId) {
+      state.teamMembers = state.teamMembers.filter(function(m){return m.id!==pendingDeleteTeamMemberId;});
+      showToast('Team member removed');
+    }
+    save(); pendingDeleteTaskId = null; pendingDeleteTeamMemberId = null; render();
+  };
+  window.cancelDelete = function() { pendingDeleteTaskId = null; pendingDeleteTeamMemberId = null; pendingResetData = false; render(); };
+
+  window.toggleTask = function(id) {
+    const wf = {'todo':'in-progress','in-progress':'confirmed','confirmed':'done','done':'todo'};
+    state.tasks = state.tasks.map(function(t) {
+      if (t.id !== id) return t;
+      const ns = wf[t.status]||'done';
+      if (ns === 'done') triggerConfetti();
+      return Object.assign({},t,{status:ns});
+    });
+    save(); render();
+  };
+
+  const triggerConfetti = function() {
+    const colors = ['var(--accent)','var(--warning)','var(--success)','var(--danger)'];
+    for (let i = 0; i < 20; i++) {
+      const el = document.createElement('div');
+      el.style.cssText = 'position:fixed;width:10px;height:10px;border-radius:50%;z-index:9999;pointer-events:none;';
+      el.style.left = Math.random()*100 + '%';
+      el.style.top = '-10px';
+      el.style.background = colors[Math.floor(Math.random()*colors.length)];
+      el.style.setProperty('--tx', (Math.random()-0.5)*200 + 'px');
+      el.style.animation = 'confetti ' + (1+Math.random()) + 's ease-out forwards';
+      document.body.appendChild(el);
+      setTimeout(function(){el.remove();}, 2000);
+    }
+  };
+
+  let dragId = null;
+  window.dragTask = function(e,id) { dragId = id; };
+  window.dragEnd = function() { dragId = null; };
+  window.dropTask = function(e,status) { e.preventDefault(); if(dragId){state.tasks=state.tasks.map(function(t){return t.id===dragId?Object.assign({},t,{status:status}):t;});dragId=null;save();render();} };
+  window.dropQuadrant = function(e,q) { e.preventDefault(); if(dragId){state.tasks=state.tasks.map(function(t){return t.id===dragId?Object.assign({},t,{quadrant:q}):t;});dragId=null;save();render();} };
+
+  window.saveTeamMember = function() {
+    const g = function(id){ return ((document.getElementById(id)||{}).value||'').trim(); };
+    const name = g('team-name');
+    const err  = document.getElementById('team-error');
+    if (!name) { if(err){err.textContent='Please enter a vendor name.';err.style.display='block';} return; }
+    if (err) err.style.display = 'none';
+    const avatar = name.split(' ').map(function(n){return n[0]||'';}).join('').toUpperCase().slice(0,2)||'V';
+    const data = {
+      name:            name,
+      role:            g('team-role')||'Vendor',
+      avatar:          avatar,
+      phone:           g('team-phone'),
+      email:           g('team-email'),
+      website:         g('team-website'),
+      contractStatus:  g('team-contract')||'none',
+      paymentStatus:   g('team-payment')||'unpaid',
+      budgetEstimate:  parseFloat(g('team-estimate'))||0,
+      budgetActual:    parseFloat(g('team-actual'))||0,
+      notes:           g('team-notes'),
+    };
+    if (editingTeamMemberId) {
+      state.teamMembers = state.teamMembers.map(function(m){
+        return m.id===editingTeamMemberId ? Object.assign({},m,data) : m;
+      });
+      showToast('Vendor updated.');
+    } else {
+      state.teamMembers.push(Object.assign({id:Date.now().toString()},data));
+      showToast('Vendor added.');
+    }
+    closeTeamModal(); save(); render();
+  };
+
+  window.deleteTeamMember = function(id) { pendingDeleteTeamMemberId = id; render(); };
+
+  window.saveHabit = function() {
+    const name = (document.getElementById('habit-name')||{}).value||'';
+    const emoji = (document.getElementById('habit-emoji')||{}).value||'⭐';
+    if (!name.trim()) return;
+    state.habits.push({id:Date.now().toString(),name:name.trim(),emoji:emoji,completed:[]});
+    closeHabitModal(); save(); render();
+  };
+
+  window.deleteHabit = function(id) { state.habits=state.habits.filter(function(h){return h.id!==id;});save();render();showToast('Habit deleted'); };
+
+  window.toggleHabitComplete = function(hid,ds) {
+    const h = state.habits.find(function(x){return x.id===hid;});
+    if(!h) return;
+    if(!h.completed) h.completed=[];
+    const idx = h.completed.indexOf(ds);
+    if(idx>=0) h.completed.splice(idx,1); else h.completed.push(ds);
+    save(); render();
+  };
+
+  window.saveGoal = function() {
+    const title = (document.getElementById('goal-title')||{}).value||'';
+    const desc = (document.getElementById('goal-desc')||{}).value||'';
+    const date = (document.getElementById('goal-date')||{}).value||'';
+    const cat = (document.getElementById('goal-cat')||{}).value||'';
+    if(!title.trim()||!date) { showToast('Please fill in title and target date'); return; }
+    if(!state.goals) state.goals=[];
+    state.goals.push({id:Date.now().toString(),title:title.trim(),description:desc,targetDate:date,category:cat,progress:0});
+    closeGoalModal(); save(); render();
+  };
+
+  window.deleteGoal = function(id) { state.goals=(state.goals||[]).filter(function(g){return g.id!==id;});save();render();showToast('Goal deleted'); };
+
+  window.selectFocusTask = function(id) { focusTaskId=id; pomodoroTime=(state.settings&&state.settings.pomodoroWork||25)*60; render(); };
+  window.toggleFocusPomo = function() {
+    if(pomodoroRunning){clearInterval(pomodoroInterval);pomodoroRunning=false;}
+    else{pomodoroRunning=true;pomodoroInterval=setInterval(function(){pomodoroTime--;updatePomo();if(pomodoroTime<=0){clearInterval(pomodoroInterval);pomodoroRunning=false;pomodoroTime=(state.settings&&state.settings.pomodoroWork||25)*60;showToast('Pomodoro complete! Great work!');}},1000);}
+    render();
+  };
+  window.resetFocusPomo = function() { clearInterval(pomodoroInterval);pomodoroRunning=false;pomodoroTime=(state.settings&&state.settings.pomodoroWork||25)*60;render(); };
+  window.completeFocusTask = function() {
+    if(focusTaskId){state.tasks=state.tasks.map(function(t){return t.id===focusTaskId?Object.assign({},t,{status:'done'}):t;});focusTaskId=null;pomodoroRunning=false;clearInterval(pomodoroInterval);showToast('Task completed! 🎉');save();}
+    render();
+  };
+  window.exitFocusMode = function() { state.currentView='dashboard';save();render(); };
+
+  window.exportData = function() {
+    const payload = Object.assign({}, state, {
+      _exported: new Date().toISOString(),
+      _app: 'WeddingFlow Pro',
+      _source: 'creatif.tools',
+    });
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = 'weddingflow-backup.json'; a.click();
+    showToast('Backup downloaded — weddingflow-backup.json');
+  };
+
+  window.printPDF = function() {
+    window.print();
+  };
+  window.importData = function(e) {
+    const file=e.target.files[0]; if(!file) return;
+    const reader=new FileReader();
+    reader.onload=function(ev){
+      try{
+        const d=JSON.parse(ev.target.result);
+        if(!d.tasks){showToast('Invalid file format');return;}
+        delete d._exported; delete d._app; delete d._source;
+        if(!d.budget) d.budget=[];
+        if(!d.goals) d.goals=[];
+        if(!d.habits) d.habits=[];
+        state=Object.assign({},state,d);
+        save(); render(); showToast('Data imported successfully');
+      }catch(err){showToast('Invalid JSON file');}
+    };
+    reader.readAsText(file);
+  };
+  window.resetData = function() { pendingResetData=true; render(); };
+  window.confirmResetData = function() {
+    state = {
+      currentView:'dashboard', tasks:[], teamMembers:[],
+      categories:[
+        {id:'venue',      name:'Venue & Ceremony Space',   color:'--category-venue'},
+        {id:'catering',  name:'Catering & Bar Service',    color:'--category-catering'},
+        {id:'photo',     name:'Photography & Videography', color:'--category-photo'},
+        {id:'floral',    name:'Floral & Decor',            color:'--category-floral'},
+        {id:'music',     name:'Music & Entertainment',     color:'--category-music'},
+        {id:'beauty',    name:'Hair & Makeup',             color:'--category-beauty'},
+        {id:'cake',      name:'Wedding Cake & Desserts',   color:'--category-cake'},
+        {id:'transport', name:'Transportation',            color:'--category-transport'},
+        {id:'officiant', name:'Officiant & Ceremony',      color:'--category-officiant'},
+        {id:'stationery',name:'Stationery & Signage',      color:'--category-stationery'},
+        {id:'lighting',  name:'Lighting & AV',             color:'--category-lighting'},
+        {id:'coord',     name:'Coordinator Services',      color:'--category-coord'},
+      ],
+      habits:[], goals:[], budget:[],
+      settings:{weekStartDay:'monday',pomodoroWork:25,pomodoroBreak:5,
+        weddingDate:'',ceremonyVenue:'',receptionVenue:'',
+        guestCountCeremony:'',guestCountReception:'',weddingStyle:'',
+        colorPalette:'',budgetTotal:'',engagementDate:'',plannerRole:'',cateringStyle:''},
+    };
+    dbDelete('mainState').catch(function(){}); pendingResetData=false; showToast('Data reset'); render();
+  };
+
+  window.toggleMobileMenu = function() { const n=document.querySelector('nav');if(n)n.classList.toggle('mobile-open'); };
+  window.closeMobileMenu = function() { const n=document.querySelector('nav');if(n)n.classList.remove('mobile-open'); };
+  window.setTaskFilter = function(f) { window.taskFilter=f; render(); };
+  window.updateSearch = function(q) { searchQuery=q; render(); };
+  window.clearSearch = function() { searchQuery=''; render(); };
+  window.loadSampleData = function() {
+    state.habits.push({id:'h1',name:'Morning skincare routine',emoji:'✨',completed:[]});
+    state.habits.push({id:'h2',name:'Venue research session',emoji:'🏛️',completed:[]});
+    state.habits.push({id:'h3',name:'Budget review',emoji:'💰',completed:[]});
+    if(!state.goals) state.goals=[];
+    state.goals.push({id:'g1',title:'All vendors booked',description:'Confirm contracts with every key vendor',targetDate:'2026-08-01',category:'coord',progress:40});
+    state.goals.push({id:'g2',title:'Dress fitting complete',description:'Final fitting and alterations signed off',targetDate:'2026-09-15',category:'beauty',progress:10});
+    if(!state.budget) state.budget=[];
+    state.budget.push({id:'b1',categoryId:'venue',vendorName:'Grand Ballroom Venue',description:'Ceremony & reception space',estimatedCost:8000,actualCost:8500,amountPaid:4250,status:'deposit'});
+    state.budget.push({id:'b2',categoryId:'photo',vendorName:'Elite Photography Studio',description:'8hr coverage + videography',estimatedCost:3500,actualCost:3500,amountPaid:0,status:'unpaid'});
+    state.budget.push({id:'b3',categoryId:'catering',vendorName:'Gourmet Catering Co.',description:'3-course sit-down dinner',estimatedCost:12000,actualCost:0,amountPaid:0,status:'unpaid'});
+    state.budget.push({id:'b4',categoryId:'floral',vendorName:'Bloom & Petal Florists',description:'Ceremony arch + table centrepieces',estimatedCost:2000,actualCost:2200,amountPaid:2200,status:'paid'});
+    state.budget.push({id:'b5',categoryId:'beauty',vendorName:'Luxe Beauty Artists',description:'Bridal hair & makeup + trial',estimatedCost:800,actualCost:800,amountPaid:400,status:'deposit'});
+    if(!state.settings) state.settings={};
+    if(!state.settings.budgetTotal) state.settings.budgetTotal='30000';
+    showToast('Sample data loaded!');
+    save(); render();
+  };
+
+  window.navigatePlanner = function(days) {
+    const parts = plannerDate.split('-');
+    const d = new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
+    d.setDate(d.getDate()+days);
+    plannerDate = localDate(d);
+    render();
+  };
+  window.goToToday = function() { plannerDate = todayStr(); render(); };
+
+  window.togglePomoMinimize = function() { pomodoroMinimized=!pomodoroMinimized; render(); };
+  window.setDuration = function(m) { pomodoroDuration=parseInt(m); pomodoroTime=pomodoroDuration*60; updatePomo(); };
+  window.togglePomo = function() {
+    if(pomodoroRunning){clearInterval(pomodoroInterval);pomodoroRunning=false;}
+    else{pomodoroRunning=true;pomodoroInterval=setInterval(function(){pomodoroTime--;updatePomo();if(pomodoroTime<=0){clearInterval(pomodoroInterval);pomodoroRunning=false;pomodoroTime=pomodoroDuration*60;showToast('Pomodoro complete! Great work!');render();}},1000);}
+    render();
+  };
+  window.resetPomo = function() { clearInterval(pomodoroInterval);pomodoroRunning=false;pomodoroTime=pomodoroDuration*60;render(); };
+
+  const updatePomo = function() {
+    const el = document.getElementById('pomo-display');
+    const ft = document.getElementById('focus-timer');
+    const m = Math.floor(pomodoroTime/60), s = pomodoroTime%60;
+    const ts = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    if(el) el.textContent = ts;
+    if(ft) ft.textContent = ts;
+  };
+
+  window.updateSettings = function() {
+    const g = function(id){ return (document.getElementById(id)||{}).value||''; };
+    state.settings = Object.assign({}, state.settings, {
+      projectName:          g('project-name') || 'Our Wedding',
+      weekStartDay:         g('week-start') || 'monday',
+      pomodoroWork:         parseInt(g('pomo-work')) || 25,
+      pomodoroBreak:        parseInt(g('pomo-break')) || 5,
+      weddingDate:          g('wedding-date'),
+      engagementDate:       g('engagement-date'),
+      ceremonyVenue:        g('ceremony-venue'),
+      receptionVenue:       g('reception-venue'),
+      guestCountCeremony:   g('guest-ceremony'),
+      guestCountReception:  g('guest-reception'),
+      weddingStyle:         g('wedding-style'),
+      colorPalette:         g('color-palette'),
+      budgetTotal:          g('budget-total'),
+      cateringStyle:        g('catering-style'),
+      plannerRole:          g('planner-role'),
+    });
+    save(); render();
+  };
+
+  window.addCategory = function() {
+    const name = (document.getElementById('category-name')||{}).value||'';
+    if(!name.trim()) return;
+    const colors = ['--category-business','--category-personal','--category-health','--category-family','--category-social','--category-work','--category-learning','--category-finance'];
+    state.categories.push({id:name.toLowerCase().replace(/\s+/g,'-'),name:name.trim(),color:colors[state.categories.length%colors.length]});
+    save(); render(); showToast('Category added');
+  };
+  window.deleteCategory = function(id) { state.categories=state.categories.filter(function(c){return c.id!==id;});save();render();showToast('Category deleted'); };
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if(searchQuery){clearSearch();return;}
+      if(pendingDeleteTaskId||pendingDeleteTeamMemberId||pendingResetData){cancelDelete();return;}
+      if(taskModalOpen){closeTaskModal();return;}
+      if(settingsModalOpen){closeSettings();return;}
+      if(teamModalOpen){closeTeamModal();return;}
+      if(budgetModalOpen){closeBudgetModal();return;}
+      if(habitModalOpen){closeHabitModal();return;}
+      if(goalModalOpen){closeGoalModal();return;}
+    }
+    if (e.key === 'n' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+      if(!taskModalOpen&&!settingsModalOpen) openTaskModal();
+    }
+  });
+
+  const hideLoader = function() {
+    const el = document.getElementById('loading-screen');
+    if (el) el.style.display = 'none';
+  };
+  openDB()
+    .then(function() { return load(); })
+    .then(function() { return generateRecurringTasks(); })
+    .then(function() { render(); hideLoader(); })
+    .catch(function() { render(); hideLoader(); });
+</script>
+</body>
+</html>
