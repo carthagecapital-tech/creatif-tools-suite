@@ -5,20 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>Creatif.tools | Privacy-First Local Microtools for Professionals</title>
-    <meta name="description" content="Minimalist, local-first utility suite featuring BudgetFlow Pro, ApexFlow Pro, ContentFlow Pro, and PoolPro Manager. High-performance professional tools that prioritize user privacy.">
-    <meta name="keywords" content="local-first apps, privacy-focused tools, BudgetFlow Pro, ApexFlow Pro, ContentFlow Pro, PoolPro Manager, professional utility suite">
+    <meta name="description" content="Minimalist, local-first utility suite featuring ContentFlow Pro, PoolPro Manager, and WeddingFlow Pro. High-performance professional tools that prioritize user privacy.">
     <link rel="canonical" href="https://creatif.tools/">
     
-    <meta name="google-site-verification" content="YOUR_VERIFICATION_CODE_HERE">
-
     <style>
         :root {
             --bg: #0a0a0a;
             --card-bg: #111;
             --text: #eee;
             --text-dim: #888;
-            --accent: #00d4aa; /* Mint/Teal from ContentFlow */
-            --accent-pool: #00b4d8; /* Blue from PoolPro */
+            --accent: #00d4aa; /* Mint/Teal */
+            --accent-pool: #00b4d8; /* Blue */
+            --accent-wedding: #b8960c; /* Champagne Gold */
             --border: #222;
             --nav-bg: rgba(10, 10, 10, 0.8);
         }
@@ -32,7 +30,6 @@
             line-height: 1.6;
         }
 
-        /* NEW NAVIGATION BAR */
         header {
             position: sticky;
             top: 0;
@@ -65,7 +62,7 @@
         nav a {
             text-decoration: none;
             color: var(--text-dim);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
             transition: color 0.2s;
         }
@@ -96,7 +93,6 @@
             font-size: 1.1rem;
         }
 
-        /* TOOLS GRID */
         .tools-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -151,11 +147,6 @@
             color: var(--accent);
         }
 
-        .card.locked {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
         footer {
             margin-top: 6rem;
             padding: 2rem;
@@ -167,7 +158,7 @@
 
         @media (max-width: 600px) {
             header { padding: 1rem; flex-direction: column; gap: 1rem; }
-            nav ul { gap: 1rem; }
+            nav ul { gap: 0.8rem; flex-wrap: wrap; justify-content: center; }
             .hero h1 { font-size: 2rem; }
         }
     </style>
@@ -180,10 +171,11 @@
         <nav>
             <ul>
                 <li><a href="/" class="active">Home</a></li>
-                <li><a href="/budgetflow/">Budget</a></li>
-                <li><a href="/apexflow/">Apex</a></li>
                 <li><a href="/contentflow/">Content</a></li>
                 <li><a href="/poolpro/">PoolPro</a></li>
+                <li><a href="/weddingflow/">WeddingFlow</a></li>
+                <li><a href="/budgetflow/">Budget</a></li>
+                <li><a href="/apexflow/">Apex</a></li>
             </ul>
         </nav>
     </header>
@@ -191,7 +183,7 @@
     <main>
         <section class="hero">
             <h1>Professional Microtools</h1>
-            <p>High-performance, local-first applications built for the modern professional. No subscriptions, no cloud dependencies, total privacy.</p>
+            <p>High-performance, local-first applications built for efficiency. No cloud dependencies, no subscriptions, just pure utility.</p>
         </section>
 
         <section class="tools-grid">
@@ -201,7 +193,7 @@
                     <span class="status-badge" style="background:var(--accent); color:#000;">READY</span>
                     <div>
                         <h3>ContentFlow Pro</h3>
-                        <p>All-in-one social media manager for planning, scheduling, and analytics across Instagram, TikTok, and YouTube.</p>
+                        <p>Comprehensive social media manager for content planning, scheduling, and multi-platform analytics.</p>
                     </div>
                     <div class="btn">Launch Application →</div>
                 </a>
@@ -212,18 +204,29 @@
                     <span class="status-badge" style="background:var(--accent-pool); color:#fff;">READY</span>
                     <div>
                         <h3>PoolPro Manager</h3>
-                        <p>Professional pool service suite for estimating, service agreements, and invoicing with offline-first reliability.</p>
+                        <p>Professional suite for pool service estimating, maintenance contracts, and streamlined invoicing.</p>
                     </div>
                     <div class="btn">Launch Application →</div>
                 </a>
             </article>
 
             <article>
+                <a href="/weddingflow/" class="card">
+                    <span class="status-badge" style="background:var(--accent-wedding); color:#fff;">READY</span>
+                    <div>
+                        <h3>WeddingFlow Pro</h3>
+                        <p>Luxury planning and management suite designed specifically for coordinators and wedding professionals.</p>
+                    </div>
+                    <div class="btn" style="color:var(--accent-wedding);">Launch Application →</div>
+                </a>
+            </article>
+
+            <article>
                 <a href="/budgetflow/" class="card">
-                    <span class="status-badge" style="background:#8b5cf6;">READY</span>
+                    <span class="status-badge" style="background:#8b5cf6; color:#fff;">READY</span>
                     <div>
                         <h3>BudgetFlow Pro</h3>
-                        <p>Advanced personal finance tracker featuring privacy-first local storage and seamless cross-device cloud sync.</p>
+                        <p>Advanced personal finance tracker featuring privacy-first local storage and data portability.</p>
                     </div>
                     <div class="btn">Launch Application →</div>
                 </a>
@@ -231,31 +234,20 @@
 
             <article>
                 <a href="/apexflow/" class="card">
-                    <span class="status-badge" style="background:#10b981;">READY</span>
+                    <span class="status-badge" style="background:#10b981; color:#fff;">READY</span>
                     <div>
                         <h3>ApexFlow Pro</h3>
-                        <p>High-speed project management and task estimation suite built for contractors and agile professionals.</p>
+                        <p>High-speed project management and task estimation suite built for contractors and agile teams.</p>
                     </div>
                     <div class="btn">Launch Application →</div>
                 </a>
-            </article>
-
-            <article>
-                <div class="card locked">
-                    <span class="status-badge" style="background:#333; color:#888;">COMING SOON</span>
-                    <div>
-                        <h3>WeddingFlow</h3>
-                        <p>Advanced planning and invoice suite tailored for coordinators and luxury wedding professionals.</p>
-                    </div>
-                    <div class="btn">Deploying...</div>
-                </div>
             </article>
 
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 Creatif.tools — Your data never leaves your device. Built for performance.</p>
+        <p>&copy; 2026 Creatif.tools — Privacy-first utilities. Your data never leaves your device.</p>
     </footer>
 
 </body>
