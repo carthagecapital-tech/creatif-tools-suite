@@ -5,66 +5,222 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>Creatif.tools | Privacy-First Local Microtools for Professionals</title>
-    <meta name="description" content="Minimalist, local-first utility suite featuring BudgetFlow Pro and ApexFlow Pro. High-performance professional tools that prioritize user privacy and performance without cloud dependencies.">
-    <meta name="keywords" content="local-first apps, privacy-focused tools, BudgetFlow Pro, ApexFlow Pro, professional utility suite, microtools">
+    <meta name="description" content="Minimalist, local-first utility suite featuring BudgetFlow Pro, ApexFlow Pro, ContentFlow Pro, and PoolPro Manager. High-performance professional tools that prioritize user privacy.">
+    <meta name="keywords" content="local-first apps, privacy-focused tools, BudgetFlow Pro, ApexFlow Pro, ContentFlow Pro, PoolPro Manager, professional utility suite">
     <link rel="canonical" href="https://creatif.tools/">
     
     <meta name="google-site-verification" content="YOUR_VERIFICATION_CODE_HERE">
 
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://creatif.tools/">
-    <meta property="og:title" content="Creatif.tools | Professional Utility Suite">
-    <meta property="og:description" content="Minimalist, local-first microtools for professionals. Secure your data with our privacy-first application suite.">
-    <meta property="og:image" content="https://creatif.tools/assets/og-image.png">
-
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://creatif.tools/">
-    <meta property="twitter:title" content="Creatif.tools | Professional Utility Suite">
-    <meta property="twitter:description" content="Minimalist, local-first microtools for professionals. Secure your data with our privacy-first application suite.">
-    <meta property="twitter:image" content="https://creatif.tools/assets/og-image.png">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #0a0a0a; --card: #161616; --accent: #00d4aa; --text: #ffffff; --text-dim: #888; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; line-height: 1.6; }
-        
-        header { width: 100%; max-width: 1000px; padding: 80px 20px 40px; text-align: center; }
-        h1 { font-size: 3.5rem; font-weight: 800; margin: 0; letter-spacing: -3px; line-height: 1; }
-        h1 span { color: var(--accent); }
-        p.subtitle { color: var(--text-dim); margin-top: 15px; font-size: 1.2rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+        :root {
+            --bg: #0a0a0a;
+            --card-bg: #111;
+            --text: #eee;
+            --text-dim: #888;
+            --accent: #00d4aa; /* Mint/Teal from ContentFlow */
+            --accent-pool: #00b4d8; /* Blue from PoolPro */
+            --border: #222;
+            --nav-bg: rgba(10, 10, 10, 0.8);
+        }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; width: 100%; max-width: 1000px; padding: 40px 20px; box-sizing: border-box; }
-        
-        .card { background: var(--card); border: 1px solid #222; padding: 35px; border-radius: 20px; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
-        .card:hover { border-color: var(--accent); transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0, 212, 170, 0.15); }
-        .card h3 { margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--text); }
-        .card p { color: var(--text-dim); font-size: 0.95rem; margin: 12px 0 24px; }
-        .card .btn { align-self: flex-start; font-size: 0.85rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px solid transparent; transition: 0.3s; }
-        .card:hover .btn { border-bottom-color: var(--accent); }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
 
-        .status-badge { position: absolute; top: 20px; right: 20px; font-size: 10px; padding: 5px 10px; border-radius: 30px; background: rgba(0,212,170,0.1); color: var(--accent); font-weight: 800; letter-spacing: 0.5px; }
-        .locked { filter: grayscale(1); opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+        /* NEW NAVIGATION BAR */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-        footer { margin-top: auto; padding: 60px 20px; color: var(--text-dim); font-size: 0.85rem; text-align: center; border-top: 1px solid #111; width: 100%; max-width: 1000px; }
-        
+        .logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--text);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .hero {
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            color: var(--text-dim);
+            max-width: 600px;
+            font-size: 1.1rem;
+        }
+
+        /* TOOLS GRID */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 220px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .status-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            align-self: flex-start;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.4rem;
+        }
+
+        .card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .btn {
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .card.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        footer {
+            margin-top: 6rem;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
         @media (max-width: 600px) {
-            h1 { font-size: 2.5rem; }
-            header { padding: 60px 20px 20px; }
+            header { padding: 1rem; flex-direction: column; gap: 1rem; }
+            nav ul { gap: 1rem; }
+            .hero h1 { font-size: 2rem; }
         }
     </style>
 </head>
+
 <body>
 
     <header>
-        <h1>creatif<span>.</span>tools</h1>
-        <p class="subtitle">High-performance, local-first microtools designed for professionals who value privacy and speed.</p>
+        <a href="/" class="logo">Creatif.tools</a>
+        <nav>
+            <ul>
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/budgetflow/">Budget</a></li>
+                <li><a href="/apexflow/">Apex</a></li>
+                <li><a href="/contentflow/">Content</a></li>
+                <li><a href="/poolpro/">PoolPro</a></li>
+            </ul>
+        </nav>
     </header>
 
     <main>
-        <section class="grid" aria-label="Available Professional Tools">
+        <section class="hero">
+            <h1>Professional Microtools</h1>
+            <p>High-performance, local-first applications built for the modern professional. No subscriptions, no cloud dependencies, total privacy.</p>
+        </section>
+
+        <section class="tools-grid">
+            
+            <article>
+                <a href="/contentflow/" class="card">
+                    <span class="status-badge" style="background:var(--accent); color:#000;">READY</span>
+                    <div>
+                        <h3>ContentFlow Pro</h3>
+                        <p>All-in-one social media manager for planning, scheduling, and analytics across Instagram, TikTok, and YouTube.</p>
+                    </div>
+                    <div class="btn">Launch Application →</div>
+                </a>
+            </article>
+
+            <article>
+                <a href="/poolpro/" class="card">
+                    <span class="status-badge" style="background:var(--accent-pool); color:#fff;">READY</span>
+                    <div>
+                        <h3>PoolPro Manager</h3>
+                        <p>Professional pool service suite for estimating, service agreements, and invoicing with offline-first reliability.</p>
+                    </div>
+                    <div class="btn">Launch Application →</div>
+                </a>
+            </article>
+
             <article>
                 <a href="/budgetflow/" class="card">
-                    <span class="status-badge">READY</span>
+                    <span class="status-badge" style="background:#8b5cf6;">READY</span>
                     <div>
                         <h3>BudgetFlow Pro</h3>
                         <p>Advanced personal finance tracker featuring privacy-first local storage and seamless cross-device cloud sync.</p>
@@ -75,7 +231,7 @@
 
             <article>
                 <a href="/apexflow/" class="card">
-                    <span class="status-badge">READY</span>
+                    <span class="status-badge" style="background:#10b981;">READY</span>
                     <div>
                         <h3>ApexFlow Pro</h3>
                         <p>High-speed project management and task estimation suite built for contractors and agile professionals.</p>
@@ -94,6 +250,7 @@
                     <div class="btn">Deploying...</div>
                 </div>
             </article>
+
         </section>
     </main>
 
