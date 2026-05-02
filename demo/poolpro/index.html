@@ -3156,8 +3156,8 @@ init();
     document.getElementById('__dm_close__').addEventListener('click', function() { ov.remove(); });
   }
 
+  /* Lock ONLY action functions — all tabs/views remain fully navigable */
   var LOCKED_FNS = ['exportProject', 'doPrint', 'doSnapshot', 'cloneProject', 'importProject', 'copyEmailBody'];
-  var LOCKED_TABS = ['invoice', 'changeorders', 'snapshots', 'library'];
 
   function lockFn(name) {
     try {
@@ -3170,29 +3170,8 @@ init();
     } catch (e) { window[name] = showProModal; }
   }
 
-  function lockShowTab() {
-    var orig = window.showTab;
-    try {
-      Object.defineProperty(window, 'showTab', {
-        get: function() {
-          return function(tab, el) {
-            if (LOCKED_TABS.indexOf(tab) !== -1) { showProModal(); return; }
-            if (typeof orig === 'function') orig(tab, el);
-          };
-        },
-        set: function() {},
-        configurable: false,
-        enumerable: true
-      });
-    } catch (e) {
-      window.showTab = function(tab, el) {
-        if (LOCKED_TABS.indexOf(tab) !== -1) { showProModal(); return; }
-      };
-    }
-  }
-
+  /* Match only action-function buttons — NOT tab navigation */
   var LOCKED_FN_RE = /exportProject|doPrint|doSnapshot|cloneProject|importProject|copyEmailBody/;
-  var LOCKED_TAB_RE = /showTab\s*\(\s*['"]?(invoice|changeorders|snapshots|library)/;
 
   function markProButtons() {
     var els = document.querySelectorAll('[onclick]');
@@ -3200,12 +3179,13 @@ init();
       var el = els[i];
       if (el.dataset.dmLocked) continue;
       var oc = el.getAttribute('onclick') || '';
-      if (!LOCKED_FN_RE.test(oc) && !LOCKED_TAB_RE.test(oc)) continue;
+      if (!LOCKED_FN_RE.test(oc)) continue;
       el.dataset.dmLocked = '1';
       el.style.opacity = '0.4';
       el.title = 'Pro Feature — unlock with full version';
       el.addEventListener('click', function(e) { e.stopImmediatePropagation(); e.preventDefault(); showProModal(); }, true);
     }
+    /* Lock file-input label for Import */
     var labels = document.querySelectorAll('label');
     for (var j = 0; j < labels.length; j++) {
       var lbl = labels[j];
@@ -3222,7 +3202,6 @@ init();
 
   function init() {
     LOCKED_FNS.forEach(lockFn);
-    lockShowTab();
     document.body.appendChild(hub);
     document.body.appendChild(badge);
     markProButtons();

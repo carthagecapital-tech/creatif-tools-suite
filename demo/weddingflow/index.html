@@ -2170,7 +2170,7 @@
     document.getElementById('__dm_close__').addEventListener('click', function() { ov.remove(); });
   }
 
-  var LOCKED_VIEWS = ['kanban', 'matrix', 'gantt', 'team', 'budget', 'habits', 'goals'];
+  /* Lock ONLY action functions — all views/navigation remain fully browsable */
   var LOCKED_FNS = ['exportData', 'importData', 'printPDF'];
 
   function lockFn(name) {
@@ -2184,24 +2184,8 @@
     } catch (e) { window[name] = showProModal; }
   }
 
-  function lockSetView() {
-    var _real = window.setView;
-    function wrapped(v) {
-      if (LOCKED_VIEWS.indexOf(v) !== -1) { showProModal(); return; }
-      if (typeof _real === 'function') _real(v);
-    }
-    try {
-      Object.defineProperty(window, 'setView', {
-        get: function() { return wrapped; },
-        set: function(fn) { _real = fn; },
-        configurable: false,
-        enumerable: true
-      });
-    } catch (e) { window.setView = wrapped; }
-  }
-
+  /* Match only export/import/print buttons — NOT navigation */
   var LOCKED_FN_RE = /exportData|importData|printPDF/;
-  var LOCKED_VIEW_RE = /setView\s*\(\s*['"]?(kanban|matrix|gantt|team|budget|habits|goals)/;
 
   function markProButtons() {
     var els = document.querySelectorAll('[onclick]');
@@ -2209,27 +2193,29 @@
       var el = els[i];
       if (el.dataset.dmLocked) continue;
       var oc = el.getAttribute('onclick') || '';
-      if (!LOCKED_FN_RE.test(oc) && !LOCKED_VIEW_RE.test(oc)) continue;
+      if (!LOCKED_FN_RE.test(oc)) continue;
       el.dataset.dmLocked = '1';
       el.style.opacity = '0.4';
       el.title = 'Pro Feature — unlock with full version';
       el.addEventListener('click', function(e) { e.stopImmediatePropagation(); e.preventDefault(); showProModal(); }, true);
     }
-    var navBtns = document.querySelectorAll('.nav-item[onclick]');
-    for (var k = 0; k < navBtns.length; k++) {
-      var btn = navBtns[k];
-      if (btn.dataset.dmLocked) continue;
-      if (!LOCKED_VIEW_RE.test(btn.getAttribute('onclick') || '')) continue;
-      btn.dataset.dmLocked = '1';
-      btn.style.opacity = '0.4';
-      btn.title = 'Pro Feature — unlock with full version';
-      btn.addEventListener('click', function(e) { e.stopImmediatePropagation(); e.preventDefault(); showProModal(); }, true);
+    /* Lock file-input label for Import */
+    var labels = document.querySelectorAll('label');
+    for (var j = 0; j < labels.length; j++) {
+      var lbl = labels[j];
+      if (lbl.dataset.dmLocked) continue;
+      var inp = lbl.querySelector('input[type="file"]');
+      if (!inp) continue;
+      if (!LOCKED_FN_RE.test(inp.getAttribute('onchange') || '')) continue;
+      lbl.dataset.dmLocked = '1';
+      lbl.style.opacity = '0.4';
+      lbl.title = 'Pro Feature';
+      lbl.addEventListener('click', function(e) { e.stopImmediatePropagation(); e.preventDefault(); showProModal(); }, true);
     }
   }
 
   function init() {
     LOCKED_FNS.forEach(lockFn);
-    lockSetView();
     document.body.appendChild(hub);
     document.body.appendChild(badge);
     markProButtons();
