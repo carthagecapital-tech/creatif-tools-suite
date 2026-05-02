@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -239,38 +238,6 @@
 </div>
 <div class="app" id="app"></div>
 <script>
-  // --- ⚡️ CREATIF.TOOLS DEMO PROTECTOR ⚡️ ---
-(function() {
-    const isDemo = window.location.pathname.includes('/demo/');
-
-    if (isDemo) {
-        document.addEventListener('DOMContentLoaded', () => {
-            // These selectors cover the buttons in your current tools
-            const proFeatures = [
-                '#save-btn', '#export-pdf', '.btn-save', 
-                '#generate-invoice', '.download-json', 
-                '[onclick*="save"]', '[onclick*="download"]'
-            ];
-
-            proFeatures.forEach(selector => {
-                document.querySelectorAll(selector).forEach(btn => {
-                    btn.style.opacity = '0.3';
-                    btn.style.filter = 'grayscale(1)';
-                    btn.style.pointerEvents = 'none';
-                    if(btn.innerText.length < 15) btn.innerHTML = "🔒 Pro";
-                });
-            });
-
-            // Prevent Ctrl+S / Cmd+S
-            window.addEventListener('keydown', e => {
-                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                    e.preventDefault();
-                    alert("Saving is disabled in Demo Mode. Get the full version at Creatif.tools!");
-                }
-            });
-        });
-    }
-})();
   const icons = {
     dashboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
     list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>',
@@ -299,10 +266,14 @@
     printer: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>',
   };
 
-  // helper: date N months from today
+  // helper: date N months from today (safe against month-end overflow)
   const fd = function(m, d) {
     const dt = new Date();
+    const day = dt.getDate();
+    dt.setDate(1);
     dt.setMonth(dt.getMonth() + m);
+    const maxDay = new Date(dt.getFullYear(), dt.getMonth()+1, 0).getDate();
+    dt.setDate(Math.min(day, maxDay));
     if (d) dt.setDate(dt.getDate() + d);
     return dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0');
   };
@@ -448,6 +419,7 @@
   const load = function() {
     return dbGet('mainState').then(function(p) {
       if (p && p.tasks) {
+        sanitizeImportedData(p);
         state             = Object.assign({}, state, p);
         pomodoroTime      = p.pomodoroTime      || (25 * 60);
         pomodoroDuration  = p.pomodoroDuration  || 25;
@@ -489,6 +461,84 @@
   const escapeHtml = function(text) {
     const map = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
     return (text||'').replace(/[&<>"']/g, function(m){return map[m];});
+  };
+
+  // Validates and sanitizes all data coming from external sources (import / IDB).
+  const sanitizeImportedData = function(d) {
+    const validPriority   = ['low','medium','high'];
+    const validStatus     = ['todo','in-progress','confirmed','done'];
+    const validQuadrant   = ['q1','q2','q3','q4'];
+    const validRecurrence = ['none','daily','weekly','monthly'];
+    const validContract   = ['none','negotiating','signed'];
+    const validPayment    = ['unpaid','deposit','paid'];
+    const validWeekStart  = ['monday','sunday'];
+    const validRole       = ['Bride','Groom','Partner','Wedding Planner','Coordinator','Other'];
+    const safeId  = function(v) { return String(v||'').replace(/[^a-zA-Z0-9_.:-]/g,''); };
+    const dateRe  = /^\d{4}-\d{2}-\d{2}$/;
+    if (Array.isArray(d.tasks)) {
+      d.tasks = d.tasks.map(function(t) {
+        return Object.assign({}, t, {
+          id:         safeId(t.id),
+          priority:   validPriority.indexOf(t.priority)    >= 0 ? t.priority   : 'low',
+          status:     validStatus.indexOf(t.status)        >= 0 ? t.status     : 'todo',
+          quadrant:   validQuadrant.indexOf(t.quadrant)    >= 0 ? t.quadrant   : 'q1',
+          recurrence: validRecurrence.indexOf(t.recurrence)>= 0 ? t.recurrence : 'none',
+          dueDate:    dateRe.test(t.dueDate)   ? t.dueDate   : null,
+          startDate:  dateRe.test(t.startDate) ? t.startDate : null,
+          progress:   Math.min(100, Math.max(0, parseInt(t.progress)||0)),
+          assignee:   t.assignee ? safeId(t.assignee) : null,
+        });
+      });
+    }
+    if (Array.isArray(d.teamMembers)) {
+      d.teamMembers = d.teamMembers.map(function(m) {
+        return Object.assign({}, m, {
+          id:             safeId(m.id),
+          avatar:         String(m.avatar||'').replace(/[^A-Z]/g,'').slice(0,2)||'V',
+          contractStatus: validContract.indexOf(m.contractStatus)>=0 ? m.contractStatus : 'none',
+          paymentStatus:  validPayment.indexOf(m.paymentStatus)  >=0 ? m.paymentStatus  : 'unpaid',
+          budgetEstimate: parseFloat(m.budgetEstimate)||0,
+          budgetActual:   parseFloat(m.budgetActual)||0,
+        });
+      });
+    }
+    if (Array.isArray(d.budget)) {
+      d.budget = d.budget.map(function(b) {
+        return Object.assign({}, b, {
+          id:            safeId(b.id),
+          status:        validPayment.indexOf(b.status)>=0 ? b.status : 'unpaid',
+          estimatedCost: parseFloat(b.estimatedCost)||0,
+          actualCost:    parseFloat(b.actualCost)||0,
+          amountPaid:    parseFloat(b.amountPaid)||0,
+        });
+      });
+    }
+    if (Array.isArray(d.habits)) {
+      d.habits = d.habits.map(function(h) {
+        return Object.assign({}, h, { id: safeId(h.id) });
+      });
+    }
+    if (Array.isArray(d.goals)) {
+      d.goals = d.goals.map(function(g) {
+        return Object.assign({}, g, {
+          id:         safeId(g.id),
+          progress:   Math.min(100, Math.max(0, parseInt(g.progress)||0)),
+          targetDate: dateRe.test(g.targetDate) ? g.targetDate : '',
+        });
+      });
+    }
+    if (d.settings && typeof d.settings === 'object') {
+      d.settings = Object.assign({}, d.settings, {
+        weddingDate:    dateRe.test(d.settings.weddingDate)    ? d.settings.weddingDate    : '',
+        engagementDate: dateRe.test(d.settings.engagementDate) ? d.settings.engagementDate : '',
+        weekStartDay:   validWeekStart.indexOf(d.settings.weekStartDay)>=0 ? d.settings.weekStartDay : 'monday',
+        plannerRole:    validRole.indexOf(d.settings.plannerRole)>=0       ? d.settings.plannerRole  : '',
+        pomodoroWork:   Math.min(120, Math.max(1, parseInt(d.settings.pomodoroWork)||25)),
+        pomodoroBreak:  Math.min(60,  Math.max(1, parseInt(d.settings.pomodoroBreak)||5)),
+        budgetTotal:    String(parseFloat(d.settings.budgetTotal)||''),
+      });
+    }
+    return d;
   };
 
   const showToast = function(msg, duration) {
@@ -730,7 +780,7 @@
       html += '<div class="stat-card" style="border-left:4px solid ' + countdownColor + ';">'
         + '<div class="stat-label">Days Until Wedding</div>'
         + '<div class="stat-value" style="color:' + countdownColor + ';">' + (daysToWedding >= 0 ? daysToWedding : 0) + '</div>'
-        + '<div style="font-size:11px;color:var(--text-muted);margin-top:8px;">' + (weddingDate) + '</div></div>';
+        + '<div style="font-size:11px;color:var(--text-muted);margin-top:8px;">' + escapeHtml(weddingDate) + '</div></div>';
     }
     html += '<div class="stat-card"><div style="position:absolute;top:16px;right:16px;">' + progressCircle(pct) + '</div><div class="stat-label">Total Tasks</div><div class="stat-value">' + total + '</div><div style="font-size:11px;color:var(--text-muted);margin-top:8px;">' + done + ' completed</div></div>'
       + '<div class="stat-card"><div style="position:absolute;top:16px;right:16px;">' + progressCircle(total?Math.round(done/total*100):0) + '</div><div class="stat-label">Completed</div><div class="stat-value" style="color:var(--success)">' + done + '</div><div style="font-size:11px;color:var(--text-muted);margin-top:8px;">' + pct + '% done</div></div>'
@@ -1050,7 +1100,7 @@
             + (t.progress>0?progressBar(t.progress,3):'')
             + '<div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-top:8px;">'
             + '<div><span class="tag tag-' + t.priority + '">' + t.priority + '</span>' + (overdue?'<span style="background:rgba(239,68,68,0.2);color:#ef4444;padding:2px 6px;border-radius:3px;margin-left:4px;">Overdue</span>':'') + '</div>'
-            + (assignee?'<div style="width:20px;height:20px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-size:10px;font-weight:700;" title="' + escapeHtml(assignee.name) + '">' + assignee.avatar + '</div>':'')
+            + (assignee?'<div style="width:20px;height:20px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-size:10px;font-weight:700;" title="' + escapeHtml(assignee.name) + '">' + escapeHtml(assignee.avatar) + '</div>':'')
             + '</div>'
             + (t.dueDate?'<div style="font-size:10px;color:var(--text-muted);margin-top:4px;">' + getRelativeDate(t.dueDate) + '</div>':'')
             + '</div>';
@@ -1408,7 +1458,7 @@
       + '<select id="bgt-status" class="form-select">'
       + ['unpaid','deposit','paid'].map(function(s){return '<option value="'+s+'"'+(g('status')===s?' selected':'')+'>'+s.charAt(0).toUpperCase()+s.slice(1)+'</option>';}).join('')
       + '</select></div>'
-      + '<div style="grid-column:1/-1;" id="bgt-error" style="display:none;color:var(--danger);font-size:13px;"></div>'
+      + '<div id="bgt-error" style="grid-column:1/-1;display:none;color:var(--danger);font-size:13px;"></div>'
       + '</div>'
       + '<div class="modal-footer">'
       + '<button class="btn btn-secondary" onclick="closeBudgetModal()">Cancel</button>'
@@ -1935,7 +1985,12 @@
         if(!d.budget) d.budget=[];
         if(!d.goals) d.goals=[];
         if(!d.habits) d.habits=[];
+        sanitizeImportedData(d);
         state=Object.assign({},state,d);
+        if(typeof d.pomodoroTime==='number')     pomodoroTime      = d.pomodoroTime;
+        if(typeof d.pomodoroDuration==='number') pomodoroDuration  = d.pomodoroDuration;
+        if(typeof d.pomodoroMinimized==='boolean') pomodoroMinimized = d.pomodoroMinimized;
+        if(d.taskFilter) window.taskFilter = d.taskFilter;
         save(); render(); showToast('Data imported successfully');
       }catch(err){showToast('Invalid JSON file');}
     };
@@ -2045,7 +2100,7 @@
     const name = (document.getElementById('category-name')||{}).value||'';
     if(!name.trim()) return;
     const colors = ['--category-business','--category-personal','--category-health','--category-family','--category-social','--category-work','--category-learning','--category-finance'];
-    state.categories.push({id:name.toLowerCase().replace(/\s+/g,'-'),name:name.trim(),color:colors[state.categories.length%colors.length]});
+    state.categories.push({id:name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''),name:name.trim(),color:colors[state.categories.length%colors.length]});
     save(); render(); showToast('Category added');
   };
   window.deleteCategory = function(id) { state.categories=state.categories.filter(function(c){return c.id!==id;});save();render();showToast('Category deleted'); };
