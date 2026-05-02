@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; connect-src 'self' data:; worker-src 'self' blob:; child-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none';">
 <meta name="color-scheme" content="dark light">
 <title>ContentFlow Pro — Social Media Content Manager | Plan, Create, Publish</title>
-<meta name="description" content="ContfentFlow Pro is an all-in-one social media content manager. Plan, schedule, and publish across Instagram, TikTok, YouTube, LinkedIn, Twitter/X, Pinterest, and Facebook with a powerful calendar, kanban pipeline, idea bank, caption library, hashtag sets, and cross-platform analytics.">
+<meta name="description" content="ContentFlow Pro is an all-in-one social media content manager. Plan, schedule, and publish across Instagram, TikTok, YouTube, LinkedIn, Twitter/X, Pinterest, and Facebook with a powerful calendar, kanban pipeline, idea bank, caption library, hashtag sets, and cross-platform analytics.">
 <meta name="keywords" content="social media planner, content calendar, post scheduler, instagram planner, tiktok scheduler, social media manager, content pipeline, kanban content, hashtag manager, caption library">
 <meta name="author" content="ContentFlow Pro">
 <meta name="robots" content="index, follow">
@@ -3646,53 +3646,6 @@ window.CFProStorage = (function() {
 </script>
 
 <script>
-  // --- ⚡️ CREATIF.TOOLS DEMO PROTECTOR ⚡️ ---
-(function() {
-    // This looks for "/demo/" in your website address
-    const isDemo = window.location.pathname.includes('/demo/');
-
-    if (isDemo) {
-        console.log("Demo Mode Active: Pro features restricted.");
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // These are the buttons we will lock in the demo
-            const proSelectors = [
-                '#save-btn',           // For ContentFlow
-                '#export-pdf',         // For ContentFlow
-                '.btn-save',           // For PoolPro
-                '#generate-invoice',   // For PoolPro
-                '.download-json',      // Data backups
-                '[onclick*="save"]',   // Generic save buttons
-                '[onclick*="download"]' // Generic download buttons
-            ];
-
-            proSelectors.forEach(selector => {
-                const buttons = document.querySelectorAll(selector);
-                buttons.forEach(btn => {
-                    // Visually disable the button
-                    btn.style.opacity = '0.3';
-                    btn.style.filter = 'grayscale(1)';
-                    btn.style.pointerEvents = 'none';
-                    btn.title = "Purchase the Pro version to unlock this feature";
-                    
-                    // Update the text to show it's locked
-                    if(btn.innerText.length < 20) {
-                        btn.innerHTML = "🔒 Pro Only";
-                    }
-                });
-            });
-
-            // Block common save shortcuts (Ctrl+S / Cmd+S)
-            window.addEventListener('keydown', (e) => {
-                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                    e.preventDefault();
-                    alert("Local saving is disabled in Demo Mode. Get the full version at Creatif.tools!");
-                }
-            });
-        });
-    }
-})();
-// --- END PROTECTOR ---
 /**
  * ContentFlow Pro — Self-contained Social Media Content Manager
  * ---------------------------------------------------------------------------
@@ -3834,6 +3787,19 @@ window.CFProStorage = (function() {
   function esc(str) {
     if (str == null) return '';
     return String(str).replace(/[&<>"']/g, c => HTML_ENTITIES[c]);
+  }
+
+  // Validates a CSS color value before injecting into a style attribute.
+  // Accepts: #hex, rgb/rgba/hsl/hsla functional notation, CSS variables.
+  // Returns fallback ('#888') for anything else, preventing CSS property injection via ';'.
+  function safeColor(str, fallback) {
+    if (!str || typeof str !== 'string') return fallback || '#888';
+    const s = str.trim();
+    if (/^#[0-9a-fA-F]{3,8}$/.test(s)) return s;
+    if (/^rgba?\(\s*[\d.]+\s*,\s*[\d.]+\s*,\s*[\d.]+(\s*,\s*[\d.]+)?\s*\)$/.test(s)) return s;
+    if (/^hsla?\(\s*[\d.]+\s*,\s*[\d.]+%\s*,\s*[\d.]+%(\s*,\s*[\d.]+)?\s*\)$/.test(s)) return s;
+    if (/^var\(--[a-zA-Z0-9_-]+\)$/.test(s)) return s;
+    return fallback || '#888';
   }
 
   /**
@@ -4131,6 +4097,8 @@ window.CFProStorage = (function() {
    */
   function migrate(data) {
     if (!data || typeof data !== 'object') return getSampleData();
+    // Deep-clone so mutations don't affect the caller's reference
+    try { data = JSON.parse(JSON.stringify(data)); } catch (_) { return getSampleData(); }
     let v = typeof data.schemaVersion === 'number' ? data.schemaVersion : 0;
     // v0 -> v1: stamp the version, ensure required arrays exist, fill missing fields.
     if (v < 1) {
@@ -4152,6 +4120,19 @@ window.CFProStorage = (function() {
       ];
       data.settings = data.settings && typeof data.settings === 'object' ? data.settings : {};
       data.wipLimits = data.wipLimits && typeof data.wipLimits === 'object' ? data.wipLimits : { idea: 0, draft: 8, ready: 5, scheduled: 10 };
+      // Sanitize platform numeric arrays — ensure bestHours/bestDays contain only integers
+      data.platforms.forEach(p => {
+        if (!Array.isArray(p.bestHours)) p.bestHours = [];
+        if (!Array.isArray(p.bestDays)) p.bestDays = [];
+        p.bestHours = p.bestHours.map(h => { const n = parseInt(h); return (isFinite(n) && n >= 0 && n <= 23) ? n : 0; });
+        p.bestDays = p.bestDays.map(d => { const n = parseInt(d); return (isFinite(n) && n >= 0 && n <= 6) ? n : 0; });
+        if (p.color) p.color = safeColor(p.color, '#888');
+      });
+      // Sanitize color fields on campaigns, pillars, and team members
+      data.campaigns.forEach(c => { if (c.color) c.color = safeColor(c.color, '#888'); });
+      data.pillars.forEach(p => { if (p.color) p.color = safeColor(p.color, '#888'); });
+      data.team.forEach(t => { if (t.color) t.color = safeColor(t.color, '#888'); });
+      if (data.settings.userColor) data.settings.userColor = safeColor(data.settings.userColor, '#00d4aa');
       v = 1;
     }
     // Future: if (v < 2) { ... data.schemaVersion = 2; v = 2; }
@@ -4563,7 +4544,7 @@ window.CFProStorage = (function() {
   function avatarHTML(user, size = 22) {
     if (!user) return '';
     return rawHTML(
-      `<div class="user-avatar" style="width:${size}px;height:${size}px;background:${esc(user.color)};font-size:${(size * 0.42).toFixed(1)}px;" aria-hidden="true">${esc(user.initials)}</div>`
+      `<div class="user-avatar" style="width:${size}px;height:${size}px;background:${safeColor(user.color)};font-size:${(size * 0.42).toFixed(1)}px;" aria-hidden="true">${esc(user.initials)}</div>`
     );
   }
 
@@ -5557,7 +5538,7 @@ window.CFProStorage = (function() {
       const dayPosts = posts.filter(p => p.scheduledDate === d);
       const dots = dayPosts.slice(0, 5).map(p => {
         const color = getPlatformColor(p.platforms[0]);
-        return `<span class="week-day-dot" style="background:${esc(color)};" aria-hidden="true"></span>`;
+        return `<span class="week-day-dot" style="background:${safeColor(color)};" aria-hidden="true"></span>`;
       }).join('');
       weekHTML += `<div class="week-day${isToday ? ' today' : ''}" data-week-date="${esc(d)}" role="button" tabindex="0">
         <div class="week-day-name">${DAYS[dt.getDay()]}</div>
@@ -5813,7 +5794,7 @@ window.CFProStorage = (function() {
     if (state.data.campaigns.length) {
       campaignHTML = '<div style="display:flex;gap:14px;margin-bottom:14px;flex-wrap:wrap;">' +
         state.data.campaigns.map(c =>
-          `<div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;"><span style="width:10px;height:10px;border-radius:3px;background:${esc(c.color)};" aria-hidden="true"></span>${esc(c.name)}</div>`
+          `<div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;"><span style="width:10px;height:10px;border-radius:3px;background:${safeColor(c.color)};" aria-hidden="true"></span>${esc(c.name)}</div>`
         ).join('') + '</div>';
     }
 
@@ -5896,7 +5877,7 @@ window.CFProStorage = (function() {
           const camp = state.data.campaigns.find(c => c.name === p.campaign);
           const bg = camp ? camp.color : getPlatformColor(p.platforms[0]);
           const plHTML = platformList(p.platforms.slice(0, 1), 12).__html;
-          htmlStr += `<div class="cal-chip cal-chip-status-${esc(p.status)}" style="border-left-color:${esc(bg)};" draggable="true" data-post-id="${esc(p.id)}">
+          htmlStr += `<div class="cal-chip cal-chip-status-${esc(p.status)}" style="border-left-color:${safeColor(bg)};" draggable="true" data-post-id="${esc(p.id)}">
             ${plHTML}<span style="overflow:hidden;text-overflow:ellipsis;">${esc(p.title)}</span>
           </div>`;
         });
@@ -6237,7 +6218,7 @@ window.CFProStorage = (function() {
         const overdue = p.status === 'draft' && p.scheduledDate && p.scheduledDate < todayISO();
         const avHTML = a ? avatarHTML(a, 20).__html : '';
         const plHTML = platformList(p.platforms, 16).__html;
-        const campChip = camp ? `<span class="chip" style="border-color:${esc(camp.color)};color:${esc(camp.color)};">${esc(camp.name)}</span>` : '';
+        const campChip = camp ? `<span class="chip" style="border-color:${safeColor(camp.color)};color:${safeColor(camp.color)};">${esc(camp.name)}</span>` : '';
         htmlStr += `<div class="kanban-card${overdue ? ' overdue' : ''}" style="border-left-color:${esc(getPlatformColor(p.platforms[0]))};" draggable="true" data-post-id="${esc(p.id)}">
           <div class="kanban-card-head">
             <div class="kanban-card-platforms">${plHTML}</div>
@@ -7834,7 +7815,7 @@ window.CFProStorage = (function() {
         <div class="progress-bar"><div class="progress-bar-fill" style="width:${goalPct}%;"></div></div>
       </div>
       <div style="font-size:0.78rem;margin-bottom:10px;">
-        <div><strong>Best times:</strong> ${p.bestDays.map(d => DAYS[d]).join(', ')} · ${p.bestHours.map(h => h + ':00').join(', ')}</div>
+        <div><strong>Best times:</strong> ${p.bestDays.map(d => esc(DAYS[d] || '')).join(', ')} · ${p.bestHours.map(h => esc(String(parseInt(h) || 0)) + ':00').join(', ')}</div>
         <div class="muted" style="margin-top:4px;">${monthPosts} posts this month · Last post: ${lastPostDays != null ? lastPostDays + ' days ago' : 'never'}</div>
       </div>
       <div style="display:flex;gap:6px;">
@@ -8697,7 +8678,7 @@ window.CFProStorage = (function() {
         <div style="display:flex;justify-content:space-between;font-size:0.825rem;margin-bottom:4px;">
           ${avatarHTML(t, 18).__html} <strong>${esc(t.name)}</strong> <span class="muted">${assigned.length} posts</span>
         </div>
-        <div class="progress-bar"><div class="progress-bar-fill" style="width:${pct}%;background:${esc(t.color)};"></div></div>
+        <div class="progress-bar"><div class="progress-bar-fill" style="width:${pct}%;background:${safeColor(t.color)};"></div></div>
       </div>`;
     }).join('');
   }
@@ -8710,7 +8691,7 @@ window.CFProStorage = (function() {
 
     const colors = ['#00d4aa', '#8b5cf6', '#3b82f6', '#10b981', '#14b8a6', '#06b6d4', '#ec4899', '#eab308'];
     const swatchesHTML = colors.map(c =>
-      `<div class="swatch${member.color === c ? ' active' : ''}" style="background:${esc(c)};" data-color="${esc(c)}"></div>`
+      `<div class="swatch${member.color === c ? ' active' : ''}" style="background:${safeColor(c)};" data-color="${esc(c)}"></div>`
     ).join('');
 
     const content = `
@@ -8818,7 +8799,7 @@ window.CFProStorage = (function() {
         <div class="settings-row">
           <div><div class="row-label">Avatar color</div></div>
           <div class="swatch-row" id="setAvatarColors">
-            ${profileColors.map(c => `<div class="swatch${s.userColor === c ? ' active' : ''}" style="background:${esc(c)};" data-color="${esc(c)}"></div>`).join('')}
+            ${profileColors.map(c => `<div class="swatch${s.userColor === c ? ' active' : ''}" style="background:${safeColor(c)};" data-color="${esc(c)}"></div>`).join('')}
           </div>
         </div>
         <div class="settings-row">
@@ -9411,7 +9392,7 @@ window.CFProStorage = (function() {
     upgradeFromIDB();
 
     if (window.CFProStorage) {
-      console.log('ContentFlow Pro storage:', window.CFProStorage.getType());
+      // storage type surfaced in Settings > Storage panel
     }
   }
 
