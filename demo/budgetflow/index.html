@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
 <meta name="description" content="BudgetFlow Pro – private, offline personal finance tracker.">
 <meta name="theme-color" content="#00d4aa">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self';">
 <title>BudgetFlow Pro — Personal Finance & Budget Tracker</title>
 <script>/**
  * Skipped minification because the original files appears to be already minified.
@@ -1191,53 +1192,6 @@ tbody tr:hover { background: var(--bg-hover); }
 <div id="toast-container"></div>
 
 <script>
-  // --- ⚡️ CREATIF.TOOLS DEMO PROTECTOR ⚡️ ---
-(function() {
-    // This looks for "/demo/" in your website address
-    const isDemo = window.location.pathname.includes('/demo/');
-
-    if (isDemo) {
-        console.log("Demo Mode Active: Pro features restricted.");
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // These are the buttons we will lock in the demo
-            const proSelectors = [
-                '#save-btn',           // For ContentFlow
-                '#export-pdf',         // For ContentFlow
-                '.btn-save',           // For PoolPro
-                '#generate-invoice',   // For PoolPro
-                '.download-json',      // Data backups
-                '[onclick*="save"]',   // Generic save buttons
-                '[onclick*="download"]' // Generic download buttons
-            ];
-
-            proSelectors.forEach(selector => {
-                const buttons = document.querySelectorAll(selector);
-                buttons.forEach(btn => {
-                    // Visually disable the button
-                    btn.style.opacity = '0.3';
-                    btn.style.filter = 'grayscale(1)';
-                    btn.style.pointerEvents = 'none';
-                    btn.title = "Purchase the Pro version to unlock this feature";
-                    
-                    // Update the text to show it's locked
-                    if(btn.innerText.length < 20) {
-                        btn.innerHTML = "🔒 Pro Only";
-                    }
-                });
-            });
-
-            // Block common save shortcuts (Ctrl+S / Cmd+S)
-            window.addEventListener('keydown', (e) => {
-                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                    e.preventDefault();
-                    alert("Local saving is disabled in Demo Mode. Get the full version at Creatif.tools!");
-                }
-            });
-        });
-    }
-})();
-// --- END PROTECTOR ---
 // ============================================================
 //  INDEXEDDB STORAGE ENGINE
 // ============================================================
@@ -1273,7 +1227,7 @@ async function loadDB() {
     db.close();
     return data || null;
   } catch (err) {
-    console.error('IndexedDB load error:', err);
+    /* IndexedDB load error suppressed in production */
     return null;
   }
 }
@@ -1290,8 +1244,8 @@ async function saveDB(data) {
     db.close();
     return true;
   } catch (err) {
-    console.error('IndexedDB save error:', err);
-    try { localStorage.setItem('budgetflow_fallback', JSON.stringify(data)); } catch(e) {}
+    /* IndexedDB save error suppressed in production */
+    try { localStorage.setItem('budgetflow_fallback', JSON.stringify(data)); } catch(e) { toast('⚠️ All save methods failed. Please export your data immediately!', 'error'); }
     toast('⚠️ Data could not be saved. Export a backup now to avoid losing changes.', 'error');
     return false;
   }
@@ -1820,7 +1774,7 @@ async function saveTransaction() {
 
   if (!date) { toast('Please enter a date', 'error'); return; }
   if (!desc) { toast('Please enter a description', 'error'); return; }
-  if (isNaN(amount) || amount <= 0) { toast('Amount must be greater than zero', 'error'); return; }
+  if (isNaN(amount) || !isFinite(amount) || amount <= 0) { toast('Amount must be greater than zero', 'error'); return; }
   if (amount > MAX_REASONABLE_AMOUNT) { toast('Amount seems unreasonably large', 'error'); return; }
 
   if (editingTxId) {
@@ -1847,6 +1801,7 @@ function editTransaction(id) {
 
 async function deleteTransaction(id) {
   if (!confirm('Delete this transaction?')) return;
+  if (!confirm('This cannot be undone. Confirm deletion?')) return;
   DB.transactions = DB.transactions.filter(t => t.id !== id);
   await saveDB(DB);
   renderTransactions();
@@ -1937,7 +1892,7 @@ async function saveBudget() {
   const month = document.getElementById('budgetMonth').value;
   const rollover = document.getElementById('budgetRollover').checked;
 
-  if (!category || isNaN(amount) || amount <= 0 || !month) {
+  if (!category || isNaN(amount) || !isFinite(amount) || amount <= 0 || !month) {
     toast('Please fill in all fields', 'error');
     return;
   }
@@ -2017,8 +1972,8 @@ function billItemHTML(b, daysUntil, isOverdue) {
       </div>
       <div class="bill-right">
         <div class="bill-amount">${fmt(b.amount)}</div>
-        <button class="btn btn-xs ${b.paid ? 'btn-secondary' : 'btn-primary'}" onclick="toggleBillPaid('${b.id}')">${b.paid ? 'Unpay' : 'Mark Paid'}</button>
-        <button class="btn btn-xs btn-danger" onclick="deleteBill('${b.id}')">Del</button>
+        <button class="btn btn-xs ${b.paid ? 'btn-secondary' : 'btn-primary'}" onclick="toggleBillPaid('${escapeAttr(b.id)}')">${b.paid ? 'Unpay' : 'Mark Paid'}</button>
+        <button class="btn btn-xs btn-danger" onclick="deleteBill('${escapeAttr(b.id)}')">Del</button>
       </div>
     </div>
   `;
@@ -2094,7 +2049,7 @@ async function saveBill() {
   const dueDay = parseInt(document.getElementById('billDueDay').value);
   const icon = document.getElementById('billIcon').value;
 
-  if (!name || isNaN(amount) || amount <= 0 || isNaN(dueDay) || dueDay < 1 || dueDay > 31) {
+  if (!name || isNaN(amount) || !isFinite(amount) || amount <= 0 || isNaN(dueDay) || dueDay < 1 || dueDay > 31) {
     toast('Please fill in all fields correctly', 'error');
     return;
   }
@@ -2123,6 +2078,7 @@ async function toggleBillPaid(id) {
 
 async function deleteBill(id) {
   if (!confirm('Delete this bill?')) return;
+  if (!confirm('This cannot be undone. Confirm deletion?')) return;
   DB.bills = DB.bills.filter(b => b.id !== id);
   await saveDB(DB);
   renderBills();
@@ -2170,9 +2126,9 @@ function renderGoals() {
           <div style="display:flex;justify-content:space-between;align-items:center;">
             <div style="font-size:13px;color:var(--text-muted);">${pct.toFixed(1)}% complete • Projected: ${projectedDate}</div>
             <div style="display:flex;gap:6px;">
-              <button class="btn btn-xs btn-secondary" onclick="contributeToGoal('${g.id}')">+ Contribute</button>
-              <button class="btn btn-xs btn-secondary" onclick="openGoalModal('${g.id}')">Edit</button>
-              <button class="btn btn-xs btn-danger" onclick="deleteGoal('${g.id}')">Del</button>
+              <button class="btn btn-xs btn-secondary" onclick="contributeToGoal('${escapeAttr(g.id)}')">+ Contribute</button>
+              <button class="btn btn-xs btn-secondary" onclick="openGoalModal('${escapeAttr(g.id)}')">Edit</button>
+              <button class="btn btn-xs btn-danger" onclick="deleteGoal('${escapeAttr(g.id)}')">Del</button>
             </div>
           </div>
         </div>
@@ -2262,7 +2218,7 @@ async function saveContribution() {
   const recordTx = document.getElementById('contributeRecordTx').checked;
   const goal = DB.goals.find(g => g.id === id);
   if (!goal) { closeContributeModal(); return; }
-  if (isNaN(amount) || amount <= 0) { toast('Please enter a valid amount', 'error'); return; }
+  if (isNaN(amount) || !isFinite(amount) || amount <= 0) { toast('Please enter a valid amount', 'error'); return; }
   if (amount > MAX_REASONABLE_AMOUNT) { toast('Amount is too large', 'error'); return; }
 
   if (recordTx) {
@@ -2282,6 +2238,7 @@ async function saveContribution() {
 
 async function deleteGoal(id) {
   if (!confirm('Delete this goal?')) return;
+  if (!confirm('This cannot be undone. Confirm deletion?')) return;
   DB.goals = DB.goals.filter(g => g.id !== id);
   await saveDB(DB);
   renderGoals();
@@ -2576,13 +2533,30 @@ async function importData(event) {
         goals: Array.isArray(imported.goals) ? imported.goals : [],
         netWorth: (imported.netWorth && typeof imported.netWorth.assets === 'number') ? imported.netWorth : { assets: 0, liabilities: 0 },
         categories: Array.isArray(imported.categories) ? imported.categories : [...DEFAULT_CATEGORIES],
-        settings: (imported.settings && typeof imported.settings === 'object') ? imported.settings : getDefaultDB().settings
+        settings: (() => {
+          const def = getDefaultDB().settings;
+          const s = (imported.settings && typeof imported.settings === 'object') ? imported.settings : {};
+          const validCurrencies = ['USD','EUR','GBP','CAD','AUD','JPY','INR'];
+          const validDateFormats = ['MM/DD/YYYY','DD/MM/YYYY','YYYY-MM-DD'];
+          const validThemes = ['dark','light'];
+          const validWeekStarts = ['0','1'];
+          return {
+            currency: validCurrencies.includes(s.currency) ? s.currency : def.currency,
+            dateFormat: validDateFormats.includes(s.dateFormat) ? s.dateFormat : def.dateFormat,
+            theme: validThemes.includes(s.theme) ? s.theme : def.theme,
+            weekStart: validWeekStarts.includes(s.weekStart) ? s.weekStart : def.weekStart
+          };
+        })()
       };
       await saveDB(DB);
       renderSettings();
       toast('Data restored successfully');
-    } catch { toast('Failed to parse file', 'error'); }
+    } catch (err) {
+      const msg = err instanceof SyntaxError ? 'Invalid JSON — file is not a valid BudgetFlow backup.' : 'Failed to process file. Please try again.';
+      toast(msg, 'error');
+    }
   };
+  reader.onerror = () => toast('Could not read the file. Please try again.', 'error');
   reader.readAsText(file);
 }
 
