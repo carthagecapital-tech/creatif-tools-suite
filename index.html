@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creatif.tools | Professional Local-First Utilities</title>
-    <meta name="description" content="High-performance, privacy-first local tools for modern professionals.">
-    
+    <title>Creatif.tools | Professional Local-First Suite</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
     <style>
@@ -14,14 +12,9 @@
             --card-bg: #0f0f0f;
             --text: #ffffff;
             --text-dim: #a1a1a1;
-            --accent: #00d4aa; /* Your signature Teal */
+            --accent: #00d4aa; /* Your Teal Accent */
             --border: #1a1a1a;
-            --nav-bg: rgba(5, 5, 5, 0.7);
-        }
-
-        * {
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
+            --nav-bg: rgba(5, 5, 5, 0.8);
         }
 
         body {
@@ -29,13 +22,12 @@
             background: var(--bg);
             color: var(--text);
             margin: 0;
-            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-x: hidden;
         }
 
-        /* --- CENTERED NAVIGATION --- */
         header {
             position: fixed;
             top: 20px;
@@ -43,95 +35,49 @@
             background: var(--nav-bg);
             backdrop-filter: blur(12px);
             border: 1px solid var(--border);
-            padding: 0.6rem 1.5rem;
+            padding: 0.7rem 2rem;
             border-radius: 100px;
             display: flex;
             align-items: center;
             gap: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .logo {
-            font-weight: 800;
-            font-size: 1rem;
-            letter-spacing: -0.5px;
-            color: var(--accent);
-            text-decoration: none;
-        }
+        .logo { font-weight: 800; color: var(--accent); text-decoration: none; font-size: 0.9rem; letter-spacing: 1px; }
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 1.2rem;
-            margin: 0;
-            padding: 0;
-        }
+        nav ul { list-style: none; display: flex; gap: 1.5rem; margin: 0; padding: 0; }
+        nav a { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
+        nav a:hover { color: var(--accent); }
 
-        nav a {
-            text-decoration: none;
-            color: var(--text-dim);
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: color 0.3s;
-        }
-
-        nav a:hover, nav a.active {
-            color: var(--accent);
-        }
-
-        /* --- HERO SECTION --- */
-        main {
-            max-width: 1000px;
-            width: 90%;
-            margin-top: 120px;
-            text-align: center;
-        }
-
-        .hero {
-            margin-bottom: 5rem;
-        }
+        main { max-width: 1100px; width: 90%; margin-top: 140px; text-align: center; }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
             font-weight: 800;
+            letter-spacing: -3px;
             margin-bottom: 1rem;
-            letter-spacing: -2px;
-            background: linear-gradient(180deg, #fff 0%, #888 100%);
+            background: linear-gradient(180deg, #fff 0%, #666 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .hero p {
-            color: var(--text-dim);
-            max-width: 600px;
-            margin: 0 auto;
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
+        .hero p { color: var(--text-dim); max-width: 600px; margin: 0 auto 4rem auto; font-size: 1.1rem; }
 
-        /* --- CENTERED GRID --- */
         .tools-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 1.5rem;
-            padding-bottom: 5rem;
+            margin-bottom: 5rem;
         }
 
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 24px;
+            border-radius: 28px;
             padding: 2.5rem;
-            text-decoration: none;
-            color: inherit;
+            text-align: left;
             display: flex;
             flex-direction: column;
-            text-align: left;
             transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            position: relative;
-            overflow: hidden;
         }
 
         .card:hover {
@@ -140,131 +86,109 @@
             box-shadow: 0 20px 40px rgba(0, 212, 170, 0.1);
         }
 
-        .status-badge {
-            font-size: 0.65rem;
+        .price-badge {
+            font-size: 0.7rem;
             font-weight: 800;
-            padding: 5px 12px;
-            border-radius: 50px;
-            background: rgba(0, 212, 170, 0.1);
             color: var(--accent);
-            border: 1px solid rgba(0, 212, 170, 0.2);
-            align-self: flex-start;
+            background: rgba(0, 212, 170, 0.1);
+            padding: 4px 12px;
+            border-radius: 50px;
+            display: inline-block;
             margin-bottom: 1.5rem;
         }
 
-        .card h3 {
-            margin: 0 0 0.75rem 0;
-            font-size: 1.5rem;
+        .card h3 { font-size: 1.6rem; margin: 0 0 1rem 0; }
+        .card p { color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem; }
+
+        .action-row { display: flex; gap: 10px; margin-top: auto; }
+
+        .btn-buy {
+            background: var(--accent);
+            color: #000;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 14px;
             font-weight: 700;
-        }
-
-        .card p {
-            color: var(--text-dim);
-            font-size: 0.95rem;
-            margin-bottom: 2rem;
-            line-height: 1.5;
-        }
-
-        .card-footer {
-            margin-top: auto;
-            display: flex;
-            align-items: center;
-            gap: 8px;
             font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--accent);
-            opacity: 0.8;
-        }
-
-        /* --- FOOTER --- */
-        footer {
-            width: 100%;
-            padding: 4rem 0;
-            border-top: 1px solid var(--border);
+            flex: 2;
             text-align: center;
-            color: var(--text-dim);
-            font-size: 0.8rem;
+            transition: 0.2s;
         }
 
-        /* --- RESPONSIVE --- */
-        @media (max-width: 768px) {
-            header { 
-                width: 95%;
-                top: 10px;
-                flex-direction: column; 
-                gap: 0.5rem; 
-                border-radius: 20px;
-                padding: 1rem;
-            }
-            nav ul { gap: 0.8rem; }
-            .hero h1 { font-size: 2.5rem; }
+        .btn-demo {
+            border: 1px solid var(--border);
+            color: #fff;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            flex: 1;
+            text-align: center;
+            transition: 0.2s;
         }
+
+        .btn-demo:hover { background: #1a1a1a; }
+
+        footer { padding: 4rem; color: var(--text-dim); font-size: 0.8rem; border-top: 1px solid var(--border); width: 100%; text-align: center; }
     </style>
 </head>
-
 <body>
 
     <header>
         <a href="/" class="logo">CREATIF.TOOLS</a>
         <nav>
             <ul>
-                <li><a href="/" class="active">Hub</a></li>
                 <li><a href="/contentflow/">Content</a></li>
                 <li><a href="/poolpro/">Pool</a></li>
                 <li><a href="/weddingflow/">Wedding</a></li>
-                <li><a href="/budgetflow/">Finance</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
         <section class="hero">
-            <h1>Built for Pros.</h1>
-            <p>A curated suite of high-performance, local-first applications. Secure, private, and exceptionally fast.</p>
+            <h1>Own your workflow.</h1>
+            <p>Premium, local-first utility apps. No subscriptions, no cloud dependencies. Download once, keep forever.</p>
         </section>
 
         <section class="tools-grid">
             
-            <a href="/contentflow/" class="card">
-                <span class="status-badge">ACTIVE</span>
+            <div class="card">
+                <span class="price-badge">$29.00 — ETSY SPECIAL</span>
                 <h3>ContentFlow Pro</h3>
                 <p>Social media orchestration with a local-first calendar and cross-platform analytics.</p>
-                <div class="card-footer">Open Tool <span>→</span></div>
-            </a>
+                <div class="action-row">
+                    <a href="/demo/contentflow" class="btn-demo">Try Demo</a>
+                    <a href="YOUR_ETSY_URL" class="btn-buy">Buy on Etsy</a>
+                </div>
+            </div>
 
-            <a href="/poolpro/" class="card">
-                <span class="status-badge">ACTIVE</span>
+            <div class="card">
+                <span class="price-badge">$35.00 — ETSY SPECIAL</span>
                 <h3>PoolPro Manager</h3>
                 <p>Heavy-duty estimating and invoicing suite for field service professionals.</p>
-                <div class="card-footer">Open Tool <span>→</span></div>
-            </a>
+                <div class="action-row">
+                    <a href="/demo/poolpro" class="btn-demo">Try Demo</a>
+                    <a href="YOUR_ETSY_URL" class="btn-buy">Buy on Etsy</a>
+                </div>
+            </div>
 
-            <a href="/weddingflow/" class="card">
-                <span class="status-badge">ACTIVE</span>
+            <div class="card">
+                <span class="price-badge">$49.00 — ETSY SPECIAL</span>
                 <h3>WeddingFlow Pro</h3>
-                <p>High-end coordinator suite for event timelines, vendor management, and luxury planning.</p>
-                <div class="card-footer">Open Tool <span>→</span></div>
-            </a>
-
-            <a href="/budgetflow/" class="card">
-                <span class="status-badge">ACTIVE</span>
-                <h3>BudgetFlow Pro</h3>
-                <p>A minimalist powerhouse for personal finance and secure data tracking.</p>
-                <div class="card-footer">Open Tool <span>→</span></div>
-            </a>
-
-            <a href="/apexflow/" class="card">
-                <span class="status-badge">ACTIVE</span>
-                <h3>ApexFlow Pro</h3>
-                <p>Agile project management for developers and small utility builders.</p>
-                <div class="card-footer">Open Tool <span>→</span></div>
-            </a>
+                <p>Luxury planning suite for coordinators. Timelines, vendors, and local-first budgets.</p>
+                <div class="action-row">
+                    <a href="/demo/weddingflow" class="btn-demo">Try Demo</a>
+                    <a href="YOUR_ETSY_URL" class="btn-buy">Buy on Etsy</a>
+                </div>
+            </div>
 
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 Creatif.tools — All data stays in your browser. No cloud, no catch.</p>
+        &copy; 2026 Creatif.tools — Privacy-first tools for professionals.
     </footer>
 
 </body>
