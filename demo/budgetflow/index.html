@@ -1191,6 +1191,53 @@ tbody tr:hover { background: var(--bg-hover); }
 <div id="toast-container"></div>
 
 <script>
+  // --- ⚡️ CREATIF.TOOLS DEMO PROTECTOR ⚡️ ---
+(function() {
+    // This looks for "/demo/" in your website address
+    const isDemo = window.location.pathname.includes('/demo/');
+
+    if (isDemo) {
+        console.log("Demo Mode Active: Pro features restricted.");
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // These are the buttons we will lock in the demo
+            const proSelectors = [
+                '#save-btn',           // For ContentFlow
+                '#export-pdf',         // For ContentFlow
+                '.btn-save',           // For PoolPro
+                '#generate-invoice',   // For PoolPro
+                '.download-json',      // Data backups
+                '[onclick*="save"]',   // Generic save buttons
+                '[onclick*="download"]' // Generic download buttons
+            ];
+
+            proSelectors.forEach(selector => {
+                const buttons = document.querySelectorAll(selector);
+                buttons.forEach(btn => {
+                    // Visually disable the button
+                    btn.style.opacity = '0.3';
+                    btn.style.filter = 'grayscale(1)';
+                    btn.style.pointerEvents = 'none';
+                    btn.title = "Purchase the Pro version to unlock this feature";
+                    
+                    // Update the text to show it's locked
+                    if(btn.innerText.length < 20) {
+                        btn.innerHTML = "🔒 Pro Only";
+                    }
+                });
+            });
+
+            // Block common save shortcuts (Ctrl+S / Cmd+S)
+            window.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    alert("Local saving is disabled in Demo Mode. Get the full version at Creatif.tools!");
+                }
+            });
+        });
+    }
+})();
+// --- END PROTECTOR ---
 // ============================================================
 //  INDEXEDDB STORAGE ENGINE
 // ============================================================
