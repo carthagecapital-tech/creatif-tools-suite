@@ -133,53 +133,77 @@
 </div>
 <div class="app" id="app"></div>
 <script>
-  // --- ⚡️ CREATIF.TOOLS DEMO PROTECTOR ⚡️ ---
+  // --- ⚡️ CREATIF.TOOLS ULTIMATE PROTECTOR ⚡️ ---
 (function() {
-    // This looks for "/demo/" in your website address
-    const isDemo = window.location.pathname.includes('/demo/');
+    // Check if URL contains "/demo"
+    const isDemo = window.location.pathname.toLowerCase().includes('/demo');
 
     if (isDemo) {
-        console.log("Demo Mode Active: Pro features restricted.");
+        console.log("Demo Mode Detected: Hard-locking Pro features.");
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // These are the buttons we will lock in the demo
+        // 1. INJECT "UNBREAKABLE" CSS
+        // This stops all clicks and greys out buttons even if the app re-renders them.
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .demo-locked { 
+                opacity: 0.4 !important; 
+                pointer-events: none !important; 
+                cursor: not-allowed !important;
+                filter: grayscale(1) !important;
+                position: relative;
+            }
+            .demo-locked::after {
+                content: "🔒 Pro";
+                position: absolute;
+                font-size: 10px;
+                top: -5px;
+                right: -5px;
+                background: #00d4aa;
+                color: #000;
+                padding: 2px 5px;
+                border-radius: 4px;
+                font-weight: 800;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 2. THE LOCKING FUNCTION
+        const lockFeatures = () => {
             const proSelectors = [
-                '#save-btn',           // For ContentFlow
-                '#export-pdf',         // For ContentFlow
-                '.btn-save',           // For PoolPro
-                '#generate-invoice',   // For PoolPro
-                '.download-json',      // Data backups
-                '[onclick*="save"]',   // Generic save buttons
-                '[onclick*="download"]' // Generic download buttons
+                '#save-btn', '#export-pdf', '.btn-save', 
+                '#generate-invoice', '.download-json', '#export-btn',
+                '[onclick*="save"]', '[onclick*="download"]', '[onclick*="export"]',
+                '.export-action', '.save-action'
             ];
 
             proSelectors.forEach(selector => {
-                const buttons = document.querySelectorAll(selector);
-                buttons.forEach(btn => {
-                    // Visually disable the button
-                    btn.style.opacity = '0.3';
-                    btn.style.filter = 'grayscale(1)';
-                    btn.style.pointerEvents = 'none';
-                    btn.title = "Purchase the Pro version to unlock this feature";
-                    
-                    // Update the text to show it's locked
-                    if(btn.innerText.length < 20) {
-                        btn.innerHTML = "🔒 Pro Only";
-                    }
+                document.querySelectorAll(selector).forEach(btn => {
+                    btn.classList.add('demo-locked');
+                    // Completely disable the click at the JavaScript level too
+                    btn.onclick = (e) => {
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                        return false;
+                    };
                 });
             });
+        };
 
-            // Block common save shortcuts (Ctrl+S / Cmd+S)
-            window.addEventListener('keydown', (e) => {
-                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                    e.preventDefault();
-                    alert("Local saving is disabled in Demo Mode. Get the full version at Creatif.tools!");
-                }
-            });
-        });
+        // 3. RUN TRIPLE CHECK
+        // Catch them immediately, when the page loads, and 1 second later
+        lockFeatures();
+        window.addEventListener('load', lockFeatures);
+        setTimeout(lockFeatures, 1500); 
+
+        // 4. BLOCK KEYBOARD SAVING
+        window.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                alert("Saving is disabled in Demo Mode. Get the full version at Creatif.tools!");
+            }
+        }, true);
     }
 })();
-// --- END PROTECTOR ---
   // ========== INDEXEDDB STORAGE ENGINE ==========
   const DB_NAME = 'apexflow_db', DB_VERSION = 1, STORE_NAME = 'appdata', LS_KEY = 'apexflow';
   function openDB() { return new Promise((resolve, reject) => { const r = indexedDB.open(DB_NAME, DB_VERSION); r.onerror = () => reject(r.error); r.onsuccess = () => resolve(r.result); r.onupgradeneeded = (e) => { const db = e.target.result; if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME, { keyPath: 'key' }); }; }); }
