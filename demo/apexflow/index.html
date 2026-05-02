@@ -1277,5 +1277,55 @@
     hideLoader();
   });
 </script>
+
+<!-- ═══════════════════ DEMO MODE LOCK ═══════════════════ -->
+<script>
+(function () {
+  'use strict';
+  var HUB='../../index.html', ETSY='https://www.etsy.com/shop/creatiftools';
+  var hub=document.createElement('a'); hub.href=HUB; hub.innerHTML='&#8592; Back to Hub';
+  hub.style.cssText='position:fixed;bottom:22px;left:22px;z-index:2147483647;background:#00d4aa;color:#050505;padding:9px 18px;border-radius:9px;font-weight:700;font-size:12px;font-family:system-ui,sans-serif;text-decoration:none;box-shadow:0 4px 20px rgba(0,212,170,.45);transition:transform .15s;';
+  hub.onmouseenter=function(){hub.style.transform='translateY(-2px)';}; hub.onmouseleave=function(){hub.style.transform='translateY(0)';};
+  var badge=document.createElement('div'); badge.textContent='DEMO';
+  badge.style.cssText='position:fixed;top:10px;right:10px;z-index:2147483647;background:#00d4aa;color:#050505;padding:4px 11px;border-radius:5px;font-weight:800;font-size:10px;font-family:system-ui,sans-serif;letter-spacing:.1em;pointer-events:none;';
+  function showProModal(){
+    if(document.getElementById('__dm__')) return;
+    var ov=document.createElement('div'); ov.id='__dm__';
+    ov.style.cssText='position:fixed;inset:0;z-index:2147483646;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;';
+    ov.innerHTML='<div style="background:#0f0f0f;border:1px solid #00d4aa;border-radius:16px;padding:40px 34px;max-width:370px;width:90%;text-align:center;color:#fff;"><div style="font-size:2rem;margin-bottom:14px;">&#128274;</div><h2 style="color:#00d4aa;margin:0 0 10px;font-size:1.15rem;font-weight:700;">Pro Feature</h2><p style="color:#999;margin:0 0 24px;line-height:1.7;font-size:.875rem;">Exporting, importing and printing are locked in the demo. Purchase the full version on Etsy to unlock everything.</p><div style="display:flex;gap:10px;justify-content:center;"><a href="'+ETSY+'" target="_blank" rel="noopener" style="background:#00d4aa;color:#050505;padding:10px 22px;border-radius:8px;font-weight:700;font-size:.85rem;text-decoration:none;">Buy on Etsy &#8599;</a><button id="__dm_x__" style="background:#1a1a1a;color:#ccc;border:1px solid #333;padding:10px 22px;border-radius:8px;font-size:.85rem;cursor:pointer;font-family:inherit;">Continue Demo</button></div></div>';
+    document.body.appendChild(ov);
+    ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
+    document.getElementById('__dm_x__').addEventListener('click',function(){ov.remove();});
+  }
+  /* Lock named functions */
+  var FNAMES=['exportData','importData'];
+  function lockFn(n){try{Object.defineProperty(window,n,{get:function(){return showProModal;},set:function(){},configurable:false,enumerable:true});}catch(e){window[n]=showProModal;}}
+  /* Override window.print — called raw in onclick="window.print()" */
+  try{Object.defineProperty(window,'print',{get:function(){return showProModal;},set:function(){},configurable:false});}catch(e){window.print=showProModal;}
+  /* Onclick sweep — catches exportData, importData, window.print buttons */
+  var RE=/exportData|importData|window\.print/;
+  function sweep(){
+    document.querySelectorAll('[onclick]').forEach(function(el){
+      if(el.dataset.dm) return;
+      if(!RE.test(el.getAttribute('onclick')||'')) return;
+      el.dataset.dm='1'; el.style.opacity='0.4'; el.title='Pro — unlock with full version';
+      el.addEventListener('click',function(e){e.stopImmediatePropagation();e.preventDefault();showProModal();},true);
+    });
+    document.querySelectorAll('label').forEach(function(lbl){
+      if(lbl.dataset.dm) return;
+      var inp=lbl.querySelector('input[type="file"]');
+      if(!inp||!RE.test(inp.getAttribute('onchange')||'')) return;
+      lbl.dataset.dm='1'; lbl.style.opacity='0.4'; lbl.title='Pro Feature';
+      lbl.addEventListener('click',function(e){e.stopImmediatePropagation();e.preventDefault();showProModal();},true);
+    });
+  }
+  function init(){FNAMES.forEach(lockFn);document.body.appendChild(hub);document.body.appendChild(badge);sweep();}
+  if(document.body){init();}else{document.addEventListener('DOMContentLoaded',init);}
+  window.addEventListener('load',sweep);
+  new MutationObserver(sweep).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+<!-- ═══════════════════ END DEMO MODE ═══════════════════ -->
+
 </body>
 </html>

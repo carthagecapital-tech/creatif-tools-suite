@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="navy">
 <head>
 <meta charset="UTF-8">
@@ -3122,95 +3122,77 @@ init();
 <script>
 (function () {
   'use strict';
+  var HUB = '../../index.html';
+  var ETSY = 'https://www.etsy.com/shop/creatiftools';
 
-  /* ── Back to Hub button ── */
+  /* Back to Hub */
   var hub = document.createElement('a');
-  hub.href = '../../index.html';
+  hub.href = HUB;
   hub.innerHTML = '&#8592; Back to Hub';
-  hub.style.cssText = 'position:fixed;bottom:22px;left:22px;z-index:2147483647;background:#00d4aa;color:#050505;padding:9px 18px;border-radius:9px;font-weight:700;font-size:12px;font-family:system-ui,sans-serif;text-decoration:none;box-shadow:0 4px 20px rgba(0,212,170,.45);transition:transform .15s;letter-spacing:.01em;';
-  hub.onmouseenter = function() { hub.style.transform = 'translateY(-2px)'; };
-  hub.onmouseleave = function() { hub.style.transform = 'translateY(0)'; };
+  hub.style.cssText = 'position:fixed;bottom:22px;left:22px;z-index:2147483647;background:#00d4aa;color:#050505;padding:9px 18px;border-radius:9px;font-weight:700;font-size:12px;font-family:system-ui,sans-serif;text-decoration:none;box-shadow:0 4px 20px rgba(0,212,170,.45);transition:transform .15s;';
+  hub.onmouseenter = function(){ hub.style.transform='translateY(-2px)'; };
+  hub.onmouseleave = function(){ hub.style.transform='translateY(0)'; };
 
-  /* ── Demo badge ── */
+  /* Demo badge */
   var badge = document.createElement('div');
   badge.textContent = 'DEMO';
   badge.style.cssText = 'position:fixed;top:10px;right:10px;z-index:2147483647;background:#00d4aa;color:#050505;padding:4px 11px;border-radius:5px;font-weight:800;font-size:10px;font-family:system-ui,sans-serif;letter-spacing:.1em;pointer-events:none;';
 
-  /* ── Pro modal ── */
+  /* Pro modal */
   function showProModal() {
-    var existing = document.getElementById('__dm_ov__');
-    if (existing) return;
+    if (document.getElementById('__dm__')) return;
     var ov = document.createElement('div');
-    ov.id = '__dm_ov__';
-    ov.style.cssText = 'position:fixed;inset:0;z-index:2147483646;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;';
+    ov.id = '__dm__';
+    ov.style.cssText = 'position:fixed;inset:0;z-index:2147483646;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;';
     ov.innerHTML = '<div style="background:#0f0f0f;border:1px solid #00d4aa;border-radius:16px;padding:40px 34px;max-width:370px;width:90%;text-align:center;color:#fff;box-shadow:0 32px 80px rgba(0,0,0,.7);">'
-      + '<div style="font-size:2rem;margin-bottom:14px;">&#128274;</div>'
-      + '<h2 style="color:#00d4aa;margin:0 0 10px;font-size:1.15rem;font-weight:700;">Pro Feature</h2>'
-      + '<p style="color:#999;margin:0 0 26px;line-height:1.7;font-size:.875rem;">Saving, exporting, invoicing, and snapshots are only available in the full version. Purchase the complete tool on Etsy to unlock everything.</p>'
-      + '<div style="display:flex;gap:10px;justify-content:center;">'
-      + '<a href="https://www.etsy.com/shop/creatiftools" target="_blank" rel="noopener" style="background:#00d4aa;color:#050505;padding:10px 22px;border-radius:8px;font-weight:700;font-size:.85rem;text-decoration:none;">Buy on Etsy &#8599;</a>'
-      + '<button id="__dm_close__" style="background:#1a1a1a;color:#ccc;border:1px solid #333;padding:10px 22px;border-radius:8px;font-size:.85rem;cursor:pointer;font-family:inherit;">Continue Demo</button>'
-      + '</div></div>';
+      +'<div style="font-size:2rem;margin-bottom:14px;">&#128274;</div>'
+      +'<h2 style="color:#00d4aa;margin:0 0 10px;font-size:1.15rem;font-weight:700;">Pro Feature</h2>'
+      +'<p style="color:#999;margin:0 0 24px;line-height:1.7;font-size:.875rem;">Saving, exporting, invoicing and snapshots are locked in the demo. Purchase the full version on Etsy to unlock everything.</p>'
+      +'<div style="display:flex;gap:10px;justify-content:center;">'
+      +'<a href="'+ETSY+'" target="_blank" rel="noopener" style="background:#00d4aa;color:#050505;padding:10px 22px;border-radius:8px;font-weight:700;font-size:.85rem;text-decoration:none;">Buy on Etsy &#8599;</a>'
+      +'<button id="__dm_x__" style="background:#1a1a1a;color:#ccc;border:1px solid #333;padding:10px 22px;border-radius:8px;font-size:.85rem;cursor:pointer;font-family:inherit;">Continue Demo</button>'
+      +'</div></div>';
     document.body.appendChild(ov);
-    ov.addEventListener('click', function(e) { if (e.target === ov) ov.remove(); });
-    document.getElementById('__dm_close__').addEventListener('click', function() { ov.remove(); });
+    ov.addEventListener('click', function(e){ if(e.target===ov) ov.remove(); });
+    document.getElementById('__dm_x__').addEventListener('click', function(){ ov.remove(); });
   }
 
-  /* Lock ONLY action functions — all tabs/views remain fully navigable */
-  var LOCKED_FNS = ['exportProject', 'doPrint', 'doSnapshot', 'cloneProject', 'importProject', 'copyEmailBody'];
-
-  function lockFn(name) {
-    try {
-      Object.defineProperty(window, name, {
-        get: function() { return showProModal; },
-        set: function() {},
-        configurable: false,
-        enumerable: true
-      });
-    } catch (e) { window[name] = showProModal; }
+  /* Functions to lock */
+  var FNAMES = ['exportProject','doPrint','doSnapshot','cloneProject','importProject','copyEmailBody'];
+  function lockFn(n) {
+    try { Object.defineProperty(window,n,{get:function(){return showProModal;},set:function(){},configurable:false,enumerable:true}); }
+    catch(e){ window[n]=showProModal; }
   }
 
-  /* Match only action-function buttons — NOT tab navigation */
-  var LOCKED_FN_RE = /exportProject|doPrint|doSnapshot|cloneProject|importProject|copyEmailBody/;
+  /* Onclick pattern — action buttons only, not navigation */
+  var RE = /exportProject|doPrint|doSnapshot|cloneProject|importProject|copyEmailBody/;
 
-  function markProButtons() {
-    var els = document.querySelectorAll('[onclick]');
-    for (var i = 0; i < els.length; i++) {
-      var el = els[i];
-      if (el.dataset.dmLocked) continue;
-      var oc = el.getAttribute('onclick') || '';
-      if (!LOCKED_FN_RE.test(oc)) continue;
-      el.dataset.dmLocked = '1';
-      el.style.opacity = '0.4';
-      el.title = 'Pro Feature — unlock with full version';
-      el.addEventListener('click', function(e) { e.stopImmediatePropagation(); e.preventDefault(); showProModal(); }, true);
-    }
-    /* Lock file-input label for Import */
-    var labels = document.querySelectorAll('label');
-    for (var j = 0; j < labels.length; j++) {
-      var lbl = labels[j];
-      if (lbl.dataset.dmLocked) continue;
-      var inp = lbl.querySelector('input[type="file"]');
-      if (!inp) continue;
-      if (!LOCKED_FN_RE.test(inp.getAttribute('onchange') || '')) continue;
-      lbl.dataset.dmLocked = '1';
-      lbl.style.opacity = '0.4';
-      lbl.title = 'Pro Feature';
-      lbl.addEventListener('click', function(e) { e.stopImmediatePropagation(); e.preventDefault(); showProModal(); }, true);
-    }
+  function sweep() {
+    document.querySelectorAll('[onclick]').forEach(function(el){
+      if(el.dataset.dm) return;
+      if(!RE.test(el.getAttribute('onclick')||'')) return;
+      el.dataset.dm='1'; el.style.opacity='0.4'; el.title='Pro — unlock with full version';
+      el.addEventListener('click',function(e){e.stopImmediatePropagation();e.preventDefault();showProModal();},true);
+    });
+    document.querySelectorAll('label').forEach(function(lbl){
+      if(lbl.dataset.dm) return;
+      var inp=lbl.querySelector('input[type="file"]');
+      if(!inp||!RE.test(inp.getAttribute('onchange')||'')) return;
+      lbl.dataset.dm='1'; lbl.style.opacity='0.4'; lbl.title='Pro Feature';
+      lbl.addEventListener('click',function(e){e.stopImmediatePropagation();e.preventDefault();showProModal();},true);
+    });
   }
 
-  function init() {
-    LOCKED_FNS.forEach(lockFn);
+  function init(){
+    FNAMES.forEach(lockFn);
     document.body.appendChild(hub);
     document.body.appendChild(badge);
-    markProButtons();
+    sweep();
   }
 
-  if (document.body) { init(); } else { document.addEventListener('DOMContentLoaded', init); }
-  window.addEventListener('load', markProButtons);
-  new MutationObserver(markProButtons).observe(document.documentElement, { childList: true, subtree: true });
-
+  if(document.body){init();}else{document.addEventListener('DOMContentLoaded',init);}
+  window.addEventListener('load',sweep);
+  new MutationObserver(sweep).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
 <!-- ═══════════════════ END DEMO MODE ═══════════════════ -->
