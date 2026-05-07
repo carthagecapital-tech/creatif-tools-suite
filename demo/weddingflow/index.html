@@ -153,7 +153,7 @@
     @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     @keyframes confetti { 0% { transform: translate(0,0) rotate(0deg); opacity: 1; } 100% { transform: translate(var(--tx),200px) rotate(360deg); opacity: 0; } }
     @media (max-width: 768px) {
-      .sidebar { width: 100%; height: auto; position: fixed; top: 0; left: 0; right: 0; border-right: none; border-bottom: 1px solid var(--border); padding: 12px 16px; z-index: 100; flex-direction: row; }
+      .sidebar { width: 100%; height: auto; position: fixed; top: 0; left: 0; right: 0; border-right: none; border-bottom: 1px solid var(--border); padding: 12px 16px; z-index: 100; flex-direction: row; overflow: visible; }
       .hamburger { display: flex; }
       .logo { padding-bottom: 0; border-bottom: none; margin-bottom: 0; gap: 8px; flex: 1; }
       .logo-icon { width: 32px; height: 32px; }
