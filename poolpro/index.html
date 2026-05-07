@@ -100,7 +100,7 @@ body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;backgroun
 #sidebar.collapsed #sb-toggle svg{transform:rotate(180deg)}
 /* PATCHED: Toggle button moved to top of sidebar */
 
-#sidebar.collapsed#sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:499}
+#sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:499}
 #tb-hamburger{display:none}
 .ns{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--SBT);padding:8px 8px 3px;opacity:.6}
 .ni{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;cursor:pointer;color:var(--SBT);font-size:12.5px;font-weight:500;transition:all .12s;user-select:none}
@@ -366,7 +366,7 @@ kbd{font-family:'JetBrains Mono','Courier New',Courier,monospace;font-size:10px}
 <div id="main">
   <div id="topbar">
     <div style="display:flex;align-items:center;gap:8px">
-      <button id="tb-hamburger" onclick="toggleMobileSidebar()" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--TX);display:none;align-items:center;justify-content:center;border-radius:6px">
+      <button id="tb-hamburger" onclick="toggleMobileSidebar()" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--TX);align-items:center;justify-content:center;border-radius:6px">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
       <div class="tb-t" id="tb-t">Dashboard</div>
