@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "id": "cleanquote-pro",
+    "name": "CleanQuote Pro",
+    "tagline": "Quote Calculator",
+    "description": "A local-first quote builder for small cleaning businesses. No account, no server. All data stays in your browser.",
+    "features": [
+      "Build quotes with line items in seconds",
+      "Auto-apply taxes & discounts",
+      "Print or export to PDF",
+      "Local-first — your data never leaves your device"
+    ],
+    "color": "#2C4A7C",
+    "monogram": "C",
+    "price": "$29",
+    "etsyUrl": "https://www.etsy.com/listing/4517517831/cleaning-service-quote-calculator"
+  }
+]

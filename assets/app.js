@@ -23,9 +23,9 @@
   // state instead of an error.
   const appDemoUrl = (id) => `apps/${encodeURIComponent(id)}/index.html`;
 
-  // The Etsy shop URL — used by the nav "Etsy" link and the empty
-  // state CTA. Replace with your real shop URL.
-  const ETSY_SHOP_URL = 'https://www.etsy.com/shop/YourShopName';
+  // The Etsy shop URL — used by the nav "Etsy" link, the footer
+  // "Etsy Shop" link, and the empty-state CTA.
+  const ETSY_SHOP_URL = 'https://www.etsy.com/shop/CreatifTools';
 
   // The contact email shown in the footer.
   const CONTACT_EMAIL = 'hello@creatif.tools';

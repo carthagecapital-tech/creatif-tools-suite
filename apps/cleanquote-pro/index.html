@@ -1,0 +1,2550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CleanQuote Pro</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%232C4A7C'/><text x='16' y='22' font-family='monospace' font-size='18' font-weight='700' fill='white' text-anchor='middle'>C</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"></noscript>
+<script>
+  (function(){try{var s=localStorage.getItem('cleanbiz-theme');if(s)document.documentElement.setAttribute('data-theme',s);else if(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();
+</script>
+<style>
+/* ============================================================
+   CLEANBIZ SUITE — BASE TEMPLATE v1.1 (Shell CSS — locked)
+   ============================================================ */
+:root {
+  --bg: #F2EFE8; --surface: #FBFAF6; --ink: #1A1A1A; --ink-2: #4A4A4A;
+  --ink-3: #8A8A8A; --line: #D9D4C7; --line-soft: #E8E3D6;
+  --red: #C8442A; --green: #3D7A4E;
+  --accent: #2C4A7C; --accent-ink: #FFFFFF; --accent-soft: #E6EBF2;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --fs-xs: 11px; --fs-sm: 12px; --fs-base: 13px; --fs-md: 14px;
+  --fs-lg: 16px; --fs-xl: 24px; --fs-2xl: 36px; --fs-3xl: 56px;
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px;
+  --sidebar-w: 240px; --footer-h: 36px;
+}
+[data-theme="dark"] {
+  --bg: #1A1815; --surface: #25231E; --ink: #F0EDE5; --ink-2: #A8A499;
+  --ink-3: #6E6A60; --line: #3A3733; --line-soft: #2D2B26;
+  --red: #E85A3D; --green: #5BAE6E;
+  --accent: #4870B5; --accent-ink: #FFFFFF; --accent-soft: #2A3850;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--mono);
+  font-size: var(--fs-base); line-height: 1.5; font-feature-settings: "ss01","cv11";
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  transition: background 0.2s, color 0.2s; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+input { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; margin: 0; padding: 0; }
+i { font-style: normal; }
+.label { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2); font-weight: 500; }
+.muted { color: var(--ink-3); }
+.mono-num { font-variant-numeric: tabular-nums; }
+.app { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: calc(100vh - var(--footer-h)); }
+@media (max-width: 900px) { .app { grid-template-columns: 1fr; } }
+.sidebar { background: var(--surface); border-right: 1px solid var(--line);
+  padding: var(--sp-5) var(--sp-4); display: flex; flex-direction: column;
+  gap: var(--sp-5); min-height: calc(100vh - var(--footer-h)); }
+@media (max-width: 900px) { .sidebar { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); } }
+.brand { display: flex; align-items: flex-start; gap: var(--sp-3); padding-bottom: var(--sp-4); border-bottom: 1px solid var(--line-soft); }
+.brand-mark { width: 32px; height: 32px; background: var(--accent); color: var(--accent-ink);
+  display: grid; place-items: center; font-weight: 700; font-size: var(--fs-md); flex-shrink: 0; transition: background 0.2s; }
+.brand-text { line-height: 1.2; }
+.brand-name { font-size: var(--fs-sm); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.brand-sub { font-size: var(--fs-xs); color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+.brand-version { margin-left: auto; font-size: var(--fs-xs); color: var(--ink-3); padding: 2px 6px; border: 1px solid var(--line); }
+.search { display: flex; align-items: center; gap: var(--sp-2); padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line); background: var(--bg); font-size: var(--fs-sm); color: var(--ink-3);
+  cursor: pointer; transition: border-color 0.15s; }
+.search:hover { border-color: var(--ink-2); }
+.search-icon { color: var(--ink-3); }
+.search-text { flex: 1; }
+.kbd { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px;
+  padding: 0 4px; font-size: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); }
+.nav-group + .nav-group { margin-top: var(--sp-4); }
+.nav-label { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--ink-3); margin-bottom: var(--sp-2); padding: 0 var(--sp-3); }
+.nav-item { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm); color: var(--ink-2); border-left: 2px solid transparent;
+  cursor: pointer; transition: background 0.1s; }
+.nav-item:hover { background: var(--bg); color: var(--ink); }
+.nav-item.active { color: var(--ink); background: var(--bg); border-left-color: var(--red); }
+.nav-num { color: var(--ink-3); width: 22px; font-variant-numeric: tabular-nums; }
+.nav-text { flex: 1; }
+.nav-badge { font-size: var(--fs-xs); color: var(--ink-3); padding: 1px 5px; border: 1px solid var(--line); }
+.sidebar-footer { margin-top: auto; padding-top: var(--sp-4); border-top: 1px solid var(--line-soft); display: flex; flex-direction: column; gap: var(--sp-3); }
+.theme-toggle { display: flex; align-items: center; gap: var(--sp-2); width: 100%;
+  padding: var(--sp-2) var(--sp-3); border: 1px solid var(--line); background: var(--bg);
+  font-size: var(--fs-sm); color: var(--ink-2); cursor: pointer; transition: border-color 0.15s, color 0.15s; }
+.theme-toggle:hover { border-color: var(--ink-2); color: var(--ink); }
+.theme-icon { width: 14px; text-align: center; font-size: 13px; line-height: 1; }
+.theme-label { flex: 1; text-align: left; }
+.sidebar-status { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-xs); color: var(--ink-3); }
+.dot { width: 6px; height: 6px; background: var(--red); border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.dot.green { background: var(--green); }
+@keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.dot.live { animation: pulse-dot 2s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .dot.live { animation: none; } }
+.main { display: flex; flex-direction: column; min-width: 0; }
+.topbar { padding: var(--sp-5) var(--sp-6) var(--sp-4); border-bottom: 1px solid var(--line);
+  display: flex; align-items: flex-end; gap: var(--sp-5); flex-wrap: wrap; }
+.breadcrumb { width: 100%; font-size: var(--fs-xs); color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--sp-2); }
+.title-block { flex: 1; min-width: 200px; }
+.title { font-size: var(--fs-xl); font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+.title em { font-style: normal; color: var(--ink-2); font-weight: 500; }
+.actions { display: flex; gap: var(--sp-2); align-items: center; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: var(--sp-2); padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line); background: var(--surface); font-size: var(--fs-sm);
+  cursor: pointer; transition: background 0.1s, border-color 0.15s; }
+.btn:hover { background: var(--bg); border-color: var(--ink-2); }
+.btn-primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.btn-primary:hover { background: var(--ink-2); border-color: var(--ink-2); }
+.btn-accent { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn-accent:hover { filter: brightness(0.92); border-color: var(--accent); }
+.btn .kbd { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.25); color: inherit; }
+.btn:not(.btn-primary):not(.btn-accent) .kbd { background: var(--bg); border-color: var(--line); color: var(--ink-2); }
+.btn-primary .kbd { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); color: inherit; }
+.period { display: flex; border: 1px solid var(--line); background: var(--surface); margin: var(--sp-4) var(--sp-6) 0; align-self: flex-start; }
+@media (max-width: 700px) { .period { margin: var(--sp-4) var(--sp-4) 0; } }
+.period-btn { padding: var(--sp-2) var(--sp-3); font-size: var(--fs-sm); color: var(--ink-2);
+  border-right: 1px solid var(--line); cursor: pointer; transition: background 0.1s; }
+.period-btn:last-child { border-right: 0; }
+.period-btn:hover { background: var(--bg); }
+.period-btn.active { background: var(--ink); color: var(--bg); }
+.content { padding: var(--sp-5) var(--sp-6) var(--sp-7); display: grid; grid-template-columns: repeat(3,1fr); gap: var(--sp-4); }
+@media (max-width: 1100px) { .content { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 700px) { .content { grid-template-columns: 1fr; padding: var(--sp-4); } }
+.card { position: relative; background: var(--surface); border: 1px solid var(--line); padding: var(--sp-5); transition: background 0.2s, border-color 0.2s; }
+.card:hover { border-color: var(--ink-2); }
+.corner { position: absolute; width: 8px; height: 8px; pointer-events: none; transition: border-color 0.2s; }
+.corner.tl { top: -1px; left: -1px; border-top: 2px solid var(--ink); border-left: 2px solid var(--ink); }
+.corner.tr { top: -1px; right: -1px; border-top: 2px solid var(--ink); border-right: 2px solid var(--ink); }
+.corner.bl { bottom: -1px; left: -1px; border-bottom: 2px solid var(--ink); border-left: 2px solid var(--ink); }
+.corner.br { bottom: -1px; right: -1px; border-bottom: 2px solid var(--ink); border-right: 2px solid var(--ink); }
+.card:hover .corner { border-color: var(--accent); }
+.card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-3); gap: var(--sp-3); }
+.card-title { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2); }
+.card-tag { font-size: var(--fs-xs); padding: 2px 6px; border: 1px solid var(--line); color: var(--ink-2); white-space: nowrap; }
+.big-num { font-size: var(--fs-3xl); font-weight: 700; line-height: 1; margin: var(--sp-3) 0 var(--sp-2); letter-spacing: -0.02em; }
+.big-num .unit { font-size: var(--fs-sm); font-weight: 500; color: var(--ink-3); margin-left: 6px; text-transform: lowercase; }
+.delta { display: inline-flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-sm); color: var(--ink-2); }
+.delta.up { color: var(--green); }
+.delta.down { color: var(--red); }
+.delta .arr { font-size: var(--fs-xs); }
+.delta .ctx { color: var(--ink-3); }
+.chart { margin-top: var(--sp-4); display: flex; align-items: flex-end; gap: 2px; height: 40px; }
+.bar { flex: 1; background: var(--ink-2); min-height: 2px; transition: background 0.15s; }
+.bar.accent { background: var(--accent); }
+.bar.muted { background: var(--line); }
+.bar.red { background: var(--red); }
+.sparkline { margin-top: var(--sp-4); width: 100%; height: 40px; display: block; }
+.statusbar { margin-top: auto; padding: var(--sp-2) var(--sp-6); border-top: 1px solid var(--line);
+  display: flex; align-items: center; gap: var(--sp-4); font-size: var(--fs-xs); color: var(--ink-3); }
+@media (max-width: 700px) { .statusbar { padding: var(--sp-2) var(--sp-4); } }
+.statusbar .grow { flex: 1; }
+.statusbar .right { display: flex; gap: var(--sp-4); align-items: center; }
+.app-footer { height: var(--footer-h); display: flex; align-items: center; justify-content: center;
+  padding: 0 var(--sp-4); background: var(--surface); border-top: 1px solid var(--line);
+  font-size: var(--fs-xs); color: var(--ink-3); letter-spacing: 0.04em; text-align: center; }
+.app-footer .app-name { color: var(--ink-2); font-weight: 500; }
+.app-footer .sep { margin: 0 var(--sp-2); color: var(--ink-3); }
+.toast-host { position: fixed; bottom: calc(var(--footer-h) + var(--sp-4)); right: var(--sp-5);
+  display: flex; flex-direction: column; gap: var(--sp-2); z-index: 1000; pointer-events: none; max-width: 360px; }
+.toast { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3) var(--sp-4);
+  background: var(--ink); color: var(--bg); font-size: var(--fs-sm); min-width: 200px;
+  pointer-events: auto; border: 1px solid var(--ink); box-shadow: 0 6px 20px rgba(0,0,0,0.15); animation: toast-in 0.2s ease-out; }
+.toast.is-leaving { animation: toast-out 0.2s ease-in forwards; }
+.toast .toast-icon { width: 8px; height: 8px; background: var(--accent); flex-shrink: 0; }
+.toast.success .toast-icon { background: var(--green); }
+.toast.info .toast-icon { background: var(--accent); }
+.toast.error .toast-icon { background: var(--red); }
+.toast .toast-msg { flex: 1; }
+@keyframes toast-in { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes toast-out { to { transform: translateY(8px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .toast { animation: none; } }
+
+/* FOCUS RING — accessibility */
+*:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ============================================================
+   APP-SPECIFIC STYLES
+   ============================================================ */
+
+/* SKIP LINK — accessibility */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--sp-4);
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--fs-sm);
+  z-index: 9999;
+  transition: top 0.15s;
+}
+.skip-link:focus { top: var(--sp-2); }
+
+/* VIEWS */
+.view { display: none; }
+.view.active { display: block; }
+.view-content { padding: var(--sp-5) var(--sp-6) var(--sp-7); }
+@media (max-width: 700px) { .view-content { padding: var(--sp-4); } }
+
+/* FORM INPUTS */
+input[type="text"], input[type="email"], input[type="tel"], input[type="number"],
+input[type="date"], select, textarea {
+  width: 100%; padding: var(--sp-2) var(--sp-3); border: 1px solid var(--line);
+  background: var(--bg); color: var(--ink); font-family: var(--mono);
+  font-size: var(--fs-base); outline: none; transition: border-color 0.15s;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+textarea { resize: vertical; min-height: 80px; }
+label.field { display: block; margin-bottom: var(--sp-3); }
+label.field > .field-label { display: block; font-size: var(--fs-xs); text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--ink-2); margin-bottom: var(--sp-1); }
+label.field > .field-label .req { color: var(--red); margin-left: 2px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--sp-4); }
+@media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+.form-grid .span-2 { grid-column: span 2; }
+@media (max-width: 600px) { .form-grid .span-2 { grid-column: span 1; } }
+.field-label { display: block; font-size: var(--fs-xs); text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--ink-2); margin-bottom: var(--sp-1); }
+
+/* RADIO / CHECKBOX */
+.radio-row { display: flex; flex-wrap: wrap; gap: var(--sp-4); margin-bottom: var(--sp-3); }
+.radio-row label, .check-row label { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-sm); cursor: pointer; }
+.radio-row input[type="radio"], .check-row input[type="checkbox"] { width: auto; cursor: pointer; }
+.check-list { display: flex; flex-direction: column; gap: var(--sp-2); }
+.check-item { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; }
+.check-item label { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-sm); cursor: pointer; flex: 1; }
+.check-item input[type="checkbox"] { width: auto; cursor: pointer; }
+.qty-input { width: 70px; flex-shrink: 0; }
+
+/* DATA TABLE */
+.data-table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+.data-table th { text-align: left; font-size: var(--fs-xs); text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--ink-2); padding: var(--sp-2) var(--sp-3);
+  background: var(--bg); border-bottom: 1px solid var(--line); font-weight: 500; }
+.data-table td { padding: var(--sp-3); border-bottom: 1px solid var(--line-soft); vertical-align: middle; }
+.data-table tr:hover td { background: var(--bg); }
+.data-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.actions-cell { display: flex; gap: var(--sp-1); align-items: center; }
+.icon-btn { padding: var(--sp-1) var(--sp-2); font-size: var(--fs-xs); color: var(--ink-2);
+  border: 1px solid transparent; cursor: pointer; background: none; font: inherit; line-height: 1; }
+.icon-btn:hover { color: var(--ink); border-color: var(--line); }
+.icon-btn.danger:hover { color: var(--red); border-color: var(--red); }
+
+/* BADGES */
+.badge { display: inline-block; font-size: var(--fs-xs); padding: 2px 8px; border: 1px solid currentColor;
+  text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; }
+.badge.draft { color: var(--ink-3); }
+.badge.sent { color: var(--accent); }
+.badge.accepted { color: var(--green); }
+.badge.declined { color: var(--red); }
+.badge.expired { color: var(--red); }
+
+/* MODALS */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: grid;
+  place-items: center; z-index: 999; animation: fade-in 0.15s ease-out; padding: var(--sp-4); }
+.modal { background: var(--surface); border: 1px solid var(--line); width: 100%;
+  max-width: 560px; max-height: 90vh; overflow-y: auto; animation: modal-in 0.15s ease-out; }
+.modal-header { display: flex; justify-content: space-between; align-items: center;
+  padding: var(--sp-5); border-bottom: 1px solid var(--line-soft); }
+.modal-title { font-size: var(--fs-sm); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.modal-body { padding: var(--sp-5); }
+.modal-footer { display: flex; justify-content: flex-end; gap: var(--sp-2);
+  padding: var(--sp-5); border-top: 1px solid var(--line-soft); }
+.modal-close { width: 28px; height: 28px; display: grid; place-items: center; color: var(--ink-2); font-size: 16px; }
+.modal-close:hover { color: var(--ink); }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal-in { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* OVERVIEW */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-4); margin-bottom: var(--sp-4); }
+@media (max-width: 1100px) { .kpi-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .kpi-grid { grid-template-columns: 1fr; } }
+.kpi-grid .big-num { font-size: var(--fs-2xl); }
+.chart-row { display: grid; grid-template-columns: 2fr 1fr; gap: var(--sp-4); margin-bottom: var(--sp-4); }
+@media (max-width: 900px) { .chart-row { grid-template-columns: 1fr; } }
+.bc-wrap { display: flex; align-items: flex-end; gap: 2px; height: 80px; margin-top: var(--sp-4); }
+.bc-bar { flex: 1; background: var(--line); min-height: 2px; cursor: default; position: relative; transition: background 0.1s; }
+.bc-bar.has-data { background: var(--ink-2); }
+.bc-bar:hover { background: var(--accent) !important; }
+.bc-tip { display: none; position: absolute; bottom: calc(100% + 4px); left: 50%;
+  transform: translateX(-50%); background: var(--ink); color: var(--bg); font-size: var(--fs-xs);
+  padding: 2px 6px; white-space: nowrap; pointer-events: none; z-index: 10; }
+.bc-bar:hover .bc-tip { display: block; }
+.mix-bar { height: 20px; display: flex; overflow: hidden; margin-top: var(--sp-4); margin-bottom: var(--sp-3); border: 1px solid var(--line-soft); }
+.mix-seg { height: 100%; transition: width 0.3s; }
+.mix-seg.draft { background: var(--ink-3); }
+.mix-seg.sent { background: var(--accent); }
+.mix-seg.accepted { background: var(--green); }
+.mix-seg.declined { background: var(--red); }
+.mix-seg.expired { background: #a03020; }
+.mix-legend { display: flex; flex-direction: column; gap: var(--sp-2); font-size: var(--fs-xs); }
+.mix-row { display: flex; align-items: center; gap: var(--sp-2); }
+.mix-dot { width: 8px; height: 8px; flex-shrink: 0; }
+.mix-dot.draft { background: var(--ink-3); }
+.mix-dot.sent { background: var(--accent); }
+.mix-dot.accepted { background: var(--green); }
+.mix-dot.declined { background: var(--red); }
+.mix-dot.expired { background: #a03020; }
+.mix-name { flex: 1; color: var(--ink-2); }
+.mix-cnt { color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.recent-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-3); }
+.link-btn { font-size: var(--fs-xs); color: var(--accent); cursor: pointer; background: none; border: none; font: inherit; }
+.link-btn:hover { text-decoration: underline; }
+
+/* QUOTE BUILDER */
+.builder-layout { display: grid; grid-template-columns: 1fr 340px; gap: var(--sp-4); align-items: start; }
+@media (max-width: 1000px) { .builder-layout { grid-template-columns: 1fr; } }
+.builder-sticky { position: sticky; top: var(--sp-4); }
+.pricing-card { background: var(--surface); border: 1px solid var(--line); padding: var(--sp-5); margin-bottom: var(--sp-4); position: relative; transition: border-color 0.2s; }
+.pricing-card:hover { border-color: var(--ink-2); }
+.pricing-card:hover .corner { border-color: var(--accent); }
+.meta-card { background: var(--surface); border: 1px solid var(--line); padding: var(--sp-5); position: relative; transition: border-color 0.2s; }
+.meta-card:hover { border-color: var(--ink-2); }
+.meta-card:hover .corner { border-color: var(--accent); }
+.pricing-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; font-size: var(--fs-sm); }
+.pricing-row.subtotal-row { border-top: 1px solid var(--line-soft); margin-top: var(--sp-2); padding-top: var(--sp-2); }
+.pricing-row.total-row { border-top: 2px solid var(--line); margin-top: var(--sp-2); padding-top: var(--sp-3); font-weight: 700; }
+.total-amt { font-size: var(--fs-2xl); font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+.meta-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; font-size: var(--fs-sm); gap: var(--sp-3); }
+.meta-row select { width: auto; min-width: 90px; }
+.meta-row input[type="date"] { width: auto; min-width: 130px; }
+.back-link { display: inline-flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-sm);
+  color: var(--ink-3); cursor: pointer; margin-bottom: var(--sp-4); background: none; border: none; font: inherit; padding: 0; }
+.back-link:hover { color: var(--ink); }
+.card-gap { margin-bottom: var(--sp-4); }
+.note-tabs { display: flex; gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.note-tab { padding: var(--sp-1) var(--sp-3); font-size: var(--fs-xs); text-transform: uppercase;
+  letter-spacing: 0.06em; border: 1px solid var(--line); cursor: pointer; color: var(--ink-3); background: var(--bg); }
+.note-tab.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.client-sel-row { margin-bottom: var(--sp-4); }
+
+/* TABLE OVERFLOW — mobile scroll */
+#quotes-table, #clients-table, #stype-table, #addons-table, #recent-quotes { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.modal-body { overflow-x: auto; }
+.filter-bar { display: flex; gap: var(--sp-3); flex-wrap: wrap; margin-bottom: var(--sp-4); align-items: flex-end; }
+.filter-bar select { width: auto; min-width: 130px; }
+.filter-bar .search-input { flex: 1; min-width: 180px; }
+
+/* BULK BAR */
+.bulk-bar { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3) var(--sp-4);
+  background: var(--accent-soft); border: 1px solid var(--accent); margin-bottom: var(--sp-3); font-size: var(--fs-sm); }
+.bulk-bar span { flex: 1; }
+
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: var(--sp-7) var(--sp-5); }
+.empty-title { font-size: var(--fs-md); font-weight: 700; color: var(--ink-2); margin-bottom: var(--sp-3); }
+.empty-state p { margin: 0 0 var(--sp-5); color: var(--ink-3); font-size: var(--fs-sm); }
+
+/* SETTINGS */
+.section-stack { display: flex; flex-direction: column; gap: var(--sp-4); }
+.settings-btns { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-top: var(--sp-3); }
+.export-row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); flex-wrap: wrap; }
+.export-desc { font-size: var(--fs-sm); color: var(--ink-3); margin-top: var(--sp-2); }
+
+/* PRINT AREA (hidden on screen) */
+#print-area { display: none; }
+
+/* ============================================================
+   PRINT / PDF
+   ============================================================ */
+.print-footer { display: none; }
+@media print {
+  @page { margin: 15mm 15mm 20mm 15mm; size: auto; }
+  body { background: white !important; color: black !important; font-size: 10pt; }
+  .sidebar, .actions, .period, .search, .statusbar, .theme-toggle,
+  .no-print, .app-footer, .toast-host, .back-link, .filter-bar,
+  .bulk-bar, .note-tabs { display: none !important; }
+  .app { display: block !important; min-height: 0 !important; }
+  .main { border: 0 !important; }
+  .topbar { border: 0 !important; padding: 0 0 8pt !important; border-bottom: 1px solid #999 !important; margin-bottom: 12pt !important; }
+  .breadcrumb { color: #666 !important; }
+  .view { display: block !important; }
+  .view:not(.active) { display: none !important; }
+  .view-content { padding: 0 !important; }
+  .card { border: 1px solid #999 !important; background: white !important; padding: 10pt !important; margin-bottom: 8pt !important; page-break-inside: avoid; }
+  .corner { display: none !important; }
+  .builder-layout { display: block !important; }
+  .builder-sticky { position: static !important; }
+  .print-footer { display: flex !important; justify-content: space-between; position: fixed;
+    bottom: 0; left: 0; right: 0; font-size: 8pt; color: #666;
+    border-top: 1px solid #ccc; padding: 4pt 10mm; }
+  .print-footer .page-num::after { content: "Page " counter(page) " of " counter(pages); }
+  /* Quote print mode */
+  body.printing-quote .app { display: none !important; }
+  body.printing-quote .app-footer { display: none !important; }
+  body.printing-quote #print-area { display: block !important; }
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">C</div>
+      <div class="brand-text">
+        <div class="brand-name">CleanQuote</div>
+        <div class="brand-sub">pro suite</div>
+      </div>
+      <div class="brand-version">v1.0</div>
+    </div>
+
+    <div class="search" onclick="focusSearch()" tabindex="0" role="button" aria-label="Focus quote search" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();focusSearch();}">
+      <span class="search-icon">⏵</span>
+      <span class="search-text">jump to anything</span>
+      <span class="kbd">⌘</span><span class="kbd">K</span>
+    </div>
+
+    <nav>
+      <div class="nav-group">
+        <div class="nav-label">-- workspace</div>
+        <ul>
+          <li class="nav-item active" data-view="overview" tabindex="0" role="button" aria-label="Overview">
+            <span class="nav-num">01</span>
+            <span class="nav-text">overview</span>
+            <span class="dot live"></span>
+          </li>
+          <li class="nav-item" data-view="quotes" tabindex="0" role="button" aria-label="Quotes">
+            <span class="nav-num">02</span>
+            <span class="nav-text">quotes</span>
+            <span class="nav-badge" id="badge-quotes">0</span>
+          </li>
+          <li class="nav-item" data-view="clients" tabindex="0" role="button" aria-label="Clients">
+            <span class="nav-num">03</span>
+            <span class="nav-text">clients</span>
+            <span class="nav-badge" id="badge-clients">0</span>
+          </li>
+        </ul>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">-- system</div>
+        <ul>
+          <li class="nav-item" data-view="services" tabindex="0" role="button" aria-label="Services">
+            <span class="nav-num">04</span>
+            <span class="nav-text">services</span>
+          </li>
+          <li class="nav-item" data-view="settings" tabindex="0" role="button" aria-label="Settings">
+            <span class="nav-num">05</span>
+            <span class="nav-text">settings</span>
+          </li>
+          <li class="nav-item" data-view="export" tabindex="0" role="button" aria-label="Export">
+            <span class="nav-num">06</span>
+            <span class="nav-text">export</span>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme (Ctrl+Shift+L)">
+        <span class="theme-icon">☾</span>
+        <span class="theme-label">dark mode</span>
+      </button>
+      <div class="sidebar-status">
+        <span class="dot green"></span>
+        <span>local-only · data on device</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="main-content">
+
+    <header class="topbar">
+      <div class="breadcrumb" id="breadcrumb">WORKSPACE / CLEANBIZ / OVERVIEW</div>
+      <div class="title-block">
+        <h1 class="title" id="page-title">Overview</h1>
+      </div>
+      <div class="actions no-print">
+        <button class="btn" onclick="exportCSV()" title="Export quotes as CSV (Ctrl+E)">
+          <span>Export .csv</span>
+          <span class="kbd">⌘</span><span class="kbd">E</span>
+        </button>
+        <button class="btn" onclick="printPDF()" title="Print / save as PDF (Ctrl+P)">
+          <span>Print / PDF</span>
+          <span class="kbd">⌘</span><span class="kbd">P</span>
+        </button>
+        <button class="btn btn-accent" onclick="openNewQuote()" title="New quote (Shift+N)">
+          <span>■</span>
+          <span>New quote</span>
+          <span class="kbd">⇧</span><span class="kbd">N</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="period no-print" id="period-bar">
+      <button class="period-btn" data-days="7">7D</button>
+      <button class="period-btn active" data-days="30">30D</button>
+      <button class="period-btn" data-days="60">60D</button>
+      <button class="period-btn" data-days="90">90D</button>
+    </div>
+
+    <!-- ===== VIEW: OVERVIEW ===== -->
+    <section class="view active" id="view-overview">
+      <div class="view-content">
+        <div class="kpi-grid" id="kpi-grid"></div>
+        <div class="chart-row">
+          <div class="card" id="daily-chart-card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title" id="chart-title">§ 05 quotes created — last 30 days</div></div>
+            <div class="bc-wrap" id="daily-chart"></div>
+          </div>
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 06 status mix</div></div>
+            <div class="mix-bar" id="mix-bar"></div>
+            <div class="mix-legend" id="mix-legend"></div>
+          </div>
+        </div>
+        <div class="card">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="recent-head">
+            <div class="card-title">§ 07 recent quotes</div>
+            <button class="link-btn" onclick="showView('quotes')">view all &rarr;</button>
+          </div>
+          <div id="recent-quotes"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== VIEW: QUOTES ===== -->
+    <section class="view" id="view-quotes">
+      <!-- List sub-view -->
+      <div id="ql-view">
+        <div class="view-content">
+          <div id="bulk-bar" class="bulk-bar no-print" style="display:none">
+            <span id="bulk-label">0 selected</span>
+            <button class="btn" onclick="bulkExportCSV()">Export CSV</button>
+            <button class="btn" style="color:var(--red)" onclick="bulkDelete()">Delete</button>
+          </div>
+          <div class="filter-bar no-print">
+            <select id="qf-status" onchange="renderQuotesList()">
+              <option value="">All statuses</option>
+              <option value="draft">Draft</option>
+              <option value="sent">Sent</option>
+              <option value="accepted">Accepted</option>
+              <option value="declined">Declined</option>
+              <option value="expired">Expired</option>
+            </select>
+            <select id="qf-date" onchange="renderQuotesList()">
+              <option value="">All time</option>
+              <option value="week">This week</option>
+              <option value="month">This month</option>
+              <option value="quarter">This quarter</option>
+            </select>
+            <input type="text" id="qf-search" class="search-input" placeholder="Search client or quote #..." oninput="renderQuotesList()">
+          </div>
+          <div id="quotes-table"></div>
+        </div>
+      </div>
+      <!-- Builder sub-view -->
+      <div id="qb-view" style="display:none">
+        <div class="view-content">
+          <button class="back-link no-print" onclick="cancelBuilder()">&#9668; back to quotes</button>
+          <div class="builder-layout">
+            <!-- Form column -->
+            <div>
+              <!-- §01 Client -->
+              <div class="card card-gap">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <div class="card-head"><div class="card-title">§ 01 — client</div></div>
+                <div class="client-sel-row">
+                  <div class="field-label">Select existing client</div>
+                  <select id="b-client-sel" onchange="fillFromClientSel()" style="margin-top:var(--sp-1)">
+                    <option value="">-- or type a new name below --</option>
+                  </select>
+                </div>
+                <div class="form-grid">
+                  <label class="field span-2">
+                    <span class="field-label">Name <span class="req">*</span></span>
+                    <input type="text" id="b-name" placeholder="Jane Smith" oninput="setDirty()">
+                  </label>
+                  <label class="field span-2">
+                    <span class="field-label">Address</span>
+                    <textarea id="b-address" rows="2" oninput="setDirty()"></textarea>
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Email</span>
+                    <input type="email" id="b-email" oninput="setDirty()">
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Phone</span>
+                    <input type="tel" id="b-phone" oninput="setDirty()">
+                  </label>
+                </div>
+              </div>
+              <!-- §02 Property -->
+              <div class="card card-gap">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <div class="card-head"><div class="card-title">§ 02 — property</div></div>
+                <div class="form-grid">
+                  <div class="span-2" style="margin-bottom:var(--sp-3)">
+                    <div class="field-label">Property type</div>
+                    <div class="radio-row" style="margin-top:var(--sp-2)">
+                      <label><input type="radio" name="b-ptype" value="residential" checked onchange="liveCalc()"> Residential</label>
+                      <label><input type="radio" name="b-ptype" value="commercial" onchange="liveCalc()"> Commercial</label>
+                      <label><input type="radio" name="b-ptype" value="airbnb" onchange="liveCalc()"> Airbnb / Short-term</label>
+                    </div>
+                  </div>
+                  <label class="field">
+                    <span class="field-label">Square footage</span>
+                    <input type="number" id="b-sqft" value="1000" min="100" max="20000" oninput="calcHours();liveCalc()">
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Bedrooms</span>
+                    <input type="number" id="b-beds" value="2" min="0" max="10" oninput="liveCalc()">
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Bathrooms</span>
+                    <input type="number" id="b-baths" value="1" min="0" max="10" oninput="liveCalc()">
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Floors</span>
+                    <input type="number" id="b-floors" value="1" min="1" max="5" oninput="liveCalc()">
+                  </label>
+                </div>
+              </div>
+              <!-- §03 Service -->
+              <div class="card card-gap">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <div class="card-head"><div class="card-title">§ 03 — service</div></div>
+                <div class="form-grid">
+                  <div class="span-2" style="margin-bottom:var(--sp-3)">
+                    <div class="field-label">Service type</div>
+                    <div id="stype-radios" style="margin-top:var(--sp-2)"></div>
+                  </div>
+                  <div class="span-2" style="margin-bottom:var(--sp-3)">
+                    <div class="field-label">Frequency</div>
+                    <div class="radio-row" style="margin-top:var(--sp-2)">
+                      <label><input type="radio" name="b-freq" value="onetime" checked onchange="liveCalc()"> One-time</label>
+                      <label><input type="radio" name="b-freq" value="weekly" onchange="liveCalc()"> Weekly (−15%)</label>
+                      <label><input type="radio" name="b-freq" value="biweekly" onchange="liveCalc()"> Bi-weekly (−10%)</label>
+                      <label><input type="radio" name="b-freq" value="monthly" onchange="liveCalc()"> Monthly (−5%)</label>
+                    </div>
+                  </div>
+                  <label class="field">
+                    <span class="field-label">Estimated hours</span>
+                    <input type="number" id="b-hours" value="2" min="1" max="48" step="0.5" oninput="liveCalc()">
+                  </label>
+                </div>
+              </div>
+              <!-- §04 Add-ons -->
+              <div class="card card-gap">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <div class="card-head"><div class="card-title">§ 04 — add-ons</div></div>
+                <div class="check-list" id="addon-checks"></div>
+              </div>
+              <!-- §05 Notes -->
+              <div class="card card-gap">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <div class="card-head"><div class="card-title">§ 05 — notes</div></div>
+                <div class="note-tabs no-print">
+                  <button class="note-tab active" id="ntab-int" onclick="switchNoteTab('int')">Internal (not in PDF)</button>
+                  <button class="note-tab" id="ntab-cli" onclick="switchNoteTab('cli')">Client-facing (shown in PDF)</button>
+                </div>
+                <textarea id="b-note-int" rows="3" placeholder="Internal notes (gate codes, reminders)..." oninput="setDirty()"></textarea>
+                <textarea id="b-note-cli" rows="3" placeholder="Notes shown on the printed quote..." style="display:none" oninput="setDirty()"></textarea>
+              </div>
+              <!-- §06 Actions -->
+              <div class="card no-print">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <div class="actions" style="justify-content:flex-start;flex-wrap:wrap">
+                  <button class="btn btn-accent" id="btn-save" onclick="saveQuote(false)">Save quote</button>
+                  <button class="btn" onclick="saveQuote(true)">Save &amp; new</button>
+                  <button class="btn" onclick="exportBuilderPDF()">Export PDF</button>
+                  <button class="btn" onclick="cancelBuilder()">Cancel</button>
+                </div>
+              </div>
+            </div>
+            <!-- Sidebar column -->
+            <div class="builder-sticky">
+              <div class="pricing-card">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <div class="card-title" style="margin-bottom:var(--sp-4)">§ pricing summary</div>
+                <div id="pricing-breakdown"></div>
+              </div>
+              <div class="meta-card">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <div class="card-title" style="margin-bottom:var(--sp-3)">§ quote details</div>
+                <div class="meta-row">
+                  <span class="muted" style="font-size:var(--fs-xs)">Quote #</span>
+                  <span id="meta-num" style="font-variant-numeric:tabular-nums;font-size:var(--fs-xs)">—</span>
+                </div>
+                <div class="meta-row" style="margin-top:var(--sp-2)">
+                  <span class="muted" style="font-size:var(--fs-xs)">Valid until</span>
+                  <input type="date" id="b-valid" style="width:auto;border:none;background:transparent;padding:0;font-size:var(--fs-xs);text-align:right;color:var(--ink)" onchange="setDirty()">
+                </div>
+                <div class="meta-row" style="margin-top:var(--sp-2)">
+                  <span class="muted" style="font-size:var(--fs-xs)">Status</span>
+                  <select id="b-status" style="width:auto;min-width:90px;font-size:var(--fs-xs)" onchange="setDirty()">
+                    <option value="draft">DRAFT</option>
+                    <option value="sent">SENT</option>
+                    <option value="accepted">ACCEPTED</option>
+                    <option value="declined">DECLINED</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== VIEW: CLIENTS ===== -->
+    <section class="view" id="view-clients">
+      <div class="view-content">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:var(--sp-4)" class="no-print">
+          <button class="btn btn-accent" onclick="openClientModal()">+ New client</button>
+        </div>
+        <div id="clients-table"></div>
+      </div>
+    </section>
+
+    <!-- ===== VIEW: SERVICES ===== -->
+    <section class="view" id="view-services">
+      <div class="view-content section-stack">
+        <div class="card">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-head">
+            <div class="card-title">§ 01 — service types</div>
+            <button class="btn no-print" onclick="openSTypeModal()">+ Add</button>
+          </div>
+          <div id="stype-table"></div>
+        </div>
+        <div class="card">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-head">
+            <div class="card-title">§ 02 — add-ons catalog</div>
+            <button class="btn no-print" onclick="openAddonModal()">+ Add</button>
+          </div>
+          <div id="addons-table"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== VIEW: SETTINGS ===== -->
+    <section class="view" id="view-settings">
+      <div class="view-content section-stack">
+        <!-- Business info -->
+        <div class="card">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-head"><div class="card-title">§ 01 — business info</div></div>
+          <div class="form-grid">
+            <label class="field span-2"><span class="field-label">Business name</span><input type="text" id="s-biz-name"></label>
+            <label class="field span-2"><span class="field-label">Address</span><input type="text" id="s-biz-addr"></label>
+            <label class="field"><span class="field-label">Email</span><input type="email" id="s-biz-email"></label>
+            <label class="field"><span class="field-label">Phone</span><input type="tel" id="s-biz-phone"></label>
+          </div>
+          <div class="settings-btns">
+            <button class="btn btn-accent" onclick="saveSettings()">Save settings</button>
+          </div>
+        </div>
+        <!-- Pricing defaults -->
+        <div class="card">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-head"><div class="card-title">§ 02 — pricing defaults</div></div>
+          <div class="form-grid">
+            <div class="span-2" style="margin-bottom:var(--sp-3)">
+              <div class="field-label">Pricing model</div>
+              <div class="radio-row" style="margin-top:var(--sp-2)">
+                <label><input type="radio" name="s-model" value="sqft" onchange="togglePriceModel()"> Per sq ft</label>
+                <label><input type="radio" name="s-model" value="hourly" onchange="togglePriceModel()"> Hourly</label>
+              </div>
+            </div>
+            <label class="field" id="s-sqft-row"><span class="field-label">Rate per sq ft ($)</span><input type="number" id="s-sqft-rate" min="0" step="0.01"></label>
+            <label class="field" id="s-hr-row" style="display:none"><span class="field-label">Hourly rate ($)</span><input type="number" id="s-hr-rate" min="0" step="0.5"></label>
+            <label class="field"><span class="field-label">Tax rate (%)</span><input type="number" id="s-tax" min="0" max="50" step="0.1"></label>
+            <label class="field"><span class="field-label">Quote validity (days)</span><input type="number" id="s-validity" min="1" max="365"></label>
+            <label class="field span-2" style="display:flex;align-items:center;gap:var(--sp-3);margin-bottom:var(--sp-1)">
+              <input type="checkbox" id="s-mat-on" style="width:auto" onchange="toggleMaterials()">
+              <span class="field-label" style="display:inline;margin:0">Enable materials fee</span>
+            </label>
+            <label class="field" id="s-mat-row" style="display:none"><span class="field-label">Materials fee ($)</span><input type="number" id="s-mat-fee" min="0" step="0.5"></label>
+          </div>
+          <div class="settings-btns">
+            <button class="btn btn-accent" onclick="saveSettings()">Save settings</button>
+            <button class="btn" onclick="loadSettingsForm()">Reset</button>
+          </div>
+        </div>
+        <!-- Data management -->
+        <div class="card">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-head"><div class="card-title">§ 03 — data management</div></div>
+          <div class="settings-btns">
+            <button class="btn" onclick="exportAllJSON()">Export all data (JSON)</button>
+            <button class="btn" onclick="triggerImport('import-json-1')">Import JSON</button>
+            <input type="file" id="import-json-1" accept=".json" style="display:none" onchange="importJSON(this)">
+            <button class="btn" onclick="doResetDefaults()">Reset to defaults</button>
+            <button class="btn" style="color:var(--red)" onclick="doClearAll()">Clear all data</button>
+          </div>
+        </div>
+        <!-- About -->
+        <div class="card">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-head"><div class="card-title">§ 04 — about</div></div>
+          <p style="margin:0 0 var(--sp-3);font-size:var(--fs-sm);color:var(--ink-2)"><strong>CleanQuote Pro v1.0</strong> — A local-first quote builder for small cleaning businesses. No account, no server. All data stays in your browser.</p>
+          <p style="margin:0;font-size:var(--fs-sm);color:var(--ink-3)">1. Set your pricing in Settings and Services. &nbsp;2. Build a quote in under 2 minutes. &nbsp;3. Export as PDF and send to your client.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== VIEW: EXPORT ===== -->
+    <section class="view" id="view-export">
+      <div class="view-content section-stack">
+        <div class="card">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="export-row">
+            <div>
+              <div class="card-title">Export all quotes (CSV)</div>
+              <div class="export-desc">Spreadsheet-compatible. All quote data, one row per quote.</div>
+            </div>
+            <button class="btn btn-accent" onclick="exportQuotesCSV()">Download CSV</button>
+          </div>
+        </div>
+        <div class="card">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="export-row">
+            <div>
+              <div class="card-title">Export all clients (CSV)</div>
+              <div class="export-desc">Client list with contact info and quote counts.</div>
+            </div>
+            <button class="btn btn-accent" onclick="exportClientsCSV()">Download CSV</button>
+          </div>
+        </div>
+        <div class="card">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="export-row">
+            <div>
+              <div class="card-title">Full backup (JSON)</div>
+              <div class="export-desc">Complete backup of all data — quotes, clients, settings.</div>
+            </div>
+            <button class="btn btn-accent" onclick="exportAllJSON()">Download JSON</button>
+          </div>
+        </div>
+        <div class="card">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="export-row">
+            <div>
+              <div class="card-title">Import backup (JSON)</div>
+              <div class="export-desc">Restore from a previous backup. Replaces all current data.</div>
+            </div>
+            <button class="btn" onclick="triggerImport('import-json-2')">Import JSON</button>
+            <input type="file" id="import-json-2" accept=".json" style="display:none" onchange="importJSON(this)">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATUS BAR -->
+    <div class="statusbar no-print">
+      <span>cleanquote pro v1.0</span>
+      <span class="grow"></span>
+      <div class="right">
+        <span id="sb-count">0 quotes</span>
+        <span class="muted" id="sb-save">saved: never</span>
+        <span style="cursor:pointer" onclick="openHelpModal()"><span class="kbd">?</span> help</span>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer class="app-footer">
+  <span>©</span>
+  <span class="sep">2026</span>
+  <span class="app-name">CleanQuote Pro</span>
+  <span class="sep">·</span>
+  <span>All Rights Reserved</span>
+</footer>
+
+<!-- Print footer (page numbers) -->
+<div class="print-footer">
+  <span>© 2026 CleanQuote Pro · All Rights Reserved · Generated <span id="print-date"></span></span>
+  <span class="page-num"></span>
+</div>
+
+<!-- Print area for PDF export -->
+<div id="print-area"></div>
+
+<script>
+/* ============================================================
+   THEME MANAGEMENT
+   ============================================================ */
+var THEME_KEY = 'cleanbiz-theme';
+
+function getTheme() {
+  return document.documentElement.getAttribute('data-theme') || 'light';
+}
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  try { localStorage.setItem(THEME_KEY, t); } catch(e) {}
+  updateToggleUI();
+}
+function toggleTheme() {
+  var next = getTheme() === 'dark' ? 'light' : 'dark';
+  setTheme(next);
+  toast('theme set to ' + next, 'info');
+}
+function updateToggleUI() {
+  var btn = document.querySelector('.theme-toggle');
+  if (!btn) return;
+  var t = getTheme();
+  btn.querySelector('.theme-icon').textContent = t === 'dark' ? '☀' : '☾';
+  btn.querySelector('.theme-label').textContent = t === 'dark' ? 'light mode' : 'dark mode';
+}
+updateToggleUI();
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+function toast(msg, type) {
+  type = type || 'info';
+  var host = document.querySelector('.toast-host');
+  if (!host) {
+    host = document.createElement('div');
+    host.className = 'toast-host';
+    document.body.appendChild(host);
+  }
+  var el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = '<span class="toast-icon"></span><span class="toast-msg"></span>';
+  el.querySelector('.toast-msg').textContent = msg;
+  host.appendChild(el);
+  setTimeout(function() {
+    el.classList.add('is-leaving');
+    setTimeout(function() { el.remove(); }, 200);
+  }, 2500);
+}
+
+/* ============================================================
+   STORAGE
+   ============================================================ */
+var CQ = {
+  load: function(key) {
+    try { return JSON.parse(localStorage.getItem('cleanquote.' + key)); } catch(e) { return null; }
+  },
+  save: function(key, val) {
+    try {
+      localStorage.setItem('cleanquote.' + key, JSON.stringify(val));
+    } catch(e) {
+      toast('storage error: data could not be saved', 'error');
+    }
+  }
+};
+
+/* ============================================================
+   DEFAULT SETTINGS
+   ============================================================ */
+function defaultSettings() {
+  return {
+    business: { name: '', address: '', email: '', phone: '' },
+    pricing: {
+      model: 'sqft', sqftRate: 0.12, hourlyRate: 45,
+      taxRate: 0.08, materialsEnabled: false, materialsFee: 0
+    },
+    serviceTypes: [
+      { id: 'standard',  name: 'Standard clean',    mult: 1.0  },
+      { id: 'deep',      name: 'Deep clean',         mult: 1.3  },
+      { id: 'moveout',   name: 'Move-out clean',     mult: 1.5  },
+      { id: 'postconst', name: 'Post-construction',  mult: 1.75 }
+    ],
+    addOns: [
+      { id: 'oven',     name: 'Inside oven',           price: 25, type: 'flat'    },
+      { id: 'fridge',   name: 'Inside fridge',         price: 25, type: 'flat'    },
+      { id: 'windows',  name: 'Interior windows',      price: 5,  type: 'perUnit' },
+      { id: 'laundry',  name: 'Laundry (wash & fold)', price: 30, type: 'flat'    },
+      { id: 'dishes',   name: 'Dishes',                price: 20, type: 'flat'    },
+      { id: 'pet',      name: 'Pet hair removal',      price: 20, type: 'flat'    },
+      { id: 'organize', name: 'Organize one room',     price: 40, type: 'flat'    },
+      { id: 'garage',   name: 'Garage sweep',          price: 30, type: 'flat'    },
+      { id: 'patio',    name: 'Patio / balcony',       price: 35, type: 'flat'    }
+    ],
+    quoteValidityDays: 30,
+    version: '1.0'
+  };
+}
+
+/* ============================================================
+   SEED DATA
+   ============================================================ */
+function seedData() {
+  var now = Date.now();
+  function daysAgo(d) { return new Date(now - d * 86400000).toISOString(); }
+
+  var clients = [
+    { id: 'cs1', name: 'Sarah Johnson',          address: '142 Maple St, Springfield IL 62701', email: 'sarah.j@example.com',         phone: '(217) 555-0184', createdAt: daysAgo(30) },
+    { id: 'cs2', name: 'Coastal Airbnb LLC',      address: '88 Beachview Dr, Miami FL 33101',    email: 'bookings@coastalbnb.com',      phone: '(305) 555-0291', createdAt: daysAgo(25) },
+    { id: 'cs3', name: 'Metro Office Solutions',  address: '400 Commerce Blvd, Chicago IL 60601',email: 'facilities@metrooffice.com',   phone: '(312) 555-0467', createdAt: daysAgo(20) }
+  ];
+
+  var quotes = [
+    {
+      id: 'qs1', number: 'Q-20260509-001', clientId: 'cs1',
+      client: { name: 'Sarah Johnson', address: '142 Maple St, Springfield IL 62701', email: 'sarah.j@example.com', phone: '(217) 555-0184' },
+      property: { type: 'residential', sqft: 1400, beds: 3, baths: 2, floors: 1 },
+      service: { type: 'standard', frequency: 'monthly' }, hours: 3, addOns: [],
+      pricing: { base: 168, typeMult: 1, freqMult: 0.95, addOnsSubtotal: 0, subtotal: 159.6, materials: 0, tax: 12.77, total: 172.37 },
+      notes: { internal: 'Gate code: 4821', client: '' },
+      status: 'accepted', validUntil: '2026-07-08', createdAt: daysAgo(28), updatedAt: daysAgo(25)
+    },
+    {
+      id: 'qs2', number: 'Q-20260515-001', clientId: 'cs2',
+      client: { name: 'Coastal Airbnb LLC', address: '88 Beachview Dr, Miami FL 33101', email: 'bookings@coastalbnb.com', phone: '(305) 555-0291' },
+      property: { type: 'airbnb', sqft: 900, beds: 2, baths: 1, floors: 1 },
+      service: { type: 'deep', frequency: 'weekly' }, hours: 3, addOns: [{ id: 'oven', qty: 1 }, { id: 'fridge', qty: 1 }],
+      pricing: { base: 108, typeMult: 1.3, freqMult: 0.85, addOnsSubtotal: 50, subtotal: 169.38, materials: 0, tax: 13.55, total: 182.93 },
+      notes: { internal: '', client: 'Please lock up when done.' },
+      status: 'sent', validUntil: '2026-07-15', createdAt: daysAgo(21), updatedAt: daysAgo(21)
+    },
+    {
+      id: 'qs3', number: 'Q-20260521-001', clientId: 'cs3',
+      client: { name: 'Metro Office Solutions', address: '400 Commerce Blvd, Chicago IL 60601', email: 'facilities@metrooffice.com', phone: '(312) 555-0467' },
+      property: { type: 'commercial', sqft: 3200, beds: 0, baths: 4, floors: 2 },
+      service: { type: 'standard', frequency: 'onetime' }, hours: 7, addOns: [],
+      pricing: { base: 384, typeMult: 1, freqMult: 1, addOnsSubtotal: 0, subtotal: 384, materials: 0, tax: 30.72, total: 414.72 },
+      notes: { internal: 'After-hours access only. Call 312-555-0467 for key.', client: '' },
+      status: 'declined', validUntil: '2026-06-20', createdAt: daysAgo(15), updatedAt: daysAgo(13)
+    },
+    {
+      id: 'qs4', number: 'Q-20260529-001', clientId: 'cs1',
+      client: { name: 'Sarah Johnson', address: '142 Maple St, Springfield IL 62701', email: 'sarah.j@example.com', phone: '(217) 555-0184' },
+      property: { type: 'residential', sqft: 1400, beds: 3, baths: 2, floors: 1 },
+      service: { type: 'deep', frequency: 'onetime' }, hours: 4, addOns: [{ id: 'windows', qty: 8 }],
+      pricing: { base: 168, typeMult: 1.3, freqMult: 1, addOnsSubtotal: 40, subtotal: 258.4, materials: 0, tax: 20.67, total: 279.07 },
+      notes: { internal: '', client: '' },
+      status: 'draft', validUntil: '2026-07-29', createdAt: daysAgo(7), updatedAt: daysAgo(7)
+    },
+    {
+      id: 'qs5', number: 'Q-20260601-001', clientId: 'cs2',
+      client: { name: 'Coastal Airbnb LLC', address: '88 Beachview Dr, Miami FL 33101', email: 'bookings@coastalbnb.com', phone: '(305) 555-0291' },
+      property: { type: 'airbnb', sqft: 900, beds: 2, baths: 1, floors: 1 },
+      service: { type: 'moveout', frequency: 'onetime' }, hours: 5, addOns: [{ id: 'oven', qty: 1 }, { id: 'fridge', qty: 1 }, { id: 'laundry', qty: 1 }],
+      pricing: { base: 108, typeMult: 1.5, freqMult: 1, addOnsSubtotal: 80, subtotal: 242, materials: 0, tax: 19.36, total: 261.36 },
+      notes: { internal: '', client: 'Full move-out clean includes all appliances.' },
+      status: 'sent', validUntil: '2026-05-01',
+      createdAt: daysAgo(4), updatedAt: daysAgo(4)
+    }
+  ];
+
+  var settings = defaultSettings();
+  settings.business.name = 'Sparkle Clean Co.';
+
+  CQ.save('clients', clients);
+  CQ.save('quotes', quotes);
+  CQ.save('settings', settings);
+  CQ.save('seeded', '1');
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function localDate(d) {
+  var dt = d ? (d instanceof Date ? d : new Date(d)) : new Date();
+  var y = dt.getFullYear();
+  var m = String(dt.getMonth() + 1);
+  var day = String(dt.getDate());
+  if (m.length < 2) m = '0' + m;
+  if (day.length < 2) day = '0' + day;
+  return y + '-' + m + '-' + day;
+}
+
+function fmtMoney(n) {
+  return '$' + (+(n || 0)).toFixed(2);
+}
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function genId() {
+  return 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function getQuoteStatus(q) {
+  if (q.status === 'accepted' || q.status === 'declined') return q.status;
+  if (q.validUntil && q.validUntil < localDate()) return 'expired';
+  return q.status || 'draft';
+}
+
+function genQuoteNumber() {
+  var today = localDate().replace(/-/g, '');
+  var prefix = 'Q-' + today + '-';
+  var quotes = CQ.load('quotes') || [];
+  var maxSeq = 0;
+  quotes.forEach(function(q) {
+    if (q.number && q.number.startsWith(prefix)) {
+      var seq = parseInt(q.number.slice(prefix.length), 10) || 0;
+      if (seq > maxSeq) maxSeq = seq;
+    }
+  });
+  var next = String(maxSeq + 1);
+  while (next.length < 3) next = '0' + next;
+  return prefix + next;
+}
+
+/* ============================================================
+   PRICING CALCULATION
+   ============================================================ */
+function calculateQuote(quote, settings) {
+  var base;
+  if (settings.pricing.model === 'sqft') {
+    base = (quote.property.sqft || 0) * (settings.pricing.sqftRate || 0.12);
+  } else {
+    base = (quote.hours || 0) * (settings.pricing.hourlyRate || 45);
+  }
+  var sTypes = settings.serviceTypes || [];
+  var found = sTypes.find(function(s) { return s.id === quote.service.type; });
+  var typeMult = found ? found.mult : 1;
+  var freqMap = { onetime: 1, weekly: 0.85, biweekly: 0.9, monthly: 0.95 };
+  var freqMult = freqMap[quote.service.frequency] || 1;
+  var addOns = settings.addOns || [];
+  var addOnsSubtotal = (quote.addOns || []).reduce(function(sum, a) {
+    var ao = addOns.find(function(x) { return x.id === a.id; });
+    if (!ao) return sum;
+    return sum + (ao.type === 'perUnit' ? ao.price * (a.qty || 1) : ao.price);
+  }, 0);
+  var subtotal = (base * typeMult * freqMult) + addOnsSubtotal;
+  var materials = settings.pricing.materialsEnabled ? (settings.pricing.materialsFee || 0) : 0;
+  var tax = (subtotal + materials) * (settings.pricing.taxRate || 0.08);
+  var total = subtotal + materials + tax;
+  return { base: base, typeMult: typeMult, freqMult: freqMult, addOnsSubtotal: addOnsSubtotal,
+           subtotal: subtotal, materials: materials, tax: tax, total: total };
+}
+
+/* ============================================================
+   VIEW SWITCHING
+   ============================================================ */
+var currentView = 'overview';
+
+function showView(id) {
+  currentView = id;
+  document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('active'); });
+  var v = document.getElementById('view-' + id);
+  if (v) v.classList.add('active');
+
+  var cfg = {
+    overview: { crumb: 'WORKSPACE / CLEANBIZ / OVERVIEW', title: 'Overview' },
+    quotes:   { crumb: 'WORKSPACE / CLEANBIZ / QUOTES',   title: 'Quotes'   },
+    clients:  { crumb: 'WORKSPACE / CLEANBIZ / CLIENTS',  title: 'Clients'  },
+    services: { crumb: 'WORKSPACE / CLEANBIZ / SERVICES', title: 'Services' },
+    settings: { crumb: 'WORKSPACE / CLEANBIZ / SETTINGS', title: 'Settings' },
+    export:   { crumb: 'WORKSPACE / CLEANBIZ / EXPORT',   title: 'Export'   }
+  };
+  var c = cfg[id] || cfg.overview;
+  document.getElementById('breadcrumb').textContent = c.crumb;
+  document.getElementById('page-title').textContent = c.title;
+  document.getElementById('period-bar').style.display = id === 'overview' ? '' : 'none';
+
+  document.querySelectorAll('.nav-item[data-view]').forEach(function(item) {
+    item.classList.toggle('active', item.dataset.view === id);
+  });
+
+  if (id === 'overview')  buildOverview();
+  if (id === 'quotes')  { showListView(); renderQuotesList(); }
+  if (id === 'clients')   renderClientsList();
+  if (id === 'services')  renderServicesView();
+  if (id === 'settings')  loadSettingsForm();
+}
+
+/* ============================================================
+   OVERVIEW
+   ============================================================ */
+var overviewDays = 30;
+
+function buildOverview() {
+  var quotes = CQ.load('quotes') || [];
+  renderKPIs(quotes);
+  renderDailyChart(quotes, overviewDays);
+  renderStatusMix(quotes);
+  renderRecentQuotes(quotes);
+}
+
+function renderKPIs(quotes) {
+  var now = Date.now();
+  var last30 = quotes.filter(function(q) { return (now - new Date(q.createdAt).getTime()) < 30 * 86400000; });
+  var prev30 = quotes.filter(function(q) { var a = now - new Date(q.createdAt).getTime(); return a >= 30 * 86400000 && a < 60 * 86400000; });
+  var closed = quotes.filter(function(q) { return q.status === 'accepted' || q.status === 'declined'; });
+  var accepted = quotes.filter(function(q) { return q.status === 'accepted'; });
+  var acceptRate = closed.length > 0 ? Math.round(accepted.length / closed.length * 100) : 0;
+  var avg = quotes.length > 0 ? quotes.reduce(function(s, q) { return s + (q.pricing ? q.pricing.total : 0); }, 0) / quotes.length : 0;
+  var weekStart = new Date(); weekStart.setDate(weekStart.getDate() - weekStart.getDay()); weekStart.setHours(0,0,0,0);
+  var weekRev = quotes.filter(function(q) { return q.status === 'accepted' && new Date(q.createdAt) >= weekStart; })
+    .reduce(function(s, q) { return s + (q.pricing ? q.pricing.total : 0); }, 0);
+
+  var deltaL30 = last30.length - prev30.length;
+  var grid = document.getElementById('kpi-grid');
+  grid.innerHTML = [
+    { title: '§ 01 total quotes', tag: 'ALL TIME',   num: quotes.length, delta: deltaL30, ctx: 'vs prev 30d', dir: deltaL30 >= 0 ? 'up' : 'down' },
+    { title: '§ 02 acceptance rate', tag: 'CLOSED',  num: acceptRate + '%', delta: null, ctx: accepted.length + ' of ' + closed.length + ' closed', dir: acceptRate >= 50 ? 'up' : 'down' },
+    { title: '§ 03 avg quote value', tag: 'ALL',     num: fmtMoney(avg), delta: null, ctx: 'per quote avg', dir: 'up', big: true },
+    { title: '§ 04 this week revenue', tag: 'ACCEPTED', num: fmtMoney(weekRev), delta: null, ctx: 'accepted this week', dir: 'up', big: true }
+  ].map(function(k) {
+    var numSize = k.big ? 'font-size:var(--fs-2xl)' : '';
+    var dHtml = k.delta !== null
+      ? '<div class="delta ' + k.dir + '"><span class="arr">' + (k.delta >= 0 ? '▲' : '▼') + '</span> ' + (k.delta >= 0 ? '+' : '') + k.delta + ' <span class="ctx">' + escHtml(k.ctx) + '</span></div>'
+      : '<div class="delta ' + k.dir + '"><span class="ctx">' + escHtml(k.ctx) + '</span></div>';
+    return '<div class="card"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>'
+      + '<div class="card-head"><div class="card-title">' + escHtml(k.title) + '</div><div class="card-tag">' + escHtml(k.tag) + '</div></div>'
+      + '<div class="big-num mono-num" style="' + numSize + '">' + escHtml(String(k.num)) + '</div>'
+      + dHtml + '</div>';
+  }).join('');
+}
+
+function renderDailyChart(quotes, days) {
+  var container = document.getElementById('daily-chart');
+  var titleEl = document.getElementById('chart-title');
+  if (!container) return;
+  titleEl.textContent = '\u00a7 05 quotes created \u2014 last ' + days + ' days';
+  var now = new Date();
+  var bars = [];
+  for (var i = days - 1; i >= 0; i--) {
+    var d = new Date(now); d.setDate(d.getDate() - i);
+    var ds = localDate(d);
+    var cnt = quotes.filter(function(q) { return q.createdAt && q.createdAt.slice(0, 10) === ds; }).length;
+    bars.push({ date: ds, count: cnt });
+  }
+  var maxCnt = Math.max.apply(null, bars.map(function(b) { return b.count; }).concat([1]));
+  container.innerHTML = bars.map(function(b) {
+    var pct = b.count > 0 ? Math.max(Math.round(b.count / maxCnt * 100), 8) : 0;
+    var style = b.count > 0 ? 'height:' + pct + '%' : 'height:2px;background:var(--line-soft)';
+    return '<div class="bc-bar' + (b.count > 0 ? ' has-data' : '') + '" style="' + style + '">'
+      + '<div class="bc-tip">' + b.date + ': ' + b.count + '</div></div>';
+  }).join('');
+}
+
+function renderStatusMix(quotes) {
+  var statuses = ['draft', 'sent', 'accepted', 'declined', 'expired'];
+  var counts = {};
+  statuses.forEach(function(s) { counts[s] = 0; });
+  quotes.forEach(function(q) { var s = getQuoteStatus(q); counts[s] = (counts[s] || 0) + 1; });
+  var total = quotes.length || 1;
+
+  var mixBar = document.getElementById('mix-bar');
+  var legend = document.getElementById('mix-legend');
+  mixBar.innerHTML = statuses.filter(function(s) { return counts[s] > 0; }).map(function(s) {
+    var pct = Math.round(counts[s] / total * 100);
+    return '<div class="mix-seg ' + s + '" style="width:' + pct + '%"></div>';
+  }).join('');
+  legend.innerHTML = statuses.map(function(s) {
+    var pct = Math.round(counts[s] / total * 100);
+    return '<div class="mix-row"><div class="mix-dot ' + s + '"></div>'
+      + '<span class="mix-name">' + s + '</span>'
+      + '<span class="mix-cnt">' + counts[s] + ' (' + pct + '%)</span></div>';
+  }).join('');
+}
+
+function renderRecentQuotes(quotes) {
+  var container = document.getElementById('recent-quotes');
+  var recent = quotes.slice().sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); }).slice(0, 5);
+  if (recent.length === 0) {
+    container.innerHTML = '<p class="muted" style="padding:var(--sp-3) 0;font-size:var(--fs-sm)">No quotes yet.</p>';
+    return;
+  }
+  container.innerHTML = '<table class="data-table"><thead><tr>'
+    + '<th>Quote #</th><th>Client</th><th>Date</th><th class="num">Total</th><th>Status</th>'
+    + '</tr></thead><tbody>'
+    + recent.map(function(q) {
+        var s = getQuoteStatus(q);
+        return '<tr><td class="mono-num">' + escHtml(q.number || '—') + '</td>'
+          + '<td>' + escHtml(q.client ? q.client.name : '—') + '</td>'
+          + '<td>' + (q.createdAt ? q.createdAt.slice(0, 10) : '—') + '</td>'
+          + '<td class="num">' + fmtMoney(q.pricing ? q.pricing.total : 0) + '</td>'
+          + '<td><span class="badge ' + s + '">' + s + '</span></td></tr>';
+      }).join('')
+    + '</tbody></table>';
+}
+
+/* ============================================================
+   QUOTES LIST
+   ============================================================ */
+function showListView() {
+  document.getElementById('ql-view').style.display = '';
+  document.getElementById('qb-view').style.display = 'none';
+  document.getElementById('breadcrumb').textContent = 'WORKSPACE / CLEANBIZ / QUOTES';
+  document.getElementById('page-title').textContent = 'Quotes';
+}
+
+function renderQuotesList() {
+  var quotes = CQ.load('quotes') || [];
+  var settings = CQ.load('settings') || defaultSettings();
+  var sf = (document.getElementById('qf-status') || {}).value || '';
+  var df = (document.getElementById('qf-date') || {}).value || '';
+  var qf = ((document.getElementById('qf-search') || {}).value || '').toLowerCase();
+
+  var filtered = quotes.filter(function(q) {
+    var s = getQuoteStatus(q);
+    if (sf && s !== sf) return false;
+    if (qf) {
+      var match = (q.number || '').toLowerCase().includes(qf) ||
+                  (q.client && q.client.name && q.client.name.toLowerCase().includes(qf));
+      if (!match) return false;
+    }
+    if (df) {
+      var created = new Date(q.createdAt).getTime();
+      if (df === 'week') {
+        var ws = new Date(); ws.setDate(ws.getDate() - ws.getDay()); ws.setHours(0,0,0,0);
+        if (created < ws.getTime()) return false;
+      } else if (df === 'month') {
+        var ms = new Date(); ms.setDate(1); ms.setHours(0,0,0,0);
+        if (created < ms.getTime()) return false;
+      } else if (df === 'quarter') {
+        var nd = new Date(); var qm = Math.floor(nd.getMonth() / 3) * 3;
+        var qs = new Date(nd.getFullYear(), qm, 1);
+        if (created < qs.getTime()) return false;
+      }
+    }
+    return true;
+  }).sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+
+  var container = document.getElementById('quotes-table');
+  if (quotes.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-title">No quotes yet</div>'
+      + '<p>Click <strong>New quote</strong> to create your first one.</p>'
+      + '<button class="btn btn-accent" onclick="openNewQuote()">&#9632; New quote</button></div>';
+    return;
+  }
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-title">No matches</div><p>Adjust your filters.</p></div>';
+    return;
+  }
+
+  container.innerHTML = '<table class="data-table"><thead><tr>'
+    + '<th><input type="checkbox" id="sel-all" onchange="toggleSelectAll(this)"></th>'
+    + '<th>Quote #</th><th>Client</th><th>Date</th><th>Property</th><th>Service</th>'
+    + '<th class="num">Total</th><th>Status</th><th>Actions</th>'
+    + '</tr></thead><tbody>'
+    + filtered.map(function(q) {
+        var s = getQuoteStatus(q);
+        var st = (settings.serviceTypes || []).find(function(x) { return x.id === (q.service || {}).type; });
+        return '<tr>'
+          + '<td><input type="checkbox" class="row-sel" data-id="' + q.id + '" onchange="updateBulkBar()"></td>'
+          + '<td class="mono-num">' + escHtml(q.number || '—') + '</td>'
+          + '<td>' + escHtml(q.client ? q.client.name : '—') + '</td>'
+          + '<td>' + (q.createdAt ? q.createdAt.slice(0, 10) : '—') + '</td>'
+          + '<td>' + escHtml((q.property || {}).type || '—') + '</td>'
+          + '<td>' + escHtml(st ? st.name : (q.service || {}).type || '—') + '</td>'
+          + '<td class="num">' + fmtMoney(q.pricing ? q.pricing.total : 0) + '</td>'
+          + '<td><span class="badge ' + s + '">' + s + '</span></td>'
+          + '<td><div class="actions-cell">'
+          + '<button class="icon-btn" onclick="viewQuoteModal(\'' + q.id + '\')" title="View" aria-label="View quote">▣</button>'
+          + '<button class="icon-btn" onclick="editQuote(\'' + q.id + '\')" title="Edit" aria-label="Edit quote">▤</button>'
+          + '<button class="icon-btn" onclick="dupQuote(\'' + q.id + '\')" title="Duplicate" aria-label="Duplicate quote">◐</button>'
+          + '<button class="icon-btn" onclick="printQuoteById(\'' + q.id + '\')" title="Export PDF" aria-label="Export PDF">▥</button>'
+          + '<button class="icon-btn danger" onclick="deleteQuote(\'' + q.id + '\')" title="Delete" aria-label="Delete quote">✕</button>'
+          + '</div></td></tr>';
+      }).join('')
+    + '</tbody></table>';
+  updateBulkBar();
+}
+
+function toggleSelectAll(cb) {
+  document.querySelectorAll('.row-sel').forEach(function(r) { r.checked = cb.checked; });
+  updateBulkBar();
+}
+function updateBulkBar() {
+  var sel = document.querySelectorAll('.row-sel:checked');
+  var bar = document.getElementById('bulk-bar');
+  if (!bar) return;
+  if (sel.length > 0) {
+    bar.style.display = '';
+    document.getElementById('bulk-label').textContent = sel.length + ' selected';
+  } else {
+    bar.style.display = 'none';
+  }
+}
+function bulkExportCSV() {
+  var ids = Array.from(document.querySelectorAll('.row-sel:checked')).map(function(c) { return c.dataset.id; });
+  var quotes = (CQ.load('quotes') || []).filter(function(q) { return ids.includes(q.id); });
+  dlQuotesCSV(quotes, 'cleanquote-selected-' + localDate() + '.csv');
+  toast('csv exported', 'success');
+}
+function bulkDelete() {
+  var ids = Array.from(document.querySelectorAll('.row-sel:checked')).map(function(c) { return c.dataset.id; });
+  openConfirm('Delete ' + ids.length + ' quote(s)? This cannot be undone.', function() {
+    var quotes = (CQ.load('quotes') || []).filter(function(q) { return !ids.includes(q.id); });
+    CQ.save('quotes', quotes);
+    toast(ids.length + ' quote(s) deleted', 'success');
+    renderQuotesList(); updateNavBadges(); updateStatusBar(); markSaved();
+  });
+}
+
+function deleteQuote(id) {
+  openConfirm('Delete this quote? This cannot be undone.', function() {
+    var quotes = (CQ.load('quotes') || []).filter(function(q) { return q.id !== id; });
+    CQ.save('quotes', quotes);
+    toast('quote deleted', 'success');
+    renderQuotesList(); updateNavBadges(); updateStatusBar(); markSaved();
+  });
+}
+
+/* ============================================================
+   QUOTE BUILDER
+   ============================================================ */
+var currentEditId = null;
+var isDirty = false;
+
+function setDirty() { isDirty = true; }
+
+function openNewQuote() {
+  var qbView = document.getElementById('qb-view');
+  if (qbView && qbView.style.display !== 'none' && isDirty) {
+    openConfirm('Start a new quote? Unsaved changes will be lost.', function() {
+      isDirty = false;
+      currentEditId = null;
+      showView('quotes');
+      showBuilderView(false);
+      resetBuilderForm();
+    });
+    return;
+  }
+  currentEditId = null;
+  showView('quotes');
+  showBuilderView(false);
+  resetBuilderForm();
+}
+
+function showBuilderView(isEdit) {
+  document.getElementById('ql-view').style.display = 'none';
+  document.getElementById('qb-view').style.display = '';
+  var label = isEdit ? 'Edit quote' : 'New quote';
+  var crumb = isEdit ? 'WORKSPACE / CLEANBIZ / QUOTES / EDIT' : 'WORKSPACE / CLEANBIZ / QUOTES / NEW';
+  document.getElementById('breadcrumb').textContent = crumb;
+  document.getElementById('page-title').textContent = label;
+  document.getElementById('btn-save').textContent = isEdit ? 'Update quote' : 'Save quote';
+}
+
+function resetBuilderForm() {
+  var settings = CQ.load('settings') || defaultSettings();
+  isDirty = false;
+  renderStypeRadios();
+  renderAddonChecks();
+  populateClientDropdown();
+
+  document.getElementById('b-client-sel').value = '';
+  document.getElementById('b-name').value = '';
+  document.getElementById('b-address').value = '';
+  document.getElementById('b-email').value = '';
+  document.getElementById('b-phone').value = '';
+  document.querySelector('input[name="b-ptype"][value="residential"]').checked = true;
+  document.getElementById('b-sqft').value = '1000';
+  document.getElementById('b-beds').value = '2';
+  document.getElementById('b-baths').value = '1';
+  document.getElementById('b-floors').value = '1';
+  var fr = document.querySelector('input[name="b-freq"][value="onetime"]');
+  if (fr) fr.checked = true;
+  document.getElementById('b-hours').value = '2';
+  document.getElementById('b-note-int').value = '';
+  document.getElementById('b-note-cli').value = '';
+  switchNoteTab('int');
+  document.getElementById('b-status').value = 'draft';
+  var vd = new Date(); vd.setDate(vd.getDate() + (settings.quoteValidityDays || 30));
+  document.getElementById('b-valid').value = localDate(vd);
+  document.getElementById('meta-num').textContent = '(generated on save)';
+  liveCalc(true);
+}
+
+function renderStypeRadios() {
+  var settings = CQ.load('settings') || defaultSettings();
+  var container = document.getElementById('stype-radios');
+  container.innerHTML = '<div class="radio-row" style="flex-wrap:wrap">' +
+    (settings.serviceTypes || []).map(function(st, i) {
+      return '<label><input type="radio" name="b-stype" value="' + st.id + '"'
+        + (i === 0 ? ' checked' : '') + ' onchange="liveCalc()"> '
+        + escHtml(st.name) + ' (' + st.mult + '&times;)</label>';
+    }).join('') + '</div>';
+}
+
+function renderAddonChecks() {
+  var settings = CQ.load('settings') || defaultSettings();
+  var container = document.getElementById('addon-checks');
+  if (!settings.addOns || settings.addOns.length === 0) {
+    container.innerHTML = '<p class="muted" style="font-size:var(--fs-sm)">No add-ons configured. Add them in Services.</p>';
+    return;
+  }
+  container.innerHTML = settings.addOns.map(function(ao) {
+    var isPerUnit = ao.type === 'perUnit';
+    var priceLabel = isPerUnit ? '$' + ao.price + '/unit' : '$' + ao.price;
+    return '<div class="check-item">'
+      + '<label><input type="checkbox" id="ao-' + ao.id + '" class="ao-cb" data-id="' + ao.id + '" onchange="aoChange(\'' + ao.id + '\');liveCalc()"> '
+      + escHtml(ao.name) + ' &mdash; ' + priceLabel + '</label>'
+      + (isPerUnit ? '<input type="number" id="aoq-' + ao.id + '" class="qty-input" value="1" min="1" max="100" style="display:none" oninput="liveCalc()">' : '')
+      + '</div>';
+  }).join('');
+}
+
+function aoChange(id) {
+  var cb = document.getElementById('ao-' + id);
+  var qi = document.getElementById('aoq-' + id);
+  if (qi) qi.style.display = (cb && cb.checked) ? '' : 'none';
+}
+
+function calcHours() {
+  var sqft = parseInt(document.getElementById('b-sqft').value) || 0;
+  var h = Math.max(Math.ceil(sqft / 500), 1);
+  document.getElementById('b-hours').value = h;
+}
+
+function liveCalc(suppress) {
+  if (!suppress) isDirty = true;
+  var settings = CQ.load('settings') || defaultSettings();
+  var draft = getDraft();
+  var p = calculateQuote(draft, settings);
+  var container = document.getElementById('pricing-breakdown');
+
+  var rows = [];
+  rows.push(['Base (' + (settings.pricing.model === 'sqft'
+    ? (draft.property.sqft + ' sqft &times; $' + settings.pricing.sqftRate)
+    : (draft.hours + 'h &times; $' + settings.pricing.hourlyRate)) + ')',
+    fmtMoney(p.base)]);
+  rows.push(['Service mult. (' + p.typeMult + '&times;)', fmtMoney(p.base * p.typeMult)]);
+  rows.push(['Frequency (' + p.freqMult + '&times;)', fmtMoney(p.base * p.typeMult * p.freqMult)]);
+  if (p.addOnsSubtotal > 0) rows.push(['Add-ons', '+ ' + fmtMoney(p.addOnsSubtotal)]);
+
+  container.innerHTML = rows.map(function(r) {
+    return '<div class="pricing-row"><span class="muted">' + r[0] + '</span><span class="mono-num">' + r[1] + '</span></div>';
+  }).join('')
+    + '<div class="pricing-row subtotal-row"><span class="muted">Subtotal</span><span class="mono-num">' + fmtMoney(p.subtotal) + '</span></div>'
+    + (p.materials > 0 ? '<div class="pricing-row"><span class="muted">Materials</span><span class="mono-num">+ ' + fmtMoney(p.materials) + '</span></div>' : '')
+    + '<div class="pricing-row"><span class="muted">Tax (' + Math.round((settings.pricing.taxRate || 0.08) * 100) + '%)</span><span class="mono-num">+ ' + fmtMoney(p.tax) + '</span></div>'
+    + '<div class="pricing-row total-row"><span>Total</span><span class="total-amt">' + fmtMoney(p.total) + '</span></div>';
+}
+
+function getDraft() {
+  var settings = CQ.load('settings') || defaultSettings();
+  var addOns = [];
+  (settings.addOns || []).forEach(function(ao) {
+    var cb = document.getElementById('ao-' + ao.id);
+    if (cb && cb.checked) {
+      var qty = 1;
+      if (ao.type === 'perUnit') {
+        var qi = document.getElementById('aoq-' + ao.id);
+        qty = parseInt((qi || {}).value) || 1;
+      }
+      addOns.push({ id: ao.id, qty: qty });
+    }
+  });
+  return {
+    client: {
+      name:    (document.getElementById('b-name') || {}).value || '',
+      address: (document.getElementById('b-address') || {}).value || '',
+      email:   (document.getElementById('b-email') || {}).value || '',
+      phone:   (document.getElementById('b-phone') || {}).value || ''
+    },
+    property: {
+      type:   (document.querySelector('input[name="b-ptype"]:checked') || {}).value || 'residential',
+      sqft:   parseInt((document.getElementById('b-sqft') || {}).value) || 0,
+      beds:   parseInt((document.getElementById('b-beds') || {}).value) || 0,
+      baths:  parseInt((document.getElementById('b-baths') || {}).value) || 0,
+      floors: parseInt((document.getElementById('b-floors') || {}).value) || 1
+    },
+    service: {
+      type:      (document.querySelector('input[name="b-stype"]:checked') || {}).value || 'standard',
+      frequency: (document.querySelector('input[name="b-freq"]:checked') || {}).value || 'onetime'
+    },
+    hours:   parseFloat((document.getElementById('b-hours') || {}).value) || 1,
+    addOns:  addOns,
+    notes: {
+      internal: (document.getElementById('b-note-int') || {}).value || '',
+      client:   (document.getElementById('b-note-cli') || {}).value || ''
+    },
+    status:    (document.getElementById('b-status') || {}).value || 'draft',
+    validUntil:(document.getElementById('b-valid') || {}).value || ''
+  };
+}
+
+function populateClientDropdown() {
+  var clients = CQ.load('clients') || [];
+  var sel = document.getElementById('b-client-sel');
+  if (!sel) return;
+  var cur = sel.value;
+  sel.innerHTML = '<option value="">-- or type a new name below --</option>'
+    + clients.map(function(c) { return '<option value="' + c.id + '">' + escHtml(c.name) + '</option>'; }).join('');
+  if (cur) sel.value = cur;
+}
+
+function fillFromClientSel() {
+  var id = document.getElementById('b-client-sel').value;
+  if (!id) return;
+  var c = (CQ.load('clients') || []).find(function(x) { return x.id === id; });
+  if (!c) return;
+  document.getElementById('b-name').value = c.name || '';
+  document.getElementById('b-address').value = c.address || '';
+  document.getElementById('b-email').value = c.email || '';
+  document.getElementById('b-phone').value = c.phone || '';
+  isDirty = true;
+}
+
+function autoCreateClient() {
+  var name = (document.getElementById('b-name').value || '').trim();
+  if (!name) return;
+  var clients = CQ.load('clients') || [];
+  var exists = clients.some(function(c) { return c.name.toLowerCase() === name.toLowerCase(); });
+  if (!exists) {
+    var nc = {
+      id: genId(), name: name,
+      address: (document.getElementById('b-address').value || '').trim(),
+      email:   (document.getElementById('b-email').value || '').trim(),
+      phone:   (document.getElementById('b-phone').value || '').trim(),
+      createdAt: new Date().toISOString()
+    };
+    clients.push(nc);
+    CQ.save('clients', clients);
+    toast('client created: ' + name, 'info');
+    populateClientDropdown();
+    document.getElementById('b-client-sel').value = nc.id;
+    updateNavBadges();
+  }
+}
+
+function switchNoteTab(tab) {
+  var intEl = document.getElementById('b-note-int');
+  var cliEl = document.getElementById('b-note-cli');
+  var tabInt = document.getElementById('ntab-int');
+  var tabCli = document.getElementById('ntab-cli');
+  if (tab === 'int') {
+    intEl.style.display = ''; cliEl.style.display = 'none';
+    tabInt.classList.add('active'); tabCli.classList.remove('active');
+  } else {
+    intEl.style.display = 'none'; cliEl.style.display = '';
+    tabInt.classList.remove('active'); tabCli.classList.add('active');
+  }
+}
+
+function saveQuote(andNew) {
+  var name = (document.getElementById('b-name').value || '').trim();
+  if (!name) {
+    toast('client name is required', 'error');
+    document.getElementById('b-name').focus();
+    return;
+  }
+  var settings = CQ.load('settings') || defaultSettings();
+  var draft = getDraft();
+  var quotes = CQ.load('quotes') || [];
+  var clients = CQ.load('clients') || [];
+
+  // Find or create client
+  var client = clients.find(function(c) { return c.name.toLowerCase() === name.toLowerCase(); });
+  if (!client) {
+    client = { id: genId(), name: draft.client.name, address: draft.client.address,
+               email: draft.client.email, phone: draft.client.phone, createdAt: new Date().toISOString() };
+    clients.push(client);
+    CQ.save('clients', clients);
+  } else {
+    // Update contact info
+    client.address = draft.client.address || client.address;
+    client.email   = draft.client.email   || client.email;
+    client.phone   = draft.client.phone   || client.phone;
+    var ci = clients.findIndex(function(c) { return c.id === client.id; });
+    if (ci >= 0) clients[ci] = client;
+    CQ.save('clients', clients);
+  }
+
+  var pricing = calculateQuote(draft, settings);
+
+  if (currentEditId) {
+    var idx = quotes.findIndex(function(q) { return q.id === currentEditId; });
+    if (idx >= 0) {
+      var orig = quotes[idx];
+      quotes[idx] = Object.assign({}, orig, draft, { clientId: client.id, pricing: pricing, updatedAt: new Date().toISOString() });
+    }
+    toast('quote updated', 'success');
+  } else {
+    var nq = Object.assign({ id: genId(), number: genQuoteNumber(), clientId: client.id,
+      pricing: pricing, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }, draft);
+    quotes.unshift(nq);
+    toast('quote saved', 'success');
+  }
+
+  CQ.save('quotes', quotes);
+  isDirty = false;
+  updateNavBadges(); updateStatusBar(); markSaved();
+
+  if (andNew) {
+    currentEditId = null;
+    showBuilderView(false);
+    resetBuilderForm();
+  } else {
+    currentEditId = null;
+    showListView();
+    renderQuotesList();
+  }
+}
+
+function cancelBuilder() {
+  if (isDirty) {
+    openConfirm('Discard unsaved changes?', function() {
+      isDirty = false;
+      currentEditId = null;
+      showListView();
+      renderQuotesList();
+    });
+  } else {
+    currentEditId = null;
+    showListView();
+    renderQuotesList();
+  }
+}
+
+function editQuote(id) {
+  var q = (CQ.load('quotes') || []).find(function(x) { return x.id === id; });
+  if (!q) return;
+  currentEditId = id;
+  showView('quotes');
+  showBuilderView(true);
+  resetBuilderForm();
+
+  document.getElementById('b-name').value = (q.client || {}).name || '';
+  document.getElementById('b-address').value = (q.client || {}).address || '';
+  document.getElementById('b-email').value = (q.client || {}).email || '';
+  document.getElementById('b-phone').value = (q.client || {}).phone || '';
+
+  var pt = document.querySelector('input[name="b-ptype"][value="' + ((q.property || {}).type || 'residential') + '"]');
+  if (pt) pt.checked = true;
+  document.getElementById('b-sqft').value = (q.property || {}).sqft || 1000;
+  document.getElementById('b-beds').value = (q.property || {}).beds || 0;
+  document.getElementById('b-baths').value = (q.property || {}).baths || 0;
+  document.getElementById('b-floors').value = (q.property || {}).floors || 1;
+
+  var st = document.querySelector('input[name="b-stype"][value="' + ((q.service || {}).type || '') + '"]');
+  if (st) st.checked = true;
+  var fr = document.querySelector('input[name="b-freq"][value="' + ((q.service || {}).frequency || 'onetime') + '"]');
+  if (fr) fr.checked = true;
+  document.getElementById('b-hours').value = q.hours || 2;
+
+  (q.addOns || []).forEach(function(ao) {
+    var cb = document.getElementById('ao-' + ao.id);
+    if (cb) {
+      cb.checked = true;
+      aoChange(ao.id);
+      var qi = document.getElementById('aoq-' + ao.id);
+      if (qi && ao.qty) qi.value = ao.qty;
+    }
+  });
+
+  document.getElementById('b-note-int').value = (q.notes || {}).internal || '';
+  document.getElementById('b-note-cli').value = (q.notes || {}).client || '';
+  document.getElementById('b-status').value = q.status || 'draft';
+  document.getElementById('b-valid').value = q.validUntil || '';
+  document.getElementById('meta-num').textContent = q.number || '—';
+  isDirty = false;
+  liveCalc(true);
+}
+
+function dupQuote(id) {
+  var q = (CQ.load('quotes') || []).find(function(x) { return x.id === id; });
+  if (!q) return;
+  currentEditId = null;
+  showView('quotes');
+  showBuilderView(false);
+  resetBuilderForm();
+
+  document.getElementById('b-name').value = (q.client || {}).name || '';
+  document.getElementById('b-address').value = (q.client || {}).address || '';
+  document.getElementById('b-email').value = (q.client || {}).email || '';
+  document.getElementById('b-phone').value = (q.client || {}).phone || '';
+
+  var pt = document.querySelector('input[name="b-ptype"][value="' + ((q.property || {}).type || 'residential') + '"]');
+  if (pt) pt.checked = true;
+  document.getElementById('b-sqft').value = (q.property || {}).sqft || 1000;
+  document.getElementById('b-beds').value = (q.property || {}).beds || 0;
+  document.getElementById('b-baths').value = (q.property || {}).baths || 0;
+  document.getElementById('b-floors').value = (q.property || {}).floors || 1;
+
+  var st = document.querySelector('input[name="b-stype"][value="' + ((q.service || {}).type || '') + '"]');
+  if (st) st.checked = true;
+  var fr = document.querySelector('input[name="b-freq"][value="' + ((q.service || {}).frequency || 'onetime') + '"]');
+  if (fr) fr.checked = true;
+  document.getElementById('b-hours').value = q.hours || 2;
+
+  (q.addOns || []).forEach(function(ao) {
+    var cb = document.getElementById('ao-' + ao.id);
+    if (cb) {
+      cb.checked = true;
+      aoChange(ao.id);
+      var qi = document.getElementById('aoq-' + ao.id);
+      if (qi && ao.qty) qi.value = ao.qty;
+    }
+  });
+
+  document.getElementById('b-note-int').value = '';
+  document.getElementById('b-note-cli').value = (q.notes || {}).client || '';
+  isDirty = true;
+  liveCalc();
+}
+
+/* ============================================================
+   PRINT / PDF
+   ============================================================ */
+function renderPrintArea(quote, settings) {
+  var biz = (settings || {}).business || {};
+  var p = quote.pricing || calculateQuote(quote, settings || defaultSettings());
+  var sTypes = (settings || defaultSettings()).serviceTypes || [];
+  var st = sTypes.find(function(s) { return s.id === (quote.service || {}).type; });
+  var addOnsConfig = ((settings || defaultSettings()).addOns) || [];
+
+  document.getElementById('print-area').innerHTML =
+    '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11pt;line-height:1.6;color:#1a1a1a">'
+    + '<div style="display:flex;justify-content:space-between;margin-bottom:20pt;padding-bottom:12pt;border-bottom:2px solid #333">'
+    + '<div><div style="font-size:18pt;font-weight:700">' + escHtml(biz.name || 'CleanQuote Pro') + '</div>'
+    + (biz.address ? '<div style="color:#555">' + escHtml(biz.address) + '</div>' : '')
+    + (biz.email   ? '<div style="color:#555">' + escHtml(biz.email) + '</div>' : '')
+    + (biz.phone   ? '<div style="color:#555">' + escHtml(biz.phone) + '</div>' : '')
+    + '</div>'
+    + '<div style="text-align:right">'
+    + '<div style="font-size:16pt;font-weight:700;letter-spacing:0.04em">QUOTE</div>'
+    + '<div style="font-size:13pt;font-variant-numeric:tabular-nums">' + escHtml(quote.number || '(draft)') + '</div>'
+    + '<div style="color:#666;font-size:9pt">Date: ' + localDate() + '</div>'
+    + '<div style="color:#666;font-size:9pt">Valid until: ' + escHtml(quote.validUntil || '—') + '</div>'
+    + '</div></div>'
+    + '<div style="margin-bottom:20pt"><div style="font-size:8pt;text-transform:uppercase;letter-spacing:0.1em;color:#888;margin-bottom:4pt">Bill to</div>'
+    + '<div style="font-weight:700;font-size:13pt">' + escHtml((quote.client || {}).name || '—') + '</div>'
+    + ((quote.client || {}).address ? '<div style="color:#555">' + escHtml(quote.client.address) + '</div>' : '')
+    + ((quote.client || {}).email   ? '<div style="color:#555">' + escHtml(quote.client.email) + '</div>' : '')
+    + ((quote.client || {}).phone   ? '<div style="color:#555">' + escHtml(quote.client.phone) + '</div>' : '')
+    + '</div>'
+    + '<table style="width:100%;border-collapse:collapse;margin-bottom:20pt">'
+    + '<thead><tr style="background:#f5f5f5">'
+    + '<th style="text-align:left;padding:6pt 8pt;border:1px solid #ccc;font-size:8pt;text-transform:uppercase">Description</th>'
+    + '<th style="text-align:left;padding:6pt 8pt;border:1px solid #ccc;font-size:8pt;text-transform:uppercase">Details</th>'
+    + '<th style="text-align:right;padding:6pt 8pt;border:1px solid #ccc;font-size:8pt;text-transform:uppercase">Amount</th>'
+    + '</tr></thead><tbody>'
+    + '<tr><td style="padding:6pt 8pt;border:1px solid #ddd">' + escHtml(st ? st.name : (quote.service || {}).type || 'Service') + '</td>'
+    + '<td style="padding:6pt 8pt;border:1px solid #ddd;color:#555">'
+    + escHtml((quote.property || {}).type || '') + ' &bull; ' + ((quote.property || {}).sqft || 0) + ' sqft &bull; '
+    + escHtml((quote.service || {}).frequency || '') + '</td>'
+    + '<td style="text-align:right;padding:6pt 8pt;border:1px solid #ddd">' + fmtMoney(p.base * p.typeMult * p.freqMult) + '</td></tr>'
+    + (quote.addOns || []).map(function(ao) {
+        var aoc = addOnsConfig.find(function(a) { return a.id === ao.id; });
+        if (!aoc) return '';
+        var amt = aoc.type === 'perUnit' ? aoc.price * (ao.qty || 1) : aoc.price;
+        return '<tr><td style="padding:6pt 8pt;border:1px solid #ddd">' + escHtml(aoc.name) + '</td>'
+          + '<td style="padding:6pt 8pt;border:1px solid #ddd;color:#555">' + (aoc.type === 'perUnit' ? ao.qty + ' &times; $' + aoc.price : '') + '</td>'
+          + '<td style="text-align:right;padding:6pt 8pt;border:1px solid #ddd">' + fmtMoney(amt) + '</td></tr>';
+      }).join('')
+    + '</tbody></table>'
+    + '<div style="margin-left:auto;max-width:280pt">'
+    + '<div style="display:flex;justify-content:space-between;padding:4pt 0;border-bottom:1px solid #eee"><span>Subtotal</span><span>' + fmtMoney(p.subtotal) + '</span></div>'
+    + (p.materials > 0 ? '<div style="display:flex;justify-content:space-between;padding:4pt 0;border-bottom:1px solid #eee"><span>Materials</span><span>' + fmtMoney(p.materials) + '</span></div>' : '')
+    + '<div style="display:flex;justify-content:space-between;padding:4pt 0;border-bottom:1px solid #eee"><span>Tax (' + Math.round(((settings || defaultSettings()).pricing.taxRate || 0.08) * 100) + '%)</span><span>' + fmtMoney(p.tax) + '</span></div>'
+    + '<div style="display:flex;justify-content:space-between;padding:8pt 0;font-weight:700;font-size:14pt;border-top:2px solid #333"><span>Total</span><span>' + fmtMoney(p.total) + '</span></div>'
+    + '</div>'
+    + ((quote.notes || {}).client ? '<div style="margin-top:20pt;padding-top:12pt;border-top:1px solid #ddd"><div style="font-size:8pt;text-transform:uppercase;letter-spacing:0.1em;color:#888;margin-bottom:6pt">Notes</div><div>' + escHtml(quote.notes.client) + '</div></div>' : '')
+    + '<div style="margin-top:24pt;padding-top:12pt;border-top:1px solid #eee;font-size:8pt;color:#888;text-align:center">This quote is valid for ' + ((settings || defaultSettings()).quoteValidityDays || 30) + ' days. Thank you for your business!</div>'
+    + '</div>';
+}
+
+function doPrint(quote, settings) {
+  renderPrintArea(quote, settings);
+  document.body.classList.add('printing-quote');
+  /* Register cleanup BEFORE window.print() — prevents race in Safari/Firefox */
+  window.addEventListener('afterprint', function h() {
+    document.body.classList.remove('printing-quote');
+    window.removeEventListener('afterprint', h);
+  });
+  toast('opening print dialog...', 'info');
+  setTimeout(function() { window.print(); }, 300);
+}
+
+function exportBuilderPDF() {
+  var settings = CQ.load('settings') || defaultSettings();
+  var draft = getDraft();
+  var pricing = calculateQuote(draft, settings);
+  var q = Object.assign({}, draft, { pricing: pricing });
+  if (currentEditId) {
+    var saved = (CQ.load('quotes') || []).find(function(x) { return x.id === currentEditId; });
+    if (saved) q.number = saved.number;
+  }
+  doPrint(q, settings);
+}
+
+function printQuoteById(id) {
+  var q = (CQ.load('quotes') || []).find(function(x) { return x.id === id; });
+  if (!q) return;
+  doPrint(q, CQ.load('settings') || defaultSettings());
+}
+
+/* ============================================================
+   CLIENTS
+   ============================================================ */
+function renderClientsList() {
+  var clients = CQ.load('clients') || [];
+  var quotes  = CQ.load('quotes')  || [];
+  var container = document.getElementById('clients-table');
+  if (clients.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-title">No clients yet</div>'
+      + '<p>Clients are auto-created when you save a quote, or add them manually.</p>'
+      + '<button class="btn btn-accent" onclick="openClientModal()">+ New client</button></div>';
+    return;
+  }
+  container.innerHTML = '<table class="data-table"><thead><tr>'
+    + '<th>Name</th><th>Email</th><th>Phone</th><th class="num">Quotes</th><th>Since</th><th>Actions</th>'
+    + '</tr></thead><tbody>'
+    + clients.map(function(c) {
+        var qc = quotes.filter(function(q) { return q.clientId === c.id; }).length;
+        return '<tr>'
+          + '<td><strong>' + escHtml(c.name) + '</strong>'
+          + (c.address ? '<br><span class="muted" style="font-size:var(--fs-xs)">' + escHtml(c.address) + '</span>' : '')
+          + '</td>'
+          + '<td>' + escHtml(c.email || '—') + '</td>'
+          + '<td>' + escHtml(c.phone || '—') + '</td>'
+          + '<td class="num">' + qc + '</td>'
+          + '<td>' + (c.createdAt ? c.createdAt.slice(0, 10) : '—') + '</td>'
+          + '<td><div class="actions-cell">'
+          + '<button class="icon-btn" onclick="viewClientModal(\'' + c.id + '\')" title="View" aria-label="View client">▣</button>'
+          + '<button class="icon-btn" onclick="openClientModal(\'' + c.id + '\')" title="Edit" aria-label="Edit client">▤</button>'
+          + '<button class="icon-btn danger" onclick="deleteClient(\'' + c.id + '\')" title="Delete" aria-label="Delete client">✕</button>'
+          + '</div></td></tr>';
+      }).join('')
+    + '</tbody></table>';
+}
+
+function openClientModal(id) {
+  var clients = CQ.load('clients') || [];
+  var c = id ? clients.find(function(x) { return x.id === id; }) : null;
+  openModal(id ? 'Edit client' : 'New client',
+    '<input type="hidden" id="mc-id" value="' + (id || '') + '">'
+    + '<div class="form-grid">'
+    + '<label class="field span-2"><span class="field-label">Name <span class="req">*</span></span><input type="text" id="mc-name" value="' + escHtml((c || {}).name || '') + '"></label>'
+    + '<label class="field span-2"><span class="field-label">Address</span><input type="text" id="mc-addr" value="' + escHtml((c || {}).address || '') + '"></label>'
+    + '<label class="field"><span class="field-label">Email</span><input type="email" id="mc-email" value="' + escHtml((c || {}).email || '') + '"></label>'
+    + '<label class="field"><span class="field-label">Phone</span><input type="tel" id="mc-phone" value="' + escHtml((c || {}).phone || '') + '"></label>'
+    + '</div>',
+    '<button class="btn" onclick="closeModal()">Cancel</button>'
+    + '<button class="btn btn-accent" onclick="saveClientModal()">Save</button>'
+  );
+}
+
+function saveClientModal() {
+  var name = ((document.getElementById('mc-name') || {}).value || '').trim();
+  if (!name) { toast('name is required', 'error'); return; }
+  var id = (document.getElementById('mc-id') || {}).value || '';
+  var clients = CQ.load('clients') || [];
+  if (id) {
+    var idx = clients.findIndex(function(c) { return c.id === id; });
+    if (idx >= 0) clients[idx] = Object.assign({}, clients[idx], {
+      name: name,
+      address: (document.getElementById('mc-addr') || {}).value || '',
+      email:   (document.getElementById('mc-email') || {}).value || '',
+      phone:   (document.getElementById('mc-phone') || {}).value || ''
+    });
+    toast('client updated', 'success');
+  } else {
+    clients.push({ id: genId(), name: name,
+      address: (document.getElementById('mc-addr') || {}).value || '',
+      email:   (document.getElementById('mc-email') || {}).value || '',
+      phone:   (document.getElementById('mc-phone') || {}).value || '',
+      createdAt: new Date().toISOString() });
+    toast('client saved', 'success');
+  }
+  CQ.save('clients', clients);
+  closeModal();
+  renderClientsList();
+  updateNavBadges();
+  markSaved();
+}
+
+function viewClientModal(id) {
+  var c = (CQ.load('clients') || []).find(function(x) { return x.id === id; });
+  if (!c) return;
+  var cqs = (CQ.load('quotes') || []).filter(function(q) { return q.clientId === id; }).slice(0, 5);
+  openModal('Client: ' + c.name,
+    '<div style="font-size:var(--fs-sm);margin-bottom:var(--sp-4)">'
+    + (c.address ? '<div><span class="muted">Address: </span>' + escHtml(c.address) + '</div>' : '')
+    + (c.email   ? '<div><span class="muted">Email: </span>' + escHtml(c.email) + '</div>' : '')
+    + (c.phone   ? '<div><span class="muted">Phone: </span>' + escHtml(c.phone) + '</div>' : '')
+    + '</div>'
+    + (cqs.length > 0
+      ? '<div class="field-label" style="margin-bottom:var(--sp-2)">Recent quotes</div>'
+        + '<table class="data-table"><thead><tr><th>Quote #</th><th>Date</th><th class="num">Total</th><th>Status</th></tr></thead><tbody>'
+        + cqs.map(function(q) {
+            var s = getQuoteStatus(q);
+            return '<tr><td>' + escHtml(q.number || '—') + '</td><td>' + (q.createdAt ? q.createdAt.slice(0,10) : '—') + '</td>'
+              + '<td class="num">' + fmtMoney((q.pricing || {}).total || 0) + '</td>'
+              + '<td><span class="badge ' + s + '">' + s + '</span></td></tr>';
+          }).join('') + '</tbody></table>'
+      : '<p class="muted" style="margin:0;font-size:var(--fs-sm)">No quotes yet.</p>'),
+    '<button class="btn" onclick="closeModal()">Close</button>'
+    + '<button class="btn" onclick="closeModal();openClientModal(\'' + id + '\')">Edit</button>'
+  );
+}
+
+function deleteClient(id) {
+  var hasQ = (CQ.load('quotes') || []).some(function(q) { return q.clientId === id; });
+  if (hasQ) { toast('cannot delete: client has existing quotes', 'error'); return; }
+  openConfirm('Delete this client?', function() {
+    CQ.save('clients', (CQ.load('clients') || []).filter(function(c) { return c.id !== id; }));
+    toast('client deleted', 'success');
+    renderClientsList(); updateNavBadges();
+  });
+}
+
+/* ============================================================
+   SERVICES
+   ============================================================ */
+function renderServicesView() {
+  var settings = CQ.load('settings') || defaultSettings();
+  var stContainer = document.getElementById('stype-table');
+  stContainer.innerHTML = '<table class="data-table"><thead><tr>'
+    + '<th>Name</th><th class="num">Multiplier</th><th>Actions</th>'
+    + '</tr></thead><tbody>'
+    + (settings.serviceTypes || []).map(function(st) {
+        return '<tr><td>' + escHtml(st.name) + '</td><td class="num">' + st.mult + '&times;</td>'
+          + '<td><div class="actions-cell">'
+          + '<button class="icon-btn" onclick="openSTypeModal(\'' + st.id + '\')" aria-label="Edit service type">▤</button>'
+          + '<button class="icon-btn danger" onclick="deleteSType(\'' + st.id + '\')" aria-label="Delete service type">✕</button>'
+          + '</div></td></tr>';
+      }).join('')
+    + '</tbody></table>';
+
+  var aoContainer = document.getElementById('addons-table');
+  aoContainer.innerHTML = '<table class="data-table"><thead><tr>'
+    + '<th>Name</th><th class="num">Price</th><th>Type</th><th>Actions</th>'
+    + '</tr></thead><tbody>'
+    + (settings.addOns || []).map(function(ao) {
+        return '<tr><td>' + escHtml(ao.name) + '</td><td class="num">$' + ao.price + '</td>'
+          + '<td>' + (ao.type === 'perUnit' ? 'per unit' : 'flat') + '</td>'
+          + '<td><div class="actions-cell">'
+          + '<button class="icon-btn" onclick="openAddonModal(\'' + ao.id + '\')" aria-label="Edit add-on">▤</button>'
+          + '<button class="icon-btn danger" onclick="deleteAddon(\'' + ao.id + '\')" aria-label="Delete add-on">✕</button>'
+          + '</div></td></tr>';
+      }).join('')
+    + '</tbody></table>';
+}
+
+function openSTypeModal(id) {
+  var settings = CQ.load('settings') || defaultSettings();
+  var st = id ? (settings.serviceTypes || []).find(function(x) { return x.id === id; }) : null;
+  openModal(id ? 'Edit service type' : 'Add service type',
+    '<input type="hidden" id="mst-id" value="' + (id || '') + '">'
+    + '<label class="field"><span class="field-label">Name <span class="req">*</span></span><input type="text" id="mst-name" value="' + escHtml((st || {}).name || '') + '"></label>'
+    + '<label class="field"><span class="field-label">Multiplier (1.3 = +30%)</span><input type="number" id="mst-mult" value="' + ((st || {}).mult || 1) + '" min="0.5" max="5" step="0.05"></label>',
+    '<button class="btn" onclick="closeModal()">Cancel</button>'
+    + '<button class="btn btn-accent" onclick="saveSTypeModal()">Save</button>'
+  );
+}
+
+function saveSTypeModal() {
+  var name = ((document.getElementById('mst-name') || {}).value || '').trim();
+  var mult = parseFloat((document.getElementById('mst-mult') || {}).value) || 1;
+  if (!name) { toast('name is required', 'error'); return; }
+  var id = (document.getElementById('mst-id') || {}).value || '';
+  var settings = CQ.load('settings') || defaultSettings();
+  if (id) {
+    var idx = settings.serviceTypes.findIndex(function(s) { return s.id === id; });
+    if (idx >= 0) settings.serviceTypes[idx] = Object.assign({}, settings.serviceTypes[idx], { name: name, mult: mult });
+    toast('service type updated', 'success');
+  } else {
+    settings.serviceTypes.push({ id: 'st' + Date.now(), name: name, mult: mult });
+    toast('service type added', 'success');
+  }
+  CQ.save('settings', settings);
+  closeModal();
+  renderServicesView();
+}
+
+function deleteSType(id) {
+  var inUse = (CQ.load('quotes') || []).some(function(q) { return (q.service || {}).type === id; });
+  if (inUse) { toast('cannot delete: used in existing quotes', 'error'); return; }
+  openConfirm('Delete this service type?', function() {
+    var s = CQ.load('settings') || defaultSettings();
+    s.serviceTypes = (s.serviceTypes || []).filter(function(x) { return x.id !== id; });
+    CQ.save('settings', s);
+    toast('deleted', 'success');
+    renderServicesView();
+  });
+}
+
+function openAddonModal(id) {
+  var settings = CQ.load('settings') || defaultSettings();
+  var ao = id ? (settings.addOns || []).find(function(x) { return x.id === id; }) : null;
+  openModal(id ? 'Edit add-on' : 'Add add-on',
+    '<input type="hidden" id="mao-id" value="' + (id || '') + '">'
+    + '<label class="field"><span class="field-label">Name <span class="req">*</span></span><input type="text" id="mao-name" value="' + escHtml((ao || {}).name || '') + '"></label>'
+    + '<label class="field"><span class="field-label">Price ($)</span><input type="number" id="mao-price" value="' + ((ao || {}).price || 0) + '" min="0" step="0.5"></label>'
+    + '<label class="field"><span class="field-label">Type</span><select id="mao-type">'
+    + '<option value="flat"' + ((ao || {}).type === 'flat' ? ' selected' : '') + '>Flat fee</option>'
+    + '<option value="perUnit"' + ((ao || {}).type === 'perUnit' ? ' selected' : '') + '>Per unit</option>'
+    + '</select></label>',
+    '<button class="btn" onclick="closeModal()">Cancel</button>'
+    + '<button class="btn btn-accent" onclick="saveAddonModal()">Save</button>'
+  );
+}
+
+function saveAddonModal() {
+  var name  = ((document.getElementById('mao-name') || {}).value || '').trim();
+  var price = parseFloat((document.getElementById('mao-price') || {}).value) || 0;
+  var type  = (document.getElementById('mao-type') || {}).value || 'flat';
+  if (!name) { toast('name is required', 'error'); return; }
+  var id = (document.getElementById('mao-id') || {}).value || '';
+  var settings = CQ.load('settings') || defaultSettings();
+  if (id) {
+    var idx = settings.addOns.findIndex(function(a) { return a.id === id; });
+    if (idx >= 0) settings.addOns[idx] = Object.assign({}, settings.addOns[idx], { name: name, price: price, type: type });
+    toast('add-on updated', 'success');
+  } else {
+    settings.addOns.push({ id: 'ao' + Date.now(), name: name, price: price, type: type });
+    toast('add-on added', 'success');
+  }
+  CQ.save('settings', settings);
+  closeModal();
+  renderServicesView();
+}
+
+function deleteAddon(id) {
+  var inUse = (CQ.load('quotes') || []).some(function(q) {
+    return (q.addOns || []).some(function(a) { return a.id === id; });
+  });
+  if (inUse) { toast('cannot delete: used in existing quotes', 'error'); return; }
+  openConfirm('Delete this add-on?', function() {
+    var s = CQ.load('settings') || defaultSettings();
+    s.addOns = (s.addOns || []).filter(function(a) { return a.id !== id; });
+    CQ.save('settings', s);
+    toast('deleted', 'success');
+    renderServicesView();
+  });
+}
+
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+function loadSettingsForm() {
+  var s = CQ.load('settings') || defaultSettings();
+  var biz = s.business || {};
+  var p   = s.pricing  || {};
+  document.getElementById('s-biz-name').value  = biz.name    || '';
+  document.getElementById('s-biz-addr').value  = biz.address || '';
+  document.getElementById('s-biz-email').value = biz.email   || '';
+  document.getElementById('s-biz-phone').value = biz.phone   || '';
+  var modelEl = document.querySelector('input[name="s-model"][value="' + (p.model || 'sqft') + '"]');
+  if (modelEl) modelEl.checked = true;
+  document.getElementById('s-sqft-rate').value = p.sqftRate  || 0.12;
+  document.getElementById('s-hr-rate').value   = p.hourlyRate || 45;
+  document.getElementById('s-tax').value        = Math.round((p.taxRate || 0.08) * 1000) / 10;
+  document.getElementById('s-validity').value  = s.quoteValidityDays || 30;
+  document.getElementById('s-mat-on').checked  = !!p.materialsEnabled;
+  document.getElementById('s-mat-fee').value   = p.materialsFee || 0;
+  togglePriceModel();
+  toggleMaterials();
+}
+
+function saveSettings() {
+  var s = CQ.load('settings') || defaultSettings();
+  s.business = {
+    name:    document.getElementById('s-biz-name').value.trim(),
+    address: document.getElementById('s-biz-addr').value.trim(),
+    email:   document.getElementById('s-biz-email').value.trim(),
+    phone:   document.getElementById('s-biz-phone').value.trim()
+  };
+  s.pricing.model            = (document.querySelector('input[name="s-model"]:checked') || {}).value || 'sqft';
+  s.pricing.sqftRate         = parseFloat(document.getElementById('s-sqft-rate').value) || 0.12;
+  s.pricing.hourlyRate       = parseFloat(document.getElementById('s-hr-rate').value)   || 45;
+  s.pricing.taxRate          = (parseFloat(document.getElementById('s-tax').value) || 8) / 100;
+  s.quoteValidityDays        = parseInt(document.getElementById('s-validity').value) || 30;
+  s.pricing.materialsEnabled = document.getElementById('s-mat-on').checked;
+  s.pricing.materialsFee     = parseFloat(document.getElementById('s-mat-fee').value) || 0;
+  CQ.save('settings', s);
+  toast('settings saved', 'success');
+  updateStatusBar();
+  markSaved();
+}
+
+function togglePriceModel() {
+  var m = (document.querySelector('input[name="s-model"]:checked') || {}).value || 'sqft';
+  document.getElementById('s-sqft-row').style.display = m === 'sqft'   ? '' : 'none';
+  document.getElementById('s-hr-row').style.display   = m === 'hourly' ? '' : 'none';
+}
+
+function toggleMaterials() {
+  var on = document.getElementById('s-mat-on').checked;
+  document.getElementById('s-mat-row').style.display = on ? '' : 'none';
+}
+
+function doResetDefaults() {
+  openConfirm('Reset all settings to factory defaults? Quotes and clients will not be affected.', function() {
+    var def = defaultSettings();
+    var cur = CQ.load('settings') || {};
+    if (cur.business) def.business = cur.business; // keep business info
+    def.business = def.business || {};
+    CQ.save('settings', def);
+    toast('settings reset to defaults', 'success');
+    loadSettingsForm();
+    renderServicesView();
+  });
+}
+
+function doClearAll() {
+  openModal('Clear all data',
+    '<p style="color:var(--red);font-size:var(--fs-sm);margin:0 0 var(--sp-3)">This permanently deletes ALL quotes, clients, and settings. This cannot be undone.</p>'
+    + '<label class="field"><span class="field-label">Type DELETE to confirm</span><input type="text" id="del-confirm" placeholder="DELETE"></label>',
+    '<button class="btn" onclick="closeModal()">Cancel</button>'
+    + '<button class="btn btn-primary" onclick="executeClearAll()">Clear all data</button>'
+  );
+}
+
+function executeClearAll() {
+  var v = (document.getElementById('del-confirm') || {}).value || '';
+  if (v !== 'DELETE') { toast('type DELETE to confirm', 'error'); return; }
+  ['quotes', 'clients', 'settings', 'seeded'].forEach(function(k) {
+    try { localStorage.removeItem('cleanquote.' + k); } catch(e) {}
+  });
+  /* Set seeded so init() does NOT re-populate with sample data on next load */
+  CQ.save('seeded', '1');
+  /* Save fresh default settings */
+  CQ.save('settings', defaultSettings());
+  closeModal();
+  toast('all data cleared', 'success');
+  /* Rebuild all views to empty state — do NOT call init() which would re-seed */
+  updateNavBadges();
+  updateStatusBar();
+  loadSettingsForm();
+  renderServicesView();
+  showView('overview');
+}
+
+/* ============================================================
+   EXPORT
+   ============================================================ */
+function dlFile(content, type, filename) {
+  var blob = new Blob([content], { type: type });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function() {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+  }, 150);
+}
+
+function dlQuotesCSV(quotes, filename) {
+  var headers = ['Quote #', 'Client', 'Date', 'Property', 'Sq Ft', 'Service', 'Frequency', 'Hours', 'Subtotal', 'Tax', 'Total', 'Status', 'Valid Until'];
+  var rows = quotes.map(function(q) {
+    return [
+      q.number || '', (q.client || {}).name || '', (q.createdAt || '').slice(0, 10),
+      (q.property || {}).type || '', (q.property || {}).sqft || 0,
+      (q.service || {}).type || '', (q.service || {}).frequency || '', q.hours || 0,
+      ((q.pricing || {}).subtotal || 0).toFixed(2), ((q.pricing || {}).tax || 0).toFixed(2),
+      ((q.pricing || {}).total || 0).toFixed(2), getQuoteStatus(q), q.validUntil || ''
+    ].map(function(v) { return '"' + String(v).replace(/"/g, '""') + '"'; });
+  });
+  dlFile([headers.join(',')].concat(rows.map(function(r) { return r.join(','); })).join('\n'),
+    'text/csv', filename || ('cleanquote-quotes-' + localDate() + '.csv'));
+}
+
+function exportQuotesCSV() {
+  dlQuotesCSV(CQ.load('quotes') || [], 'cleanquote-quotes-' + localDate() + '.csv');
+  toast('csv exported', 'success');
+}
+
+function exportClientsCSV() {
+  var clients = CQ.load('clients') || [];
+  var quotes  = CQ.load('quotes')  || [];
+  var headers = ['Name', 'Address', 'Email', 'Phone', 'Quote Count', 'Created'];
+  var rows = clients.map(function(c) {
+    var qc = quotes.filter(function(q) { return q.clientId === c.id; }).length;
+    return [c.name, c.address || '', c.email || '', c.phone || '', qc, (c.createdAt || '').slice(0, 10)]
+      .map(function(v) { return '"' + String(v).replace(/"/g, '""') + '"'; });
+  });
+  dlFile([headers.join(',')].concat(rows.map(function(r) { return r.join(','); })).join('\n'),
+    'text/csv', 'cleanquote-clients-' + localDate() + '.csv');
+  toast('clients csv exported', 'success');
+}
+
+function exportAllJSON() {
+  var data = {
+    version: '1.0', exportedAt: new Date().toISOString(),
+    quotes:   CQ.load('quotes')   || [],
+    clients:  CQ.load('clients')  || [],
+    settings: CQ.load('settings') || defaultSettings()
+  };
+  dlFile(JSON.stringify(data, null, 2), 'application/json', 'cleanquote-backup-' + localDate() + '.json');
+  toast('data exported', 'success');
+}
+
+function triggerImport(inputId) {
+  document.getElementById(inputId).click();
+}
+
+function importJSON(input) {
+  var file = input.files[0];
+  if (!file) return;
+  openConfirm('Replace ALL current data with this backup?', function() {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        var data = JSON.parse(e.target.result);
+        if (data.quotes)   CQ.save('quotes',   data.quotes);
+        if (data.clients)  CQ.save('clients',  data.clients);
+        if (data.settings) CQ.save('settings', data.settings);
+        CQ.save('seeded', '1');
+        toast('data imported', 'success');
+        init();
+      } catch(err) { toast('invalid JSON file', 'error'); }
+    };
+    reader.readAsText(file);
+    input.value = '';
+  });
+}
+
+/* Override shell stubs */
+function exportCSV() { exportQuotesCSV(); }
+function printPDF()  {
+  /* If builder is open, export the current quote as a formatted PDF */
+  var qbView = document.getElementById('qb-view');
+  if (qbView && qbView.style.display !== 'none') {
+    exportBuilderPDF();
+    return;
+  }
+  toast('opening print dialog...', 'info');
+  setTimeout(function() { window.print(); }, 300);
+}
+
+/* beforeprint / afterprint — dark-mode print fix */
+window.addEventListener('beforeprint', function() {
+  document.documentElement.setAttribute('data-theme', 'light');
+});
+window.addEventListener('afterprint', function() {
+  try {
+    var saved = localStorage.getItem('cleanbiz-theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+    else document.documentElement.removeAttribute('data-theme');
+  } catch(e) {}
+});
+
+/* ============================================================
+   MODALS
+   ============================================================ */
+var pendingConfirm = null;
+
+function openModal(title, bodyHTML, footerHTML) {
+  closeModal();
+  var bd = document.createElement('div');
+  bd.className = 'modal-backdrop';
+  bd.id = 'active-modal';
+  bd.innerHTML = '<div class="modal">'
+    + '<div class="modal-header">'
+    + '<span class="modal-title">' + escHtml(title) + '</span>'
+    + '<button class="modal-close" onclick="closeModal()">&#x2715;</button>'
+    + '</div>'
+    + '<div class="modal-body">' + bodyHTML + '</div>'
+    + (footerHTML ? '<div class="modal-footer">' + footerHTML + '</div>' : '')
+    + '</div>';
+  bd.addEventListener('click', function(e) { if (e.target === bd) closeModal(); });
+  document.body.appendChild(bd);
+}
+
+function closeModal() {
+  var m = document.getElementById('active-modal');
+  if (m) m.remove();
+}
+
+function openConfirm(msg, cb) {
+  pendingConfirm = cb;
+  openModal('Confirm',
+    '<p style="margin:0;font-size:var(--fs-sm)">' + escHtml(msg) + '</p>',
+    '<button class="btn" onclick="closeModal()">Cancel</button>'
+    + '<button class="btn btn-primary" onclick="runConfirm()">Confirm</button>'
+  );
+}
+
+function runConfirm() {
+  closeModal();
+  if (pendingConfirm) { pendingConfirm(); pendingConfirm = null; }
+}
+
+function viewQuoteModal(id) {
+  var q = (CQ.load('quotes') || []).find(function(x) { return x.id === id; });
+  if (!q) return;
+  var settings = CQ.load('settings') || defaultSettings();
+  var s = getQuoteStatus(q);
+  var st = (settings.serviceTypes || []).find(function(x) { return x.id === (q.service || {}).type; });
+  var p = q.pricing || calculateQuote(q, settings);
+  openModal('Quote ' + (q.number || ''),
+    '<div style="font-size:var(--fs-sm)">'
+    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin-bottom:var(--sp-4)">'
+    + '<div><div class="field-label" style="margin-bottom:var(--sp-2)">Client</div>'
+    + '<strong>' + escHtml((q.client || {}).name || '—') + '</strong>'
+    + ((q.client || {}).address ? '<br>' + escHtml(q.client.address) : '')
+    + ((q.client || {}).email   ? '<br>' + escHtml(q.client.email) : '')
+    + ((q.client || {}).phone   ? '<br>' + escHtml(q.client.phone) : '')
+    + '</div>'
+    + '<div><div class="field-label" style="margin-bottom:var(--sp-2)">Quote details</div>'
+    + 'Status: <span class="badge ' + s + '">' + s + '</span><br>'
+    + 'Valid until: ' + escHtml(q.validUntil || '—') + '<br>'
+    + 'Created: ' + ((q.createdAt || '').slice(0, 10) || '—') + '</div></div>'
+    + '<div style="margin-bottom:var(--sp-3)"><div class="field-label" style="margin-bottom:var(--sp-1)">Property</div>'
+    + escHtml((q.property || {}).type || '—') + ' &bull; ' + ((q.property || {}).sqft || 0) + ' sqft &bull; '
+    + ((q.property || {}).beds || 0) + ' beds &bull; ' + ((q.property || {}).baths || 0) + ' baths</div>'
+    + '<div style="margin-bottom:var(--sp-3)"><div class="field-label" style="margin-bottom:var(--sp-1)">Service</div>'
+    + escHtml(st ? st.name : (q.service || {}).type || '—') + ' &bull; ' + escHtml((q.service || {}).frequency || '—') + '</div>'
+    + '<div style="border-top:1px solid var(--line-soft);padding-top:var(--sp-3)">'
+    + '<div style="display:flex;justify-content:space-between"><span>Subtotal</span><span>' + fmtMoney(p.subtotal) + '</span></div>'
+    + (p.materials > 0 ? '<div style="display:flex;justify-content:space-between"><span>Materials</span><span>' + fmtMoney(p.materials) + '</span></div>' : '')
+    + '<div style="display:flex;justify-content:space-between"><span>Tax</span><span>' + fmtMoney(p.tax) + '</span></div>'
+    + '<div style="display:flex;justify-content:space-between;font-weight:700;font-size:var(--fs-md);margin-top:var(--sp-2);padding-top:var(--sp-2);border-top:1px solid var(--line)">'
+    + '<span>Total</span><span style="color:var(--accent)">' + fmtMoney(p.total) + '</span></div></div>'
+    + ((q.notes || {}).client ? '<div style="margin-top:var(--sp-3);padding-top:var(--sp-3);border-top:1px solid var(--line-soft)"><div class="field-label" style="margin-bottom:var(--sp-1)">Client notes</div><p style="margin:0">' + escHtml(q.notes.client) + '</p></div>' : '')
+    + '</div>',
+    '<button class="btn" onclick="closeModal()">Close</button>'
+    + '<button class="btn" onclick="closeModal();editQuote(\'' + id + '\')">Edit</button>'
+    + '<button class="btn btn-accent" onclick="closeModal();printQuoteById(\'' + id + '\')">Export PDF</button>'
+  );
+}
+
+function openHelpModal() {
+  openModal('Keyboard shortcuts',
+    '<table class="data-table" style="width:100%"><tbody>'
+    + '<tr><td><span class="kbd">Ctrl</span><span class="kbd">E</span></td><td>Export quotes as CSV</td></tr>'
+    + '<tr><td><span class="kbd">Ctrl</span><span class="kbd">P</span></td><td>Print / save as PDF</td></tr>'
+    + '<tr><td><span class="kbd">Ctrl</span><span class="kbd">Shift</span><span class="kbd">L</span></td><td>Toggle light / dark theme</td></tr>'
+    + '<tr><td><span class="kbd">Shift</span><span class="kbd">N</span></td><td>New quote</td></tr>'
+    + '<tr><td><span class="kbd">Ctrl</span><span class="kbd">K</span></td><td>Focus search / jump</td></tr>'
+    + '</tbody></table>',
+    '<button class="btn" onclick="closeModal()">Close</button>'
+  );
+}
+
+/* ============================================================
+   STATUS BAR + BADGES
+   ============================================================ */
+function updateNavBadges() {
+  var qb = document.getElementById('badge-quotes');
+  var cb = document.getElementById('badge-clients');
+  if (qb) qb.textContent = (CQ.load('quotes')  || []).length;
+  if (cb) cb.textContent = (CQ.load('clients') || []).length;
+}
+
+function updateStatusBar() {
+  var sc = document.getElementById('sb-count');
+  var sl = document.getElementById('sb-save');
+  var qs = CQ.load('quotes') || [];
+  if (sc) sc.textContent = qs.length + ' quote' + (qs.length !== 1 ? 's' : '');
+  if (sl) sl.textContent = 'local only';
+}
+
+function markSaved() {
+  var sl = document.getElementById('sb-save');
+  if (!sl) return;
+  var now = new Date();
+  var h = String(now.getHours());   if (h.length < 2) h = '0' + h;
+  var m = String(now.getMinutes()); if (m.length < 2) m = '0' + m;
+  sl.textContent = 'saved ' + h + ':' + m;
+}
+
+function focusSearch() {
+  if (currentView !== 'quotes') {
+    showView('quotes');
+  }
+  setTimeout(function() {
+    var si = document.getElementById('qf-search');
+    if (si) si.focus();
+  }, 50);
+}
+
+/* ============================================================
+   KEYBOARD SHORTCUTS
+   ============================================================ */
+document.addEventListener('keydown', function(e) {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    focusSearch();
+  }
+  if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
+    e.preventDefault();
+    toggleTheme();
+  }
+  if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'e') {
+    e.preventDefault();
+    exportCSV();
+  }
+  if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'p') {
+    e.preventDefault();
+    printPDF();
+  }
+  if (e.shiftKey && !e.metaKey && !e.ctrlKey && e.key === 'N') {
+    var active = document.activeElement;
+    var tag = active ? active.tagName : '';
+    if (tag !== 'INPUT' && tag !== 'TEXTAREA' && tag !== 'SELECT') {
+      e.preventDefault();
+      openNewQuote();
+    }
+  }
+  if (e.key === 'Escape') { closeModal(); }
+});
+
+/* Period bar */
+document.querySelectorAll('.period-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.period-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    overviewDays = parseInt(btn.dataset.days) || 30;
+    var quotes = CQ.load('quotes') || [];
+    renderDailyChart(quotes, overviewDays);
+  });
+});
+
+/* Nav clicks */
+document.querySelectorAll('.nav-item[data-view]').forEach(function(item) {
+  item.addEventListener('click', function() {
+    var qbView = document.getElementById('qb-view');
+    if (qbView && qbView.style.display !== 'none' && isDirty) {
+      openConfirm('Leave the quote builder? Unsaved changes will be lost.', function() {
+        isDirty = false;
+        currentEditId = null;
+        showView(item.dataset.view);
+      });
+      return;
+    }
+    showView(item.dataset.view);
+  });
+  item.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); item.click(); }
+  });
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function init() {
+  if (!CQ.load('seeded')) {
+    seedData();
+    setTimeout(function() { toast('welcome to CleanQuote Pro \u00b7 loaded 5 sample quotes', 'success'); }, 500);
+  }
+  // Show overview
+  currentView = 'overview';
+  document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('active'); });
+  var ov = document.getElementById('view-overview');
+  if (ov) ov.classList.add('active');
+  document.querySelectorAll('.nav-item[data-view]').forEach(function(item) {
+    item.classList.toggle('active', item.dataset.view === 'overview');
+  });
+  document.getElementById('period-bar').style.display = '';
+  buildOverview();
+  loadSettingsForm();
+  updateNavBadges();
+  updateStatusBar();
+  var pd = document.getElementById('print-date');
+  if (pd) pd.textContent = localDate();
+}
+
+init();
+</script>
+</body>
+</html>
