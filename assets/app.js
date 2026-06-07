@@ -34,6 +34,12 @@
   // and Stripe (planned). See `buyApp()` below.
   const PURCHASE_MODE = 'etsy'; // 'etsy' | 'stripe'
 
+  // Demo limit. After this many milliseconds of an open demo, an
+  // overlay slides in asking the customer to buy on Etsy. Customer
+  // can dismiss it once per session and keep exploring. Set to 0
+  // to disable the limit entirely.
+  const DEMO_LIMIT_MS = 90000; // 90 seconds
+
   // Stripe-ready config. Populated when PURCHASE_MODE === 'stripe'.
   // You can also add per-app Stripe price IDs to each manifest entry:
   //   "stripePriceId": "price_1AbC..."
@@ -51,6 +57,7 @@
      ------------------------------------------------------------ */
   let APPS = [];
   let currentApp = null;
+  let demoLimitTimer = null;
 
   /* ------------------------------------------------------------
      DOM
@@ -69,6 +76,11 @@
     modalSub:    $('#modalSub'),
     modalBuy:    $('#modalBuy'),
     modalClose:  $('#modalClose'),
+    modalBanner: $('#modalDemoBanner'),
+    bannerBuy:   $('#bannerBuy'),
+    modalOverlay:$('#modalDemoOverlay'),
+    overlayBuy:  $('#overlayBuy'),
+    overlayDismiss: $('#overlayDismiss'),
     toast:       $('#toast'),
     year:        $('#year'),
     etsyNav:     $('#etsyNavLink'),
@@ -208,6 +220,7 @@
     els.modalFrame.style.display = 'none';
     els.modalEmpty.classList.remove('show');
     els.modalLoader.style.display = 'grid';
+    els.modalOverlay.classList.remove('show');
 
     // Try to load the demo file. If it 404s (file doesn't exist
     // yet), show the "coming soon" state instead of a broken page.
@@ -217,6 +230,10 @@
       loaded = true;
       els.modalLoader.style.display = 'none';
       els.modalFrame.style.display = 'block';
+      // Start the demo limit timer once the app is actually visible.
+      // If we started it earlier, customers with slow connections
+      // would see the overlay before the app finished loading.
+      startDemoLimitTimer();
     };
     const onError = () => {
       if (loaded) return;
@@ -239,6 +256,11 @@
   }
 
   function closeDemo() {
+    // Always clear the timer so the next demo opens with a fresh window.
+    if (demoLimitTimer) {
+      clearTimeout(demoLimitTimer);
+      demoLimitTimer = null;
+    }
     els.modal.classList.remove('open');
     document.body.style.overflow = '';
     // give the iframe a moment to unload before clearing, to avoid flash
@@ -248,6 +270,23 @@
       els.modalFrame.onerror = null;
     }, 200);
     currentApp = null;
+  }
+
+  // The demo limit gate. After DEMO_LIMIT_MS of an open demo,
+  // an overlay slides in asking the customer to buy. One dismiss
+  // per session — they can keep exploring after they close it.
+  function startDemoLimitTimer() {
+    if (demoLimitTimer) clearTimeout(demoLimitTimer);
+    if (DEMO_LIMIT_MS <= 0) return; // disabled
+    demoLimitTimer = setTimeout(showDemoLimitOverlay, DEMO_LIMIT_MS);
+  }
+
+  function showDemoLimitOverlay() {
+    if (!currentApp) return;
+    if (!els.modalBuy) return;
+    // Mirror the buy href to the overlay's buy button (it's an <a>).
+    els.overlayBuy.href = currentApp.etsyUrl || '#';
+    els.modalOverlay.classList.add('show');
   }
 
   /* ------------------------------------------------------------
@@ -284,6 +323,20 @@
     });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && els.modal.classList.contains('open')) closeDemo();
+    });
+
+    // Demo limit — banner buy, overlay buy, overlay dismiss
+    els.bannerBuy.addEventListener('click', () => {
+      if (currentApp) buyApp(currentApp);
+    });
+    els.overlayBuy.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (currentApp) buyApp(currentApp);
+    });
+    els.overlayDismiss.addEventListener('click', () => {
+      els.modalOverlay.classList.remove('show');
+      // Cancel the timer so it doesn't pop up again mid-explore.
+      if (demoLimitTimer) { clearTimeout(demoLimitTimer); demoLimitTimer = null; }
     });
 
     // Filters

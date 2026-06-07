@@ -77,6 +77,25 @@ Then:
 1. Delete the entry from `apps/manifest.json`
 2. Optionally delete the `apps/<id>/` folder (it won't be referenced anymore)
 
+## Demo limit
+
+Every demo on the site is gated by a 90-second taste-it-then-buy-it timer,
+enforced **by the parent site, not the app**. After 90 seconds of an open
+demo, an overlay slides in asking the customer to buy on Etsy. They can
+dismiss the overlay once and keep exploring.
+
+This means:
+- Your app file is **never modified** — the version on Etsy is identical to
+  the version served in the iframe.
+- The limit is just a UX nudge, not a technical lock. A determined customer
+  could open the demo file's URL directly and use it without the gate. The
+  gate exists to convert curious browsers into buyers, not to enforce DRM.
+
+To change the timer, edit `DEMO_LIMIT_MS` near the top of `assets/app.js`
+(default: 90000 = 90 seconds). Set to `0` to disable the gate entirely.
+
+---
+
 ## Direct purchase (Stripe) — switching from Etsy later
 
 The Buy button is routed through a function, not a hardcoded link, so flipping
