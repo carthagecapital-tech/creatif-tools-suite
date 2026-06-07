@@ -14,5 +14,21 @@
     "monogram": "C",
     "price": "$29",
     "etsyUrl": "https://www.etsy.com/listing/4517517831/cleaning-service-quote-calculator"
+  },
+  {
+    "id": "cleanroute-pro",
+    "name": "CleanRoute Pro",
+    "tagline": "Stop planning routes in your head the night before.",
+    "description": "Plan your cleaning jobs in the smartest order. Save time, save gas, finish sooner. Local-first — your data never leaves your browser.",
+    "features": [
+      "Drag-to-reorder stops",
+      "Total drive time estimate",
+      "Print-friendly route sheet",
+      "Local-first — your data never leaves your device"
+    ],
+    "color": "#D17A22",
+    "monogram": "R",
+    "price": "$39",
+    "etsyUrl": "https://www.etsy.com/listing/4517754673/cleaning-service-route-planner-app-html"
   }
 ]

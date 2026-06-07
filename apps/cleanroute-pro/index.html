@@ -1,0 +1,3428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CleanRoute Pro — Today</title>
+
+<script>
+  (function () {
+    try {
+      var stored = localStorage.getItem('cleanbiz-theme');
+      if (stored) {
+        document.documentElement.setAttribute('data-theme', stored);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    } catch (e) { }
+  })();
+</script>
+<style>
+/* ============================================================
+   CLEANBIZ SUITE — BASE TEMPLATE v1.1  (LOCKED DESIGN SYSTEM)
+   ============================================================ */
+:root {
+  --bg: #F2EFE8;
+  --surface: #FBFAF6;
+  --ink: #1A1A1A;
+  --ink-2: #4A4A4A;
+  --ink-3: #8A8A8A;
+  --line: #D9D4C7;
+  --line-soft: #E8E3D6;
+  --red: #C8442A;
+  --green: #3D7A4E;
+  --accent: #D17A22;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #F5E6D3;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-base: 13px;
+  --fs-md: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 24px;
+  --fs-2xl: 36px;
+  --fs-3xl: 56px;
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sidebar-w: 240px;
+  --footer-h: 36px;
+}
+[data-theme="dark"] {
+  --bg: #1A1815;
+  --surface: #25231E;
+  --ink: #F0EDE5;
+  --ink-2: #A8A499;
+  --ink-3: #6E6A60;
+  --line: #3A3733;
+  --line-soft: #2D2B26;
+  --red: #E85A3D;
+  --green: #5BAE6E;
+  --accent: #E89A47;
+  --accent-ink: #1A1815;
+  --accent-soft: #4A3618;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+*:focus { outline: none; }
+*:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: var(--fs-base);
+  line-height: 1.5;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background 0.2s, color 0.2s;
+}
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+input, select, textarea { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; margin: 0; padding: 0; }
+i { font-style: normal; }
+.label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.muted { color: var(--ink-3); }
+.mono-num { font-variant-numeric: tabular-nums; }
+.app {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  min-height: calc(100vh - var(--footer-h));
+}
+@media (max-width: 900px) {
+  .app { grid-template-columns: 1fr; }
+}
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  padding: var(--sp-5) var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  min-height: calc(100vh - var(--footer-h));
+}
+@media (max-width: 900px) {
+  .sidebar { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+}
+.brand {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--line-soft);
+}
+.brand-mark {
+  width: 32px;
+  height: 32px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: var(--fs-md);
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.brand-text { line-height: 1.2; }
+.brand-name {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+/* Time picker */
+/* Time picker dropdown */
+.tp-wrap { position: relative; }
+.tp-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+  font-family: var(--mono);
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s;
+  gap: var(--sp-2);
+}
+.tp-btn:hover { border-color: var(--ink-2); }
+.tp-btn.is-open { border-color: var(--accent); }
+.tp-val { flex: 1; color: var(--ink-3); }
+.tp-val.has-val { color: var(--ink); }
+.tp-arrow { color: var(--ink-3); font-size: 10px; margin-left: auto; transition: transform 0.15s; }
+.tp-btn.is-open .tp-arrow { transform: rotate(180deg); }
+.tp-clear {
+  color: var(--ink-3);
+  font-size: var(--fs-md);
+  line-height: 1;
+  padding: 0 2px;
+  display: none;
+}
+.tp-btn.has-val .tp-clear { display: inline; }
+.tp-btn.has-val .tp-clear:hover { color: var(--red); }
+.tp-drop {
+  position: absolute;
+  top: calc(100% + 1px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top-color: var(--line-soft);
+  z-index: 500;
+  display: none;
+  max-height: 220px;
+  overflow-y: auto;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+.tp-drop.open { display: block; }
+.tp-slot {
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  font-family: var(--mono);
+  cursor: pointer;
+  color: var(--ink-2);
+  transition: background 0.08s;
+  white-space: nowrap;
+}
+.tp-slot:hover { background: var(--bg); color: var(--ink); }
+.tp-slot.is-hour { color: var(--ink); font-weight: 500; border-top: 1px solid var(--line-soft); }
+.tp-slot.is-hour:first-child { border-top: 0; }
+.tp-slot.is-selected { background: var(--accent-soft); color: var(--accent); }
+.tp-slot.is-selected.is-hour { color: var(--accent); }
+/* Period toggle group */
+.period-group { display: inline-flex; }
+.period-group .btn + .btn { margin-left: -1px; }
+.period-group .btn.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+/* Search / command palette */
+.search-group-label {
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--bg);
+}
+.search-result-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  border-bottom: 1px solid var(--line-soft);
+  transition: background 0.1s;
+}
+.search-result-item:last-child { border-bottom: 0; }
+.search-result-item:hover { background: var(--bg); }
+.search-result-icon {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  width: 14px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.brand-sub {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+.brand-version {
+  margin-left: auto;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+}
+.search {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  font-size: var(--fs-sm);
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.search:hover { border-color: var(--ink-2); }
+.search-icon { color: var(--ink-3); }
+.search-text { flex: 1; }
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  font-size: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+}
+.nav-group + .nav-group { margin-top: var(--sp-4); }
+.nav-label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  margin-bottom: var(--sp-2);
+  padding: 0 var(--sp-3);
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.nav-item:hover { background: var(--bg); color: var(--ink); }
+.nav-item.active {
+  color: var(--ink);
+  background: var(--bg);
+  border-left-color: var(--red);
+}
+.nav-num { color: var(--ink-3); width: 22px; font-variant-numeric: tabular-nums; }
+.nav-text { flex: 1; }
+.nav-badge {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+}
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.theme-toggle:hover { border-color: var(--ink-2); color: var(--ink); }
+.theme-icon {
+  width: 14px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1;
+}
+.theme-label { flex: 1; text-align: left; }
+.sidebar-status {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  background: var(--red);
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.dot.green { background: var(--green); }
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.7); }
+}
+.dot.live { animation: pulse-dot 1.8s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .dot.live { animation: none; }
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.topbar {
+  padding: var(--sp-5) var(--sp-6) var(--sp-4);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-5);
+  flex-wrap: wrap;
+}
+.breadcrumb {
+  width: 100%;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--sp-2);
+}
+.title-block { flex: 1; min-width: 200px; }
+.title {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.title em {
+  font-style: normal;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.actions {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.15s;
+}
+.btn:hover { background: var(--bg); border-color: var(--ink-2); }
+.btn-primary {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+.btn-primary:hover { background: var(--ink-2); border-color: var(--ink-2); }
+.btn-accent {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+.btn-accent:hover { filter: brightness(0.92); border-color: var(--accent); }
+.btn .kbd {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.25);
+  color: inherit;
+}
+.btn:not(.btn-primary):not(.btn-accent) .kbd {
+  background: var(--bg);
+  border-color: var(--line);
+  color: var(--ink-2);
+}
+.btn-primary .kbd {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.2);
+  color: inherit;
+}
+.content {
+  padding: var(--sp-5) var(--sp-6) var(--sp-7);
+}
+@media (max-width: 700px) { .content { padding: var(--sp-4); } }
+.card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: var(--sp-5);
+  transition: background 0.2s, border-color 0.2s;
+}
+.card:hover { border-color: var(--ink-2); }
+.corner {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  pointer-events: none;
+  transition: border-color 0.2s;
+}
+.corner.tl { top: -1px; left: -1px; border-top: 2px solid var(--ink); border-left: 2px solid var(--ink); }
+.corner.tr { top: -1px; right: -1px; border-top: 2px solid var(--ink); border-right: 2px solid var(--ink); }
+.corner.bl { bottom: -1px; left: -1px; border-bottom: 2px solid var(--ink); border-left: 2px solid var(--ink); }
+.corner.br { bottom: -1px; right: -1px; border-bottom: 2px solid var(--ink); border-right: 2px solid var(--ink); }
+.card:hover .corner { border-color: var(--accent); }
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-3);
+  gap: var(--sp-3);
+}
+.card-title {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+}
+.card-tag {
+  font-size: var(--fs-xs);
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.big-num {
+  font-size: var(--fs-3xl);
+  font-weight: 700;
+  line-height: 1;
+  margin: var(--sp-3) 0 var(--sp-2);
+  letter-spacing: -0.02em;
+}
+.big-num .unit {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--ink-3);
+  margin-left: 6px;
+  text-transform: lowercase;
+}
+.delta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.delta.up { color: var(--green); }
+.delta.down { color: var(--red); }
+.delta .arr { font-size: var(--fs-xs); }
+.delta .ctx { color: var(--ink-3); }
+.statusbar {
+  margin-top: auto;
+  padding: var(--sp-2) var(--sp-6);
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+@media (max-width: 700px) { .statusbar { padding: var(--sp-2) var(--sp-4); } }
+.statusbar .grow { flex: 1; }
+.statusbar .right { display: flex; gap: var(--sp-4); align-items: center; }
+.app-footer {
+  height: var(--footer-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--sp-4);
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+.app-footer .app-name {
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.app-footer .sep {
+  margin: 0 var(--sp-2);
+  color: var(--ink-3);
+}
+.toast-host {
+  position: fixed;
+  bottom: calc(var(--footer-h) + var(--sp-4));
+  right: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  z-index: 1000;
+  pointer-events: none;
+  max-width: 360px;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--ink);
+  color: var(--bg);
+  font-size: var(--fs-sm);
+  min-width: 200px;
+  pointer-events: auto;
+  border: 1px solid var(--ink);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  animation: toast-in 0.2s ease-out;
+}
+.toast.is-leaving { animation: toast-out 0.2s ease-in forwards; }
+.toast .toast-icon {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.toast.success .toast-icon { background: var(--green); }
+.toast.info .toast-icon { background: var(--accent); }
+.toast.error .toast-icon { background: var(--red); }
+.toast .toast-msg { flex: 1; }
+@keyframes toast-in {
+  from { transform: translateY(8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes toast-out {
+  to { transform: translateY(8px); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast { animation: none; }
+}
+.print-footer { display: none; }
+@media print {
+  @page { margin: 15mm 15mm 20mm 15mm; size: auto; }
+  body { background: white !important; color: black !important; font-size: 10pt; }
+  .sidebar, .actions, .search, .statusbar, .theme-toggle,
+  .no-print, .app-footer, .toast-host, .modal-backdrop, .modal, .action-bar { display: none !important; }
+  .app { display: block !important; min-height: 0 !important; }
+  .main { border: 0 !important; }
+  .topbar { border: 0 !important; padding: 0 0 8pt !important; border-bottom: 1px solid #999 !important; margin-bottom: 12pt !important; }
+  .breadcrumb { color: #666 !important; }
+  .title em { color: #666 !important; }
+  .content { display: block !important; padding: 0 !important; }
+  .card { border: 1px solid #999 !important; background: white !important; padding: 10pt !important; margin-bottom: 8pt !important; page-break-inside: avoid; }
+  .corner { display: none !important; }
+  .big-num { font-size: 22pt !important; }
+  .print-footer {
+    display: flex !important;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 8pt;
+    color: #666;
+    border-top: 1px solid #ccc;
+    padding: 4pt 10mm;
+  }
+  .print-footer .page-num::after {
+    content: "Page " counter(page) " of " counter(pages);
+  }
+}
+
+/* ============================================================
+   APP-SPECIFIC STYLES — CleanRoute Pro
+   ============================================================ */
+
+.view { display: none; }
+.view.active { display: block; }
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-5);
+}
+@media (max-width: 700px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+}
+
+.route-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: var(--sp-5);
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .route-layout { grid-template-columns: 1fr; }
+}
+.route-list { display: flex; flex-direction: column; gap: var(--sp-3); }
+.route-card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: var(--sp-4) var(--sp-5);
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  gap: var(--sp-4);
+  align-items: center;
+  transition: border-color 0.15s;
+}
+.route-card:hover { border-color: var(--ink-2); }
+.route-card.is-completed { opacity: 0.6; }
+.route-card.is-completed .route-order { text-decoration: line-through; }
+.route-order {
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  width: 48px;
+}
+.route-main { min-width: 0; }
+.route-row1 { display: flex; align-items: center; gap: var(--sp-3); margin-bottom: 4px; flex-wrap: wrap; }
+.route-client { font-weight: 700; font-size: var(--fs-base); }
+.route-addr { font-size: var(--fs-xs); color: var(--ink-3); margin-bottom: var(--sp-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.route-row3 { display: flex; align-items: center; gap: var(--sp-3); font-size: var(--fs-xs); color: var(--ink-2); flex-wrap: wrap; }
+.route-tag { padding: 2px 6px; border: 1px solid var(--line); color: var(--ink-2); }
+.route-tag.tw { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+.route-actions { display: flex; flex-direction: column; gap: var(--sp-1); }
+.route-actions .icon-btn { padding: var(--sp-1) var(--sp-2); font-size: var(--fs-xs); border: 1px solid var(--line); background: var(--bg); }
+.route-actions .icon-btn:hover { border-color: var(--ink-2); }
+.reorder-btns { display: flex; flex-direction: column; gap: 2px; }
+.reorder-btns button { padding: 2px 6px; font-size: 10px; border: 1px solid var(--line); cursor: pointer; background: var(--bg); }
+.reorder-btns button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+@media (max-width: 700px) {
+  .route-card { grid-template-columns: 40px 1fr; }
+  .route-actions { grid-column: 1 / -1; flex-direction: row; justify-content: flex-end; gap: var(--sp-2); }
+}
+
+.badge {
+  font-size: var(--fs-xs);
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.badge-scheduled { color: var(--ink-3); border-color: var(--line); }
+.badge-completed { color: var(--green); border-color: var(--green); background: rgba(61,122,78,0.08); }
+.badge-cancelled { color: var(--red); border-color: var(--red); background: rgba(200,68,42,0.08); }
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+.data-table th {
+  text-align: left;
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.data-table td {
+  padding: var(--sp-3);
+  border-bottom: 1px solid var(--line-soft);
+  vertical-align: middle;
+}
+.data-table tr:hover td { background: var(--bg); }
+.data-table .actions-cell { display: flex; gap: var(--sp-1); }
+.data-table .actions-cell button { padding: 2px 6px; font-size: var(--fs-xs); border: 1px solid var(--line); }
+.data-table .actions-cell button:hover { border-color: var(--ink-2); }
+
+.filter-bar {
+  display: flex;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-4);
+  align-items: flex-end;
+}
+.filter-bar label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  display: block;
+  margin-bottom: var(--sp-1);
+}
+.filter-bar input, .filter-bar select {
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+  min-width: 140px;
+}
+.filter-bar input:focus, .filter-bar select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-4);
+}
+@media (max-width: 600px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+.form-group { display: flex; flex-direction: column; gap: var(--sp-1); }
+.form-group.full { grid-column: 1 / -1; }
+.form-group label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+  width: 100%;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.form-group textarea { min-height: 80px; resize: vertical; }
+.radio-group {
+  display: flex;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.radio-group input[type="radio"] {
+  width: auto;
+  accent-color: var(--accent);
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 900;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-4);
+}
+.modal-backdrop.open { display: flex; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  max-width: 560px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+.modal-header {
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-title {
+  font-size: var(--fs-md);
+  font-weight: 700;
+}
+.modal-close {
+  font-size: var(--fs-lg);
+  color: var(--ink-3);
+  line-height: 1;
+  padding: var(--sp-1);
+}
+.modal-close:hover { color: var(--ink); }
+.modal-body { padding: var(--sp-4) var(--sp-5); }
+.modal-footer {
+  padding: var(--sp-4) var(--sp-5);
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: var(--sp-3);
+  justify-content: flex-end;
+}
+
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-4);
+}
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+.cal-day-label {
+  background: var(--surface);
+  padding: var(--sp-2);
+  text-align: center;
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+.cal-cell {
+  background: var(--surface);
+  min-height: 80px;
+  padding: var(--sp-2);
+  cursor: pointer;
+  transition: background 0.1s;
+  position: relative;
+}
+.cal-cell:hover { background: var(--bg); }
+.cal-cell.empty { background: var(--bg); cursor: default; }
+.cal-cell .cal-date {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  margin-bottom: var(--sp-1);
+}
+.cal-cell .cal-count {
+  font-size: var(--fs-xs);
+  color: var(--accent);
+  font-weight: 700;
+}
+.cal-cell.is-today { background: var(--accent-soft); }
+.cal-cell.is-today .cal-date { color: var(--accent); }
+
+.settings-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  max-width: 720px;
+}
+.settings-stack .card { padding: var(--sp-4) var(--sp-5); }
+.settings-stack .card-title { margin-bottom: var(--sp-3); }
+
+.export-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-4);
+}
+@media (max-width: 700px) {
+  .export-grid { grid-template-columns: 1fr; }
+}
+.export-grid .card { cursor: pointer; }
+.export-grid .card:hover { border-color: var(--accent); }
+.export-grid .card:hover .corner { border-color: var(--accent); }
+.export-grid .big-num { font-size: var(--fs-xl); margin: var(--sp-2) 0; }
+
+.empty-state {
+  text-align: center;
+  padding: var(--sp-7) var(--sp-5);
+  border: 1px dashed var(--line);
+  background: var(--surface);
+}
+.empty-state .big-num { font-size: var(--fs-2xl); color: var(--ink-3); }
+.empty-state p { color: var(--ink-3); margin: var(--sp-3) 0 var(--sp-4); }
+
+body.printing-route .app { display: none !important; }
+body.printing-route .app-footer { display: none !important; }
+body.printing-route .toast-host { display: none !important; }
+#print-route-area {
+  display: none;
+  padding: 24pt;
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: var(--mono);
+  font-size: 10pt;
+  line-height: 1.5;
+  color: #000;
+  background: #fff;
+}
+body.printing-route #print-route-area { display: block !important; }
+@media print {
+  body.printing-route #print-route-area { display: block !important; }
+}
+.print-sheet-header {
+  border-bottom: 2px solid #000;
+  padding-bottom: 12pt;
+  margin-bottom: 16pt;
+}
+.print-sheet-header h1 {
+  font-size: 18pt;
+  font-weight: 700;
+  margin: 0 0 4pt;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.print-sheet-header h2 {
+  font-size: 12pt;
+  font-weight: 500;
+  margin: 0 0 6pt;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.print-sheet-header .biz-info {
+  font-size: 9pt;
+  color: #444;
+  line-height: 1.4;
+}
+.print-sheet-meta {
+  display: flex;
+  gap: 24pt;
+  margin-bottom: 16pt;
+  font-size: 9pt;
+  flex-wrap: wrap;
+}
+.print-sheet-meta strong { font-weight: 700; }
+.print-stop {
+  border: 1px solid #999;
+  padding: 10pt;
+  margin-bottom: 10pt;
+  page-break-inside: avoid;
+}
+.print-stop.compact {
+  padding: 6pt;
+  margin-bottom: 6pt;
+  display: flex;
+  gap: 12pt;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+.print-stop-header {
+  font-size: 11pt;
+  font-weight: 700;
+  margin-bottom: 6pt;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 4pt;
+}
+.print-stop.compact .print-stop-header {
+  font-size: 10pt;
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+  min-width: 120pt;
+}
+.print-stop-row { margin-bottom: 3pt; }
+.print-stop.compact .print-stop-row { margin-bottom: 0; display: inline; }
+.print-stop-label { font-weight: 700; display: inline-block; min-width: 80pt; }
+.print-footer-note {
+  margin-top: 16pt;
+  padding-top: 8pt;
+  border-top: 1px solid #999;
+  font-size: 8pt;
+  color: #666;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sticky-card {
+  position: sticky;
+  top: var(--sp-4);
+}
+.action-bar {
+  display: flex;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  margin-top: var(--sp-5);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--line);
+}
+.checkbox-col { width: 32px; }
+input[type="checkbox"] { accent-color: var(--accent); width: 14px; height: 14px; }
+.help-modal-body { font-size: var(--fs-sm); line-height: 1.7; }
+.help-modal-body kbd {
+  display: inline-block;
+  padding: 1px 4px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  font-size: var(--fs-xs);
+  min-width: 20px;
+  text-align: center;
+}
+.help-modal-body h4 {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  margin: var(--sp-4) 0 var(--sp-2);
+  border-bottom: 1px solid var(--line-soft);
+  padding-bottom: var(--sp-1);
+}
+.help-modal-body p { margin: var(--sp-2) 0; }
+
+.view-job-detail { font-size: var(--fs-sm); line-height: 1.8; }
+.view-job-detail .detail-row { display: flex; gap: var(--sp-3); margin-bottom: var(--sp-2); flex-wrap: wrap; }
+.view-job-detail .detail-label { min-width: 120px; color: var(--ink-3); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; }
+.view-job-detail .detail-value { flex: 1; }
+.view-client-jobs { font-size: var(--fs-sm); }
+.view-client-jobs .cj-row { padding: var(--sp-2) 0; border-bottom: 1px solid var(--line-soft); display: flex; justify-content: space-between; }
+.view-client-jobs .cj-row:last-child { border-bottom: none; }
+</style>
+</head>
+<body>
+
+<!-- PRINT ROUTE AREA (hidden until print) -->
+<div id="print-route-area">
+  <div class="print-sheet-header">
+    <h1 id="print-biz-name">CleanRoute Pro</h1>
+    <h2>ROUTE SHEET</h2>
+    <div class="biz-info" id="print-biz-info"></div>
+  </div>
+  <div class="print-sheet-meta">
+    <div><strong>Date:</strong> <span id="print-date"></span></div>
+    <div><strong>Stops:</strong> <span id="print-stops"></span></div>
+    <div><strong>Total:</strong> <span id="print-total"></span></div>
+    <div><strong>Start:</strong> <span id="print-start"></span></div>
+    <div><strong>End:</strong> <span id="print-end"></span></div>
+  </div>
+  <div id="print-stops-list"></div>
+  <div class="print-footer-note">
+    <span id="print-start-addr"></span>
+    <span id="print-generated"></span>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">R</div>
+      <div class="brand-text">
+        <h1 class="brand-name">CleanRoute</h1>
+        <div class="brand-sub">pro suite</div>
+      </div>
+      <div class="brand-version">v1.0</div>
+    </div>
+
+    <div class="search" onclick="openSearchModal()" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openSearchModal()">
+      <span class="search-icon">⏵</span>
+      <span class="search-text">jump to anything</span>
+      <span class="kbd">⌘</span><span class="kbd">K</span>
+    </div>
+
+    <nav>
+      <div class="nav-group">
+        <div class="nav-label">-- workspace</div>
+        <ul>
+          <li class="nav-item active" data-view="today">
+            <span class="nav-num">01</span>
+            <span class="nav-text">today</span>
+            <span class="dot live"></span>
+          </li>
+          <li class="nav-item" data-view="jobs">
+            <span class="nav-num">02</span>
+            <span class="nav-text">jobs</span>
+            <span class="nav-badge" id="nav-jobs-count">0</span>
+          </li>
+          <li class="nav-item" data-view="routes">
+            <span class="nav-num">03</span>
+            <span class="nav-text">routes</span>
+          </li>
+          <li class="nav-item" data-view="clients">
+            <span class="nav-num">04</span>
+            <span class="nav-text">clients</span>
+            <span class="nav-badge" id="nav-clients-count">0</span>
+          </li>
+        </ul>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">-- system</div>
+        <ul>
+          <li class="nav-item" data-view="settings">
+            <span class="nav-num">05</span>
+            <span class="nav-text">settings</span>
+          </li>
+          <li class="nav-item" data-view="export">
+            <span class="nav-num">06</span>
+            <span class="nav-text">export</span>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme (⌘⇧L)">
+        <span class="theme-icon">☾</span>
+        <span class="theme-label">dark mode</span>
+      </button>
+      <div class="sidebar-status">
+        <span class="dot green"></span>
+        <span>local-only · data on device</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <header class="topbar">
+      <div class="breadcrumb" id="breadcrumb">WORKSPACE / CLEANBIZ / TODAY</div>
+      <div class="title-block">
+        <h2 class="title" id="page-title">Today <em>— route plan</em></h2>
+      </div>
+      <div class="actions" id="topbar-actions">
+        <button class="btn" onclick="exportRouteCSV(getActiveDate())" title="Export today's route as CSV (⌘E)">
+          <span>Export .csv</span>
+          <span class="kbd">⌘</span><span class="kbd">E</span>
+        </button>
+        <button class="btn" onclick="printCurrentView()" title="Print or save as PDF (⌘P)">
+          <span>Print / PDF</span>
+          <span class="kbd">⌘</span><span class="kbd">P</span>
+        </button>
+        <button class="btn btn-accent" onclick="openJobModal()" title="Create a new job (⌘N)">
+          <span>■</span>
+          <span>Add Job</span>
+          <span class="kbd">⌘</span><span class="kbd">N</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- VIEW: TODAY -->
+    <section class="view active" id="view-today">
+      <div class="content">
+        <div class="kpi-grid" id="today-kpis">
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 01 stops</div></div>
+            <div class="big-num mono-num" id="kpi-stops">0</div>
+          </div>
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 02 total time</div></div>
+            <div class="big-num mono-num" id="kpi-time">0 <span class="unit">hrs</span></div>
+          </div>
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 03 est. finish</div></div>
+            <div class="big-num mono-num" id="kpi-finish">--:--</div>
+          </div>
+        </div>
+
+        <div class="route-layout">
+          <div id="today-route-container"></div>
+          <div class="sticky-card" id="today-stats">
+            <div class="card">
+              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <div class="card-head"><div class="card-title">§ 04 route stats</div></div>
+              <div style="font-size:var(--fs-sm);line-height:1.8;margin-top:var(--sp-3);">
+                <div class="mono-num">Total job time: <span id="stat-job-time">0.0</span> hrs</div>
+                <div class="mono-num">Total buffer: <span id="stat-buffer">0</span> min</div>
+                <div class="mono-num">Earliest start: <span id="stat-start">--:--</span></div>
+                <div class="mono-num">Latest end: <span id="stat-end">--:--</span></div>
+                <div class="mono-num" style="margin-top:var(--sp-3);color:var(--ink-3);">Buffer per job: <span id="stat-buffer-setting">15</span> min</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-bar" id="today-action-bar">
+          <button class="btn btn-accent" onclick="autoArrangeToday()">Auto-arrange</button>
+          <button class="btn" onclick="printRouteSheet()">Print Route Sheet</button>
+          <button class="btn" onclick="openJobModal()">Add Job</button>
+          <button class="btn" onclick="duplicateTodayForTomorrow()">Duplicate for tomorrow</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: JOBS -->
+    <section class="view" id="view-jobs">
+      <div class="content">
+        <div class="filter-bar">
+          <div>
+            <label>From</label>
+            <input type="date" id="jobs-filter-from">
+          </div>
+          <div>
+            <label>To</label>
+            <input type="date" id="jobs-filter-to">
+          </div>
+          <div>
+            <label>Status</label>
+            <select id="jobs-filter-status">
+              <option value="all">All</option>
+              <option value="scheduled">Scheduled</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div>
+            <label>Client</label>
+            <select id="jobs-filter-client"><option value="all">All</option></select>
+          </div>
+          <div>
+            <label>Service</label>
+            <select id="jobs-filter-service">
+              <option value="all">All</option>
+              <option value="standard">Standard</option>
+              <option value="deep">Deep</option>
+              <option value="moveout">Move-out</option>
+              <option value="postconst">Post-construction</option>
+            </select>
+          </div>
+          <div>
+            <label>&nbsp;</label>
+            <button class="btn" onclick="renderJobs()">Refresh</button>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:var(--sp-3);margin-bottom:var(--sp-3);flex-wrap:wrap;" id="jobs-bulk-bar" class="no-print">
+          <button class="btn" onclick="bulkDuplicateJobs()">Duplicate selected</button>
+          <button class="btn" onclick="bulkCompleteJobs()">Mark completed</button>
+          <button class="btn" onclick="bulkDeleteJobs()" style="color:var(--red);">Delete selected</button>
+        </div>
+
+        <div class="card" style="padding:0;overflow-x:auto;">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <table class="data-table" id="jobs-table">
+            <thead>
+              <tr>
+                <th class="checkbox-col"><input type="checkbox" id="jobs-select-all" onchange="toggleSelectAllJobs()"></th>
+                <th>Date</th>
+                <th>Order</th>
+                <th>Client</th>
+                <th>Address</th>
+                <th>Service</th>
+                <th>Hours</th>
+                <th>Time Window</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="jobs-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: ROUTES -->
+    <section class="view" id="view-routes">
+      <div class="content">
+        <div style="margin-bottom:var(--sp-4);">
+          <div class="period-group">
+            <button class="btn period-btn active" id="routes-toggle-list" onclick="showRoutesList()">List view</button>
+            <button class="btn period-btn" id="routes-toggle-cal" onclick="showRoutesCalendar()">Calendar view</button>
+          </div>
+        </div>
+
+        <div id="routes-list-view">
+          <div class="card" style="padding:0;overflow-x:auto;">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <table class="data-table" id="routes-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Day</th>
+                  <th>Stops</th>
+                  <th>Total Hours</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="routes-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="routes-cal-view" style="display:none;">
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="cal-header">
+              <button class="btn" onclick="changeMonth(-1)">← Prev</button>
+              <div style="font-weight:700;font-size:var(--fs-md);" id="cal-month-label"></div>
+              <button class="btn" onclick="changeMonth(1)">Next →</button>
+            </div>
+            <div class="cal-grid" id="cal-grid"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: CLIENTS -->
+    <section class="view" id="view-clients">
+      <div class="content">
+        <div style="margin-bottom:var(--sp-4);">
+          <button class="btn btn-accent" onclick="openClientModal()">+ New Client</button>
+        </div>
+        <div class="card" style="padding:0;overflow-x:auto;">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <table class="data-table" id="clients-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Jobs</th>
+                <th>Notes</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="clients-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: SETTINGS -->
+    <section class="view" id="view-settings">
+      <div class="content">
+        <div class="settings-stack">
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 01 business info</div></div>
+            <div class="form-grid">
+              <div class="form-group full">
+                <label>Business name</label>
+                <input type="text" id="set-biz-name">
+              </div>
+              <div class="form-group full">
+                <label>Address</label>
+                <input type="text" id="set-biz-addr">
+              </div>
+              <div class="form-group">
+                <label>Phone</label>
+                <input type="text" id="set-biz-phone">
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="text" id="set-biz-email">
+              </div>
+            </div>
+            <div style="margin-top:var(--sp-3);text-align:right;">
+              <button class="btn btn-accent" onclick="saveSettings()">Save business info</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 02 route defaults</div></div>
+            <div class="form-grid">
+              <div class="form-group full">
+                <label>Start address (home base)</label>
+                <input type="text" id="set-start-addr">
+              </div>
+              <div class="form-group">
+                <label>Buffer between jobs (minutes)</label>
+                <input type="number" id="set-buffer" min="0" max="120">
+              </div>
+              <div class="form-group">
+                <label>Average drive speed (mph)</label>
+                <input type="number" id="set-speed" min="1" max="100">
+              </div>
+              <div class="form-group">
+                <label>Default job duration (hours)</label>
+                <input type="number" id="set-default-hours" min="0.5" max="24" step="0.5">
+              </div>
+              <div class="form-group full">
+                <label>Print format</label>
+                <div class="radio-group">
+                  <label><input type="radio" name="printfmt" value="detailed" id="set-print-detailed"> Detailed</label>
+                  <label><input type="radio" name="printfmt" value="compact" id="set-print-compact"> Compact</label>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top:var(--sp-3);text-align:right;">
+              <button class="btn btn-accent" onclick="saveSettings()">Save route defaults</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 03 data management</div></div>
+            <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap;">
+              <button class="btn" onclick="exportAllJSON()">Export all data (JSON)</button>
+              <button class="btn" onclick="importJSON()">Import JSON</button>
+              <button class="btn" onclick="resetDefaults()">Reset to defaults</button>
+              <button class="btn" onclick="clearAllData()" style="color:var(--red);">Clear all data</button>
+            </div>
+            <input type="file" id="import-file" accept=".json" style="display:none;" onchange="handleImportFile(event)">
+          </div>
+
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 04 about</div></div>
+            <div style="font-size:var(--fs-sm);line-height:1.7;">
+              <p><strong>CleanRoute Pro</strong> v1.0</p>
+              <p>3-step quick start:</p>
+              <p>1. Add your clients in the Clients section.<br>
+                 2. Plan today's route — add jobs, auto-arrange, print.<br>
+                 3. Mark jobs complete as you finish them.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: EXPORT -->
+    <section class="view" id="view-export">
+      <div class="content">
+        <div class="export-grid">
+          <div class="card" onclick="exportRouteCSV(getActiveDate())">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 01 today's route</div><div class="card-tag">CSV</div></div>
+            <div class="big-num mono-num">.csv</div>
+            <div class="delta"><span class="ctx">Export today's route as spreadsheet</span></div>
+          </div>
+          <div class="card" onclick="exportJobsRange()">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 02 jobs in range</div><div class="card-tag">CSV</div></div>
+            <div class="big-num mono-num">.csv</div>
+            <div class="delta"><span class="ctx">Pick a date range and export</span></div>
+          </div>
+          <div class="card" onclick="exportClientsCSV()">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 03 all clients</div><div class="card-tag">CSV</div></div>
+            <div class="big-num mono-num">.csv</div>
+            <div class="delta"><span class="ctx">Export client database</span></div>
+          </div>
+          <div class="card" onclick="exportAllJSON()">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 04 full backup</div><div class="card-tag">JSON</div></div>
+            <div class="big-num mono-num">.json</div>
+            <div class="delta"><span class="ctx">Complete backup of all data</span></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:var(--sp-4);max-width:560px;">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-head"><div class="card-title">§ 05 restore from backup</div></div>
+          <div style="display:flex;gap:var(--sp-3);align-items:center;flex-wrap:wrap;">
+            <button class="btn" onclick="importJSON()">Import JSON backup</button>
+            <span class="muted">Replaces all current data. Use with care.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="statusbar">
+      <span>cleanroute pro v1.0</span>
+      <span class="grow"></span>
+      <div class="right">
+        <span>last sync: <span class="muted">local only</span></span>
+        <span style="cursor:pointer;" onclick="openHelpModal()"><span class="kbd">?</span> help</span>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer class="app-footer">
+  <span>©</span>
+  <span class="sep">2026</span>
+  <span class="app-name">CleanRoute Pro</span>
+  <span class="sep">·</span>
+  <span>All Rights Reserved</span>
+</footer>
+
+<div class="print-footer">
+  <span class="copyright">© 2026 CleanRoute Pro · All Rights Reserved · Generated <span id="print-date-footer"></span></span>
+  <span class="page-num"></span>
+</div>
+
+<!-- MODALS -->
+
+<!-- Job Modal -->
+<div class="modal-backdrop" id="modal-job-backdrop" onclick="if(event.target===this)closeJobModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="job-modal-title">Add Job</div>
+      <button class="modal-close" onclick="closeJobModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="job-date">
+        </div>
+        <div class="form-group">
+          <label>Client</label>
+          <select id="job-client"></select>
+        </div>
+        <div class="form-group full">
+          <label>Or new client name</label>
+          <input type="text" id="job-new-client" placeholder="Leave blank to use selected client">
+        </div>
+        <div class="form-group full">
+          <label>Service type</label>
+          <div class="radio-group">
+            <label><input type="radio" name="job-service" value="standard" checked> Standard</label>
+            <label><input type="radio" name="job-service" value="deep"> Deep</label>
+            <label><input type="radio" name="job-service" value="moveout"> Move-out</label>
+            <label><input type="radio" name="job-service" value="postconst"> Post-construction</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Estimated hours</label>
+          <input type="number" id="job-hours" min="0.5" max="24" step="0.5">
+        </div>
+        <div class="form-group">
+          <label>Time window start</label>
+          <div class="tp-wrap" id="job-tw-start-wrap">
+            <button type="button" class="tp-btn" id="job-tw-start-btn" onclick="toggleTimeDrop('job-tw-start')">
+              <span class="tp-val" id="job-tw-start-display">not set</span>
+              <span class="tp-clear" onclick="event.stopPropagation();clearTimePicker('job-tw-start')" title="Clear">×</span>
+              <span class="tp-arrow">▾</span>
+            </button>
+            <div class="tp-drop" id="job-tw-start-drop"></div>
+            <input type="hidden" id="job-tw-start">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Time window end</label>
+          <div class="tp-wrap" id="job-tw-end-wrap">
+            <button type="button" class="tp-btn" id="job-tw-end-btn" onclick="toggleTimeDrop('job-tw-end')">
+              <span class="tp-val" id="job-tw-end-display">not set</span>
+              <span class="tp-clear" onclick="event.stopPropagation();clearTimePicker('job-tw-end')" title="Clear">×</span>
+              <span class="tp-arrow">▾</span>
+            </button>
+            <div class="tp-drop" id="job-tw-end-drop"></div>
+            <input type="hidden" id="job-tw-end">
+          </div>
+        </div>
+        <div class="form-group full">
+          <label>Notes</label>
+          <textarea id="job-notes"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeJobModal()">Cancel</button>
+      <button class="btn btn-accent" onclick="saveJob()">Save Job</button>
+    </div>
+  </div>
+</div>
+
+<!-- View Job Modal -->
+<div class="modal-backdrop" id="modal-viewjob-backdrop" onclick="if(event.target===this)closeViewJobModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Job Details</div>
+      <button class="modal-close" onclick="closeViewJobModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="view-job-detail" id="view-job-content"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeViewJobModal()">Close</button>
+      <button class="btn btn-accent" onclick="closeViewJobModal();editJob(window._viewJobId)">Edit</button>
+    </div>
+  </div>
+</div>
+
+<!-- Client Modal -->
+<div class="modal-backdrop" id="modal-client-backdrop" onclick="if(event.target===this)closeClientModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="client-modal-title">New Client</div>
+      <button class="modal-close" onclick="closeClientModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>Name *</label>
+          <input type="text" id="client-name">
+        </div>
+        <div class="form-group full">
+          <label>Address *</label>
+          <input type="text" id="client-addr" placeholder="Street, City ST ZIP">
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="text" id="client-phone">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="text" id="client-email">
+        </div>
+        <div class="form-group full">
+          <label>Notes</label>
+          <textarea id="client-notes"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeClientModal()">Cancel</button>
+      <button class="btn btn-accent" onclick="saveClient()">Save Client</button>
+    </div>
+  </div>
+</div>
+
+<!-- View Client Modal -->
+<div class="modal-backdrop" id="modal-viewclient-backdrop" onclick="if(event.target===this)closeViewClientModal()">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-header">
+      <div class="modal-title" id="viewclient-title">Client</div>
+      <button class="modal-close" onclick="closeViewClientModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="view-job-detail" id="viewclient-info"></div>
+      <h4 style="font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-3);margin:var(--sp-4) 0 var(--sp-2);border-bottom:1px solid var(--line-soft);padding-bottom:var(--sp-1);">Past Jobs</h4>
+      <div class="view-client-jobs" id="viewclient-jobs"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeViewClientModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Modal -->
+<div class="modal-backdrop" id="modal-confirm-backdrop" onclick="if(event.target===this)closeConfirmModal()">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-header">
+      <div class="modal-title" id="confirm-title">Confirm</div>
+      <button class="modal-close" onclick="closeConfirmModal()">×</button>
+    </div>
+    <div class="modal-body" id="confirm-body">Are you sure?</div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeConfirmModal()">Cancel</button>
+      <button class="btn btn-accent" id="confirm-btn" onclick="">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Duplicate Date Modal -->
+<div class="modal-backdrop" id="modal-dup-backdrop" onclick="if(event.target===this)closeDupModal()">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-header">
+      <div class="modal-title">Duplicate to Date</div>
+      <button class="modal-close" onclick="closeDupModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Target date</label>
+        <input type="date" id="dup-target-date">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeDupModal()">Cancel</button>
+      <button class="btn btn-accent" onclick="executeDuplicate()">Duplicate</button>
+    </div>
+  </div>
+</div>
+
+<!-- Help Modal -->
+<div class="modal-backdrop" id="modal-help-backdrop" onclick="if(event.target===this)closeHelpModal()">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-header">
+      <div class="modal-title">Keyboard Shortcuts</div>
+      <button class="modal-close" onclick="closeHelpModal()">×</button>
+    </div>
+    <div class="modal-body help-modal-body">
+      <h4>General</h4>
+      <p><kbd>⌘</kbd><kbd>K</kbd> or <kbd>Ctrl</kbd><kbd>K</kbd> — Jump to search</p>
+      <p><kbd>⌘</kbd><kbd>⇧</kbd><kbd>L</kbd> or <kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>L</kbd> — Toggle light/dark theme</p>
+      <h4>Actions</h4>
+      <p><kbd>⌘</kbd><kbd>E</kbd> or <kbd>Ctrl</kbd><kbd>E</kbd> — Export today's route as CSV</p>
+      <p><kbd>⌘</kbd><kbd>P</kbd> or <kbd>Ctrl</kbd><kbd>P</kbd> — Print / PDF</p>
+      <p><kbd>⌘</kbd><kbd>N</kbd> or <kbd>Ctrl</kbd><kbd>N</kbd> — New job (when not typing)</p>
+      <h4>Navigation</h4>
+      <p>Click any sidebar item to switch views. All data is saved automatically.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeHelpModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Search / Command Palette Modal -->
+<div class="modal-backdrop" id="modal-search-backdrop" onclick="if(event.target===this)closeSearchModal()" style="align-items:flex-start;padding-top:10vh;">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-body" style="padding:0;">
+      <div style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--line);">
+        <span style="color:var(--ink-3);font-size:var(--fs-xs);">▸</span>
+        <input type="text" id="search-input" placeholder="jump to view, client, or job..."
+          style="flex:1;border:0;background:transparent;font-size:var(--fs-md);font-family:var(--mono);color:var(--ink);outline:none;"
+          oninput="updateSearchResults()" onkeydown="handleSearchKey(event)" autocomplete="off">
+        <span class="kbd" onclick="closeSearchModal()" style="cursor:pointer;">Esc</span>
+      </div>
+      <div id="search-results" style="max-height:320px;overflow-y:auto;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Clear Data Modal -->
+<div class="modal-backdrop" id="modal-cleardata-backdrop" onclick="if(event.target===this)closeClearDataModal()">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-header">
+      <div class="modal-title">DELETE ALL DATA</div>
+      <button class="modal-close" onclick="closeClearDataModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <p style="color:var(--red);margin:0 0 var(--sp-3);">This will permanently erase all jobs, clients, and settings. This cannot be undone.</p>
+      <div class="form-group">
+        <label>Type DELETE to confirm</label>
+        <input type="text" id="cleardata-confirm-input" placeholder="DELETE" autocomplete="off">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeClearDataModal()">Cancel</button>
+      <button class="btn" style="color:var(--red);border-color:var(--red);" onclick="executeClearData()">Delete Everything</button>
+    </div>
+  </div>
+</div>
+
+<!-- Export Date Range Modal -->
+<div class="modal-backdrop" id="modal-exportrange-backdrop" onclick="if(event.target===this)closeExportRangeModal()">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-header">
+      <div class="modal-title">Export Jobs by Date Range</div>
+      <button class="modal-close" onclick="closeExportRangeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>From</label>
+          <input type="date" id="exportrange-from">
+        </div>
+        <div class="form-group">
+          <label>To</label>
+          <input type="date" id="exportrange-to">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeExportRangeModal()">Cancel</button>
+      <button class="btn btn-accent" onclick="executeExportRange()">Export .csv</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Host -->
+<div class="toast-host" id="toast-host"></div>
+
+<script>
+/* ============================================================
+   DATA & STORAGE
+   ============================================================ */
+var PREFIX = 'cleanroute.';
+
+function getClients() {
+  try {
+    var raw = localStorage.getItem(PREFIX + 'clients');
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
+}
+function saveClients(arr) {
+  try {
+    localStorage.setItem(PREFIX + 'clients', JSON.stringify(arr));
+  } catch (e) {
+    toast('storage error — clients not saved', 'error');
+  }
+}
+function getJobs() {
+  try {
+    var raw = localStorage.getItem(PREFIX + 'jobs');
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
+}
+function saveJobs(arr) {
+  try {
+    localStorage.setItem(PREFIX + 'jobs', JSON.stringify(arr));
+  } catch (e) {
+    toast('storage error — jobs not saved', 'error');
+  }
+}
+function getSettings() {
+  try {
+    var raw = localStorage.getItem(PREFIX + 'settings');
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  return {
+    business: { name: "Sparkle Clean Co.", address: "", phone: "", email: "" },
+    route: { startAddress: "", defaultBufferMinutes: 15, avgSpeedMph: 25, defaultJobHours: 3, printFormat: "detailed" },
+    version: "1.0"
+  };
+}
+function persistSettings(obj) {
+  try {
+    localStorage.setItem(PREFIX + 'settings', JSON.stringify(obj));
+  } catch (e) {
+    toast('storage error — settings not saved', 'error');
+  }
+}
+
+/* ============================================================
+   SEED DATA
+   ============================================================ */
+function seedData() {
+  if (localStorage.getItem(PREFIX + 'seeded') === '1') return;
+  var today = fmtDate(new Date());
+  var tomorrow = fmtDate(offsetDate(new Date(), 1));
+  var yesterday = fmtDate(offsetDate(new Date(), -1));
+  var nextWeek = fmtDate(offsetDate(new Date(), 7));
+
+  var clients = [
+    { id: "c_1717612800001", name: "Sarah Johnson", address: "142 Maple St, Springfield IL 62701", phone: "(217) 555-0184", email: "sarah@example.com", notes: "Gate code 1234, two friendly dogs", createdAt: "2026-06-05T12:00:00.000Z" },
+    { id: "c_1717612800002", name: "Mike Chen", address: "88 Oak Ave, Springfield IL 62702", phone: "(217) 555-0293", email: "mike@example.com", notes: "Key under mat", createdAt: "2026-06-05T12:00:00.000Z" },
+    { id: "c_1717612800003", name: "Lisa Rivera", address: "305 Pine Ln, Springfield IL 62703", phone: "(217) 555-0377", email: "lisa@example.com", notes: "Allergic to strong scents", createdAt: "2026-06-05T12:00:00.000Z" },
+    { id: "c_1717612800004", name: "Tom Bradley", address: "56 Elm St, Springfield IL 62701", phone: "(217) 555-0412", email: "tom@example.com", notes: "", createdAt: "2026-06-05T12:00:00.000Z" }
+  ];
+
+  var jobs = [
+    { id: "j_1717612800001", clientId: "c_1717612800001", date: today, serviceType: "standard", estimatedHours: 3, timeWindow: { start: "09:00", end: "11:00" }, order: 1, status: "scheduled", notes: "Client has 2 cats, use back door", completedAt: null, createdAt: "2026-06-05T12:00:00.000Z", updatedAt: "2026-06-05T12:00:00.000Z" },
+    { id: "j_1717612800002", clientId: "c_1717612800002", date: today, serviceType: "deep", estimatedHours: 4, timeWindow: null, order: 2, status: "scheduled", notes: "", completedAt: null, createdAt: "2026-06-05T12:00:00.000Z", updatedAt: "2026-06-05T12:00:00.000Z" },
+    { id: "j_1717612800003", clientId: "c_1717612800004", date: today, serviceType: "standard", estimatedHours: 2.5, timeWindow: null, order: 3, status: "scheduled", notes: "", completedAt: null, createdAt: "2026-06-05T12:00:00.000Z", updatedAt: "2026-06-05T12:00:00.000Z" },
+    { id: "j_1717612800004", clientId: "c_1717612800003", date: today, serviceType: "moveout", estimatedHours: 5, timeWindow: null, order: 4, status: "scheduled", notes: "", completedAt: null, createdAt: "2026-06-05T12:00:00.000Z", updatedAt: "2026-06-05T12:00:00.000Z" },
+    { id: "j_1717612800005", clientId: "c_1717612800001", date: today, serviceType: "standard", estimatedHours: 2, timeWindow: null, order: 5, status: "scheduled", notes: "Weekly maintenance", completedAt: null, createdAt: "2026-06-05T12:00:00.000Z", updatedAt: "2026-06-05T12:00:00.000Z" },
+    { id: "j_1717612800006", clientId: "c_1717612800002", date: tomorrow, serviceType: "standard", estimatedHours: 3, timeWindow: null, order: 1, status: "scheduled", notes: "", completedAt: null, createdAt: "2026-06-05T12:00:00.000Z", updatedAt: "2026-06-05T12:00:00.000Z" },
+    { id: "j_1717612800007", clientId: "c_1717612800003", date: tomorrow, serviceType: "deep", estimatedHours: 4, timeWindow: null, order: 2, status: "scheduled", notes: "", completedAt: null, createdAt: "2026-06-05T12:00:00.000Z", updatedAt: "2026-06-05T12:00:00.000Z" },
+    { id: "j_1717612800008", clientId: "c_1717612800004", date: tomorrow, serviceType: "standard", estimatedHours: 2, timeWindow: null, order: 3, status: "scheduled", notes: "", completedAt: null, createdAt: "2026-06-05T12:00:00.000Z", updatedAt: "2026-06-05T12:00:00.000Z" },
+    { id: "j_1717612800009", clientId: "c_1717612800001", date: yesterday, serviceType: "standard", estimatedHours: 3, timeWindow: null, order: 1, status: "completed", notes: "", completedAt: "2026-06-05T18:00:00.000Z", createdAt: "2026-06-04T12:00:00.000Z", updatedAt: "2026-06-05T18:00:00.000Z" },
+    { id: "j_1717612800010", clientId: "c_1717612800002", date: yesterday, serviceType: "standard", estimatedHours: 2, timeWindow: null, order: 2, status: "cancelled", notes: "Client rescheduled", completedAt: null, createdAt: "2026-06-04T12:00:00.000Z", updatedAt: "2026-06-05T12:00:00.000Z" },
+    { id: "j_1717612800011", clientId: "c_1717612800003", date: nextWeek, serviceType: "postconst", estimatedHours: 6, timeWindow: null, order: 1, status: "scheduled", notes: "Post-renovation deep clean", completedAt: null, createdAt: "2026-06-05T12:00:00.000Z", updatedAt: "2026-06-05T12:00:00.000Z" }
+  ];
+
+  var settings = getSettings();
+  settings.business.name = "Sparkle Clean Co.";
+  settings.business.address = "100 Office Way, Springfield IL 62701";
+  settings.business.phone = "(217) 555-0100";
+  settings.business.email = "owner@sparkle.com";
+  settings.route.startAddress = "100 Office Way, Springfield IL 62701";
+
+  saveClients(clients);
+  saveJobs(jobs);
+  persistSettings(settings);
+  localStorage.setItem(PREFIX + 'seeded', '1');
+  toast('welcome to CleanRoute Pro · loaded 11 sample jobs', 'success');
+}
+
+/* ============================================================
+   UTILS
+   ============================================================ */
+function fmtDate(d) {
+  return d.toISOString().slice(0, 10);
+}
+function offsetDate(d, days) {
+  var nd = new Date(d);
+  nd.setDate(nd.getDate() + days);
+  return nd;
+}
+function uid(prefix) {
+  return prefix + '_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+}
+function extractZip(address) {
+  var m = (address || '').match(/\b(\d{5})\b/);
+  return m ? m[1] : '99999';
+}
+function timeAdd(start, minutes) {
+  var sh = parseInt(start.split(':')[0], 10);
+  var sm = parseInt(start.split(':')[1], 10);
+  var total = sh * 60 + sm + minutes;
+  var h = Math.floor(total / 60) % 24;
+  var m = total % 60;
+  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+}
+function formatTime(t) {
+  if (!t) return '';
+  var h = parseInt(t.split(':')[0], 10);
+  var m = t.split(':')[1];
+  var ampm = h >= 12 ? 'PM' : 'AM';
+  var h12 = h % 12 || 12;
+  return h12 + ':' + m + ' ' + ampm;
+}
+function formatDateLong(dstr) {
+  var d = new Date(dstr + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+function formatDateShort(dstr) {
+  var d = new Date(dstr + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+function dayName(dstr) {
+  var d = new Date(dstr + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { weekday: 'short' });
+}
+function esc(str) {
+  if (!str) return '';
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+/* ============================================================
+   ACTIVE DATE HELPERS
+   ============================================================ */
+var _activeRouteDate = null;
+function getActiveDate() {
+  return _activeRouteDate || fmtDate(new Date());
+}
+
+/* ============================================================
+   TIME PICKER
+   ============================================================ */
+var TP_SLOTS = (function () {
+  var slots = [];
+  for (var h = 5; h <= 21; h++) {
+    for (var m = 0; m < 60; m += 30) {
+      var hh = String(h).padStart(2, '0');
+      var mm = String(m).padStart(2, '0');
+      var ap = h >= 12 ? 'PM' : 'AM';
+      var h12 = h % 12 || 12;
+      slots.push({
+        value: hh + ':' + mm,
+        label: h12 + ':' + mm + ' ' + ap,
+        isHour: m === 0
+      });
+    }
+  }
+  return slots;
+})();
+
+function fmt24(v) {
+  var s = TP_SLOTS.filter(function (x) { return x.value === v; })[0];
+  return s ? s.label : v;
+}
+
+function buildTimeDrop(id) {
+  var drop = document.getElementById(id + '-drop');
+  if (!drop) return;
+  var cur = (document.getElementById(id) || {}).value || '';
+  drop.innerHTML = TP_SLOTS.map(function (s) {
+    var cls = 'tp-slot' + (s.isHour ? ' is-hour' : '') + (s.value === cur ? ' is-selected' : '');
+    return '<div class="' + cls + '" onclick="selectTimePicker(\'' + id + '\',\'' + s.value + '\')">' + s.label + '</div>';
+  }).join('');
+  var sel = drop.querySelector('.is-selected');
+  if (sel) sel.scrollIntoView({ block: 'nearest' });
+}
+
+function toggleTimeDrop(id) {
+  var drop = document.getElementById(id + '-drop');
+  var btn = document.getElementById(id + '-btn');
+  var wasOpen = drop.classList.contains('open');
+  closeAllTimePickers();
+  if (!wasOpen) {
+    buildTimeDrop(id);
+    drop.classList.add('open');
+    btn.classList.add('is-open');
+    /* Scroll selected into view after render */
+    var sel = drop.querySelector('.is-selected');
+    if (sel) setTimeout(function () { sel.scrollIntoView({ block: 'nearest' }); }, 0);
+  }
+}
+
+function closeAllTimePickers() {
+  document.querySelectorAll('.tp-drop.open').forEach(function (d) { d.classList.remove('open'); });
+  document.querySelectorAll('.tp-btn.is-open').forEach(function (b) { b.classList.remove('is-open'); });
+}
+
+function selectTimePicker(id, value) {
+  var hidden = document.getElementById(id);
+  var display = document.getElementById(id + '-display');
+  var btn = document.getElementById(id + '-btn');
+  if (hidden) hidden.value = value;
+  if (display) { display.textContent = fmt24(value); display.classList.add('has-val'); }
+  if (btn) btn.classList.add('has-val');
+  closeAllTimePickers();
+}
+
+function clearTimePicker(id) {
+  var hidden = document.getElementById(id);
+  var display = document.getElementById(id + '-display');
+  var btn = document.getElementById(id + '-btn');
+  if (hidden) hidden.value = '';
+  if (display) { display.textContent = 'not set'; display.classList.remove('has-val'); }
+  if (btn) btn.classList.remove('has-val');
+}
+
+function setTimePicker(id, time24) {
+  if (!time24) { clearTimePicker(id); return; }
+  /* Snap to nearest slot */
+  var h = parseInt(time24.split(':')[0], 10);
+  var m = parseInt(time24.split(':')[1] || '0', 10);
+  var snapped = String(h).padStart(2, '0') + ':' + String(Math.round(m / 30) * 30 % 60).padStart(2, '0');
+  selectTimePicker(id, snapped);
+}
+
+/* Close pickers on outside click */
+document.addEventListener('click', function (e) {
+  if (!e.target.closest('.tp-wrap')) closeAllTimePickers();
+}, true);
+
+/* ============================================================
+   THEME
+   ============================================================ */
+var THEME_KEY = 'cleanbiz-theme';
+function getTheme() {
+  return document.documentElement.getAttribute('data-theme') || 'light';
+}
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+  updateToggleUI();
+}
+function toggleTheme() {
+  var next = getTheme() === 'dark' ? 'light' : 'dark';
+  setTheme(next);
+  toast('theme set to ' + next, 'info');
+}
+function updateToggleUI() {
+  var btn = document.querySelector('.theme-toggle');
+  if (!btn) return;
+  var t = getTheme();
+  btn.querySelector('.theme-icon').textContent = t === 'dark' ? '☀' : '☾';
+  btn.querySelector('.theme-label').textContent = t === 'dark' ? 'light mode' : 'dark mode';
+}
+updateToggleUI();
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+function toast(message, type) {
+  type = type || 'info';
+  var host = document.getElementById('toast-host');
+  if (!host) return;
+  var el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = '<span class="toast-icon"></span><span class="toast-msg"></span>';
+  el.querySelector('.toast-msg').textContent = message;
+  host.appendChild(el);
+  setTimeout(function () {
+    el.classList.add('is-leaving');
+    setTimeout(function () { el.remove(); }, 200);
+  }, 2300);
+}
+
+/* ============================================================
+   VIEW SWITCHING
+   ============================================================ */
+var currentView = 'today';
+var VIEWS = {
+  today: { title: 'Today', subtitle: 'route plan', breadcrumb: 'WORKSPACE / CLEANBIZ / TODAY' },
+  jobs: { title: 'Jobs', subtitle: 'all jobs', breadcrumb: 'WORKSPACE / CLEANBIZ / JOBS' },
+  routes: { title: 'Routes', subtitle: 'history & calendar', breadcrumb: 'WORKSPACE / CLEANBIZ / ROUTES' },
+  clients: { title: 'Clients', subtitle: 'contact database', breadcrumb: 'WORKSPACE / CLEANBIZ / CLIENTS' },
+  settings: { title: 'Settings', subtitle: 'preferences', breadcrumb: 'WORKSPACE / CLEANBIZ / SETTINGS' },
+  export: { title: 'Export', subtitle: 'data export', breadcrumb: 'WORKSPACE / CLEANBIZ / EXPORT' }
+};
+
+function showView(id) {
+  currentView = id;
+  if (id !== 'today') _activeRouteDate = null;
+  document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('active'); });
+  var v = document.getElementById('view-' + id);
+  if (v) v.classList.add('active');
+
+  document.querySelectorAll('.nav-item').forEach(function (i) { i.classList.remove('active'); });
+  var nav = document.querySelector('.nav-item[data-view="' + id + '"]');
+  if (nav) nav.classList.add('active');
+
+  var meta = VIEWS[id];
+  if (meta) {
+    document.title = 'CleanRoute Pro — ' + meta.title;
+    document.getElementById('breadcrumb').textContent = meta.breadcrumb;
+    document.getElementById('page-title').innerHTML = meta.title + ' <em>— ' + meta.subtitle + '</em>';
+  }
+
+  if (id === 'today') {
+    if (window._viewDate) {
+      var d = window._viewDate;
+      window._viewDate = null;
+      document.getElementById('breadcrumb').textContent = 'WORKSPACE / CLEANBIZ / ROUTES / ' + d;
+      document.getElementById('page-title').innerHTML = formatDateShort(d) + ' <em>— route plan</em>';
+      renderDateRoute(d);
+    } else {
+      renderToday();
+    }
+  }
+  if (id === 'jobs') { renderJobs(); populateJobFilters(); }
+  if (id === 'routes') renderRoutesList();
+  if (id === 'clients') renderClients();
+  if (id === 'settings') loadSettingsForm();
+}
+
+document.querySelectorAll('.nav-item').forEach(function (item) {
+  item.addEventListener('click', function () {
+    var id = item.getAttribute('data-view');
+    if (id) showView(id);
+  });
+});
+
+/* ============================================================
+   TODAY'S ROUTE
+   ============================================================ */
+function getTodayJobs() {
+  var today = fmtDate(new Date());
+  var jobs = getJobs().filter(function (j) { return j.date === today && j.status !== 'cancelled'; });
+  jobs.sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+  return jobs;
+}
+
+function getClient(id) {
+  return getClients().find(function (c) { return c.id === id; }) || {};
+}
+
+function calculateRouteTime(jobs, settings) {
+  var totalJobMinutes = jobs.reduce(function (s, j) { return s + ((j.estimatedHours || 0) * 60); }, 0);
+  var totalBufferMinutes = jobs.length * (settings.route.defaultBufferMinutes || 0);
+  var totalMinutes = totalJobMinutes + totalBufferMinutes;
+  var firstJob = jobs.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); })[0];
+  var startTime = '08:00';
+  if (firstJob && firstJob.timeWindow && firstJob.timeWindow.start) {
+    startTime = firstJob.timeWindow.start;
+  }
+  var sh = parseInt(startTime.split(':')[0], 10);
+  var sm = parseInt(startTime.split(':')[1], 10);
+  var endMinutes = sh * 60 + sm + totalMinutes;
+  var eh = Math.floor(endMinutes / 60) % 24;
+  var em = endMinutes % 60;
+  var endTime = String(eh).padStart(2, '0') + ':' + String(em).padStart(2, '0');
+  return {
+    totalJobHours: totalJobMinutes / 60,
+    totalBufferMinutes: totalBufferMinutes,
+    totalHours: totalMinutes / 60,
+    startTime: startTime,
+    endTime: endTime
+  };
+}
+
+function renderToday() {
+  window._viewDate = null;
+  _activeRouteDate = null;
+  var ab = document.getElementById('today-action-bar');
+  if (ab) ab.style.display = '';
+  var jobs = getTodayJobs();
+  var settings = getSettings();
+  var calc = calculateRouteTime(jobs, settings);
+
+  document.getElementById('kpi-stops').textContent = jobs.length;
+  document.getElementById('kpi-time').innerHTML = calc.totalHours.toFixed(1) + ' <span class="unit">hrs</span>';
+  document.getElementById('kpi-finish').textContent = formatTime(calc.endTime);
+
+  document.getElementById('stat-job-time').textContent = calc.totalJobHours.toFixed(1);
+  document.getElementById('stat-buffer').textContent = calc.totalBufferMinutes;
+  document.getElementById('stat-start').textContent = formatTime(calc.startTime);
+  document.getElementById('stat-end').textContent = formatTime(calc.endTime);
+  document.getElementById('stat-buffer-setting').textContent = settings.route.defaultBufferMinutes || 15;
+
+  var container = document.getElementById('today-route-container');
+  if (jobs.length === 0) {
+    var hasYesterday = getJobs().some(function (j) { return j.date === fmtDate(offsetDate(new Date(), -1)); });
+    container.innerHTML =
+      '<div class="empty-state">' +
+        '<div class="big-num">No jobs scheduled</div>' +
+        '<p>No jobs scheduled for today</p>' +
+        '<div style="display:flex;gap:var(--sp-3);justify-content:center;flex-wrap:wrap;">' +
+          '<button class="btn btn-accent" onclick="openJobModal()">Add your first job</button>' +
+          (hasYesterday ? '<button class="btn" onclick="duplicateYesterdayToToday()">Duplicate yesterday\'s route</button>' : '') +
+        '</div>' +
+      '</div>';
+    return;
+  }
+
+  var html = '<div class="route-list">';
+  jobs.forEach(function (j, idx) {
+    var c = getClient(j.clientId);
+    var tw = '';
+    if (j.timeWindow && j.timeWindow.start && j.timeWindow.end) {
+      tw = '<span class="route-tag tw">' + formatTime(j.timeWindow.start) + ' - ' + formatTime(j.timeWindow.end) + '</span>';
+    }
+    html +=
+      '<div class="route-card ' + (j.status === 'completed' ? 'is-completed' : '') + '">' +
+        '<div class="route-order">' + (j.order || idx + 1) + '</div>' +
+        '<div class="route-main">' +
+          '<div class="route-row1">' +
+            '<span class="route-client">' + esc(c.name || 'Unknown') + '</span>' +
+            '<span class="badge badge-' + j.status + '">' + j.status + '</span>' +
+          '</div>' +
+          '<div class="route-addr">' + esc(c.address || '') + '</div>' +
+          '<div class="route-row3">' +
+            '<span class="route-tag">' + j.serviceType + '</span>' +
+            '<span class="route-tag">' + (j.estimatedHours || 0) + ' hrs</span>' +
+            tw +
+            (j.notes ? '<span class="muted" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + esc(j.notes) + '</span>' : '') +
+          '</div>' +
+        '</div>' +
+        '<div class="route-actions">' +
+          '<div class="reorder-btns">' +
+            '<button ' + (idx === 0 ? 'disabled' : '') + ' onclick="reorderJob(\'' + j.id + '\', -1)">▲</button>' +
+            '<button ' + (idx === jobs.length - 1 ? 'disabled' : '') + ' onclick="reorderJob(\'' + j.id + '\', 1)">▼</button>' +
+          '</div>' +
+          '<div style="display:flex;gap:2px;flex-wrap:wrap;justify-content:flex-end;">' +
+            '<button class="icon-btn" onclick="viewJob(\'' + j.id + '\')">View</button>' +
+            '<button class="icon-btn" onclick="editJob(\'' + j.id + '\')">Edit</button>' +
+            '<button class="icon-btn" onclick="markComplete(\'' + j.id + '\')">Done</button>' +
+            '<button class="icon-btn" onclick="removeJob(\'' + j.id + '\')">Remove</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function reorderJob(id, dir) {
+  var jobs = getJobs();
+  var today = fmtDate(new Date());
+  var todayJobs = jobs.filter(function (j) { return j.date === today && j.status !== 'cancelled'; });
+  todayJobs.sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+  var idx = todayJobs.findIndex(function (j) { return j.id === id; });
+  if (idx < 0) return;
+  var newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= todayJobs.length) return;
+  var temp = todayJobs[idx];
+  todayJobs[idx] = todayJobs[newIdx];
+  todayJobs[newIdx] = temp;
+  todayJobs.forEach(function (j, i) { j.order = i + 1; });
+  var otherJobs = jobs.filter(function (j) { return j.date !== today || j.status === 'cancelled'; });
+  saveJobs(otherJobs.concat(todayJobs));
+  renderToday();
+  toast('route reordered', 'success');
+}
+
+function autoArrangeToday() {
+  var today = fmtDate(new Date());
+  var jobs = getJobs().filter(function (j) { return j.date === today && j.status !== 'cancelled'; });
+  var clients = getClients();
+  var arranged = autoArrangeRoute(jobs, clients);
+  var otherJobs = getJobs().filter(function (j) { return j.date !== today || j.status === 'cancelled'; });
+  saveJobs(otherJobs.concat(arranged));
+  renderToday();
+  toast('route arranged · ' + arranged.length + ' stops optimized', 'success');
+}
+
+function autoArrangeRoute(jobs, clients) {
+  function extractZipLocal(address) {
+    var m = (address || '').match(/\b(\d{5})\b/);
+    return m ? m[1] : '99999';
+  }
+  var annotated = jobs.map(function (j) {
+    var c = clients.find(function (x) { return x.id === j.clientId; });
+    return Object.assign({}, j, { _zip: extractZipLocal(c ? c.address : '') });
+  });
+  annotated.sort(function (a, b) {
+    var aTW = a.timeWindow && a.timeWindow.start;
+    var bTW = b.timeWindow && b.timeWindow.start;
+    if (aTW && !bTW) return -1;
+    if (!aTW && bTW) return 1;
+    if (aTW && bTW) return aTW.localeCompare(bTW);
+    if (a._zip !== b._zip) return a._zip.localeCompare(b._zip);
+    var aName = (clients.find(function (x) { return x.id === a.clientId; }) || {}).name || '';
+    var bName = (clients.find(function (x) { return x.id === b.clientId; }) || {}).name || '';
+    return aName.localeCompare(bName);
+  });
+  return annotated.map(function (j, i) {
+    var copy = Object.assign({}, j);
+    delete copy._zip;
+    copy.order = i + 1;
+    return copy;
+  });
+}
+
+function markComplete(id) {
+  var jobs = getJobs();
+  var j = jobs.find(function (x) { return x.id === id; });
+  if (!j) return;
+  j.status = 'completed';
+  j.completedAt = new Date().toISOString();
+  j.updatedAt = new Date().toISOString();
+  saveJobs(jobs);
+  renderToday();
+  toast('job marked complete', 'success');
+}
+
+function removeJob(id) {
+  openConfirm('Remove job?', 'This will cancel the job from the route.', function () {
+    var jobs = getJobs();
+    var j = jobs.find(function (x) { return x.id === id; });
+    if (!j) return;
+    j.status = 'cancelled';
+    j.updatedAt = new Date().toISOString();
+    saveJobs(jobs);
+    renderToday();
+    toast('job removed from route', 'info');
+  });
+}
+
+function duplicateTodayForTomorrow() {
+  var today = fmtDate(new Date());
+  var tomorrow = fmtDate(offsetDate(new Date(), 1));
+  var jobs = getJobs();
+  var todayJobs = jobs.filter(function (j) { return j.date === today && j.status !== 'cancelled'; });
+  if (todayJobs.length === 0) { toast('no jobs to duplicate', 'error'); return; }
+  var newJobs = todayJobs.map(function (j) {
+    return Object.assign({}, j, {
+      id: uid('j'),
+      date: tomorrow,
+      status: 'scheduled',
+      completedAt: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    });
+  });
+  newJobs.forEach(function (j, i) { j.order = i + 1; });
+  saveJobs(jobs.concat(newJobs));
+  renderToday();
+  toast(todayJobs.length + ' jobs duplicated for tomorrow', 'success');
+}
+
+function duplicateYesterdayToToday() {
+  var today = fmtDate(new Date());
+  var yesterday = fmtDate(offsetDate(new Date(), -1));
+  var jobs = getJobs();
+  var yJobs = jobs.filter(function (j) { return j.date === yesterday && j.status !== 'cancelled'; });
+  if (yJobs.length === 0) { toast('no jobs yesterday to duplicate', 'error'); return; }
+  var newJobs = yJobs.map(function (j) {
+    return Object.assign({}, j, {
+      id: uid('j'),
+      date: today,
+      status: 'scheduled',
+      completedAt: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    });
+  });
+  newJobs.forEach(function (j, i) { j.order = i + 1; });
+  saveJobs(jobs.concat(newJobs));
+  renderToday();
+  toast(yJobs.length + ' jobs duplicated from yesterday', 'success');
+}
+
+/* ============================================================
+   VIEW JOB
+   ============================================================ */
+function viewJob(id) {
+  var j = getJobs().find(function (x) { return x.id === id; });
+  if (!j) return;
+  var c = getClient(j.clientId);
+  window._viewJobId = id;
+  var tw = '';
+  if (j.timeWindow && j.timeWindow.start && j.timeWindow.end) {
+    tw = j.timeWindow.start + ' - ' + j.timeWindow.end;
+  }
+  var html =
+    '<div class="detail-row"><div class="detail-label">Client</div><div class="detail-value">' + esc(c.name || 'Unknown') + '</div></div>' +
+    '<div class="detail-row"><div class="detail-label">Address</div><div class="detail-value">' + esc(c.address || '') + '</div></div>' +
+    '<div class="detail-row"><div class="detail-label">Date</div><div class="detail-value">' + j.date + '</div></div>' +
+    '<div class="detail-row"><div class="detail-label">Service</div><div class="detail-value">' + j.serviceType + '</div></div>' +
+    '<div class="detail-row"><div class="detail-label">Hours</div><div class="detail-value">' + j.estimatedHours + '</div></div>' +
+    '<div class="detail-row"><div class="detail-label">Time Window</div><div class="detail-value">' + (tw || '—') + '</div></div>' +
+    '<div class="detail-row"><div class="detail-label">Status</div><div class="detail-value"><span class="badge badge-' + j.status + '">' + j.status + '</span></div></div>' +
+    '<div class="detail-row"><div class="detail-label">Order</div><div class="detail-value">' + (j.order || '—') + '</div></div>' +
+    '<div class="detail-row"><div class="detail-label">Notes</div><div class="detail-value">' + esc(j.notes || '—') + '</div></div>';
+  document.getElementById('view-job-content').innerHTML = html;
+  document.getElementById('modal-viewjob-backdrop').classList.add('open');
+}
+function closeViewJobModal() {
+  document.getElementById('modal-viewjob-backdrop').classList.remove('open');
+  window._viewJobId = null;
+}
+
+/* ============================================================
+   JOB MODAL & CRUD
+   ============================================================ */
+var editingJobId = null;
+
+function openJobModal(jobId) {
+  editingJobId = jobId || null;
+  document.getElementById('job-modal-title').textContent = editingJobId ? 'Edit Job' : 'Add Job';
+  var clients = getClients();
+  var sel = document.getElementById('job-client');
+  sel.innerHTML = '<option value="">-- select client --</option>';
+  clients.forEach(function (c) {
+    var opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = c.name;
+    sel.appendChild(opt);
+  });
+
+  var settings = getSettings();
+  if (editingJobId) {
+    var j = getJobs().find(function (x) { return x.id === editingJobId; });
+    if (j) {
+      document.getElementById('job-date').value = j.date;
+      document.getElementById('job-client').value = j.clientId;
+      document.getElementById('job-hours').value = j.estimatedHours;
+      document.getElementById('job-notes').value = j.notes || '';
+      setTimePicker('job-tw-start', j.timeWindow ? j.timeWindow.start : '');
+        setTimePicker('job-tw-end', j.timeWindow ? j.timeWindow.end : '');
+      var radios = document.getElementsByName('job-service');
+      for (var i = 0; i < radios.length; i++) {
+        if (radios[i].value === j.serviceType) radios[i].checked = true;
+      }
+    }
+  } else {
+    var defaultDate = _activeRouteDate || fmtDate(new Date());
+    document.getElementById('job-date').value = defaultDate;
+    document.getElementById('job-client').value = '';
+    document.getElementById('job-hours').value = settings.route.defaultJobHours || 3;
+    document.getElementById('job-notes').value = '';
+    setTimePicker('job-tw-start', '');
+    setTimePicker('job-tw-end', '');
+    document.getElementById('job-new-client').value = '';
+    var radios = document.getElementsByName('job-service');
+    for (var i = 0; i < radios.length; i++) {
+      if (radios[i].value === 'standard') radios[i].checked = true;
+    }
+  }
+  document.getElementById('modal-job-backdrop').classList.add('open');
+}
+
+function closeJobModal() {
+  document.getElementById('modal-job-backdrop').classList.remove('open');
+  editingJobId = null;
+}
+
+function saveJob() {
+  var date = document.getElementById('job-date').value;
+  var clientId = document.getElementById('job-client').value;
+  var newClientName = document.getElementById('job-new-client').value.trim();
+  var hours = parseFloat(document.getElementById('job-hours').value) || 3;
+  var notes = document.getElementById('job-notes').value;
+  var twStart = document.getElementById('job-tw-start').value;
+  var twEnd = document.getElementById('job-tw-end').value;
+  var serviceType = '';
+  var radios = document.getElementsByName('job-service');
+  for (var i = 0; i < radios.length; i++) { if (radios[i].checked) serviceType = radios[i].value; }
+
+  if (!date) { toast('date is required', 'error'); return; }
+
+  var clients = getClients();
+  if (newClientName) {
+    var newClient = {
+      id: uid('c'), name: newClientName, address: '', phone: '', email: '', notes: '', createdAt: new Date().toISOString()
+    };
+    clients.push(newClient);
+    saveClients(clients);
+    clientId = newClient.id;
+    toast('new client created', 'success');
+  }
+  if (!clientId) { toast('client is required', 'error'); return; }
+
+  var jobs = getJobs();
+  var timeWindow = null;
+  if (twStart || twEnd) timeWindow = { start: twStart || null, end: twEnd || null };
+
+  if (editingJobId) {
+    var j = jobs.find(function (x) { return x.id === editingJobId; });
+    if (j) {
+      j.date = date; j.clientId = clientId; j.serviceType = serviceType;
+      j.estimatedHours = hours; j.timeWindow = timeWindow; j.notes = notes;
+      j.updatedAt = new Date().toISOString();
+    }
+  } else {
+    var dayJobs = jobs.filter(function (x) { return x.date === date && x.status !== 'cancelled'; });
+    var maxOrder = dayJobs.reduce(function (m, x) { return Math.max(m, x.order || 0); }, 0);
+    jobs.push({
+      id: uid('j'), clientId: clientId, date: date, serviceType: serviceType,
+      estimatedHours: hours, timeWindow: timeWindow, order: maxOrder + 1,
+      status: 'scheduled', notes: notes, completedAt: null,
+      createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()
+    });
+  }
+  saveJobs(jobs);
+  closeJobModal();
+  renderToday();
+  renderJobs();
+  updateNavCounts();
+  toast(editingJobId ? 'job updated' : 'job added', 'success');
+}
+
+function editJob(id) {
+  openJobModal(id);
+}
+
+/* ============================================================
+   JOBS TABLE
+   ============================================================ */
+function populateJobFilters() {
+  var clients = getClients();
+  var sel = document.getElementById('jobs-filter-client');
+  var current = sel.value;
+  sel.innerHTML = '<option value="all">All</option>';
+  clients.forEach(function (c) {
+    var opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = c.name;
+    sel.appendChild(opt);
+  });
+  sel.value = current || 'all';
+}
+
+function renderJobs() {
+  populateJobFilters();
+  var from = document.getElementById('jobs-filter-from').value;
+  var to = document.getElementById('jobs-filter-to').value;
+  var status = document.getElementById('jobs-filter-status').value;
+  var clientId = document.getElementById('jobs-filter-client').value;
+  var service = document.getElementById('jobs-filter-service').value;
+
+  var jobs = getJobs().filter(function (j) {
+    if (from && j.date < from) return false;
+    if (to && j.date > to) return false;
+    if (status !== 'all' && j.status !== status) return false;
+    if (clientId !== 'all' && j.clientId !== clientId) return false;
+    if (service !== 'all' && j.serviceType !== service) return false;
+    return true;
+  });
+  jobs.sort(function (a, b) { return a.date.localeCompare(b.date) || (a.order || 0) - (b.order || 0); });
+
+  var tbody = document.getElementById('jobs-tbody');
+  if (jobs.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--ink-3);padding:var(--sp-5);">No jobs match filters</td></tr>';
+    return;
+  }
+  var html = '';
+  jobs.forEach(function (j) {
+    var c = getClient(j.clientId);
+    var tw = '';
+    if (j.timeWindow && j.timeWindow.start && j.timeWindow.end) {
+      tw = j.timeWindow.start + ' - ' + j.timeWindow.end;
+    }
+    html +=
+      '<tr>' +
+        '<td><input type="checkbox" class="job-check" data-id="' + j.id + '"></td>' +
+        '<td>' + j.date + '</td>' +
+        '<td>' + (j.order || '-') + '</td>' +
+        '<td>' + esc(c.name || 'Unknown') + '</td>' +
+        '<td>' + esc(c.address || '') + '</td>' +
+        '<td>' + j.serviceType + '</td>' +
+        '<td>' + j.estimatedHours + '</td>' +
+        '<td>' + tw + '</td>' +
+        '<td><span class="badge badge-' + j.status + '">' + j.status + '</span></td>' +
+        '<td class="actions-cell">' +
+          '<button onclick="viewJob(\'' + j.id + '\')">View</button>' +
+          '<button onclick="editJob(\'' + j.id + '\')">Edit</button>' +
+          '<button onclick="deleteJob(\'' + j.id + '\')">Del</button>' +
+        '</td>' +
+      '</tr>';
+  });
+  tbody.innerHTML = html;
+}
+
+function toggleSelectAllJobs() {
+  var checked = document.getElementById('jobs-select-all').checked;
+  document.querySelectorAll('.job-check').forEach(function (cb) { cb.checked = checked; });
+}
+
+function getSelectedJobIds() {
+  var ids = [];
+  document.querySelectorAll('.job-check:checked').forEach(function (cb) { ids.push(cb.getAttribute('data-id')); });
+  return ids;
+}
+
+function bulkDuplicateJobs() {
+  var ids = getSelectedJobIds();
+  if (ids.length === 0) { toast('no jobs selected', 'error'); return; }
+  openDupModal(ids);
+}
+
+function bulkCompleteJobs() {
+  var ids = getSelectedJobIds();
+  if (ids.length === 0) { toast('no jobs selected', 'error'); return; }
+  var jobs = getJobs();
+  var now = new Date().toISOString();
+  ids.forEach(function (id) {
+    var j = jobs.find(function (x) { return x.id === id; });
+    if (j) { j.status = 'completed'; j.completedAt = now; j.updatedAt = now; }
+  });
+  saveJobs(jobs);
+  renderJobs();
+  renderToday();
+  toast(ids.length + ' jobs marked complete', 'success');
+}
+
+function bulkDeleteJobs() {
+  var ids = getSelectedJobIds();
+  if (ids.length === 0) { toast('no jobs selected', 'error'); return; }
+  openConfirm('Delete ' + ids.length + ' jobs?', 'This cannot be undone.', function () {
+    var jobs = getJobs().filter(function (j) { return ids.indexOf(j.id) === -1; });
+    saveJobs(jobs);
+    renderJobs();
+    renderToday();
+    updateNavCounts();
+    toast(ids.length + ' jobs deleted', 'info');
+  });
+}
+
+function deleteJob(id) {
+  openConfirm('Delete job?', 'This cannot be undone.', function () {
+    var jobs = getJobs().filter(function (j) { return j.id !== id; });
+    saveJobs(jobs);
+    renderJobs();
+    renderToday();
+    updateNavCounts();
+    toast('job deleted', 'info');
+  });
+}
+
+/* ============================================================
+   DUPLICATE MODAL
+   ============================================================ */
+var dupJobIds = [];
+function openDupModal(ids) {
+  dupJobIds = ids || [];
+  document.getElementById('dup-target-date').value = fmtDate(new Date());
+  document.getElementById('modal-dup-backdrop').classList.add('open');
+}
+function closeDupModal() {
+  document.getElementById('modal-dup-backdrop').classList.remove('open');
+  dupJobIds = [];
+}
+function executeDuplicate() {
+  var targetDate = document.getElementById('dup-target-date').value;
+  if (!targetDate) { toast('pick a target date', 'error'); return; }
+  var jobs = getJobs();
+  var toDup = jobs.filter(function (j) { return dupJobIds.indexOf(j.id) !== -1; });
+  var dayJobs = jobs.filter(function (j) { return j.date === targetDate && j.status !== 'cancelled'; });
+  var maxOrder = dayJobs.reduce(function (m, x) { return Math.max(m, x.order || 0); }, 0);
+  var newJobs = toDup.map(function (j, i) {
+    return Object.assign({}, j, {
+      id: uid('j'), date: targetDate, status: 'scheduled', completedAt: null,
+      order: maxOrder + i + 1, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()
+    });
+  });
+  saveJobs(jobs.concat(newJobs));
+  closeDupModal();
+  renderJobs();
+  renderToday();
+  toast(toDup.length + ' jobs duplicated to ' + targetDate, 'success');
+}
+
+/* ============================================================
+   ROUTES VIEW
+   ============================================================ */
+var calCurrentDate = new Date();
+
+function showRoutesList() {
+  document.getElementById('routes-list-view').style.display = 'block';
+  document.getElementById('routes-cal-view').style.display = 'none';
+  document.getElementById('routes-toggle-list').classList.add('active');
+  document.getElementById('routes-toggle-cal').classList.remove('active');
+  renderRoutesList();
+}
+function showRoutesCalendar() {
+  document.getElementById('routes-list-view').style.display = 'none';
+  document.getElementById('routes-cal-view').style.display = 'block';
+  document.getElementById('routes-toggle-list').classList.remove('active');
+  document.getElementById('routes-toggle-cal').classList.add('active');
+  renderCalendar();
+}
+
+function renderRoutesList() {
+  var jobs = getJobs();
+  var dateMap = {};
+  jobs.forEach(function (j) {
+    if (j.status === 'cancelled') return;
+    if (!dateMap[j.date]) dateMap[j.date] = [];
+    dateMap[j.date].push(j);
+  });
+  var dates = Object.keys(dateMap).sort();
+  var tbody = document.getElementById('routes-tbody');
+  if (dates.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--ink-3);padding:var(--sp-5);">No routes yet</td></tr>';
+    return;
+  }
+  var html = '';
+  var today = fmtDate(new Date());
+  dates.forEach(function (d) {
+    var dayJobs = dateMap[d];
+    var totalHours = dayJobs.reduce(function (s, j) { return s + (j.estimatedHours || 0); }, 0);
+    var allDone = dayJobs.every(function (j) { return j.status === 'completed'; });
+    var status = d < today ? (allDone ? 'completed' : 'incomplete') : (d === today ? (allDone ? 'completed' : 'in progress') : 'planned');
+    var statusLabel = status === 'in progress' ? 'in progress' : status;
+    html +=
+      '<tr style="cursor:pointer;" onclick="viewDateRoute(\'' + d + '\')">' +
+        '<td>' + formatDateShort(d) + '<br><span class="muted" style="font-size:var(--fs-xs)">' + d + '</span></td>' +
+        '<td>' + dayName(d) + '</td>' +
+        '<td>' + dayJobs.length + '</td>' +
+        '<td>' + totalHours.toFixed(1) + '</td>' +
+        '<td><span class="badge badge-' + (status === 'in progress' ? 'scheduled' : status) + '">' + statusLabel + '</span></td>' +
+        '<td class="actions-cell">' +
+          '<button onclick="event.stopPropagation();viewDateRoute(\'' + d + '\')">View</button>' +
+          '<button onclick="event.stopPropagation();printDateRoute(\'' + d + '\')">Print</button>' +
+          '<button onclick="event.stopPropagation();dupDateRoute(\'' + d + '\')">Dup</button>' +
+          '<button onclick="event.stopPropagation();deleteDateRoute(\'' + d + '\')">Del</button>' +
+        '</td>' +
+      '</tr>';
+  });
+  tbody.innerHTML = html;
+}
+
+function viewDateRoute(date) {
+  window._viewDate = date;
+  showView('today');
+}
+
+function renderDateRoute(date) {
+  _activeRouteDate = date;
+  /* Hide the today-only action bar; inject date-specific controls below */
+  var ab = document.getElementById('today-action-bar');
+  if (ab) ab.style.display = 'none';
+  var jobs = getJobs().filter(function (j) { return j.date === date && j.status !== 'cancelled'; });
+  jobs.sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+  var settings = getSettings();
+  var calc = calculateRouteTime(jobs, settings);
+
+  document.getElementById('kpi-stops').textContent = jobs.length;
+  document.getElementById('kpi-time').innerHTML = calc.totalHours.toFixed(1) + ' <span class="unit">hrs</span>';
+  document.getElementById('kpi-finish').textContent = formatTime(calc.endTime);
+
+  document.getElementById('stat-job-time').textContent = calc.totalJobHours.toFixed(1);
+  document.getElementById('stat-buffer').textContent = calc.totalBufferMinutes;
+  document.getElementById('stat-start').textContent = formatTime(calc.startTime);
+  document.getElementById('stat-end').textContent = formatTime(calc.endTime);
+
+  var container = document.getElementById('today-route-container');
+  if (jobs.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="big-num">No jobs</div><p>No jobs for ' + date + '</p></div>';
+    return;
+  }
+  var html = '<div style="display:flex;gap:var(--sp-3);align-items:center;flex-wrap:wrap;margin-bottom:var(--sp-4);">' +
+    '<button class="btn" onclick="_activeRouteDate=null;window._viewDate=null;showView(\'today\');"><span style="margin-right:4px;">←</span> Back to today</button>' +
+    '<button class="btn" onclick="printRouteSheet()">Print Route Sheet</button>' +
+    '<button class="btn btn-accent" onclick="openJobModal()">Add Job</button>' +
+    '</div>' +
+    '<div class="route-list">';
+  jobs.forEach(function (j, idx) {
+    var c = getClient(j.clientId);
+    var tw = '';
+    if (j.timeWindow && j.timeWindow.start && j.timeWindow.end) {
+      tw = '<span class="route-tag tw">' + formatTime(j.timeWindow.start) + ' - ' + formatTime(j.timeWindow.end) + '</span>';
+    }
+    html +=
+      '<div class="route-card ' + (j.status === 'completed' ? 'is-completed' : '') + '">' +
+        '<div class="route-order">' + (j.order || idx + 1) + '</div>' +
+        '<div class="route-main">' +
+          '<div class="route-row1">' +
+            '<span class="route-client">' + esc(c.name || 'Unknown') + '</span>' +
+            '<span class="badge badge-' + j.status + '">' + j.status + '</span>' +
+          '</div>' +
+          '<div class="route-addr">' + esc(c.address || '') + '</div>' +
+          '<div class="route-row3">' +
+            '<span class="route-tag">' + j.serviceType + '</span>' +
+            '<span class="route-tag">' + (j.estimatedHours || 0) + ' hrs</span>' +
+            tw +
+            (j.notes ? '<span class="muted" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + esc(j.notes) + '</span>' : '') +
+          '</div>' +
+        '</div>' +
+        '<div class="route-actions">' +
+          '<div class="reorder-btns">' +
+            '<button disabled>▲</button><button disabled>▼</button>' +
+          '</div>' +
+          '<div style="display:flex;gap:2px;flex-wrap:wrap;justify-content:flex-end;">' +
+            '<button class="icon-btn" onclick="viewJob(\'' + j.id + '\')">View</button>' +
+            '<button class="icon-btn" onclick="editJob(\'' + j.id + '\')">Edit</button>' +
+            '<button class="icon-btn" onclick="markComplete(\'' + j.id + '\')">Done</button>' +
+            '<button class="icon-btn" onclick="removeJob(\'' + j.id + '\')">Remove</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function printDateRoute(date) {
+  window._printDate = date;
+  printRouteSheet();
+}
+function dupDateRoute(date) {
+  var jobs = getJobs().filter(function (j) { return j.date === date && j.status !== 'cancelled'; });
+  if (jobs.length === 0) { toast('no jobs to duplicate', 'error'); return; }
+  openDupModal(jobs.map(function (j) { return j.id; }));
+}
+function deleteDateRoute(date) {
+  openConfirm('Delete all jobs for ' + date + '?', 'This will remove all jobs scheduled for this day.', function () {
+    var jobs = getJobs().filter(function (j) { return j.date !== date; });
+    saveJobs(jobs);
+    renderRoutesList();
+    renderToday();
+    updateNavCounts();
+    toast('jobs for ' + date + ' deleted', 'info');
+  });
+}
+
+/* ============================================================
+   CALENDAR
+   ============================================================ */
+function renderCalendar() {
+  var year = calCurrentDate.getFullYear();
+  var month = calCurrentDate.getMonth();
+  var label = calCurrentDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+  document.getElementById('cal-month-label').textContent = label;
+
+  var firstDay = new Date(year, month, 1);
+  var lastDay = new Date(year, month + 1, 0);
+  var startDay = firstDay.getDay();
+  var daysInMonth = lastDay.getDate();
+  var today = fmtDate(new Date());
+
+  var jobs = getJobs();
+  var countMap = {};
+  jobs.forEach(function (j) {
+    if (j.status === 'cancelled') return;
+    if (!countMap[j.date]) countMap[j.date] = 0;
+    countMap[j.date]++;
+  });
+
+  var grid = document.getElementById('cal-grid');
+  var html = '';
+  var dayLabels = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  dayLabels.forEach(function (d) { html += '<div class="cal-day-label">' + d + '</div>'; });
+  for (var i = 0; i < startDay; i++) html += '<div class="cal-cell empty"></div>';
+  for (var d = 1; d <= daysInMonth; d++) {
+    var dateStr = String(year) + '-' + String(month + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+    var cnt = countMap[dateStr] || 0;
+    var isToday = dateStr === today;
+    html +=
+      '<div class="cal-cell ' + (isToday ? 'is-today' : '') + '" onclick="viewDateRoute(\'' + dateStr + '\')">' +
+        '<div class="cal-date">' + d + '</div>' +
+        (cnt > 0 ? '<div class="cal-count">' + cnt + ' job' + (cnt > 1 ? 's' : '') + '</div>' : '') +
+      '</div>';
+  }
+  grid.innerHTML = html;
+}
+function changeMonth(dir) {
+  calCurrentDate.setMonth(calCurrentDate.getMonth() + dir);
+  renderCalendar();
+}
+
+/* ============================================================
+   CLIENTS
+   ============================================================ */
+var editingClientId = null;
+
+function renderClients() {
+  var clients = getClients();
+  var jobs = getJobs();
+  var tbody = document.getElementById('clients-tbody');
+  if (clients.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--ink-3);padding:var(--sp-5);">No clients yet</td></tr>';
+    return;
+  }
+  var html = '';
+  clients.forEach(function (c) {
+    var jobCount = jobs.filter(function (j) { return j.clientId === c.id; }).length;
+    html +=
+      '<tr>' +
+        '<td>' + esc(c.name) + '</td>' +
+        '<td>' + esc(c.address) + '</td>' +
+        '<td>' + esc(c.phone) + '</td>' +
+        '<td>' + esc(c.email) + '</td>' +
+        '<td>' + jobCount + '</td>' +
+        '<td>' + esc((c.notes || '').slice(0, 30)) + '</td>' +
+        '<td>' + (c.createdAt ? c.createdAt.slice(0, 10) : '') + '</td>' +
+        '<td class="actions-cell">' +
+          '<button onclick="viewClientModal(\'' + c.id + '\')">View</button>' +
+          '<button onclick="editClient(\'' + c.id + '\')">Edit</button>' +
+          '<button onclick="deleteClient(\'' + c.id + '\')">Del</button>' +
+        '</td>' +
+      '</tr>';
+  });
+  tbody.innerHTML = html;
+}
+
+function openClientModal(clientId) {
+  editingClientId = clientId || null;
+  document.getElementById('client-modal-title').textContent = editingClientId ? 'Edit Client' : 'New Client';
+  if (editingClientId) {
+    var c = getClients().find(function (x) { return x.id === editingClientId; });
+    if (c) {
+      document.getElementById('client-name').value = c.name;
+      document.getElementById('client-addr').value = c.address;
+      document.getElementById('client-phone').value = c.phone;
+      document.getElementById('client-email').value = c.email;
+      document.getElementById('client-notes').value = c.notes;
+    }
+  } else {
+    document.getElementById('client-name').value = '';
+    document.getElementById('client-addr').value = '';
+    document.getElementById('client-phone').value = '';
+    document.getElementById('client-email').value = '';
+    document.getElementById('client-notes').value = '';
+  }
+  document.getElementById('modal-client-backdrop').classList.add('open');
+}
+function closeClientModal() {
+  document.getElementById('modal-client-backdrop').classList.remove('open');
+  editingClientId = null;
+}
+function saveClient() {
+  var name = document.getElementById('client-name').value.trim();
+  var addr = document.getElementById('client-addr').value.trim();
+  if (!name || !addr) { toast('name and address are required', 'error'); return; }
+  var clients = getClients();
+  if (editingClientId) {
+    var c = clients.find(function (x) { return x.id === editingClientId; });
+    if (c) {
+      c.name = name; c.address = addr; c.phone = document.getElementById('client-phone').value.trim();
+      c.email = document.getElementById('client-email').value.trim(); c.notes = document.getElementById('client-notes').value;
+    }
+  } else {
+    clients.push({
+      id: uid('c'), name: name, address: addr,
+      phone: document.getElementById('client-phone').value.trim(),
+      email: document.getElementById('client-email').value.trim(),
+      notes: document.getElementById('client-notes').value,
+      createdAt: new Date().toISOString()
+    });
+  }
+  saveClients(clients);
+  closeClientModal();
+  renderClients();
+  updateNavCounts();
+  toast(editingClientId ? 'client updated' : 'client added', 'success');
+}
+function editClient(id) { openClientModal(id); }
+function deleteClient(id) {
+  var jobs = getJobs().filter(function (j) { return j.clientId === id; });
+  if (jobs.length > 0) { toast('cannot delete client with jobs', 'error'); return; }
+  openConfirm('Delete client?', 'This cannot be undone.', function () {
+    var clients = getClients().filter(function (c) { return c.id !== id; });
+    saveClients(clients);
+    renderClients();
+    updateNavCounts();
+    toast('client deleted', 'info');
+  });
+}
+
+/* ============================================================
+   VIEW CLIENT MODAL
+   ============================================================ */
+function viewClientModal(id) {
+  var c = getClients().find(function (x) { return x.id === id; });
+  if (!c) return;
+  var jobs = getJobs().filter(function (j) { return j.clientId === id; });
+  document.getElementById('viewclient-title').textContent = c.name;
+  var infoHtml =
+    '<div class="detail-row"><div class="detail-label">Address</div><div class="detail-value">' + esc(c.address) + '</div></div>' +
+    '<div class="detail-row"><div class="detail-label">Phone</div><div class="detail-value">' + esc(c.phone || '—') + '</div></div>' +
+    '<div class="detail-row"><div class="detail-label">Email</div><div class="detail-value">' + esc(c.email || '—') + '</div></div>' +
+    '<div class="detail-row"><div class="detail-label">Notes</div><div class="detail-value">' + esc(c.notes || '—') + '</div></div>' +
+    '<div class="detail-row"><div class="detail-label">Total Jobs</div><div class="detail-value">' + jobs.length + '</div></div>';
+  document.getElementById('viewclient-info').innerHTML = infoHtml;
+
+  var jobsHtml = '';
+  if (jobs.length === 0) {
+    jobsHtml = '<p class="muted">No jobs yet.</p>';
+  } else {
+    jobs.sort(function (a, b) { return b.date.localeCompare(a.date); });
+    jobs.forEach(function (j) {
+      jobsHtml +=
+        '<div class="cj-row">' +
+          '<span>' + j.date + ' · ' + j.serviceType + ' · ' + j.estimatedHours + ' hrs</span>' +
+          '<span class="badge badge-' + j.status + '">' + j.status + '</span>' +
+        '</div>';
+    });
+  }
+  document.getElementById('viewclient-jobs').innerHTML = jobsHtml;
+  document.getElementById('modal-viewclient-backdrop').classList.add('open');
+}
+function closeViewClientModal() {
+  document.getElementById('modal-viewclient-backdrop').classList.remove('open');
+}
+
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+function loadSettingsForm() {
+  var s = getSettings();
+  document.getElementById('set-biz-name').value = s.business.name || '';
+  document.getElementById('set-biz-addr').value = s.business.address || '';
+  document.getElementById('set-biz-phone').value = s.business.phone || '';
+  document.getElementById('set-biz-email').value = s.business.email || '';
+  document.getElementById('set-start-addr').value = s.route.startAddress || '';
+  document.getElementById('set-buffer').value = s.route.defaultBufferMinutes || 15;
+  document.getElementById('set-speed').value = s.route.avgSpeedMph || 25;
+  document.getElementById('set-default-hours').value = s.route.defaultJobHours || 3;
+  if (s.route.printFormat === 'compact') document.getElementById('set-print-compact').checked = true;
+  else document.getElementById('set-print-detailed').checked = true;
+}
+function saveSettings() {
+  var s = getSettings();
+  s.business.name = document.getElementById('set-biz-name').value.trim();
+  s.business.address = document.getElementById('set-biz-addr').value.trim();
+  s.business.phone = document.getElementById('set-biz-phone').value.trim();
+  s.business.email = document.getElementById('set-biz-email').value.trim();
+  s.route.startAddress = document.getElementById('set-start-addr').value.trim();
+  s.route.defaultBufferMinutes = parseInt(document.getElementById('set-buffer').value, 10) || 15;
+  s.route.avgSpeedMph = parseInt(document.getElementById('set-speed').value, 10) || 25;
+  s.route.defaultJobHours = parseFloat(document.getElementById('set-default-hours').value) || 3;
+  s.route.printFormat = document.getElementById('set-print-compact').checked ? 'compact' : 'detailed';
+  persistSettings(s);
+  toast('settings saved', 'success');
+}
+function resetDefaults() {
+  openConfirm('Reset settings?', 'Business info and route defaults will reset to factory values.', function () {
+    var def = {
+      business: { name: "Sparkle Clean Co.", address: "", phone: "", email: "" },
+      route: { startAddress: "", defaultBufferMinutes: 15, avgSpeedMph: 25, defaultJobHours: 3, printFormat: "detailed" },
+      version: "1.0"
+    };
+    persistSettings(def);
+    loadSettingsForm();
+    toast('settings reset to defaults', 'info');
+  });
+}
+function clearAllData() {
+  document.getElementById('cleardata-confirm-input').value = '';
+  document.getElementById('modal-cleardata-backdrop').classList.add('open');
+}
+function closeClearDataModal() {
+  document.getElementById('modal-cleardata-backdrop').classList.remove('open');
+}
+function executeClearData() {
+  var input = document.getElementById('cleardata-confirm-input').value;
+  if (input !== 'DELETE') { toast('type DELETE in all caps to confirm', 'error'); return; }
+  try {
+    localStorage.removeItem(PREFIX + 'clients');
+    localStorage.removeItem(PREFIX + 'jobs');
+    localStorage.removeItem(PREFIX + 'settings');
+    localStorage.removeItem(PREFIX + 'seeded');
+  } catch (e) {}
+  closeClearDataModal();
+  toast('all data cleared — reload to start fresh', 'info');
+}
+
+/* ============================================================
+   EXPORT
+   ============================================================ */
+function exportRouteCSV(date) {
+  date = date || getActiveDate();
+  var jobs = getJobs().filter(function (j) { return j.date === date && j.status !== 'cancelled'; });
+  jobs.sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+  var rows = [['date','order','client','address','service','hours','time_window','status']];
+  jobs.forEach(function (j) {
+    var c = getClient(j.clientId);
+    var tw = '';
+    if (j.timeWindow && j.timeWindow.start && j.timeWindow.end) tw = j.timeWindow.start + '-' + j.timeWindow.end;
+    rows.push([j.date, j.order || '', c.name || '', c.address || '', j.serviceType, j.estimatedHours, tw, j.status]);
+  });
+  downloadCSV(rows, 'cleanroute-route-' + date + '.csv');
+  toast('csv exported', 'success');
+}
+
+function exportJobsRange() {
+  var today = fmtDate(new Date());
+  document.getElementById('exportrange-from').value = today;
+  document.getElementById('exportrange-to').value = today;
+  document.getElementById('modal-exportrange-backdrop').classList.add('open');
+}
+function closeExportRangeModal() {
+  document.getElementById('modal-exportrange-backdrop').classList.remove('open');
+}
+function executeExportRange() {
+  var from = document.getElementById('exportrange-from').value;
+  var to = document.getElementById('exportrange-to').value;
+  if (!from || !to) { toast('select a date range', 'error'); return; }
+  if (from > to) { toast('from date must be on or before to date', 'error'); return; }
+  var jobs = getJobs().filter(function (j) { return j.date >= from && j.date <= to && j.status !== 'cancelled'; });
+  jobs.sort(function (a, b) { return a.date.localeCompare(b.date) || (a.order || 0) - (b.order || 0); });
+  var rows = [['date','order','client','address','service','hours','time_window','status']];
+  jobs.forEach(function (j) {
+    var c = getClient(j.clientId);
+    var tw = '';
+    if (j.timeWindow && j.timeWindow.start && j.timeWindow.end) tw = j.timeWindow.start + '-' + j.timeWindow.end;
+    rows.push([j.date, j.order || '', c.name || '', c.address || '', j.serviceType, j.estimatedHours, tw, j.status]);
+  });
+  downloadCSV(rows, 'cleanroute-jobs-' + from + '-to-' + to + '.csv');
+  closeExportRangeModal();
+  toast('csv exported', 'success');
+}
+
+function exportClientsCSV() {
+  var clients = getClients();
+  var jobs = getJobs();
+  var rows = [['name','address','phone','email','job_count','notes','created']];
+  clients.forEach(function (c) {
+    var cnt = jobs.filter(function (j) { return j.clientId === c.id; }).length;
+    rows.push([c.name, c.address, c.phone, c.email, cnt, c.notes, c.createdAt ? c.createdAt.slice(0, 10) : '']);
+  });
+  downloadCSV(rows, 'cleanroute-clients.csv');
+  toast('csv exported', 'success');
+}
+
+function exportAllJSON() {
+  var data = {
+    clients: getClients(),
+    jobs: getJobs(),
+    settings: getSettings(),
+    exportedAt: new Date().toISOString()
+  };
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'cleanroute-backup-' + fmtDate(new Date()) + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('json backup exported', 'success');
+}
+
+function importJSON() {
+  document.getElementById('import-file').click();
+}
+function handleImportFile(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function (ev) {
+    try {
+      var data = JSON.parse(ev.target.result);
+      if (data.clients) saveClients(data.clients);
+      if (data.jobs) saveJobs(data.jobs);
+      if (data.settings) persistSettings(data.settings);
+      toast('backup restored successfully', 'success');
+      renderToday(); renderJobs(); renderClients(); renderRoutesList(); loadSettingsForm(); updateNavCounts();
+    } catch (err) {
+      toast('invalid backup file', 'error');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+function downloadCSV(rows, filename) {
+  var csv = rows.map(function (r) {
+    return r.map(function (c) {
+      var s = String(c || '').replace(/"/g, '""');
+      if (s.indexOf(',') !== -1 || s.indexOf('"') !== -1 || s.indexOf('\n') !== -1) s = '"' + s + '"';
+      return s;
+    }).join(',');
+  }).join('\n');
+  var blob = new Blob([csv], { type: 'text/csv' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+/* ============================================================
+   PRINT ROUTE SHEET
+   ============================================================ */
+function printRouteSheet() {
+  var date = window._printDate || _activeRouteDate || fmtDate(new Date());
+  window._printDate = null;
+  var jobs = getJobs().filter(function (j) { return j.date === date && j.status !== 'cancelled'; });
+  if (jobs.length === 0) {
+    toast('no jobs to print for this date', 'error');
+    return;
+  }
+  jobs.sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+  var settings = getSettings();
+  var calc = calculateRouteTime(jobs, settings);
+  var isCompact = settings.route.printFormat === 'compact';
+
+  document.getElementById('print-biz-name').textContent = settings.business.name || 'CleanRoute Pro';
+  document.getElementById('print-biz-info').innerHTML =
+    (settings.business.address ? settings.business.address + '<br>' : '') +
+    (settings.business.phone ? settings.business.phone + '<br>' : '') +
+    (settings.business.email ? settings.business.email : '');
+  document.getElementById('print-date').textContent = formatDateLong(date);
+  document.getElementById('print-stops').textContent = jobs.length;
+  document.getElementById('print-total').textContent = calc.totalHours.toFixed(1) + ' hrs';
+  document.getElementById('print-start').textContent = formatTime(calc.startTime);
+  document.getElementById('print-end').textContent = formatTime(calc.endTime);
+  document.getElementById('print-start-addr').textContent = 'Start at: ' + (settings.route.startAddress || 'Home base');
+  document.getElementById('print-generated').textContent = 'Generated: ' + new Date().toLocaleString();
+
+  var list = document.getElementById('print-stops-list');
+  var html = '';
+  jobs.forEach(function (j, i) {
+    var c = getClient(j.clientId);
+    var tw = '';
+    if (j.timeWindow && j.timeWindow.start && j.timeWindow.end) {
+      tw = '<div class="print-stop-row"><span class="print-stop-label">Time:</span> ' + formatTime(j.timeWindow.start) + ' - ' + formatTime(j.timeWindow.end) + '</div>';
+    }
+    if (isCompact) {
+      html +=
+        '<div class="print-stop compact">' +
+          '<div class="print-stop-header">' + (i + 1) + '. ' + esc(c.name || 'Unknown') + '</div>' +
+          '<div class="print-stop-row">' + esc(c.address || '') + ' · ' + j.serviceType + ' · ' + j.estimatedHours + ' hrs' + (j.notes ? ' · ' + esc(j.notes) : '') + '</div>' +
+        '</div>';
+    } else {
+      html +=
+        '<div class="print-stop">' +
+          '<div class="print-stop-header">STOP ' + (i + 1) + ' of ' + jobs.length + '</div>' +
+          '<div class="print-stop-row"><span class="print-stop-label">Client:</span> ' + esc(c.name || 'Unknown') + '</div>' +
+          '<div class="print-stop-row"><span class="print-stop-label">Address:</span> ' + esc(c.address || '') + '</div>' +
+          (c.phone ? '<div class="print-stop-row"><span class="print-stop-label">Phone:</span> ' + esc(c.phone) + '</div>' : '') +
+          '<div class="print-stop-row"><span class="print-stop-label">Service:</span> ' + j.serviceType + ' · ' + j.estimatedHours + ' hrs</div>' +
+          tw +
+          (j.notes ? '<div class="print-stop-row"><span class="print-stop-label">Notes:</span> ' + esc(j.notes) + '</div>' : '') +
+        '</div>';
+    }
+  });
+  list.innerHTML = html;
+
+  document.body.classList.add('printing-route');
+  toast('opening print dialog...', 'info');
+  setTimeout(function () {
+    window.print();
+    setTimeout(function () { document.body.classList.remove('printing-route'); }, 500);
+  }, 300);
+}
+
+/* ============================================================
+   GENERIC PRINT (topbar button)
+   ============================================================ */
+function printCurrentView() {
+  /* Context-aware: on the today view, print the formatted route sheet
+     (clean, branded, one page per job). On any other view, print
+     the current screen as-is. */
+  if (currentView === 'today') {
+    printRouteSheet();
+    return;
+  }
+  toast('opening print dialog...', 'info');
+  setTimeout(function () { window.print(); }, 300);
+}
+
+/* ============================================================
+   CONFIRM MODAL
+   ============================================================ */
+var confirmCallback = null;
+function openConfirm(title, body, callback) {
+  confirmCallback = callback;
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-body').textContent = body;
+  var btn = document.getElementById('confirm-btn');
+  btn.textContent = 'Confirm';
+  btn.onclick = function () {
+    closeConfirmModal();
+    if (confirmCallback) confirmCallback();
+  };
+  document.getElementById('modal-confirm-backdrop').classList.add('open');
+}
+function closeConfirmModal() {
+  document.getElementById('modal-confirm-backdrop').classList.remove('open');
+  confirmCallback = null;
+}
+
+/* ============================================================
+   HELP MODAL
+   ============================================================ */
+function openHelpModal() { document.getElementById('modal-help-backdrop').classList.add('open'); }
+function closeHelpModal() { document.getElementById('modal-help-backdrop').classList.remove('open'); }
+
+/* ============================================================
+   NAV COUNTS
+   ============================================================ */
+function updateNavCounts() {
+  document.getElementById('nav-jobs-count').textContent = getJobs().filter(function (j) { return j.status !== 'cancelled'; }).length;
+  document.getElementById('nav-clients-count').textContent = getClients().length;
+}
+
+/* ============================================================
+   KEYBOARD SHORTCUTS
+   ============================================================ */
+document.addEventListener('keydown', function (e) {
+  var tag = e.target.tagName.toLowerCase();
+  var typing = tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable;
+
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    openSearchModal();
+  }
+  if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
+    e.preventDefault(); toggleTheme();
+  }
+  if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'e') {
+    e.preventDefault(); exportRouteCSV(getActiveDate());
+  }
+  if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'p') {
+    toast('opening print dialog...', 'info');
+  }
+  if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'n') {
+    if (!typing) { e.preventDefault(); openJobModal(); }
+  }
+  if (e.key === '?' && !typing) {
+    e.preventDefault(); openHelpModal();
+  }
+});
+
+function openSearchModal() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('modal-search-backdrop').classList.add('open');
+  updateSearchResults();
+  setTimeout(function () { document.getElementById('search-input').focus(); }, 60);
+}
+function closeSearchModal() {
+  document.getElementById('modal-search-backdrop').classList.remove('open');
+}
+function handleSearchKey(e) {
+  if (e.key === 'Escape') { e.preventDefault(); closeSearchModal(); }
+  if (e.key === 'Enter') {
+    var first = document.querySelector('.search-result-item');
+    if (first) first.click();
+  }
+}
+function updateSearchResults() {
+  var q = (document.getElementById('search-input').value || '').toLowerCase().trim();
+  var html = '';
+  var views = [
+    { label: 'Today — route plan', icon: '01', view: 'today' },
+    { label: 'Jobs — all jobs', icon: '02', view: 'jobs' },
+    { label: 'Routes — history & calendar', icon: '03', view: 'routes' },
+    { label: 'Clients — contact database', icon: '04', view: 'clients' },
+    { label: 'Settings — preferences', icon: '05', view: 'settings' },
+    { label: 'Export — data export', icon: '06', view: 'export' }
+  ];
+  var matchViews = views.filter(function (v) { return !q || v.label.toLowerCase().indexOf(q) !== -1; });
+  if (matchViews.length) {
+    html += '<div class="search-group-label">Views</div>';
+    matchViews.forEach(function (v) {
+      html += '<div class="search-result-item" onclick="closeSearchModal();showView(\'' + v.view + '\')">' +
+        '<span class="search-result-icon muted">' + v.icon + '</span>' +
+        '<span>' + esc(v.label) + '</span>' +
+        '</div>';
+    });
+  }
+  var clients = getClients();
+  var matchClients = q ? clients.filter(function (c) {
+    return c.name.toLowerCase().indexOf(q) !== -1 || (c.address || '').toLowerCase().indexOf(q) !== -1;
+  }) : [];
+  if (matchClients.length) {
+    html += '<div class="search-group-label">Clients</div>';
+    matchClients.slice(0, 6).forEach(function (c) {
+      html += '<div class="search-result-item" onclick="closeSearchModal();showView(\'clients\')">' +
+        '<span class="search-result-icon muted">C</span>' +
+        '<span>' + esc(c.name) + ' <span class="muted" style="font-size:var(--fs-xs);">' + esc(c.address || '') + '</span></span>' +
+        '</div>';
+    });
+  }
+  if (!html) {
+    html = '<div style="padding:var(--sp-5);color:var(--ink-3);text-align:center;font-size:var(--fs-sm);">No results for "' + esc(q) + '"</div>';
+  }
+  document.getElementById('search-results').innerHTML = html;
+}
+
+/* ============================================================
+   PRINT THEME SWAP
+   ============================================================ */
+window.addEventListener('beforeprint', function () {
+  document.documentElement.setAttribute('data-theme', 'light');
+});
+window.addEventListener('afterprint', function () {
+  try {
+    var saved = localStorage.getItem(THEME_KEY);
+    document.documentElement.setAttribute('data-theme', saved || 'light');
+  } catch (e) {
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
+  updateToggleUI();
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+seedData();
+updateNavCounts();
+renderToday();
+
+var pd = document.getElementById('print-date-footer');
+if (pd) pd.textContent = new Date().toISOString().slice(0, 10);
+</script>
+</body>
+</html>
