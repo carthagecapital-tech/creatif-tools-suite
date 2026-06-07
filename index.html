@@ -1,304 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creatif.tools | Professional Local-First Utilities</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Creatif.tools — Local-first apps for pros</title>
+  <meta name="description" content="A growing suite of professional, privacy-first single-file apps. Try the demo in your browser, then buy on Etsy." />
+  <meta name="theme-color" content="#050505" />
 
-    <!-- Favicon: black + teal monogram -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23050505'/><rect x='1' y='1' width='30' height='30' rx='6.5' fill='none' stroke='%2300d4aa' stroke-width='1' opacity='0.35'/><text x='16' y='22' text-anchor='middle' font-family='system-ui,Arial,sans-serif' font-weight='900' font-size='14' letter-spacing='-0.5' fill='%2300d4aa'>ct</text></svg>">
-    <link rel="alternate icon" href="data:image/png;base64,iVBORw0KGgo=">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Creatif.tools — Local-first apps for pros" />
+  <meta property="og:description" content="A growing suite of professional, privacy-first single-file apps. Try the demo in your browser, then buy on Etsy." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://creatif.tools/" />
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Favicon: black + teal monogram -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23050505'/><rect x='1' y='1' width='30' height='30' rx='6.5' fill='none' stroke='%2300d4aa' stroke-width='1' opacity='0.35'/><text x='16' y='22' text-anchor='middle' font-family='system-ui,Arial,sans-serif' font-weight='900' font-size='14' letter-spacing='-0.5' fill='%2300d4aa'>ct</text></svg>" />
 
-    <style>
-        :root {
-            --bg: #050505;
-            --card-bg: #0f0f0f;
-            --text: #ffffff;
-            --text-dim: #a1a1a1;
-            --accent: #00d4aa; /* Signature Teal */
-            --border: #1a1a1a;
-            --nav-bg: rgba(5, 5, 5, 0.7);
-        }
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-        * {
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* --- NAVIGATION --- */
-        header {
-            position: fixed;
-            top: 20px;
-            z-index: 1000;
-            background: var(--nav-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border);
-            padding: 0.6rem 1.5rem;
-            border-radius: 100px;
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .logo {
-            font-weight: 800;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            color: var(--accent);
-            text-decoration: none;
-            text-transform: uppercase;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 1.2rem;
-            margin: 0;
-            padding: 0;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: var(--text-dim);
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: color 0.3s;
-        }
-
-        nav a:hover, nav a.active {
-            color: var(--accent);
-        }
-
-        /* --- HERO --- */
-        main {
-            max-width: 1100px;
-            width: 90%;
-            margin-top: 140px;
-            text-align: center;
-        }
-
-        .hero {
-            margin-bottom: 5rem;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            font-weight: 800;
-            margin-bottom: 1rem;
-            letter-spacing: -3px;
-            background: linear-gradient(180deg, #fff 0%, #777 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            color: var(--text-dim);
-            max-width: 600px;
-            margin: 0 auto;
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-
-        /* --- GRID --- */
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.5rem;
-            padding-bottom: 8rem;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 28px;
-            padding: 2.5rem;
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-
-        .card:hover {
-            border-color: var(--accent);
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 212, 170, 0.1);
-        }
-
-        .price-badge {
-            font-size: 0.7rem;
-            font-weight: 800;
-            padding: 5px 12px;
-            border-radius: 50px;
-            background: rgba(0, 212, 170, 0.1);
-            color: var(--accent);
-            border: 1px solid rgba(0, 212, 170, 0.2);
-            align-self: flex-start;
-            margin-bottom: 1.5rem;
-        }
-
-        .card h3 {
-            margin: 0 0 0.75rem 0;
-            font-size: 1.6rem;
-            font-weight: 700;
-        }
-
-        .card p {
-            color: var(--text-dim);
-            font-size: 0.95rem;
-            margin-bottom: 2.5rem;
-            line-height: 1.6;
-        }
-
-        /* --- BUTTONS --- */
-        .action-row {
-            display: flex;
-            gap: 12px;
-            margin-top: auto;
-        }
-
-        .btn-buy {
-            background: var(--accent);
-            color: #050505;
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 14px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            flex: 2;
-            text-align: center;
-            transition: opacity 0.2s;
-        }
-
-        .btn-demo {
-            border: 1px solid var(--border);
-            color: #fff;
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 14px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            flex: 1;
-            text-align: center;
-            transition: background 0.2s;
-        }
-
-        .btn-buy:hover { opacity: 0.9; }
-        .btn-demo:hover { background: #1a1a1a; }
-
-        /* --- FOOTER --- */
-        footer {
-            width: 100%;
-            padding: 4rem 0;
-            border-top: 1px solid var(--border);
-            text-align: center;
-            color: var(--text-dim);
-            font-size: 0.8rem;
-        }
-
-        @media (max-width: 768px) {
-            header { width: 90%; flex-direction: column; gap: 0.8rem; border-radius: 20px; }
-            .hero h1 { font-size: 2.8rem; }
-        }
-    </style>
+  <link rel="stylesheet" href="assets/style.css" />
 </head>
-
 <body>
 
-    <header>
-        <a href="index.html" class="logo">CREATIF.TOOLS</a>
-        <nav>
-            <ul>
-                <li><a href="demo/contentflow/">Content</a></li>
-                <li><a href="demo/poolpro/">Pool</a></li>
-                <li><a href="demo/weddingflow/">Wedding</a></li>
-                <li><a href="demo/budgetflow/">Finance</a></li>
-                <li><a href="demo/apexflow/">Apex</a></li>
-            </ul>
-        </nav>
-    </header>
+  <!-- ============================================================
+       NAV
+       ============================================================ -->
+  <header class="site-nav">
+    <a href="/" class="brand" aria-label="Creatif.tools home">
+      <span class="brand-mark">ct</span>
+      <span>Creatif.tools</span>
+    </a>
+    <nav class="primary" aria-label="Primary">
+      <ul>
+        <li><a href="#apps">Apps</a></li>
+        <li><a href="#" id="etsyNavLink" target="_blank" rel="noopener">Etsy Shop</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <main>
-        <section class="hero">
-            <h1>Built for Pros.</h1>
-            <p>Premium, local-first applications for modern creators and businesses. Secure, private, and exceptionally fast.</p>
-        </section>
+  <!-- ============================================================
+       MAIN
+       ============================================================ -->
+  <main>
 
-        <section class="tools-grid">
-            
-            <article class="card">
-                <span class="price-badge">$29.00 — Lifetime</span>
-                <h3>ContentFlow Pro</h3>
-                <p>Complete social media orchestration with a local-first calendar and multi-platform analytics.</p>
-                <div class="action-row">
-                    <a href="demo/contentflow/" class="btn-demo">Try Demo</a>
-                    <a href="YOUR_ETSY_LINK" class="btn-buy">Buy on Etsy</a>
-                </div>
-            </article>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-badges">Try Before You Buy</div>
+      <h1>Local-first apps,<br/>built for real work.</h1>
+      <p>
+        A growing suite of single-file apps for creators, contractors, and small operators.
+        Privacy by default — your data never leaves your device.
+        Open the demo, see if it fits, then grab it on Etsy.
+      </p>
+    </section>
 
-            <article class="card">
-                <span class="price-badge">$35.00 — Lifetime</span>
-                <h3>PoolPro Manager</h3>
-                <p>Heavy-duty service suite for pool professional estimating, maintenance, and invoicing.</p>
-                <div class="action-row">
-                    <a href="demo/poolpro/" class="btn-demo">Try Demo</a>
-                    <a href="YOUR_ETSY_LINK" class="btn-buy">Buy on Etsy</a>
-                </div>
-            </article>
+    <!-- APPS -->
+    <section id="apps">
+      <div class="section-head">
+        <div>
+          <h2>The Suite</h2>
+          <p>Every app is a single HTML file. No install. No accounts. No tracking.</p>
+        </div>
+        <div class="filter-bar" role="tablist" aria-label="Filter apps">
+          <button class="filter-chip active" data-filter="all" role="tab" aria-selected="true">All</button>
+          <button class="filter-chip" data-filter="live" role="tab" aria-selected="false">Available now</button>
+          <button class="filter-chip" data-filter="coming-soon" role="tab" aria-selected="false">Coming soon</button>
+        </div>
+      </div>
 
-            <article class="card">
-                <span class="price-badge">$49.00 — Lifetime</span>
-                <h3>WeddingFlow Pro</h3>
-                <p>Luxury planning suite for coordinators managing high-end event timelines and budgets.</p>
-                <div class="action-row">
-                    <a href="demo/weddingflow/" class="btn-demo">Try Demo</a>
-                    <a href="YOUR_ETSY_LINK" class="btn-buy">Buy on Etsy</a>
-                </div>
-            </article>
+      <div class="apps-grid" id="appGrid" aria-live="polite"></div>
 
-            <article class="card">
-                <span class="price-badge">$19.00 — Lifetime</span>
-                <h3>BudgetFlow Pro</h3>
-                <p>A minimalist powerhouse for personal finance tracking with total data privacy.</p>
-                <div class="action-row">
-                    <a href="demo/budgetflow/" class="btn-demo">Try Demo</a>
-                    <a href="YOUR_ETSY_LINK" class="btn-buy">Buy on Etsy</a>
-                </div>
-            </article>
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <div class="pulse" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+        </div>
+        <h3>New apps on the way</h3>
+        <p>The first app is shipping soon. Follow our Etsy shop to be notified when it drops.</p>
+      </div>
+    </section>
 
-            <article class="card">
-                <span class="price-badge">$24.00 — Lifetime</span>
-                <h3>ApexFlow Pro</h3>
-                <p>Agile project management for contractors and developers focused on local efficiency.</p>
-                <div class="action-row">
-                    <a href="demo/apexflow/" class="btn-demo">Try Demo</a>
-                    <a href="YOUR_ETSY_LINK" class="btn-buy">Buy on Etsy</a>
-                </div>
-            </article>
+  </main>
 
-        </section>
-    </main>
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="site-foot">
+    <div class="foot-row">
+      <div>© <span id="year"></span> Creatif.tools — All data stays on your device.</div>
+      <div>
+        <a href="#" id="footShopLink" target="_blank" rel="noopener">Etsy Shop</a>
+        <a href="#" id="footContact">Contact</a>
+      </div>
+    </div>
+  </footer>
 
-    <footer>
-        <p>&copy; 2026 Creatif.tools — All data remains on your device. Built for performance.</p>
-    </footer>
+  <!-- ============================================================
+       DEMO MODAL
+       ============================================================ -->
+  <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-bar">
+        <div class="modal-bar-left">
+          <div class="monogram" id="modalMono" style="background: var(--accent);">A</div>
+          <div>
+            <div class="modal-title" id="modalTitle">App name</div>
+            <div class="modal-sub" id="modalSub">Live demo</div>
+          </div>
+        </div>
+        <div class="modal-bar-right">
+          <a href="#" class="btn btn-primary" id="modalBuy">
+            Buy on Etsy
+            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          </a>
+          <button class="btn btn-ghost" id="modalClose" aria-label="Close demo">
+            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>
+            Close
+          </button>
+        </div>
+      </div>
 
+      <div class="modal-loader" id="modalLoader">
+        <div class="spinner" aria-label="Loading demo"></div>
+      </div>
+
+      <iframe class="modal-frame" id="modalFrame" title="App demo" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+
+      <div class="modal-empty" id="modalEmpty">
+        <div>
+          <h3>Demo not available yet</h3>
+          <p>This app's demo is being prepared. In the meantime, check the listing on Etsy for screenshots and a full walkthrough.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TOAST
+       ============================================================ -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="assets/app.js" defer></script>
 </body>
 </html>
