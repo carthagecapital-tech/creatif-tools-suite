@@ -30,5 +30,21 @@
     "monogram": "R",
     "price": "$39",
     "etsyUrl": "https://www.etsy.com/listing/4517754673/cleaning-service-route-planner-app-html"
+  },
+  {
+    "id": "cleaninspect-pro",
+    "name": "CleanInspect Pro",
+    "tagline": "Inspection Checklist",
+    "description": "Room-by-room quality control for cleaning pros. Run an inspection, capture inspector notes, generate a signed PDF report — all without leaving the browser. Local-first.",
+    "features": [
+      "Room-by-room inspection with sign-off",
+      "Inspector notes & issue flagging",
+      "Printable PDF report for the client",
+      "Local-first — your data never leaves your device"
+    ],
+    "color": "#B8462E",
+    "monogram": "I",
+    "price": "$29",
+    "etsyUrl": "https://www.etsy.com/listing/4518461252/house-cleaning-inspection-checklist-app"
   }
 ]
