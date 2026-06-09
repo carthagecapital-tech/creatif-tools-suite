@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CleanBoard Pro — Forms</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%233D6B47'/><text x='16' y='22' font-family='ui-monospace,monospace' font-size='18' font-weight='700' fill='white' text-anchor='middle'>B</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"></noscript>
+<script>
+  (function () {
+    try {
+      var stored = localStorage.getItem('cleanboard-theme') || localStorage.getItem('cleanbiz-theme');
+      if (stored) document.documentElement.setAttribute('data-theme', stored);
+      else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.setAttribute('data-theme', 'dark');
+    } catch (e) {}
+  })();
+</script>
+<style>
+:root {
+  --bg: #F2EFE8; --surface: #FBFAF6; --ink: #1A1A1A; --ink-2: #4A4A4A; --ink-3: #8A8A8A;
+  --line: #D9D4C7; --line-soft: #E8E3D6; --red: #C8442A; --green: #3D7A4E;
+  --accent: #3D6B47; --accent-ink: #FFFFFF; --accent-soft: #E2EBE4;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --fs-xs: 11px; --fs-sm: 12px; --fs-base: 13px; --fs-md: 14px; --fs-lg: 16px; --fs-xl: 24px; --fs-2xl: 36px; --fs-3xl: 56px;
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px; --sp-7: 48px;
+  --sidebar-w: 240px; --footer-h: 36px;
+}
+[data-theme="dark"] {
+  --bg: #1A1815; --surface: #25231E; --ink: #F0EDE5; --ink-2: #A8A499; --ink-3: #6E6A60;
+  --line: #3A3733; --line-soft: #2D2B26; --red: #E85A3D; --green: #5BAE6E;
+  --accent: #5A8E68; --accent-ink: #FFFFFF; --accent-soft: #2A3A2E;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+*:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.skip-link { position: absolute; left: -9999px; top: var(--sp-2); z-index: 9999; padding: var(--sp-2) var(--sp-3); background: var(--accent); color: var(--accent-ink); font-size: var(--fs-sm); }
+.skip-link:focus { left: var(--sp-2); }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--mono); font-size: var(--fs-base);
+  line-height: 1.5; font-feature-settings: "ss01", "cv11"; -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility; transition: background 0.2s, color 0.2s;
+}
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+input, select, textarea { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; margin: 0; padding: 0; }
+i { font-style: normal; }
+.label { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2); font-weight: 500; }
+.muted { color: var(--ink-3); }
+.mono-num { font-variant-numeric: tabular-nums; }
+.app { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: calc(100vh - var(--footer-h)); min-height: calc(100dvh - var(--footer-h)); }
+@media (max-width: 900px) { .app { grid-template-columns: 1fr; } }
+.sidebar {
+  background: var(--surface); border-right: 1px solid var(--line); padding: var(--sp-5) var(--sp-4);
+  display: flex; flex-direction: column; gap: var(--sp-5); min-height: calc(100vh - var(--footer-h)); min-height: calc(100dvh - var(--footer-h));
+}
+@media (max-width: 900px) { .sidebar { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); } }
+.brand { display: flex; align-items: flex-start; gap: var(--sp-3); padding-bottom: var(--sp-4); border-bottom: 1px solid var(--line-soft); }
+.brand-mark { width: 32px; height: 32px; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-weight: 700; font-size: var(--fs-md); flex-shrink: 0; transition: background 0.2s; }
+.brand-text { line-height: 1.2; }
+.brand-name { font-size: var(--fs-sm); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.brand-sub { font-size: var(--fs-xs); color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+.brand-version { margin-left: auto; font-size: var(--fs-xs); color: var(--ink-3); padding: 2px 6px; border: 1px solid var(--line); }
+.search { display: flex; align-items: center; gap: var(--sp-2); padding: var(--sp-2) var(--sp-3); border: 1px solid var(--line); background: var(--bg); font-size: var(--fs-sm); color: var(--ink-3); cursor: pointer; transition: border-color 0.15s; }
+.search:hover { border-color: var(--ink-2); }
+.search-icon { color: var(--ink-3); }
+.search-text { flex: 1; }
+.kbd { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 4px; font-size: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); }
+.nav-group + .nav-group { margin-top: var(--sp-4); }
+.nav-label { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin-bottom: var(--sp-2); padding: 0 var(--sp-3); }
+.nav-item { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-2) var(--sp-3); font-size: var(--fs-sm); color: var(--ink-2); border-left: 2px solid transparent; cursor: pointer; transition: background 0.1s; }
+.nav-item:hover { background: var(--bg); color: var(--ink); }
+.nav-item.active { color: var(--ink); background: var(--bg); border-left-color: var(--red); }
+.nav-num { color: var(--ink-3); width: 22px; font-variant-numeric: tabular-nums; }
+.nav-text { flex: 1; }
+.nav-badge { font-size: var(--fs-xs); color: var(--ink-3); padding: 1px 5px; border: 1px solid var(--line); }
+.sidebar-footer { margin-top: auto; padding-top: var(--sp-4); border-top: 1px solid var(--line-soft); display: flex; flex-direction: column; gap: var(--sp-3); }
+.sidebar-status { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-xs); color: var(--ink-3); }
+.dot { width: 6px; height: 6px; background: var(--red); border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.dot.green { background: var(--green); }
+@keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.7); } }
+.dot.live { animation: pulse-dot 1.8s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .dot.live { animation: none; } }
+.main { display: flex; flex-direction: column; min-width: 0; }
+.topbar { padding: var(--sp-5) var(--sp-6) var(--sp-4); border-bottom: 1px solid var(--line); display: flex; align-items: flex-end; gap: var(--sp-5); flex-wrap: wrap; }
+.breadcrumb { width: 100%; font-size: var(--fs-xs); color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--sp-2); }
+.title-block { flex: 1; min-width: 200px; }
+.title { font-size: var(--fs-xl); font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+.title em { font-style: normal; color: var(--ink-2); font-weight: 500; }
+.actions { display: flex; gap: var(--sp-2); align-items: center; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: var(--sp-2); padding: var(--sp-2) var(--sp-3); border: 1px solid var(--line); background: var(--surface); font-size: var(--fs-sm); cursor: pointer; transition: background 0.1s, border-color 0.15s; }
+.btn:hover { background: var(--bg); border-color: var(--ink-2); }
+.btn-primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.btn-primary:hover { background: var(--ink-2); border-color: var(--ink-2); }
+.btn-accent { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn-accent:hover { filter: brightness(0.92); border-color: var(--accent); }
+.btn .kbd { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.25); color: inherit; }
+.btn:not(.btn-primary):not(.btn-accent) .kbd { background: var(--bg); border-color: var(--line); color: var(--ink-2); }
+.btn-primary .kbd { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); color: inherit; }
+.period { display: flex; border: 1px solid var(--line); background: var(--surface); margin: var(--sp-4) var(--sp-6) 0; align-self: flex-start; }
+@media (max-width: 700px) { .period { margin: var(--sp-4) var(--sp-4) 0; } }
+.period-btn { padding: var(--sp-2) var(--sp-3); font-size: var(--fs-sm); color: var(--ink-2); border-right: 1px solid var(--line); cursor: pointer; transition: background 0.1s; }
+.period-btn:last-child { border-right: 0; }
+.period-btn:hover { background: var(--bg); }
+.period-btn.active { background: var(--ink); color: var(--bg); }
+.content { padding: var(--sp-5) var(--sp-6) var(--sp-7); }
+@media (max-width: 700px) { .content { padding: var(--sp-4); } }
+.card { position: relative; background: var(--surface); border: 1px solid var(--line); padding: var(--sp-5); transition: background 0.2s, border-color 0.2s; }
+.card:hover { border-color: var(--ink-2); }
+.corner { position: absolute; width: 8px; height: 8px; pointer-events: none; transition: border-color 0.2s; }
+.corner.tl { top: -1px; left: -1px; border-top: 2px solid var(--ink); border-left: 2px solid var(--ink); }
+.corner.tr { top: -1px; right: -1px; border-top: 2px solid var(--ink); border-right: 2px solid var(--ink); }
+.corner.bl { bottom: -1px; left: -1px; border-bottom: 2px solid var(--ink); border-left: 2px solid var(--ink); }
+.corner.br { bottom: -1px; right: -1px; border-bottom: 2px solid var(--ink); border-right: 2px solid var(--ink); }
+.card:hover .corner { border-color: var(--accent); }
+.card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-3); gap: var(--sp-3); }
+.card-title { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2); }
+.card-tag { font-size: var(--fs-xs); padding: 2px 6px; border: 1px solid var(--line); color: var(--ink-2); white-space: nowrap; }
+.big-num { font-size: var(--fs-3xl); font-weight: 700; line-height: 1; margin: var(--sp-3) 0 var(--sp-2); letter-spacing: -0.02em; }
+.big-num .unit { font-size: var(--fs-sm); font-weight: 500; color: var(--ink-3); margin-left: 6px; text-transform: lowercase; }
+.statusbar { margin-top: auto; padding: var(--sp-2) var(--sp-6); border-top: 1px solid var(--line); display: flex; align-items: center; gap: var(--sp-4); font-size: var(--fs-xs); color: var(--ink-3); }
+@media (max-width: 700px) { .statusbar { padding: var(--sp-2) var(--sp-4); } }
+.statusbar .grow { flex: 1; }
+.statusbar .right { display: flex; gap: var(--sp-4); align-items: center; }
+.app-footer { height: var(--footer-h); display: flex; align-items: center; justify-content: center; padding: 0 var(--sp-4); background: var(--surface); border-top: 1px solid var(--line); font-size: var(--fs-xs); color: var(--ink-3); letter-spacing: 0.04em; text-align: center; }
+.app-footer .app-name { color: var(--ink-2); font-weight: 500; }
+.app-footer .sep { margin: 0 var(--sp-2); color: var(--ink-3); }
+.toast-host { position: fixed; bottom: calc(var(--footer-h) + var(--sp-4)); right: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-2); z-index: 1000; pointer-events: none; max-width: 360px; }
+.toast { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3) var(--sp-4); background: var(--ink); color: var(--bg); font-size: var(--fs-sm); min-width: 200px; pointer-events: auto; border: 1px solid var(--ink); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); animation: toast-in 0.2s ease-out; }
+.toast.is-leaving { animation: toast-out 0.2s ease-in forwards; }
+.toast .toast-icon { width: 8px; height: 8px; background: var(--accent); flex-shrink: 0; }
+.toast.success .toast-icon { background: var(--green); }
+.toast.info .toast-icon { background: var(--accent); }
+.toast.error .toast-icon { background: var(--red); }
+.toast .toast-msg { flex: 1; }
+@keyframes toast-in { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes toast-out { to { transform: translateY(8px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .toast { animation: none; } }
+.print-footer { display: none; }
+@media print {
+  @page { margin: 15mm 15mm 20mm 15mm; size: auto; }
+  body { background: white !important; color: black !important; font-size: 10pt; }
+  .sidebar, .actions, .period, .search, .statusbar, .theme-toggle-fixed,
+  .no-print, .app-footer, .toast-host, .modal-backdrop, .modal { display: none !important; }
+  .app { display: block !important; min-height: 0 !important; }
+  .main { border: 0 !important; }
+  .topbar { border: 0 !important; padding: 0 0 8pt !important; border-bottom: 1px solid #999 !important; margin-bottom: 12pt !important; }
+  .breadcrumb { color: #666 !important; }
+  .title em { color: #666 !important; }
+  .content { display: block !important; padding: 0 !important; }
+  .card { border: 1px solid #999 !important; background: white !important; padding: 10pt !important; margin-bottom: 8pt !important; page-break-inside: avoid; }
+  .corner { display: none !important; }
+  .big-num { font-size: 22pt !important; }
+  .print-footer { display: flex !important; justify-content: space-between; position: fixed; bottom: 0; left: 0; right: 0; text-align: center; font-size: 8pt; color: #666; border-top: 1px solid #ccc; padding: 4pt 10mm; }
+  .print-footer .page-num::after { content: "Page " counter(page) " of " counter(pages); }
+}
+
+/* APP-SPECIFIC */
+.view { display: none; }
+.view.active { display: block; }
+.frm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4); }
+@media (max-width: 1100px) { .frm-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 700px) { .frm-grid { grid-template-columns: 1fr; } }
+.frm-card { border: 1px solid var(--line); padding: var(--sp-4); background: var(--surface); transition: border-color 0.15s; display: flex; flex-direction: column; gap: var(--sp-2); }
+.frm-card:hover { border-color: var(--ink-2); }
+.frm-card-name { font-size: var(--fs-md); font-weight: 700; }
+.frm-card-desc { font-size: var(--fs-sm); color: var(--ink-2); line-height: 1.4; }
+.frm-card-meta { display: flex; gap: var(--sp-2); font-size: var(--fs-xs); color: var(--ink-3); }
+.frm-card-actions { display: flex; gap: var(--sp-2); margin-top: auto; padding-top: var(--sp-2); }
+.pkt-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-4); }
+@media (max-width: 900px) { .pkt-grid { grid-template-columns: 1fr; } }
+.pkt-card { border: 1px solid var(--line); padding: var(--sp-4); background: var(--surface); transition: border-color 0.15s; }
+.pkt-card:hover { border-color: var(--ink-2); }
+.pkt-card-chips { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin-top: var(--sp-2); }
+.pkt-chip { font-size: 10px; padding: 2px 6px; border: 1px solid var(--line); color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.04em; }
+.pkt-card-actions { display: flex; gap: var(--sp-2); margin-top: var(--sp-3); }
+.data-table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+.data-table th { text-align: left; padding: var(--sp-2) var(--sp-3); border-bottom: 1px solid var(--line); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); font-weight: 500; }
+.data-table td { padding: var(--sp-2) var(--sp-3); border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+.data-table tr:hover td { background: var(--bg); }
+.data-table .actions-cell { display: flex; gap: var(--sp-1); justify-content: flex-end; }
+.data-table .actions-cell .btn { padding: 2px 6px; font-size: var(--fs-xs); }
+.badge { font-size: var(--fs-xs); padding: 2px 6px; border: 1px solid var(--line); color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.04em; display: inline-block; }
+.badge-accent { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+.badge-green { background: rgba(61,122,78,0.1); color: var(--green); border-color: var(--green); }
+.badge-red { background: rgba(200,68,42,0.1); color: var(--red); border-color: var(--red); }
+.form-section { margin-bottom: var(--sp-5); border: 1px solid var(--line); background: var(--surface); padding: var(--sp-4); }
+.form-section-head { font-size: var(--fs-sm); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-2); margin-bottom: var(--sp-3); padding-bottom: var(--sp-2); border-bottom: 1px solid var(--line); }
+.form-field { margin-bottom: var(--sp-3); }
+.form-field label { display: block; font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2); font-weight: 500; margin-bottom: var(--sp-1); }
+.form-field label .required { color: var(--red); margin-left: 2px; }
+.form-field input, .form-field select, .form-field textarea { width: 100%; padding: var(--sp-2) var(--sp-3); border: 1px solid var(--line); background: var(--bg); font-size: var(--fs-sm); color: var(--ink); font-family: var(--mono); outline: none; transition: border-color 0.15s; }
+.form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: var(--ink-2); }
+.form-field input[type="checkbox"] { width: auto; margin-right: var(--sp-2); }
+.form-field .checkbox-group { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.form-field .checkbox-group label { display: inline-flex; align-items: center; font-size: var(--fs-sm); text-transform: none; letter-spacing: normal; cursor: pointer; }
+.form-field-stars { display: flex; gap: var(--sp-1); font-size: 18px; cursor: pointer; user-select: none; }
+.form-field-stars span { color: var(--line); transition: color 0.1s; }
+.form-field-stars span.is-active { color: var(--accent); }
+.form-view-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-4); flex-wrap: wrap; gap: var(--sp-3); }
+.form-view-actions { display: flex; gap: var(--sp-2); }
+.filters-bar { display: flex; gap: var(--sp-3); margin-bottom: var(--sp-4); flex-wrap: wrap; align-items: center; }
+.filters-bar input, .filters-bar select { padding: var(--sp-2) var(--sp-3); border: 1px solid var(--line); background: var(--bg); font-size: var(--fs-sm); color: var(--ink); font-family: var(--mono); }
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 900; display: none; }
+.modal-backdrop.is-open { display: block; }
+.modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--surface); border: 1px solid var(--line); z-index: 901; display: none; max-width: 90vw; max-height: 90vh; overflow: auto; min-width: 400px; }
+.modal.is-open { display: block; }
+.modal-header { padding: var(--sp-4); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-size: var(--fs-md); font-weight: 700; }
+.modal-close { font-size: var(--fs-lg); color: var(--ink-3); cursor: pointer; line-height: 1; }
+.modal-close:hover { color: var(--ink); }
+.modal-body { padding: var(--sp-4); }
+.modal-footer { padding: var(--sp-4); border-top: 1px solid var(--line); display: flex; gap: var(--sp-2); justify-content: flex-end; }
+@media (max-width: 600px) { .modal { min-width: 90vw; } }
+.search-palette { position: fixed; top: 20%; left: 50%; transform: translateX(-50%); width: 500px; max-width: 90vw; background: var(--surface); border: 1px solid var(--line); z-index: 902; display: none; box-shadow: 0 12px 40px rgba(0,0,0,0.2); }
+.search-palette.is-open { display: block; }
+.search-palette-input { width: 100%; padding: var(--sp-3) var(--sp-4); border: none; border-bottom: 1px solid var(--line); background: var(--bg); font-size: var(--fs-md); color: var(--ink); font-family: var(--mono); outline: none; }
+.search-palette-results { max-height: 300px; overflow: auto; }
+.search-palette-item { padding: var(--sp-3) var(--sp-4); cursor: pointer; display: flex; align-items: center; gap: var(--sp-3); }
+.search-palette-item:hover { background: var(--bg); }
+.search-palette-item.is-selected { background: var(--bg); outline: 2px solid var(--accent); outline-offset: -2px; }
+.search-palette-item-key { margin-left: auto; font-size: var(--fs-xs); color: var(--ink-3); }
+.help-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+@media (max-width: 600px) { .help-grid { grid-template-columns: 1fr; } }
+.help-item { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-2) 0; }
+.help-key { display: flex; gap: 2px; }
+.settings-stack { display: flex; flex-direction: column; gap: var(--sp-4); max-width: 700px; }
+.export-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-4); }
+@media (max-width: 900px) { .export-grid { grid-template-columns: 1fr; } }
+.client-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+@media (max-width: 700px) { .client-detail-grid { grid-template-columns: 1fr; } }
+.empty-state { text-align: center; padding: var(--sp-7) var(--sp-4); color: var(--ink-3); }
+.readonly-field { padding: var(--sp-2) 0; border-bottom: 1px solid var(--line-soft); }
+.readonly-label { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin-bottom: 2px; }
+.readonly-value { font-size: var(--fs-sm); color: var(--ink); }
+
+/* FIXED THEME TOGGLE - TOP RIGHT */
+.theme-toggle-fixed {
+  position: fixed; top: 16px; right: 16px; z-index: 100;
+  width: 36px; height: 36px; display: grid; place-items: center;
+  background: var(--surface); border: 1px solid var(--line);
+  color: var(--ink-2); cursor: pointer; font-size: 16px;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.theme-toggle-fixed:hover { border-color: var(--ink-2); color: var(--ink); background: var(--bg); }
+@media (max-width: 900px) { .theme-toggle-fixed { top: 12px; right: 12px; width: 32px; height: 32px; font-size: 14px; } }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<button class="theme-toggle-fixed" id="theme-toggle-btn" title="Toggle theme (⌘⇧L)" aria-label="Toggle dark mode">
+  <span id="theme-toggle-icon">☾</span>
+</button>
+
+<div class="app">
+  <aside class="sidebar" aria-label="Application sidebar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">B</div>
+      <div class="brand-text">
+        <div class="brand-name">CleanBoard</div>
+        <div class="brand-sub">pro suite</div>
+      </div>
+      <div class="brand-version">v1.0</div>
+    </div>
+    <div class="search" id="search-trigger" role="button" tabindex="0" aria-label="Open search palette, Command K">
+      <span class="search-icon">⏵</span>
+      <span class="search-text">jump to anything</span>
+      <span class="kbd">⌘</span><span class="kbd">K</span>
+    </div>
+    <nav aria-label="Main navigation">
+      <div class="nav-group">
+        <div class="nav-label" aria-hidden="true">-- workspace</div>
+        <ul role="list">
+          <li class="nav-item active" data-view="board" role="button" tabindex="0" aria-current="page" aria-label="Board — forms library"><span class="nav-num" aria-hidden="true">01</span><span class="nav-text">board</span><span class="dot live" aria-hidden="true"></span><span class="nav-badge" id="nav-badge-forms" aria-hidden="true">8</span></li>
+          <li class="nav-item" data-view="submissions" role="button" tabindex="0" aria-label="Submissions — log"><span class="nav-num" aria-hidden="true">02</span><span class="nav-text">submissions</span><span class="nav-badge" id="nav-badge-submissions" aria-hidden="true">0</span></li>
+          <li class="nav-item" data-view="packets" role="button" tabindex="0" aria-label="Welcome Packets — bundles"><span class="nav-num" aria-hidden="true">03</span><span class="nav-text">packets</span><span class="nav-badge" id="nav-badge-packets" aria-hidden="true">1</span></li>
+          <li class="nav-item" data-view="clients" role="button" tabindex="0" aria-label="Clients — database"><span class="nav-num" aria-hidden="true">04</span><span class="nav-text">clients</span><span class="nav-badge" id="nav-badge-clients" aria-hidden="true">0</span></li>
+        </ul>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label" aria-hidden="true">-- system</div>
+        <ul role="list">
+          <li class="nav-item" data-view="settings" role="button" tabindex="0" aria-label="Settings — preferences"><span class="nav-num" aria-hidden="true">05</span><span class="nav-text">settings</span></li>
+          <li class="nav-item" data-view="export" role="button" tabindex="0" aria-label="Export — data"><span class="nav-num" aria-hidden="true">06</span><span class="nav-text">export</span></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-status">
+        <span class="dot green" aria-hidden="true"></span>
+        <span>local-only · data on device</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main" id="main-content">
+    <header class="topbar" aria-label="Page header">
+      <div class="breadcrumb" id="breadcrumb" aria-hidden="true">WORKSPACE / CLEANBIZ / BOARD</div>
+      <div class="title-block">
+        <h1 class="title" id="page-title">Forms <em>— library</em></h1>
+      </div>
+      <div class="actions" id="topbar-actions" role="toolbar" aria-label="Page actions">
+        <button class="btn" id="btn-export-csv" title="Export submissions as CSV (⌘E)" aria-label="Export all submissions as CSV, Command E">
+          <span aria-hidden="true">Export .csv</span><span class="kbd" aria-hidden="true">⌘</span><span class="kbd" aria-hidden="true">E</span>
+        </button>
+        <button class="btn" id="btn-print" title="Print or save as PDF (⌘P)" aria-label="Print or save as PDF, Command P">
+          <span aria-hidden="true">Print / PDF</span><span class="kbd" aria-hidden="true">⌘</span><span class="kbd" aria-hidden="true">P</span>
+        </button>
+        <button class="btn btn-accent" id="btn-new-form" title="New form (⌘N)" aria-label="Create new form, Command N">
+          <span aria-hidden="true">■</span><span>New form</span><span class="kbd" aria-hidden="true">⌘</span><span class="kbd" aria-hidden="true">N</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="content">
+      <section class="view active" id="view-board">
+        <div class="frm-grid" id="forms-grid"></div>
+      </section>
+      <section class="view" id="view-submissions">
+        <div class="filters-bar" role="search" aria-label="Filter submissions">
+          <select id="sub-filter-form" aria-label="Filter by form"><option value="">All forms</option></select>
+          <select id="sub-filter-status" aria-label="Filter by status">
+            <option value="">All status</option><option value="submitted">Submitted</option><option value="draft">Draft</option>
+          </select>
+          <select id="sub-filter-date" aria-label="Filter by date range">
+            <option value="">All time</option><option value="week">This week</option><option value="month">This month</option><option value="quarter">This quarter</option>
+          </select>
+          <input type="text" id="sub-search" placeholder="Search by name or field..." aria-label="Search submissions by name or field" style="min-width:220px;">
+        </div>
+        <table class="data-table" id="submissions-table">
+          <thead><tr><th>Date</th><th>Form</th><th>Client</th><th>Status</th><th>Summary</th><th style="text-align:right">Actions</th></tr></thead>
+          <tbody id="submissions-tbody"></tbody>
+        </table>
+      </section>
+      <section class="view" id="view-packets">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--sp-4);">
+          <div class="label">Welcome packets — bundle forms for onboarding</div>
+          <button class="btn btn-accent" id="btn-new-packet">+ New packet</button>
+        </div>
+        <div class="pkt-grid" id="packets-grid"></div>
+      </section>
+      <section class="view" id="view-clients">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--sp-4);">
+          <div class="label">Client database</div>
+          <button class="btn btn-accent" id="btn-add-client">+ Add client</button>
+        </div>
+        <table class="data-table" id="clients-table">
+          <thead><tr><th>Name</th><th>Address</th><th>Phone</th><th>Email</th><th>Forms</th><th>Created</th><th style="text-align:right">Actions</th></tr></thead>
+          <tbody id="clients-tbody"></tbody>
+        </table>
+      </section>
+      <section class="view" id="view-settings">
+        <div class="settings-stack">
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 01 business info</div></div>
+            <div class="form-field"><label>Business name</label><input type="text" id="set-business-name"></div>
+            <div class="form-field"><label>Address</label><input type="text" id="set-business-address"></div>
+            <div class="form-field"><label>Phone</label><input type="text" id="set-business-phone"></div>
+            <div class="form-field"><label>Email</label><input type="email" id="set-business-email"></div>
+            <div class="form-field"><label>Tax rate (%)</label><input type="number" id="set-tax-rate" step="0.1"></div>
+          </div>
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 02 service defaults</div></div>
+            <div class="form-field"><label>Default labor rate ($/hr)</label><input type="number" id="set-labor-rate"></div>
+            <div class="form-field"><label>Default payment terms</label>
+              <select id="set-payment-terms"><option>Net 7</option><option>Net 15</option><option>Net 30</option><option>Due on receipt</option></select>
+            </div>
+            <div class="form-field"><label>Default cancellation policy</label><textarea id="set-cancellation-policy" rows="4"></textarea></div>
+          </div>
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 03 form defaults</div></div>
+            <div class="form-field"><label>Default status for new forms</label>
+              <select id="set-default-status"><option value="draft">Draft</option><option value="submitted">Submitted</option></select>
+            </div>
+            <div class="form-field"><label>Auto-save drafts (seconds, 0 = off)</label><input type="number" id="set-autosave" min="0" step="5"></div>
+          </div>
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 04 data management</div></div>
+            <div style="display:flex; gap:var(--sp-2); flex-wrap:wrap;">
+              <button class="btn" id="btn-export-json">Export all (JSON)</button>
+              <button class="btn" id="btn-import-trigger">Import JSON</button>
+              <input type="file" id="import-file" style="display:none" accept=".json">
+              <button class="btn" id="btn-reset-defaults">Reset to defaults</button>
+              <button class="btn" id="btn-clear-all" style="color:var(--red)">Clear all data</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="view" id="view-export">
+        <div class="export-grid">
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 01 export submissions</div></div>
+            <p class="muted" style="margin-bottom:var(--sp-3);">Download all form submissions as a CSV file.</p>
+            <button class="btn btn-accent" id="btn-export-sub-csv">Export submissions .csv</button>
+          </div>
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 02 export by date range</div></div>
+            <div class="form-field"><label>From</label><input type="date" id="export-from"></div>
+            <div class="form-field"><label>To</label><input type="date" id="export-to"></div>
+            <button class="btn btn-accent" id="btn-export-range">Export range .csv</button>
+          </div>
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 03 export clients</div></div>
+            <p class="muted" style="margin-bottom:var(--sp-3);">Download client database as CSV.</p>
+            <button class="btn btn-accent" id="btn-export-clients">Export clients .csv</button>
+          </div>
+          <div class="card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-head"><div class="card-title">§ 04 full backup</div></div>
+            <p class="muted" style="margin-bottom:var(--sp-3);">Complete JSON backup of all data.</p>
+            <button class="btn btn-accent" id="btn-export-backup">Download backup .json</button>
+            <div style="margin-top:var(--sp-3);">
+              <button class="btn" id="btn-restore-trigger">Restore from JSON</button>
+              <input type="file" id="restore-file" style="display:none" accept=".json">
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="view" id="view-form" aria-label="Form fill">
+        <div class="form-view-header">
+          <div>
+            <div class="breadcrumb" id="form-breadcrumb" aria-hidden="true">WORKSPACE / CLEANBIZ / FORM</div>
+            <h2 class="title" id="form-title">Client Intake Form</h2>
+          </div>
+          <div class="form-view-actions" role="toolbar" aria-label="Form actions">
+            <span class="badge" id="form-status-badge" aria-live="polite" aria-label="Form status">DRAFT</span>
+            <button class="btn" id="btn-save-draft" aria-label="Save current form as draft">Save draft</button>
+            <button class="btn btn-primary" id="btn-submit-form" aria-label="Submit and finalize this form">Submit</button>
+            <button class="btn" id="btn-cancel-form" aria-label="Cancel and discard form changes">Cancel</button>
+            <button class="btn" id="btn-print-form" aria-label="Print or save this form as PDF">Print PDF</button>
+          </div>
+        </div>
+        <div id="form-container"></div>
+      </section>
+    </div>
+    <div class="statusbar">
+      <span>cleanboard pro v1.0.0</span>
+      <span class="grow"></span>
+      <div class="right">
+        <span>last sync: <span class="muted">local only</span></span>
+        <button class="btn" id="btn-help" style="padding:2px 6px;font-size:var(--fs-xs);" title="Keyboard shortcuts (?)" aria-label="Open keyboard shortcuts help"><span class="kbd" aria-hidden="true">?</span> help</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="modal-backdrop" aria-hidden="true"></div>
+<div class="modal" id="modal-view-sub" style="width:600px;" role="dialog" aria-modal="true" aria-labelledby="view-sub-title">
+  <div class="modal-header"><div class="modal-title" id="view-sub-title">Submission</div><button class="modal-close" data-action="close-modal" aria-label="Close dialog">×</button></div>
+  <div class="modal-body" id="view-sub-body"></div>
+  <div class="modal-footer">
+    <button class="btn" data-action="close-modal">Close</button>
+    <button class="btn btn-primary" id="btn-print-modal" aria-label="Print this submission as PDF">Print PDF</button>
+  </div>
+</div>
+<div class="modal" id="modal-confirm" style="width:400px;" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-body">
+  <div class="modal-header"><div class="modal-title" id="confirm-title">Confirm</div><button class="modal-close" data-action="close-modal" aria-label="Close dialog">×</button></div>
+  <div class="modal-body" id="confirm-body">Are you sure?</div>
+  <div class="modal-footer">
+    <button class="btn" data-action="close-modal">Cancel</button>
+    <button class="btn btn-primary" id="btn-confirm">Confirm</button>
+  </div>
+</div>
+<div class="modal" id="modal-client" style="width:500px;" role="dialog" aria-modal="true" aria-labelledby="client-modal-title">
+  <div class="modal-header"><div class="modal-title" id="client-modal-title">Add Client</div><button class="modal-close" data-action="close-modal" aria-label="Close dialog">×</button></div>
+  <div class="modal-body">
+    <div class="form-field"><label>Name <span class="required">*</span></label><input type="text" id="client-name"></div>
+    <div class="form-field"><label>Address <span class="required">*</span></label><input type="text" id="client-address"></div>
+    <div class="form-field"><label>Phone</label><input type="text" id="client-phone"></div>
+    <div class="form-field"><label>Email</label><input type="email" id="client-email"></div>
+    <div class="form-field"><label>Notes</label><textarea id="client-notes" rows="3"></textarea></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-action="close-modal">Cancel</button>
+    <button class="btn btn-primary" id="btn-save-client">Save</button>
+  </div>
+</div>
+<div class="modal" id="modal-packet" style="width:500px;" role="dialog" aria-modal="true" aria-labelledby="packet-modal-title">
+  <div class="modal-header"><div class="modal-title" id="packet-modal-title">New Packet</div><button class="modal-close" data-action="close-modal" aria-label="Close dialog">×</button></div>
+  <div class="modal-body">
+    <div class="form-field"><label>Packet name</label><input type="text" id="pkt-name" placeholder="e.g. New Hire Packet"></div>
+    <div class="form-field"><label>Description</label><input type="text" id="pkt-desc" placeholder="Short description"></div>
+    <div class="form-field"><label>Select forms (2-5)</label><div id="pkt-form-list" style="display:flex;flex-direction:column;gap:var(--sp-2);max-height:200px;overflow:auto;"></div></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-action="close-modal">Cancel</button>
+    <button class="btn btn-primary" id="btn-create-packet">Create packet</button>
+  </div>
+</div>
+<div class="search-palette" id="search-palette" role="dialog" aria-modal="true" aria-label="Search">
+  <input type="text" class="search-palette-input" id="search-input" placeholder="Type to search..." aria-label="Search all content" autocomplete="off" spellcheck="false">
+  <div class="search-palette-results" id="search-results" role="listbox" aria-label="Search results" aria-live="polite"></div>
+</div>
+<div class="modal" id="modal-help" style="width:560px;" role="dialog" aria-modal="true" aria-labelledby="help-modal-title">
+  <div class="modal-header"><div class="modal-title" id="help-modal-title">Keyboard shortcuts</div><button class="modal-close" data-action="close-modal" aria-label="Close dialog">×</button></div>
+  <div class="modal-body">
+    <div class="help-grid">
+      <div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">K</span></div><span>Open search</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">N</span></div><span>New form</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">E</span></div><span>Export CSV</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">P</span></div><span>Print / PDF</span></div>
+      </div>
+      <div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">⇧</span><span class="kbd">L</span></div><span>Toggle theme</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">?</span></div><span>Show help</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">Esc</span></div><span>Close modal</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer"><button class="btn" data-action="close-modal">Close</button></div>
+</div>
+<div class="toast-host" id="toast-host"></div>
+<footer class="app-footer">
+  <span>©</span><span class="sep">2026</span><span class="app-name">CleanBoard Pro</span><span class="sep">·</span><span>All Rights Reserved</span>
+</footer>
+<div class="print-footer">
+  <span class="copyright">© 2026 CleanBoard Pro · All Rights Reserved · Generated <span id="print-date"></span></span>
+  <span class="page-num"></span>
+</div>
+
+<script>
+
+/* === THEME === */
+var THEME_KEY = 'cleanboard-theme';
+function getTheme() { return document.documentElement.getAttribute('data-theme') || 'light'; }
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+  updateToggleUI();
+}
+function toggleTheme() {
+  var next = getTheme() === 'dark' ? 'light' : 'dark';
+  setTheme(next);
+  toast('theme set to ' + next, 'info');
+}
+function updateToggleUI() {
+  var t = getTheme();
+  var icon = document.getElementById('theme-toggle-icon');
+  var btn = document.getElementById('theme-toggle-btn');
+  if (icon) icon.textContent = t === 'dark' ? '☀' : '☾';
+  if (btn) btn.title = t === 'dark' ? 'Toggle light mode (⌘⇧L)' : 'Toggle dark mode (⌘⇧L)';
+}
+updateToggleUI();
+
+/* === PRINT THEME SWAP === */
+window.addEventListener('beforeprint', function () {
+  document.documentElement.setAttribute('data-print-theme', document.documentElement.getAttribute('data-theme') || 'light');
+  document.documentElement.removeAttribute('data-theme');
+});
+window.addEventListener('afterprint', function () {
+  var saved = document.documentElement.getAttribute('data-print-theme');
+  if (saved && saved !== 'light') document.documentElement.setAttribute('data-theme', saved);
+  document.documentElement.removeAttribute('data-print-theme');
+});
+
+/* === TOAST === */
+function toast(message, type) {
+  type = type || 'info';
+  var host = document.getElementById('toast-host');
+  if (!host) { host = document.createElement('div'); host.className = 'toast-host'; host.id = 'toast-host'; document.body.appendChild(host); }
+  var el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = '<span class="toast-icon"></span><span class="toast-msg"></span>';
+  el.querySelector('.toast-msg').textContent = message;
+  host.appendChild(el);
+  setTimeout(function () { el.classList.add('is-leaving'); setTimeout(function () { el.remove(); }, 200); }, 2300);
+}
+
+/* === DATA HELPERS === */
+var PREFIX = 'cleanboard.';
+function getData(key) {
+  try { var raw = localStorage.getItem(PREFIX + key); return raw ? JSON.parse(raw) : null; }
+  catch (e) { return null; }
+}
+function setData(key, val) {
+  try { localStorage.setItem(PREFIX + key, JSON.stringify(val)); }
+  catch (e) { toast('storage error', 'error'); }
+}
+function genId(prefix) { return prefix + '_' + Date.now() + '_' + Math.floor(Math.random()*1000); }
+function fmtDate(d) {
+  if (!d) return '';
+  var date;
+  // Date-only strings (YYYY-MM-DD) must be parsed as local to avoid UTC midnight shifting
+  if (typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d)) {
+    var parts = d.split('-');
+    date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+  } else {
+    date = new Date(d);
+  }
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+function todayISO() { return new Date().toISOString().slice(0,10); }
+function nowISO() { return new Date().toISOString(); }
+function esc(s) {
+  if (s === undefined || s === null) return '';
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+/* === DEFAULT FORM SCHEMAS === */
+function getDefaultForms() {
+  return [
+    {
+      id: "frm_intake", name: "Client Intake Form", description: "Capture new client info when they sign up for service",
+      sections: [
+        { id: "sec_client_info", name: "Client Info", fields: [
+          { id: "fld_client_name", type: "text", label: "Client name", required: true },
+          { id: "fld_phone", type: "phone", label: "Phone", required: true },
+          { id: "fld_email", type: "email", label: "Email", required: false },
+          { id: "fld_address", type: "text", label: "Address", required: true }
+        ]},
+        { id: "sec_property", name: "Property Details", fields: [
+          { id: "fld_property_type", type: "select", label: "Property type", required: false, options: ["Single family","Townhouse","Condo","Apartment","Commercial","Other"] },
+          { id: "fld_square_footage", type: "number", label: "Square footage", required: false },
+          { id: "fld_bedrooms", type: "number", label: "Bedrooms", required: false },
+          { id: "fld_bathrooms", type: "number", label: "Bathrooms", required: false },
+          { id: "fld_pets", type: "checkbox", label: "Pets", required: false, options: ["Yes"] },
+          { id: "fld_pet_notes", type: "textarea", label: "Pet notes", required: false }
+        ]},
+        { id: "sec_service", name: "Service Preferences", fields: [
+          { id: "fld_frequency", type: "select", label: "Service frequency", required: false, options: ["Weekly","Biweekly","Monthly","One-time","Other"] },
+          { id: "fld_preferred_day", type: "select", label: "Preferred day", required: false, options: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"] },
+          { id: "fld_preferred_time", type: "select", label: "Preferred time", required: false, options: ["Morning","Afternoon","Evening","Anytime"] },
+          { id: "fld_access_notes", type: "textarea", label: "Gate code / access notes", required: false }
+        ]},
+        { id: "sec_notes", name: "Notes", fields: [
+          { id: "fld_special_instructions", type: "textarea", label: "Special instructions", required: false },
+          { id: "fld_referral_source", type: "select", label: "How did you hear about us", required: false, options: ["Google","Facebook","Referral","Nextdoor","Yard sign","Other"] }
+        ]}
+      ]
+    },
+    {
+      id: "frm_agreement", name: "Service Agreement", description: "Contract terms, scope of work, signatures",
+      sections: [
+        { id: "sec_parties", name: "Parties", fields: [
+          { id: "fld_provider_name", type: "text", label: "Service provider name", required: false },
+          { id: "fld_provider_address", type: "text", label: "Service provider address", required: false },
+          { id: "fld_client_name", type: "text", label: "Client name", required: true },
+          { id: "fld_client_address", type: "text", label: "Client address", required: true }
+        ]},
+        { id: "sec_scope", name: "Scope of Work", fields: [
+          { id: "fld_services_included", type: "textarea", label: "Services included", required: true },
+          { id: "fld_service_frequency", type: "select", label: "Service frequency", required: false, options: ["Weekly","Biweekly","Monthly","As-needed"] }
+        ]},
+        { id: "sec_term", name: "Term & Rate", fields: [
+          { id: "fld_start_date", type: "date", label: "Start date", required: true },
+          { id: "fld_rate_per_visit", type: "number", label: "Rate per visit", required: false },
+          { id: "fld_billing_frequency", type: "select", label: "Billing frequency", required: false, options: ["Per visit","Weekly","Monthly"] },
+          { id: "fld_payment_terms", type: "select", label: "Payment terms", required: false, options: ["Net 7","Net 15","Net 30","Due on receipt"] }
+        ]},
+        { id: "sec_auth", name: "Authorization", fields: [
+          { id: "fld_cancellation_policy", type: "textarea", label: "Cancellation policy", required: false },
+          { id: "fld_client_signature", type: "text", label: "Client signature", required: false },
+          { id: "fld_client_sig_date", type: "date", label: "Client signature date", required: false },
+          { id: "fld_provider_signature", type: "text", label: "Service provider signature", required: false },
+          { id: "fld_provider_sig_date", type: "date", label: "Provider signature date", required: false }
+        ]}
+      ]
+    },
+    {
+      id: "frm_workorder", name: "Work Order", description: "Job details, scope, materials, hours, total",
+      sections: [
+        { id: "sec_job_info", name: "Job Info", fields: [
+          { id: "fld_wo_number", type: "text", label: "Work order #", required: false },
+          { id: "fld_date", type: "date", label: "Date", required: false },
+          { id: "fld_client_name", type: "text", label: "Client name", required: true },
+          { id: "fld_property_address", type: "text", label: "Property address", required: true },
+          { id: "fld_assigned_to", type: "text", label: "Assigned to", required: false },
+          { id: "fld_scheduled_date", type: "date", label: "Scheduled date", required: false },
+          { id: "fld_scheduled_time", type: "text", label: "Scheduled time", required: false },
+          { id: "fld_job_type", type: "select", label: "Job type", required: false, options: ["Standard","Deep","Move-out","Post-construction","Airbnb turnover"] }
+        ]},
+        { id: "sec_scope", name: "Scope of Work", fields: [
+          { id: "fld_scope", type: "textarea", label: "Scope of work", required: true },
+          { id: "fld_materials_used", type: "textarea", label: "Materials used", required: false }
+        ]},
+        { id: "sec_costs", name: "Costs", fields: [
+          { id: "fld_material_cost", type: "number", label: "Material cost", required: false },
+          { id: "fld_labor_hours", type: "number", label: "Labor hours", required: false, step: 0.1 },
+          { id: "fld_labor_rate", type: "number", label: "Labor rate", required: false },
+          { id: "fld_tax", type: "number", label: "Tax (%)", required: false },
+          { id: "fld_status", type: "select", label: "Status", required: false, options: ["Scheduled","In progress","Complete","Cancelled"] },
+          { id: "fld_notes", type: "textarea", label: "Notes", required: false }
+        ]}
+      ]
+    },
+    {
+      id: "frm_quote", name: "Quote Request", description: "Prospect inquiry — capture before sending a quote",
+      sections: [
+        { id: "sec_contact", name: "Contact Info", fields: [
+          { id: "fld_prospect_name", type: "text", label: "Prospect name", required: true },
+          { id: "fld_phone", type: "phone", label: "Phone", required: true },
+          { id: "fld_email", type: "email", label: "Email", required: false }
+        ]},
+        { id: "sec_property", name: "Property", fields: [
+          { id: "fld_address", type: "text", label: "Address", required: true },
+          { id: "fld_property_type", type: "select", label: "Property type", required: false, options: ["Single family","Townhouse","Condo","Apartment","Commercial","Other"] },
+          { id: "fld_square_footage", type: "number", label: "Square footage", required: false },
+          { id: "fld_bedrooms", type: "number", label: "Bedrooms", required: false },
+          { id: "fld_bathrooms", type: "number", label: "Bathrooms", required: false }
+        ]},
+        { id: "sec_service", name: "Service Requested", fields: [
+          { id: "fld_services_requested", type: "textarea", label: "Services requested", required: true },
+          { id: "fld_desired_start", type: "date", label: "Desired start date", required: false },
+          { id: "fld_how_often", type: "select", label: "How often", required: false, options: ["Weekly","Biweekly","Monthly","One-time","Other"] }
+        ]},
+        { id: "sec_source", name: "How They Found You", fields: [
+          { id: "fld_referral_source", type: "select", label: "How did you hear about us", required: false, options: ["Google","Facebook","Referral","Nextdoor","Yard sign","Other"] },
+          { id: "fld_best_time_contact", type: "select", label: "Best time to contact", required: false, options: ["Morning","Afternoon","Evening","Anytime"] },
+          { id: "fld_additional_notes", type: "textarea", label: "Additional notes", required: false }
+        ]}
+      ]
+    },
+    {
+      id: "frm_satisfaction", name: "Satisfaction Survey", description: "Post-job client feedback — rate the service",
+      sections: [
+        { id: "sec_job", name: "Job Info", fields: [
+          { id: "fld_client_name", type: "text", label: "Client name", required: true },
+          { id: "fld_date_of_service", type: "date", label: "Date of service", required: false },
+          { id: "fld_service_type", type: "select", label: "Service type", required: false, options: ["Standard","Deep","Move-out","Other"] }
+        ]},
+        { id: "sec_ratings", name: "Ratings", fields: [
+          { id: "fld_overall", type: "select", label: "Overall satisfaction", required: false, options: ["Very satisfied","Satisfied","Neutral","Dissatisfied","Very dissatisfied"] },
+          { id: "fld_quality", type: "stars", label: "Quality rating", required: false },
+          { id: "fld_communication", type: "stars", label: "Communication rating", required: false },
+          { id: "fld_timeliness", type: "stars", label: "Timeliness rating", required: false },
+          { id: "fld_value", type: "stars", label: "Value for money", required: false },
+          { id: "fld_recommend", type: "select", label: "Would you recommend us", required: false, options: ["Definitely","Probably","Maybe","Probably not","Definitely not"] }
+        ]},
+        { id: "sec_comments", name: "Comments", fields: [
+          { id: "fld_do_well", type: "textarea", label: "What did we do well", required: false },
+          { id: "fld_improve", type: "textarea", label: "What could we improve", required: false },
+          { id: "fld_testimonial_ok", type: "checkbox", label: "May we use your feedback as a testimonial", required: false, options: ["Yes"] },
+          { id: "fld_client_signature", type: "text", label: "Client signature", required: false }
+        ]}
+      ]
+    },
+    {
+      id: "frm_incident", name: "Incident Report", description: "Document damage, complaints, or on-site issues",
+      sections: [
+        { id: "sec_incident", name: "Incident Info", fields: [
+          { id: "fld_date", type: "date", label: "Date of incident", required: true },
+          { id: "fld_time", type: "text", label: "Time of incident", required: false },
+          { id: "fld_location", type: "text", label: "Location", required: true },
+          { id: "fld_reported_by", type: "text", label: "Reported by", required: true },
+          { id: "fld_client_involved", type: "text", label: "Client involved", required: false },
+          { id: "fld_incident_type", type: "select", label: "Incident type", required: false, options: ["Property damage","Client complaint","Worker injury","Safety hazard","Theft","Other"] },
+          { id: "fld_severity", type: "select", label: "Severity", required: false, options: ["Low","Medium","High","Critical"] }
+        ]},
+        { id: "sec_desc", name: "Description", fields: [
+          { id: "fld_description", type: "textarea", label: "Description", required: true },
+          { id: "fld_witnesses", type: "textarea", label: "Witnesses", required: false }
+        ]},
+        { id: "sec_action", name: "Action Taken", fields: [
+          { id: "fld_immediate_action", type: "textarea", label: "Immediate action taken", required: false },
+          { id: "fld_photos_taken", type: "checkbox", label: "Photos taken", required: false, options: ["Yes","No"] },
+          { id: "fld_reported_insurance", type: "checkbox", label: "Reported to insurance", required: false, options: ["Yes","No"] },
+          { id: "fld_followup", type: "textarea", label: "Follow-up needed", required: false }
+        ]},
+        { id: "sec_sign", name: "Signatures", fields: [
+          { id: "fld_reporter_signature", type: "text", label: "Reporter signature", required: false },
+          { id: "fld_reporter_date", type: "date", label: "Date", required: false }
+        ]}
+      ]
+    },
+    {
+      id: "frm_employee", name: "Employee Application", description: "Hiring form for cleaners and crew members",
+      sections: [
+        { id: "sec_personal", name: "Personal Info", fields: [
+          { id: "fld_full_name", type: "text", label: "Full name", required: true },
+          { id: "fld_dob", type: "date", label: "Date of birth", required: false },
+          { id: "fld_phone", type: "phone", label: "Phone", required: true },
+          { id: "fld_email", type: "email", label: "Email", required: true },
+          { id: "fld_address", type: "text", label: "Address", required: false },
+          { id: "fld_emergency_name", type: "text", label: "Emergency contact name", required: false },
+          { id: "fld_emergency_phone", type: "phone", label: "Emergency contact phone", required: false }
+        ]},
+        { id: "sec_experience", name: "Experience", fields: [
+          { id: "fld_position", type: "select", label: "Position applying for", required: false, options: ["Cleaner","Crew lead","Supervisor","Other"] },
+          { id: "fld_employment_type", type: "select", label: "Employment type", required: false, options: ["Full-time","Part-time","Contract","Seasonal"] },
+          { id: "fld_years_exp", type: "number", label: "Years of cleaning experience", required: false },
+          { id: "fld_prev_employer", type: "text", label: "Previous employer", required: false },
+          { id: "fld_prev_employer_phone", type: "phone", label: "Previous employer phone", required: false },
+          { id: "fld_reason_leaving", type: "textarea", label: "Reason for leaving", required: false },
+          { id: "fld_cleaning_exp", type: "checkbox", label: "Worked for cleaning company before", required: false, options: ["Yes","No"] }
+        ]},
+        { id: "sec_availability", name: "Availability", fields: [
+          { id: "fld_start_date", type: "date", label: "Available start date", required: false },
+          { id: "fld_days_available", type: "checkbox", label: "Days available", required: false, options: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"] },
+          { id: "fld_hours_available", type: "select", label: "Hours available", required: false, options: ["Morning","Afternoon","Evening","Overnight","Flexible"] },
+          { id: "fld_transportation", type: "checkbox", label: "Have reliable transportation", required: false, options: ["Yes","No"] },
+          { id: "fld_background_check", type: "checkbox", label: "Willing to undergo background check", required: false, options: ["Yes","No"] }
+        ]},
+        { id: "sec_references", name: "References", fields: [
+          { id: "fld_ref1_name", type: "text", label: "Reference 1 name", required: false },
+          { id: "fld_ref1_phone", type: "phone", label: "Reference 1 phone", required: false },
+          { id: "fld_ref1_relationship", type: "text", label: "Reference 1 relationship", required: false },
+          { id: "fld_ref2_name", type: "text", label: "Reference 2 name", required: false },
+          { id: "fld_ref2_phone", type: "phone", label: "Reference 2 phone", required: false },
+          { id: "fld_ref2_relationship", type: "text", label: "Reference 2 relationship", required: false },
+          { id: "fld_additional_notes", type: "textarea", label: "Additional notes", required: false },
+          { id: "fld_applicant_signature", type: "text", label: "Applicant signature", required: false },
+          { id: "fld_app_date", type: "date", label: "Application date", required: false }
+        ]}
+      ]
+    },
+    {
+      id: "frm_referral", name: "Referral Form", description: "Capture client referrals for new business",
+      sections: [
+        { id: "sec_referrer", name: "Referrer", fields: [
+          { id: "fld_referrer_name", type: "text", label: "Referrer name", required: true },
+          { id: "fld_referrer_phone", type: "phone", label: "Referrer phone", required: false },
+          { id: "fld_referrer_email", type: "email", label: "Referrer email", required: false },
+          { id: "fld_relationship", type: "select", label: "Relationship to referred", required: false, options: ["Friend","Family","Neighbor","Colleague","Client","Other"] }
+        ]},
+        { id: "sec_referral", name: "Referral", fields: [
+          { id: "fld_referred_name", type: "text", label: "Referred person name", required: true },
+          { id: "fld_referred_phone", type: "phone", label: "Referred person phone", required: false },
+          { id: "fld_referred_email", type: "email", label: "Referred person email", required: false },
+          { id: "fld_referred_address", type: "text", label: "Referred person address", required: false },
+          { id: "fld_why_referring", type: "textarea", label: "Why are you referring them", required: false },
+          { id: "fld_best_time_contact", type: "select", label: "Best time to contact referral", required: false, options: ["Morning","Afternoon","Evening","Anytime"] },
+          { id: "fld_mention_ok", type: "checkbox", label: "May we mention you when we reach out", required: false, options: ["Yes","No"] }
+        ]},
+        { id: "sec_thanks", name: "Thank You", fields: [
+          { id: "fld_referrer_signature", type: "text", label: "Referrer signature", required: false },
+          { id: "fld_date", type: "date", label: "Date", required: false }
+        ]}
+      ]
+    }
+  ];
+}
+
+function getDefaultSettings() {
+  return {
+    business: { name: "Sparkle Clean Co.", address: "100 Office Way, Springfield IL 62701", phone: "(217) 555-0100", email: "owner@sparkle.com", logo: "", taxRate: 7.5 },
+    service: { defaultLaborRate: 35, defaultPaymentTerms: "Net 15", defaultCancellationPolicy: "Cancellations within 24 hours of scheduled service are subject to a 50% fee. Same-day cancellations are charged in full." },
+    forms: { defaultStatus: "draft", autoSaveInterval: 30 },
+    version: "1.0.0"
+  };
+}
+
+function getDefaultPacket() {
+  return {
+    id: "pkt_welcome", name: "New Client Welcome Packet", description: "Standard onboarding bundle for new residential clients",
+    formIds: ["frm_intake", "frm_agreement", "frm_satisfaction"], isDefault: true, createdAt: "2026-06-01T00:00:00.000Z"
+  };
+}
+
+/* === SEED DATA === */
+function seedData() {
+  if (getData('seeded')) return;
+  var forms = getDefaultForms();
+  var clients = [
+    { id: "c_1", name: "Sarah Johnson", address: "142 Maple St, Springfield IL 62701", phone: "(217) 555-0184", email: "sarah@example.com", notes: "Gate code 1234, two friendly dogs", createdAt: "2026-06-05T12:00:00.000Z" },
+    { id: "c_2", name: "Mike Chen", address: "88 Oak Ave, Springfield IL 62702", phone: "(217) 555-0291", email: "mike.c@example.com", notes: "Commercial account, prefers Fridays", createdAt: "2026-06-04T12:00:00.000Z" },
+    { id: "c_3", name: "Lisa Rivera", address: "55 Pine Ln, Springfield IL 62703", phone: "(217) 555-0377", email: "lisa.r@example.com", notes: "Monthly deep clean, allergic to bleach", createdAt: "2026-06-03T12:00:00.000Z" },
+    { id: "c_4", name: "Coastal Airbnb LLC", address: "200 Beach Rd, Springfield IL 62704", phone: "(217) 555-0455", email: "bookings@coastal.example.com", notes: "Turnover service, 2 units", createdAt: "2026-06-02T12:00:00.000Z" }
+  ];
+  var submissions = [
+    { id: "sub_1", formId: "frm_intake", formName: "Client Intake Form", clientId: "c_1", clientName: "Sarah Johnson", values: { "fld_client_name": "Sarah Johnson", "fld_phone": "(217) 555-0184", "fld_email": "sarah@example.com", "fld_address": "142 Maple St, Springfield IL 62701", "fld_property_type": "Single family", "fld_square_footage": 2400, "fld_bedrooms": 3, "fld_bathrooms": 2, "fld_pets": ["Yes"], "fld_pet_notes": "2 friendly dogs", "fld_frequency": "Biweekly", "fld_preferred_day": "Tuesday", "fld_preferred_time": "Morning", "fld_access_notes": "Gate code 1234", "fld_special_instructions": "Please use eco-friendly products", "fld_referral_source": "Google" }, status: "submitted", submittedAt: nowISO(), createdAt: nowISO(), updatedAt: nowISO() },
+    { id: "sub_2", formId: "frm_agreement", formName: "Service Agreement", clientId: "c_2", clientName: "Mike Chen", values: { "fld_provider_name": "Sparkle Clean Co.", "fld_provider_address": "100 Office Way, Springfield IL 62701", "fld_client_name": "Mike Chen", "fld_client_address": "88 Oak Ave, Springfield IL 62702", "fld_services_included": "Weekly office cleaning, trash removal, restroom sanitization, floor mopping", "fld_service_frequency": "Weekly", "fld_start_date": "2026-06-01", "fld_rate_per_visit": 180, "fld_billing_frequency": "Weekly", "fld_payment_terms": "Net 15", "fld_cancellation_policy": "Cancellations within 24 hours subject to 50% fee.", "fld_client_signature": "Mike Chen", "fld_client_sig_date": "2026-06-01", "fld_provider_signature": "Sparkle Clean Co.", "fld_provider_sig_date": "2026-06-01" }, status: "submitted", submittedAt: "2026-06-05T10:00:00.000Z", createdAt: "2026-06-05T10:00:00.000Z", updatedAt: "2026-06-05T10:00:00.000Z" },
+    { id: "sub_3", formId: "frm_satisfaction", formName: "Satisfaction Survey", clientId: "c_3", clientName: "Lisa Rivera", values: { "fld_client_name": "Lisa Rivera", "fld_date_of_service": "2026-06-01", "fld_service_type": "Deep", "fld_overall": "Very satisfied", "fld_quality": 5, "fld_communication": 5, "fld_timeliness": 4, "fld_value": 5, "fld_recommend": "Definitely", "fld_do_well": "The team was thorough and professional.", "fld_improve": "Nothing — great job!", "fld_testimonial_ok": ["Yes"], "fld_client_signature": "Lisa Rivera" }, status: "submitted", submittedAt: "2026-06-06T14:00:00.000Z", createdAt: "2026-06-06T14:00:00.000Z", updatedAt: "2026-06-06T14:00:00.000Z" },
+    { id: "sub_4", formId: "frm_quote", formName: "Quote Request", clientId: "c_4", clientName: "Coastal Airbnb LLC", values: { "fld_prospect_name": "Coastal Airbnb LLC", "fld_phone": "(217) 555-0455", "fld_email": "bookings@coastal.example.com", "fld_address": "200 Beach Rd, Springfield IL 62704", "fld_property_type": "Commercial", "fld_square_footage": 1800, "fld_bedrooms": 4, "fld_bathrooms": 3, "fld_services_requested": "Airbnb turnover cleaning between guests. Linen change, restock supplies, full clean.", "fld_desired_start": "2026-06-10", "fld_how_often": "As-needed", "fld_referral_source": "Referral", "fld_best_time_contact": "Morning", "fld_additional_notes": "Need same-day turnaround" }, status: "draft", submittedAt: null, createdAt: "2026-06-06T09:00:00.000Z", updatedAt: "2026-06-06T09:00:00.000Z" }
+  ];
+  setData('forms', forms);
+  setData('clients', clients);
+  setData('submissions', submissions);
+  setData('packets', [getDefaultPacket()]);
+  setData('settings', getDefaultSettings());
+  setData('seeded', "1");
+  setTimeout(function () { toast('welcome to CleanBoard Pro · loaded 4 sample submissions and 8 forms', 'success'); }, 400);
+}
+
+/* === STATE === */
+var currentView = 'board';
+var currentFormId = null;
+var currentSubmissionId = null;
+var currentClientId = null;
+var editingPacketId = null;
+var confirmCallback = null;
+var modalSubId = null;
+
+/* === VIEW SWITCHING === */
+var viewTitles = {
+  board: { bc: 'WORKSPACE / CLEANBIZ / BOARD', title: 'Forms <em>— library</em>' },
+  submissions: { bc: 'WORKSPACE / CLEANBIZ / SUBMISSIONS', title: 'Submissions <em>— log</em>' },
+  packets: { bc: 'WORKSPACE / CLEANBIZ / PACKETS', title: 'Welcome Packets <em>— bundles</em>' },
+  clients: { bc: 'WORKSPACE / CLEANBIZ / CLIENTS', title: 'Clients <em>— database</em>' },
+  settings: { bc: 'WORKSPACE / CLEANBIZ / SETTINGS', title: 'Settings <em>— preferences</em>' },
+  export: { bc: 'WORKSPACE / CLEANBIZ / EXPORT', title: 'Export <em>— data</em>' },
+  form: { bc: 'WORKSPACE / CLEANBIZ / FORM', title: 'Form <em>— fill out</em>' }
+};
+
+function showView(id) {
+  if (id === 'form' && !currentFormId) { toast('select a form first', 'error'); return; }
+  currentView = id;
+  document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('active'); });
+  var v = document.getElementById('view-' + id);
+  if (v) v.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(function (i) { i.classList.remove('active'); i.removeAttribute('aria-current'); });
+  var nav = document.querySelector('.nav-item[data-view="' + id + '"]');
+  if (nav) { nav.classList.add('active'); nav.setAttribute('aria-current', 'page'); }
+  var info = viewTitles[id];
+  if (info) {
+    document.getElementById('breadcrumb').textContent = info.bc;
+    document.getElementById('page-title').innerHTML = info.title;
+  }
+  if (id === 'board') renderFormsLibrary();
+  if (id === 'submissions') renderSubmissions();
+  if (id === 'packets') renderPackets();
+  if (id === 'clients') renderClients();
+  if (id === 'settings') loadSettings();
+  window.scrollTo(0,0);
+}
+
+/* === EVENT DELEGATION SETUP === */
+function setupEventDelegation() {
+  // Sidebar nav
+  document.querySelectorAll('.nav-item').forEach(function (item) {
+    item.addEventListener('click', function () { showView(this.dataset.view); });
+    item.addEventListener('keydown', function (e) {
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); showView(this.dataset.view); }
+    });
+  });
+
+  // Search trigger keyboard support
+  document.getElementById('search-trigger').addEventListener('keydown', function (e) {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); openSearchPalette(); }
+  });
+
+  // Forms grid - delegated
+  document.getElementById('forms-grid').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    var action = btn.dataset.action;
+    var id = btn.dataset.id;
+    if (action === 'fill-form') openFormFill(id);
+    if (action === 'view-form-subs') { showView('submissions'); document.getElementById('sub-filter-form').value = id; renderSubmissions(); }
+  });
+
+  // Submissions table - delegated
+  document.getElementById('submissions-tbody').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    var action = btn.dataset.action;
+    var id = btn.dataset.id;
+    if (action === 'view-sub') viewSubmission(id);
+    if (action === 'edit-sub') editSubmission(id);
+    if (action === 'print-sub') printSubmission(id);
+    if (action === 'dup-sub') duplicateSubmission(id);
+    if (action === 'del-sub') deleteSubmission(id);
+  });
+
+  // Packets grid - delegated
+  document.getElementById('packets-grid').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    var action = btn.dataset.action;
+    var id = btn.dataset.id;
+    if (action === 'use-packet') usePacket(id);
+    if (action === 'del-packet') deletePacket(id);
+  });
+
+  // Clients table - delegated
+  document.getElementById('clients-tbody').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    var action = btn.dataset.action;
+    var id = btn.dataset.id;
+    if (action === 'view-client') viewClient(id);
+    if (action === 'edit-client') editClient(id);
+    if (action === 'del-client') deleteClient(id);
+  });
+
+  // Modal close buttons - delegated
+  document.querySelectorAll('.modal').forEach(function (modal) {
+    modal.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-action="close-modal"]');
+      if (btn) closeAllModals();
+    });
+  });
+  document.getElementById('modal-backdrop').addEventListener('click', closeAllModals);
+
+  // Static buttons
+  document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
+  document.getElementById('search-trigger').addEventListener('click', openSearchPalette);
+  document.getElementById('btn-export-csv').addEventListener('click', exportCSV);
+  document.getElementById('btn-print').addEventListener('click', function () { window.print(); });
+  document.getElementById('btn-new-form').addEventListener('click', newForm);
+  document.getElementById('btn-new-packet').addEventListener('click', openPacketBuilder);
+  document.getElementById('btn-add-client').addEventListener('click', openClientModal);
+  document.getElementById('btn-save-client').addEventListener('click', saveClient);
+  document.getElementById('btn-create-packet').addEventListener('click', savePacket);
+  document.getElementById('btn-print-modal').addEventListener('click', printSubmissionFromModal);
+  document.getElementById('btn-save-draft').addEventListener('click', saveFormDraft);
+  document.getElementById('btn-submit-form').addEventListener('click', submitForm);
+  document.getElementById('btn-cancel-form').addEventListener('click', cancelForm);
+  document.getElementById('btn-print-form').addEventListener('click', printFormPDF);
+  document.getElementById('btn-export-sub-csv').addEventListener('click', exportSubmissionsCSV);
+  document.getElementById('btn-export-range').addEventListener('click', exportRangeCSV);
+  document.getElementById('btn-export-clients').addEventListener('click', exportClientsCSV);
+  document.getElementById('btn-export-backup').addEventListener('click', exportFullJSON);
+  document.getElementById('btn-export-json').addEventListener('click', exportFullJSON);
+  document.getElementById('btn-import-trigger').addEventListener('click', function () { document.getElementById('import-file').click(); });
+  document.getElementById('import-file').addEventListener('change', function () { importJSON(this); });
+  document.getElementById('btn-restore-trigger').addEventListener('click', function () { document.getElementById('restore-file').click(); });
+  document.getElementById('restore-file').addEventListener('change', function () { importJSON(this); });
+  document.getElementById('btn-reset-defaults').addEventListener('click', resetDefaults);
+  document.getElementById('btn-clear-all').addEventListener('click', function () { openConfirmModal('clear-all'); });
+  document.getElementById('btn-help').addEventListener('click', function () { openModal('modal-help'); });
+
+  // Filter inputs
+  document.getElementById('sub-filter-form').addEventListener('change', renderSubmissions);
+  document.getElementById('sub-filter-status').addEventListener('change', renderSubmissions);
+  document.getElementById('sub-filter-date').addEventListener('change', renderSubmissions);
+  document.getElementById('sub-search').addEventListener('input', renderSubmissions);
+
+  // Settings inputs (save on change)
+  ['set-business-name','set-business-address','set-business-phone','set-business-email','set-tax-rate',
+   'set-labor-rate','set-payment-terms','set-cancellation-policy','set-default-status','set-autosave'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('change', saveSettings);
+  });
+
+  // Search palette
+  document.getElementById('search-input').addEventListener('input', doSearch);
+  document.getElementById('search-input').addEventListener('keydown', function (e) {
+    var items = document.querySelectorAll('#search-results .search-palette-item[data-idx]');
+    if (!items.length) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      searchSelectedIdx = Math.min(searchSelectedIdx + 1, items.length - 1);
+      updateSearchSelection(items);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      searchSelectedIdx = Math.max(searchSelectedIdx - 1, 0);
+      updateSearchSelection(items);
+    } else if (e.key === 'Enter') {
+      if (searchSelectedIdx >= 0 && items[searchSelectedIdx]) items[searchSelectedIdx].click();
+    } else if (e.key === 'Escape') {
+      closeAllModals();
+    }
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', function (e) {
+    var inInput = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT';
+    if (e.key === 'Escape') closeAllModals();
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearchPalette(); }
+    if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'l') { e.preventDefault(); toggleTheme(); }
+    if (inInput) return;
+    if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'e') { e.preventDefault(); exportCSV(); }
+    if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'n') { e.preventDefault(); newForm(); }
+    if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'p') { e.preventDefault(); toast('opening print dialog...', 'info'); window.print(); }
+    if (!e.metaKey && !e.ctrlKey && e.key === '?') { e.preventDefault(); openModal('modal-help'); }
+  });
+}
+
+/* === FORMS LIBRARY === */
+function renderFormsLibrary() {
+  var grid = document.getElementById('forms-grid');
+  var forms = getData('forms') || [];
+  var submissions = getData('submissions') || [];
+  if (forms.length === 0) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">No forms in library — go to Settings → Data Management → Reset to defaults to restore the default form set.</div>';
+    return;
+  }
+  var html = '';
+  forms.forEach(function (form) {
+    var subCount = submissions.filter(function (s) { return s.formId === form.id; }).length;
+    var fieldCount = form.sections.reduce(function (acc, sec) { return acc + sec.fields.length; }, 0);
+    html += '<div class="frm-card">' +
+      '<div class="frm-card-name">' + esc(form.name) + '</div>' +
+      '<div class="frm-card-desc">' + esc(form.description) + '</div>' +
+      '<div class="frm-card-meta"><span>' + fieldCount + ' fields</span><span>' + subCount + ' submissions</span></div>' +
+      '<div class="frm-card-actions">' +
+        '<button class="btn btn-primary" data-action="fill-form" data-id="' + esc(form.id) + '" aria-label="Fill out ' + esc(form.name) + '">Fill out</button>' +
+        '<button class="btn" data-action="view-form-subs" data-id="' + esc(form.id) + '" aria-label="View submissions for ' + esc(form.name) + '">View submissions</button>' +
+      '</div></div>';
+  });
+  grid.innerHTML = html;
+}
+
+/* === FORM FILLING === */
+function openFormFill(formId, submissionId) {
+  currentFormId = formId;
+  currentSubmissionId = submissionId || null;
+  var forms = getData('forms') || [];
+  var form = forms.find(function (f) { return f.id === formId; });
+  if (!form) { toast('form not found', 'error'); return; }
+  var settings = getData('settings') || getDefaultSettings();
+  var sub = null;
+  if (submissionId) {
+    var subs = getData('submissions') || [];
+    sub = subs.find(function (s) { return s.id === submissionId; });
+  }
+  document.getElementById('form-title').textContent = form.name;
+  document.getElementById('form-breadcrumb').textContent = 'WORKSPACE / CLEANBIZ / ' + form.name.toUpperCase();
+  var badge = document.getElementById('form-status-badge');
+  badge.textContent = (sub && sub.status) ? sub.status.toUpperCase() : 'DRAFT';
+  badge.className = 'badge ' + ((sub && sub.status === 'submitted') ? 'badge-green' : '');
+
+  var container = document.getElementById('form-container');
+  var html = '<div class="card" style="margin-bottom:var(--sp-4);">' +
+    '<div style="display:flex;gap:var(--sp-4);flex-wrap:wrap;">' +
+      '<div><span class="label">Form</span><div style="font-weight:700;">' + esc(form.name) + '</div></div>' +
+      '<div><span class="label">Date</span><div>' + (sub && sub.submittedAt ? fmtDate(sub.submittedAt) : fmtDate(new Date())) + '</div></div>' +
+      '<div><span class="label">Status</span><div>' + (sub ? sub.status : 'draft') + '</div></div>' +
+    '</div></div>';
+
+  var values = sub ? sub.values : {};
+  if (!submissionId) {
+    if (form.id === 'frm_agreement' || form.id === 'frm_workorder') {
+      values['fld_provider_name'] = values['fld_provider_name'] || settings.business.name;
+      values['fld_provider_address'] = values['fld_provider_address'] || settings.business.address;
+      values['fld_provider_signature'] = values['fld_provider_signature'] || settings.business.name;
+      values['fld_provider_sig_date'] = values['fld_provider_sig_date'] || todayISO();
+    }
+    if (form.id === 'frm_workorder') {
+      values['fld_wo_number'] = values['fld_wo_number'] || ('WO-' + Date.now());
+      values['fld_date'] = values['fld_date'] || todayISO();
+      values['fld_labor_rate'] = values['fld_labor_rate'] || settings.service.defaultLaborRate;
+      values['fld_tax'] = values['fld_tax'] || settings.business.taxRate;
+    }
+    if (form.id === 'frm_agreement') {
+      values['fld_cancellation_policy'] = values['fld_cancellation_policy'] || settings.service.defaultCancellationPolicy;
+    }
+  }
+
+  form.sections.forEach(function (sec) {
+    html += '<div class="form-section"><div class="form-section-head">' + esc(sec.name) + '</div>';
+    sec.fields.forEach(function (field) {
+      html += renderFieldHTML(field, values[field.id]);
+    });
+    html += '</div>';
+  });
+  container.innerHTML = html;
+
+  // Attach star click handlers after rendering
+  container.querySelectorAll('.form-field-stars').forEach(function (stars) {
+    stars.querySelectorAll('span').forEach(function (star) {
+      star.addEventListener('click', function () {
+        var v = parseInt(this.dataset.val);
+        var parent = this.parentNode;
+        parent.querySelectorAll('span').forEach(function (st, idx) {
+          st.classList.toggle('is-active', idx < v);
+        });
+        parent.dataset.value = v;
+      });
+    });
+  });
+
+  showView('form');
+}
+
+function renderFieldHTML(field, value) {
+  var html = '<div class="form-field">';
+  html += '<label>' + esc(field.label) + (field.required ? ' <span class="required">*</span>' : '') + '</label>';
+  if (field.type === 'textarea') {
+    html += '<textarea id="field-' + esc(field.id) + '" rows="3">' + esc(value || '') + '</textarea>';
+  } else if (field.type === 'select') {
+    html += '<select id="field-' + esc(field.id) + '"><option value="">— select —</option>';
+    (field.options || []).forEach(function (opt) {
+      html += '<option value="' + esc(opt) + '"' + (value === opt ? ' selected' : '') + '>' + esc(opt) + '</option>';
+    });
+    html += '</select>';
+  } else if (field.type === 'checkbox') {
+    html += '<div class="checkbox-group">';
+    (field.options || []).forEach(function (opt) {
+      var checked = '';
+      if (value && Array.isArray(value) && value.indexOf(opt) !== -1) checked = ' checked';
+      if (value === opt) checked = ' checked';
+      html += '<label><input type="checkbox" name="' + esc(field.id) + '" value="' + esc(opt) + '"' + checked + '> ' + esc(opt) + '</label>';
+    });
+    html += '</div>';
+  } else if (field.type === 'stars') {
+    var val = parseInt(value) || 0;
+    html += '<div class="form-field-stars" data-field-id="' + esc(field.id) + '" data-value="' + val + '">';
+    for (var i = 1; i <= 5; i++) {
+      html += '<span data-val="' + i + '"' + (i <= val ? ' class="is-active"' : '') + '>★</span>';
+    }
+    html += '</div>';
+  } else {
+    var step = field.step ? ' step="' + field.step + '"' : '';
+    html += '<input type="' + (field.type === 'phone' ? 'tel' : field.type) + '" id="field-' + esc(field.id) + '" value="' + esc(value || '') + '"' + step + '>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function collectFormValues(form) {
+  var values = {};
+  form.sections.forEach(function (sec) {
+    sec.fields.forEach(function (field) {
+      if (field.type === 'checkbox') {
+        var checked = [];
+        document.querySelectorAll('input[name="' + field.id + '"]:checked').forEach(function (cb) { checked.push(cb.value); });
+        values[field.id] = checked;
+      } else if (field.type === 'stars') {
+        var starsEl = document.querySelector('.form-field-stars[data-field-id="' + field.id + '"]');
+        values[field.id] = starsEl ? parseInt(starsEl.dataset.value || 0) : 0;
+      } else {
+        var el = document.getElementById('field-' + field.id);
+        values[field.id] = el ? el.value : '';
+      }
+    });
+  });
+  return values;
+}
+
+function validateForm(form, values) {
+  var errors = [];
+  form.sections.forEach(function (sec) {
+    sec.fields.forEach(function (field) {
+      if (field.required) {
+        var val = values[field.id];
+        if (!val || (Array.isArray(val) && val.length === 0) || (typeof val === 'string' && val.trim() === '')) {
+          errors.push(field.label + ' is required');
+        }
+      }
+    });
+  });
+  return errors;
+}
+
+function submitForm() {
+  var forms = getData('forms') || [];
+  var form = forms.find(function (f) { return f.id === currentFormId; });
+  if (!form) return;
+  var values = collectFormValues(form);
+  var errors = validateForm(form, values);
+  if (errors.length > 0) { toast(errors[0], 'error'); return; }
+  var subs = getData('submissions') || [];
+  var clientName = values['fld_client_name'] || values['fld_prospect_name'] || values['fld_full_name'] || values['fld_referrer_name'] || values['fld_referred_name'] || 'Unknown';
+  var clients = getData('clients') || [];
+  var matchedClient = clients.find(function (c) { return c.name.toLowerCase() === clientName.toLowerCase(); });
+  var clientId = matchedClient ? matchedClient.id : null;
+  var sub;
+  if (currentSubmissionId) {
+    sub = subs.find(function (s) { return s.id === currentSubmissionId; });
+    if (sub) { sub.values = values; sub.status = 'submitted'; sub.clientName = clientName; sub.clientId = sub.clientId || clientId; sub.submittedAt = nowISO(); sub.updatedAt = nowISO(); }
+  } else {
+    sub = { id: genId('sub'), formId: form.id, formName: form.name, clientId: clientId, clientName: clientName, values: values, status: 'submitted', submittedAt: nowISO(), createdAt: nowISO(), updatedAt: nowISO() };
+    subs.push(sub);
+  }
+  setData('submissions', subs);
+  toast('form submitted', 'success');
+  updateBadge('submissions', subs.length);
+  showView('submissions');
+}
+
+function saveFormDraft() {
+  var forms = getData('forms') || [];
+  var form = forms.find(function (f) { return f.id === currentFormId; });
+  if (!form) return;
+  var values = collectFormValues(form);
+  var subs = getData('submissions') || [];
+  var clientName = values['fld_client_name'] || values['fld_prospect_name'] || values['fld_full_name'] || values['fld_referrer_name'] || values['fld_referred_name'] || 'Unknown';
+  if (currentSubmissionId) {
+    var sub = subs.find(function (s) { return s.id === currentSubmissionId; });
+    if (sub) { sub.values = values; sub.clientName = clientName; sub.updatedAt = nowISO(); }
+  } else {
+    var newSub = { id: genId('sub'), formId: form.id, formName: form.name, clientId: null, clientName: clientName, values: values, status: 'draft', submittedAt: null, createdAt: nowISO(), updatedAt: nowISO() };
+    subs.push(newSub);
+    currentSubmissionId = newSub.id;
+  }
+  setData('submissions', subs);
+  toast('draft saved', 'success');
+  updateBadge('submissions', subs.length);
+}
+
+function cancelForm() {
+  openConfirmModal('cancel-form', function () {
+    currentFormId = null; currentSubmissionId = null; showView('board');
+  });
+}
+
+function newForm() {
+  var forms = getData('forms') || [];
+  if (forms.length > 0) openFormFill(forms[0].id);
+}
+
+/* === SUBMISSIONS === */
+function renderSubmissions() {
+  var tbody = document.getElementById('submissions-tbody');
+  var subs = getData('submissions') || [];
+  var forms = getData('forms') || [];
+  var filterForm = document.getElementById('sub-filter-form').value;
+  var filterStatus = document.getElementById('sub-filter-status').value;
+  var filterDate = document.getElementById('sub-filter-date').value;
+  var search = document.getElementById('sub-search').value.toLowerCase();
+
+  var sel = document.getElementById('sub-filter-form');
+  var prevVal = sel.value;
+  while (sel.options.length > 1) sel.remove(1);
+  forms.forEach(function (f) {
+    var o = document.createElement('option');
+    o.value = f.id; o.textContent = f.name;
+    sel.appendChild(o);
+  });
+  sel.value = prevVal;
+
+  var filtered = subs.filter(function (s) {
+    if (filterForm && s.formId !== filterForm) return false;
+    if (filterStatus && s.status !== filterStatus) return false;
+    if (filterDate) {
+      var d = new Date(s.createdAt || s.submittedAt);
+      var now = new Date();
+      if (filterDate === 'week') {
+        var weekAgo = new Date(); weekAgo.setDate(now.getDate() - 7);
+        if (d < weekAgo) return false;
+      } else if (filterDate === 'month') {
+        if (d.getMonth() !== now.getMonth() || d.getFullYear() !== now.getFullYear()) return false;
+      } else if (filterDate === 'quarter') {
+        var q = Math.floor(now.getMonth() / 3);
+        if (Math.floor(d.getMonth() / 3) !== q || d.getFullYear() !== now.getFullYear()) return false;
+      }
+    }
+    if (search) {
+      var text = (s.clientName + ' ' + JSON.stringify(s.values)).toLowerCase();
+      if (text.indexOf(search) === -1) return false;
+    }
+    return true;
+  });
+
+  var html = '';
+  if (filtered.length === 0) {
+    html = '<tr><td colspan="6" class="empty-state">No submissions found</td></tr>';
+  } else {
+    filtered.sort(function (a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+    filtered.forEach(function (s) {
+      var form = forms.find(function (f) { return f.id === s.formId; });
+      var summary = makeSummary(s, form);
+      html += '<tr>' +
+        '<td>' + (s.submittedAt ? fmtDate(s.submittedAt) : fmtDate(s.createdAt)) + '</td>' +
+        '<td><span class="badge">' + esc(s.formName) + '</span></td>' +
+        '<td>' + esc(s.clientName || '—') + '</td>' +
+        '<td><span class="badge ' + (s.status === 'submitted' ? 'badge-green' : '') + '">' + s.status.toUpperCase() + '</span></td>' +
+        '<td class="muted">' + esc(summary) + '</td>' +
+        '<td class="actions-cell">' +
+          '<button class="btn" data-action="view-sub" data-id="' + esc(s.id) + '" aria-label="View submission from ' + esc(s.clientName || 'Unknown') + '">View</button>' +
+          '<button class="btn" data-action="edit-sub" data-id="' + esc(s.id) + '" aria-label="Edit submission from ' + esc(s.clientName || 'Unknown') + '">Edit</button>' +
+          '<button class="btn" data-action="print-sub" data-id="' + esc(s.id) + '" aria-label="Print submission from ' + esc(s.clientName || 'Unknown') + '">Print</button>' +
+          '<button class="btn" data-action="dup-sub" data-id="' + esc(s.id) + '" aria-label="Duplicate submission from ' + esc(s.clientName || 'Unknown') + '">Dup</button>' +
+          '<button class="btn" style="color:var(--red)" data-action="del-sub" data-id="' + esc(s.id) + '" aria-label="Delete submission from ' + esc(s.clientName || 'Unknown') + '">Del</button>' +
+        '</td></tr>';
+    });
+  }
+  tbody.innerHTML = html;
+}
+
+function makeSummary(sub, form) {
+  var v = sub.values;
+  var parts = [];
+  if (v.fld_bedrooms) parts.push(v.fld_bedrooms + ' bed');
+  if (v.fld_bathrooms) parts.push(v.fld_bathrooms + ' bath');
+  if (v.fld_property_type) parts.push(v.fld_property_type);
+  if (v.fld_frequency) parts.push(v.fld_frequency);
+  if (v.fld_job_type) parts.push(v.fld_job_type);
+  if (v.fld_overall) parts.push(v.fld_overall);
+  if (v.fld_incident_type) parts.push(v.fld_incident_type);
+  return parts.join(' · ') || '—';
+}
+
+function viewSubmission(subId) {
+  var subs = getData('submissions') || [];
+  var sub = subs.find(function (s) { return s.id === subId; });
+  if (!sub) return;
+  modalSubId = subId;
+  var forms = getData('forms') || [];
+  var form = forms.find(function (f) { return f.id === sub.formId; });
+  document.getElementById('view-sub-title').textContent = sub.formName + ' — ' + (sub.clientName || 'Unknown');
+  var body = document.getElementById('view-sub-body');
+  var html = '';
+  if (form) {
+    form.sections.forEach(function (sec) {
+      html += '<div style="margin-bottom:var(--sp-4);"><div class="form-section-head">' + esc(sec.name) + '</div>';
+      sec.fields.forEach(function (field) {
+        var val = sub.values[field.id];
+        if (val === undefined || val === null || val === '') return;
+        html += '<div class="readonly-field"><div class="readonly-label">' + esc(field.label) + '</div><div class="readonly-value">' + esc(Array.isArray(val) ? val.join(', ') : val) + '</div></div>';
+      });
+      html += '</div>';
+    });
+  } else {
+    html = '<pre style="font-size:var(--fs-xs);white-space:pre-wrap;">' + esc(JSON.stringify(sub.values, null, 2)) + '</pre>';
+  }
+  body.innerHTML = html;
+  openModal('modal-view-sub');
+}
+
+function editSubmission(subId) {
+  var subs = getData('submissions') || [];
+  var sub = subs.find(function (s) { return s.id === subId; });
+  if (!sub) return;
+  openFormFill(sub.formId, sub.id);
+}
+
+function printSubmission(subId) {
+  var subs = getData('submissions') || [];
+  var sub = subs.find(function (s) { return s.id === subId; });
+  if (!sub) return;
+  printSubmissionPDF(sub);
+}
+
+function printSubmissionFromModal() {
+  if (modalSubId) printSubmission(modalSubId);
+  closeAllModals();
+}
+
+function duplicateSubmission(subId) {
+  var subs = getData('submissions') || [];
+  var sub = subs.find(function (s) { return s.id === subId; });
+  if (!sub) return;
+  var dup = JSON.parse(JSON.stringify(sub));
+  dup.id = genId('sub'); dup.status = 'draft'; dup.submittedAt = null;
+  dup.createdAt = nowISO(); dup.updatedAt = nowISO();
+  subs.push(dup);
+  setData('submissions', subs);
+  toast('submission duplicated', 'success');
+  renderSubmissions();
+  updateBadge('submissions', subs.length);
+}
+
+function deleteSubmission(subId) {
+  openConfirmModal('delete-sub', function () {
+    var subs = getData('submissions') || [];
+    subs = subs.filter(function (s) { return s.id !== subId; });
+    setData('submissions', subs);
+    toast('submission deleted', 'success');
+    renderSubmissions();
+    updateBadge('submissions', subs.length);
+  });
+}
+
+/* === PACKETS === */
+function renderPackets() {
+  var grid = document.getElementById('packets-grid');
+  var packets = getData('packets') || [];
+  var forms = getData('forms') || [];
+  var html = '';
+  packets.forEach(function (pkt) {
+    var formNames = pkt.formIds.map(function (fid) {
+      var f = forms.find(function (x) { return x.id === fid; });
+      return f ? f.name : fid;
+    });
+    var chips = formNames.map(function (n) { return '<span class="pkt-chip">' + esc(n) + '</span>'; }).join('');
+    html += '<div class="pkt-card">' +
+      '<div style="font-weight:700;font-size:var(--fs-md);">' + esc(pkt.name) + '</div>' +
+      '<div class="muted" style="font-size:var(--fs-sm);margin-top:2px;">' + esc(pkt.description || '') + '</div>' +
+      '<div class="pkt-card-chips">' + chips + '</div>' +
+      '<div class="pkt-card-actions">' +
+        '<button class="btn btn-primary" data-action="use-packet" data-id="' + esc(pkt.id) + '" aria-label="Use packet: ' + esc(pkt.name) + '">Use this packet</button>' +
+        (pkt.isDefault ? '' : '<button class="btn" data-action="del-packet" data-id="' + esc(pkt.id) + '" aria-label="Delete packet: ' + esc(pkt.name) + '">Delete</button>') +
+      '</div></div>';
+  });
+  grid.innerHTML = html;
+}
+
+function openPacketBuilder() {
+  editingPacketId = null;
+  document.getElementById('pkt-name').value = '';
+  document.getElementById('pkt-desc').value = '';
+  var list = document.getElementById('pkt-form-list');
+  list.innerHTML = '';
+  var forms = getData('forms') || [];
+  forms.forEach(function (f) {
+    var lbl = document.createElement('label');
+    lbl.style.cssText = 'display:flex;align-items:center;gap:var(--sp-2);cursor:pointer;font-size:var(--fs-sm);';
+    var cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.value = f.id; cb.className = 'pkt-form-cb';
+    lbl.appendChild(cb);
+    lbl.appendChild(document.createTextNode(f.name));
+    list.appendChild(lbl);
+  });
+  openModal('modal-packet');
+}
+
+function savePacket() {
+  var name = document.getElementById('pkt-name').value.trim();
+  var desc = document.getElementById('pkt-desc').value.trim();
+  var selected = [];
+  document.querySelectorAll('.pkt-form-cb:checked').forEach(function (cb) { selected.push(cb.value); });
+  if (!name) { toast('packet name required', 'error'); return; }
+  if (selected.length < 2) { toast('select at least 2 forms', 'error'); return; }
+  if (selected.length > 5) { toast('max 5 forms per packet', 'error'); return; }
+  var packets = getData('packets') || [];
+  packets.push({ id: genId('pkt'), name: name, description: desc, formIds: selected, isDefault: false, createdAt: nowISO() });
+  setData('packets', packets);
+  toast('packet created', 'success');
+  closeAllModals();
+  renderPackets();
+  updateBadge('packets', packets.length);
+}
+
+function usePacket(pktId) {
+  var packets = getData('packets') || [];
+  var pkt = packets.find(function (p) { return p.id === pktId; });
+  if (!pkt) return;
+  if (pkt.formIds.length > 0) {
+    openFormFill(pkt.formIds[0]);
+    toast('packet: ' + pkt.name + ' · opens first form — multi-form sequence queued for v1.1', 'info');
+  }
+}
+
+function deletePacket(pktId) {
+  openConfirmModal('delete-packet', function () {
+    var packets = getData('packets') || [];
+    packets = packets.filter(function (p) { return p.id !== pktId; });
+    setData('packets', packets);
+    toast('packet deleted', 'success');
+    renderPackets();
+    updateBadge('packets', packets.length);
+  });
+}
+
+/* === CLIENTS === */
+function renderClients() {
+  var tbody = document.getElementById('clients-tbody');
+  var clients = getData('clients') || [];
+  var subs = getData('submissions') || [];
+  var html = '';
+  if (clients.length === 0) {
+    html = '<tr><td colspan="7" class="empty-state">No clients yet</td></tr>';
+  } else {
+    clients.forEach(function (c) {
+      var formCount = subs.filter(function (s) { return s.clientId === c.id; }).length;
+      html += '<tr>' +
+        '<td>' + esc(c.name) + '</td>' +
+        '<td>' + esc(c.address || '—') + '</td>' +
+        '<td>' + esc(c.phone || '—') + '</td>' +
+        '<td>' + esc(c.email || '—') + '</td>' +
+        '<td>' + formCount + '</td>' +
+        '<td class="muted">' + fmtDate(c.createdAt) + '</td>' +
+        '<td class="actions-cell">' +
+          '<button class="btn" data-action="view-client" data-id="' + esc(c.id) + '" aria-label="View details for ' + esc(c.name) + '">View</button>' +
+          '<button class="btn" data-action="edit-client" data-id="' + esc(c.id) + '" aria-label="Edit client ' + esc(c.name) + '">Edit</button>' +
+          '<button class="btn" style="color:var(--red)" data-action="del-client" data-id="' + esc(c.id) + '" aria-label="Delete client ' + esc(c.name) + '">Del</button>' +
+        '</td></tr>';
+    });
+  }
+  tbody.innerHTML = html;
+}
+
+function openClientModal() {
+  currentClientId = null;
+  document.getElementById('client-modal-title').textContent = 'Add Client';
+  document.getElementById('client-name').value = '';
+  document.getElementById('client-address').value = '';
+  document.getElementById('client-phone').value = '';
+  document.getElementById('client-email').value = '';
+  document.getElementById('client-notes').value = '';
+  openModal('modal-client');
+}
+
+function saveClient() {
+  var name = document.getElementById('client-name').value.trim();
+  var address = document.getElementById('client-address').value.trim();
+  if (!name || !address) { toast('name and address required', 'error'); return; }
+  var clients = getData('clients') || [];
+  if (currentClientId) {
+    var c = clients.find(function (x) { return x.id === currentClientId; });
+    if (c) {
+      c.name = name; c.address = address;
+      c.phone = document.getElementById('client-phone').value.trim();
+      c.email = document.getElementById('client-email').value.trim();
+      c.notes = document.getElementById('client-notes').value.trim();
+    }
+  } else {
+    clients.push({ id: genId('c'), name: name, address: address, phone: document.getElementById('client-phone').value.trim(), email: document.getElementById('client-email').value.trim(), notes: document.getElementById('client-notes').value.trim(), createdAt: nowISO() });
+  }
+  setData('clients', clients);
+  toast('client saved', 'success');
+  closeAllModals();
+  renderClients();
+  updateBadge('clients', clients.length);
+}
+
+function viewClient(cId) {
+  var clients = getData('clients') || [];
+  var c = clients.find(function (x) { return x.id === cId; });
+  if (!c) return;
+  var subs = getData('submissions') || [];
+  var clientSubs = subs.filter(function (s) { return s.clientId === cId || s.clientName === c.name; });
+  document.getElementById('view-sub-title').textContent = c.name;
+  var html = '<div class="client-detail-grid">' +
+    '<div><span class="label">Address</span><div>' + esc(c.address) + '</div></div>' +
+    '<div><span class="label">Phone</span><div>' + esc(c.phone || '—') + '</div></div>' +
+    '<div><span class="label">Email</span><div>' + esc(c.email || '—') + '</div></div>' +
+    '<div><span class="label">Notes</span><div>' + esc(c.notes || '—') + '</div></div>' +
+    '</div>' +
+    '<div style="margin-top:var(--sp-4);"><span class="label">Recent submissions</span></div>' +
+    (clientSubs.length === 0 ? '<div class="muted">No submissions</div>' :
+      clientSubs.slice(0,5).map(function (s) {
+        return '<div class="readonly-field"><div class="readonly-label">' + esc(s.formName) + ' — ' + fmtDate(s.createdAt) + '</div><div class="readonly-value">' + esc(s.status) + '</div></div>';
+      }).join(''));
+  document.getElementById('view-sub-body').innerHTML = html;
+  openModal('modal-view-sub');
+}
+
+function editClient(cId) {
+  var clients = getData('clients') || [];
+  var c = clients.find(function (x) { return x.id === cId; });
+  if (!c) return;
+  currentClientId = cId;
+  document.getElementById('client-modal-title').textContent = 'Edit Client';
+  document.getElementById('client-name').value = c.name;
+  document.getElementById('client-address').value = c.address;
+  document.getElementById('client-phone').value = c.phone || '';
+  document.getElementById('client-email').value = c.email || '';
+  document.getElementById('client-notes').value = c.notes || '';
+  openModal('modal-client');
+}
+
+function deleteClient(cId) {
+  var subs = getData('submissions') || [];
+  var hasSubs = subs.some(function (s) { return s.clientId === cId; });
+  if (hasSubs) { toast('cannot delete client with submissions', 'error'); return; }
+  openConfirmModal('delete-client', function () {
+    var clients = getData('clients') || [];
+    clients = clients.filter(function (c) { return c.id !== cId; });
+    setData('clients', clients);
+    toast('client deleted', 'success');
+    renderClients();
+    updateBadge('clients', clients.length);
+  });
+}
+
+/* === SETTINGS === */
+function loadSettings() {
+  var settings = getData('settings') || getDefaultSettings();
+  document.getElementById('set-business-name').value = settings.business.name || '';
+  document.getElementById('set-business-address').value = settings.business.address || '';
+  document.getElementById('set-business-phone').value = settings.business.phone || '';
+  document.getElementById('set-business-email').value = settings.business.email || '';
+  document.getElementById('set-tax-rate').value = settings.business.taxRate || '';
+  document.getElementById('set-labor-rate').value = settings.service.defaultLaborRate || '';
+  document.getElementById('set-payment-terms').value = settings.service.defaultPaymentTerms || 'Net 15';
+  document.getElementById('set-cancellation-policy').value = settings.service.defaultCancellationPolicy || '';
+  document.getElementById('set-default-status').value = settings.forms.defaultStatus || 'draft';
+  document.getElementById('set-autosave').value = settings.forms.autoSaveInterval || 30;
+}
+
+function saveSettings() {
+  var settings = {
+    business: { name: document.getElementById('set-business-name').value, address: document.getElementById('set-business-address').value, phone: document.getElementById('set-business-phone').value, email: document.getElementById('set-business-email').value, logo: '', taxRate: parseFloat(document.getElementById('set-tax-rate').value) || 0 },
+    service: { defaultLaborRate: parseFloat(document.getElementById('set-labor-rate').value) || 0, defaultPaymentTerms: document.getElementById('set-payment-terms').value, defaultCancellationPolicy: document.getElementById('set-cancellation-policy').value },
+    forms: { defaultStatus: document.getElementById('set-default-status').value, autoSaveInterval: parseInt(document.getElementById('set-autosave').value) || 0 },
+    version: "1.0.0"
+  };
+  setData('settings', settings);
+  toast('settings saved', 'success');
+}
+
+function resetDefaults() {
+  openConfirmModal('reset-defaults', function () {
+    setData('settings', getDefaultSettings());
+    loadSettings();
+    toast('settings reset to defaults', 'success');
+  });
+}
+
+/* === EXPORT / IMPORT === */
+function exportSubmissionsCSV() {
+  var subs = getData('submissions') || [];
+  if (subs.length === 0) { toast('no submissions to export', 'error'); return; }
+  var headers = ['id','formId','formName','clientName','status','submittedAt','createdAt'];
+  var rows = subs.map(function (s) { return [s.id, s.formId, s.formName, s.clientName || '', s.status, s.submittedAt || '', s.createdAt]; });
+  downloadCSV('cleanboard-submissions-' + todayISO() + '.csv', headers, rows);
+  toast('submissions exported', 'success');
+}
+
+function exportRangeCSV() {
+  var from = document.getElementById('export-from').value;
+  var to = document.getElementById('export-to').value;
+  if (!from || !to) { toast('select date range', 'error'); return; }
+  var subs = getData('submissions') || [];
+  var filtered = subs.filter(function (s) {
+    var d = new Date(s.createdAt || s.submittedAt);
+    return d >= new Date(from) && d <= new Date(to + 'T23:59:59');
+  });
+  if (filtered.length === 0) { toast('no submissions in range', 'error'); return; }
+  var headers = ['id','formId','formName','clientName','status','submittedAt','createdAt'];
+  var rows = filtered.map(function (s) { return [s.id, s.formId, s.formName, s.clientName || '', s.status, s.submittedAt || '', s.createdAt]; });
+  downloadCSV('cleanboard-submissions-' + from + '-to-' + to + '.csv', headers, rows);
+  toast('range exported', 'success');
+}
+
+function exportClientsCSV() {
+  var clients = getData('clients') || [];
+  if (clients.length === 0) { toast('no clients to export', 'error'); return; }
+  var headers = ['id','name','address','phone','email','notes','createdAt'];
+  var rows = clients.map(function (c) { return [c.id, c.name, c.address, c.phone || '', c.email || '', c.notes || '', c.createdAt]; });
+  downloadCSV('cleanboard-clients-' + todayISO() + '.csv', headers, rows);
+  toast('clients exported', 'success');
+}
+
+function exportFullJSON() {
+  var data = { forms: getData('forms') || [], submissions: getData('submissions') || [], packets: getData('packets') || [], clients: getData('clients') || [], settings: getData('settings') || getDefaultSettings(), exportedAt: nowISO() };
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'cleanboard-backup-' + todayISO() + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('full backup exported', 'success');
+}
+
+function importJSON(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function (e) {
+    try {
+      var data = JSON.parse(e.target.result);
+      if (data.forms) setData('forms', data.forms);
+      if (data.submissions) setData('submissions', data.submissions);
+      if (data.packets) setData('packets', data.packets);
+      if (data.clients) setData('clients', data.clients);
+      if (data.settings) setData('settings', data.settings);
+      toast('data imported successfully', 'success');
+      init();
+    } catch (err) { toast('invalid JSON file', 'error'); }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+function downloadCSV(filename, headers, rows) {
+  var csv = [headers.join(',')];
+  rows.forEach(function (r) {
+    csv.push(r.map(function (cell) {
+      var s = String(cell || '').replace(/"/g, '""');
+      if (s.indexOf(',') !== -1 || s.indexOf('"') !== -1 || s.indexOf('\n') !== -1) s = '"' + s + '"';
+      return s;
+    }).join(','));
+  });
+  var blob = new Blob([csv.join('\n')], { type: 'text/csv' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function exportCSV() { exportSubmissionsCSV(); }
+
+/* === PRINT / PDF === */
+function printFormPDF() {
+  if (!currentFormId) return;
+  var forms = getData('forms') || [];
+  var form = forms.find(function (f) { return f.id === currentFormId; });
+  if (!form) return;
+  var values = collectFormValues(form);
+  var settings = getData('settings') || getDefaultSettings();
+  var win = window.open('', '_blank', 'width=900,height=700');
+  if (!win) { toast('pop-up blocked — allow pop-ups and try again', 'error'); return; }
+  win.document.write(buildPrintHTML(form, values, settings, null));
+  win.document.close();
+  win.focus();
+  win.onafterprint = function () { win.close(); };
+  setTimeout(function () { win.print(); }, 300);
+}
+
+function printSubmissionPDF(sub) {
+  var forms = getData('forms') || [];
+  var form = forms.find(function (f) { return f.id === sub.formId; });
+  var settings = getData('settings') || getDefaultSettings();
+  var win = window.open('', '_blank', 'width=900,height=700');
+  if (!win) { toast('pop-up blocked — allow pop-ups and try again', 'error'); return; }
+  win.document.write(buildPrintHTML(form || { name: sub.formName, sections: [] }, sub.values, settings, sub));
+  win.document.close();
+  win.focus();
+  win.onafterprint = function () { win.close(); };
+  setTimeout(function () { win.print(); }, 300);
+}
+
+function buildPrintHTML(form, values, settings, sub) {
+  var biz = settings.business;
+  var rows = '';
+  if (form && form.sections) {
+    form.sections.forEach(function (sec) {
+      rows += '<tr><td colspan="2" style="padding:12pt 0 4pt;border-bottom:1px solid #ccc;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;font-size:9pt;">' + esc(sec.name) + '</td></tr>';
+      sec.fields.forEach(function (field) {
+        var val = values[field.id];
+        if (val === undefined || val === null) val = '';
+        if (Array.isArray(val)) val = val.join(', ');
+        rows += '<tr><td style="padding:4pt 8pt 4pt 0;width:35%;vertical-align:top;color:#555;font-size:9pt;">' + esc(field.label) + '</td><td style="padding:4pt 0;vertical-align:top;font-size:9pt;">' + esc(val) + '</td></tr>';
+      });
+    });
+  } else {
+    rows += '<tr><td colspan="2"><pre style="font-size:9pt;white-space:pre-wrap;">' + esc(JSON.stringify(values, null, 2)) + '</pre></td></tr>';
+  }
+  var formNum = sub ? sub.id.replace('sub_', '') : Date.now();
+  return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + esc(form.name) + '</title>' +
+    '<style>body{font-family:ui-monospace,SF Mono,Menlo,Consolas,monospace;font-size:10pt;line-height:1.4;margin:0;padding:20pt;color:#222;}table{width:100%;border-collapse:collapse;}.header{border-bottom:2px solid #222;padding-bottom:8pt;margin-bottom:12pt;}.footer{border-top:1px solid #ccc;padding-top:4pt;margin-top:12pt;font-size:8pt;color:#666;text-align:center;}td{vertical-align:top;}</style></head><body>' +
+    '<div class="header"><div style="font-weight:700;font-size:14pt;">' + esc(biz.name || 'CleanBoard Pro') + '</div>' +
+    '<div style="font-size:11pt;font-weight:700;margin-top:4pt;">' + esc(form.name) + '</div>' +
+    '<div style="font-size:9pt;color:#666;margin-top:4pt;">Date: ' + (sub && sub.submittedAt ? fmtDate(sub.submittedAt) : fmtDate(new Date())) + ' &nbsp;|&nbsp; Form #: ' + esc(formNum) + '</div></div>' +
+    '<table>' + rows + '</table>' +
+    '<div class="footer">© 2026 CleanBoard Pro · All Rights Reserved · Page 1 of 1</div>' +
+    '</body></html>';
+}
+
+/* === MODALS === */
+var activeTrapHandler = null;
+
+function trapModalFocus(modal) {
+  var sel = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  var focusable = Array.prototype.slice.call(modal.querySelectorAll(sel));
+  if (!focusable.length) return;
+  var first = focusable[0];
+  var last = focusable[focusable.length - 1];
+  if (activeTrapHandler) document.removeEventListener('keydown', activeTrapHandler);
+  activeTrapHandler = function (e) {
+    if (e.key !== 'Tab') return;
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  };
+  document.addEventListener('keydown', activeTrapHandler);
+}
+
+function openModal(id) {
+  document.getElementById('modal-backdrop').classList.add('is-open');
+  var modal = document.getElementById(id);
+  modal.classList.add('is-open');
+  setTimeout(function () {
+    var firstInput = modal.querySelector('input:not([disabled]), select:not([disabled]), textarea:not([disabled])');
+    var firstFocusable = firstInput || modal.querySelector('button:not([disabled])');
+    if (firstFocusable) firstFocusable.focus();
+    trapModalFocus(modal);
+  }, 50);
+}
+
+function closeAllModals() {
+  document.querySelectorAll('.modal, .search-palette').forEach(function (m) { m.classList.remove('is-open'); });
+  document.getElementById('modal-backdrop').classList.remove('is-open');
+  if (activeTrapHandler) { document.removeEventListener('keydown', activeTrapHandler); activeTrapHandler = null; }
+}
+
+function openConfirmModal(type, callback) {
+  confirmCallback = callback;
+  var titles = { 'delete-sub': 'Delete submission?', 'delete-packet': 'Delete packet?', 'delete-client': 'Delete client?', 'clear-all': 'Clear ALL data?', 'reset-defaults': 'Reset to defaults?', 'cancel-form': 'Discard form?' };
+  var bodies = { 'delete-sub': 'This submission will be permanently removed.', 'delete-packet': 'This packet will be permanently removed.', 'delete-client': 'This client will be permanently removed.', 'clear-all': 'All forms, submissions, clients, and packets will be deleted. This cannot be undone.', 'reset-defaults': 'Settings will be reset to factory defaults.', 'cancel-form': 'Unsaved changes will be lost.' };
+  document.getElementById('confirm-title').textContent = titles[type] || 'Confirm';
+  document.getElementById('confirm-body').textContent = bodies[type] || 'Are you sure?';
+  document.getElementById('btn-confirm').onclick = function () {
+    if (type === 'clear-all') {
+      var keys = ['forms','submissions','packets','clients','settings','seeded'];
+      keys.forEach(function (k) { try { localStorage.removeItem(PREFIX + k); } catch (e) {} });
+      toast('all data cleared', 'success');
+      seedData();
+      init();
+    } else if (confirmCallback) {
+      confirmCallback();
+    }
+    closeAllModals();
+  };
+  openModal('modal-confirm');
+}
+
+/* === SEARCH PALETTE === */
+var searchSelectedIdx = -1;
+
+function openSearchPalette() {
+  searchSelectedIdx = -1;
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results').innerHTML = '';
+  document.getElementById('modal-backdrop').classList.add('is-open');
+  document.getElementById('search-palette').classList.add('is-open');
+  document.getElementById('search-input').focus();
+}
+
+function updateSearchSelection(items) {
+  items.forEach(function (item, i) {
+    item.classList.toggle('is-selected', i === searchSelectedIdx);
+    if (i === searchSelectedIdx) item.scrollIntoView({ block: 'nearest' });
+  });
+}
+
+function doSearch() {
+  searchSelectedIdx = -1;
+  var q = document.getElementById('search-input').value.toLowerCase().trim();
+  var results = document.getElementById('search-results');
+  results.innerHTML = '';
+  if (!q) return;
+  var items = [];
+  var forms = getData('forms') || [];
+  forms.forEach(function (f) {
+    if (f.name.toLowerCase().indexOf(q) !== -1) items.push({ label: f.name, action: function () { showView('board'); openFormFill(f.id); }, key: 'Form' });
+  });
+  var subs = getData('submissions') || [];
+  subs.forEach(function (s) {
+    if ((s.clientName || '').toLowerCase().indexOf(q) !== -1 || s.formName.toLowerCase().indexOf(q) !== -1) {
+      items.push({ label: s.formName + ' — ' + (s.clientName || 'Unknown'), action: function () { viewSubmission(s.id); }, key: 'Submission' });
+    }
+  });
+  var clients = getData('clients') || [];
+  clients.forEach(function (c) {
+    if (c.name.toLowerCase().indexOf(q) !== -1) items.push({ label: c.name, action: function () { showView('clients'); }, key: 'Client' });
+  });
+  var packets = getData('packets') || [];
+  packets.forEach(function (p) {
+    if (p.name.toLowerCase().indexOf(q) !== -1) items.push({ label: p.name, action: function () { showView('packets'); }, key: 'Packet' });
+  });
+  if (items.length === 0) {
+    results.innerHTML = '<div class="search-palette-item"><span class="muted">No results</span></div>';
+    return;
+  }
+  items.slice(0, 10).forEach(function (item, idx) {
+    var div = document.createElement('div');
+    div.className = 'search-palette-item';
+    div.setAttribute('data-idx', idx);
+    div.setAttribute('role', 'option');
+    div.innerHTML = '<span>' + esc(item.label) + '</span><span class="search-palette-item-key">' + item.key + '</span>';
+    div.addEventListener('click', function () { closeAllModals(); item.action(); });
+    results.appendChild(div);
+  });
+}
+
+/* === INIT === */
+function updateBadge(type, count) {
+  var el = document.getElementById('nav-badge-' + type);
+  if (el) el.textContent = count;
+}
+
+function init() {
+  seedData();
+  setupEventDelegation();
+  var forms = getData('forms') || [];
+  var subs = getData('submissions') || [];
+  var clients = getData('clients') || [];
+  var packets = getData('packets') || [];
+  updateBadge('forms', forms.length);
+  updateBadge('submissions', subs.length);
+  updateBadge('clients', clients.length);
+  updateBadge('packets', packets.length);
+  renderFormsLibrary();
+  renderSubmissions();
+  renderPackets();
+  renderClients();
+  loadSettings();
+  var pd = document.getElementById('print-date');
+  if (pd) pd.textContent = todayISO();
+}
+
+init();
+</script>
+</body>
+</html>
