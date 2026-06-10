@@ -62,5 +62,21 @@
     "monogram": "C",
     "price": "$29",
     "etsyUrl": "https://www.etsy.com/listing/4518719013/cleaning-business-forms-bundle-app-for"
+  },
+  {
+    "id": "cleanschedule-pro",
+    "name": "CleanSchedule Pro",
+    "tagline": "Job Scheduler",
+    "description": "A complete job scheduler for cleaning service businesses. Schedule one-time and recurring jobs, print the daily route as a PDF, track actual time with a start/stop clock. Works offline, no subscription, no account.",
+    "features": [
+      "One-time and recurring job scheduling",
+      "Daily route PDF print",
+      "Start/stop time tracking per job",
+      "Works offline — no subscription, no account"
+    ],
+    "color": "#4A5AC4",
+    "monogram": "S",
+    "price": "$29",
+    "etsyUrl": "https://www.etsy.com/listing/4519362297/cleaning-schedule-app-for-service-pros"
   }
 ]
