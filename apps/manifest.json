@@ -78,5 +78,21 @@
     "monogram": "S",
     "price": "$29",
     "etsyUrl": "https://www.etsy.com/listing/4519362297/cleaning-schedule-app-for-service-pros"
+  },
+  {
+    "id": "cleancrm-pro",
+    "name": "CleanCRM Pro",
+    "tagline": "Client Manager",
+    "description": "A complete client and lead manager for cleaning service businesses. Track prospects through your pipeline, manage client and property profiles, and onboard new clients in 8 guided steps. Works offline, no subscription, no account.",
+    "features": [
+      "Lead pipeline from first contact to client",
+      "8-step client onboarding workflow",
+      "Client & property profiles",
+      "Local-first — your data never leaves your device"
+    ],
+    "color": "#6B4A6E",
+    "monogram": "C",
+    "price": "$39",
+    "etsyUrl": "https://www.etsy.com/listing/4519939105/cleaning-client-onboarding-app-for"
   }
 ]
