@@ -94,5 +94,21 @@
     "monogram": "C",
     "price": "$39",
     "etsyUrl": "https://www.etsy.com/listing/4519939105/cleaning-client-onboarding-app-for"
+  },
+  {
+    "id": "lawnquote-pro",
+    "name": "LawnQuote Pro",
+    "tagline": "Lawn Care Estimator",
+    "description": "Build professional lawn care estimates in under a minute. Line items, taxes, discounts — all automatic. Local-first, no account, no subscription. Built for solo landscapers and small lawn care businesses.",
+    "features": [
+      "Build estimates with line items in seconds",
+      "Auto-apply taxes & discounts",
+      "Print or export to PDF",
+      "Local-first — your data never leaves your device"
+    ],
+    "color": "#2D6A3E",
+    "monogram": "L",
+    "price": "$39",
+    "etsyUrl": "https://www.etsy.com/listing/4520752842/lawn-care-estimate-app-for-service-pros"
   }
 ]
