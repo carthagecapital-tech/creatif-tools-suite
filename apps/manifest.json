@@ -110,5 +110,21 @@
     "monogram": "L",
     "price": "$39",
     "etsyUrl": "https://www.etsy.com/listing/4520752842/lawn-care-estimate-app-for-service-pros"
+  },
+  {
+    "id": "lawnforms-pro",
+    "name": "LawnForms Pro",
+    "tagline": "Contract Templates",
+    "description": "A library of contract templates for lawn care service businesses. Pick a template, fill in the details, sign and print. Works offline, no subscription, no account. Local-first.",
+    "features": [
+      "Multiple contract templates ready to fill",
+      "Print or export to PDF",
+      "Works offline — no subscription, no account",
+      "Local-first — your data never leaves your device"
+    ],
+    "color": "#1F5F5B",
+    "monogram": "L",
+    "price": "$19",
+    "etsyUrl": "https://www.etsy.com/listing/4522365713/lawn-care-contract-template-app-for"
   }
 ]

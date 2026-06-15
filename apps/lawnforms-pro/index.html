@@ -1,0 +1,2910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LawnForms Pro — Contract Templates</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%232D6A3E'/><text x='16' y='22' font-family='ui-monospace,monospace' font-size='18' font-weight='700' fill='white' text-anchor='middle'>F</text></svg>">
+<script>
+  /* Pre-paint theme to prevent FOUC */
+  (function () {
+    try {
+      var stored = localStorage.getItem('lawnforms-theme') || localStorage.getItem('cleanbiz-theme');
+      var resolved = 'light';
+      if (stored) {
+        if (stored === 'system') {
+          resolved = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        } else {
+          resolved = stored;
+        }
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        resolved = 'dark';
+      }
+      document.documentElement.setAttribute('data-theme', resolved);
+    } catch (e) { /* localStorage unavailable */ }
+  })();
+</script>
+<style>
+/* ============================================================
+   CLEANBIZ SUITE — BASE TEMPLATE v1.2
+   ============================================================ */
+
+:root {
+  /* base palette — never change between apps */
+  --bg: #F2EFE8;
+  --surface: #FBFAF6;
+  --ink: #1A1A1A;
+  --ink-2: #4A4A4A;
+  --ink-3: #8A8A8A;
+  --line: #D9D4C7;
+  --line-soft: #E8E3D6;
+  --red: #C8442A;
+  --green: #3D7A4E;
+  --orange: #C8782A;
+
+  /* ACCENT — light variant (swap per app) */
+  --accent: #1F5F5B;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #D8E8E6;
+
+  /* typography */
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-base: 13px;
+  --fs-md: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 24px;
+  --fs-2xl: 36px;
+  --fs-3xl: 56px;
+
+  /* spacing */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+
+  /* layout */
+  --sidebar-w: 240px;
+  --footer-h: 36px;
+}
+
+/* === DARK THEME === */
+[data-theme="dark"] {
+  --bg: #1A1815;
+  --surface: #25231E;
+  --ink: #F0EDE5;
+  --ink-2: #A8A499;
+  --ink-3: #6E6A60;
+  --line: #3A3733;
+  --line-soft: #2D2B26;
+  --red: #E85A3D;
+  --green: #5BAE6E;
+  --orange: #E89A47;
+  --accent: #3D8A85;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #243834;
+}
+
+/* === RESET === */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+*:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+*:focus:not(:focus-visible) { outline: none; }
+*:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: var(--fs-base);
+  line-height: 1.5;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background 0.2s, color 0.2s;
+}
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+input, select, textarea { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; margin: 0; padding: 0; }
+i { font-style: normal; }
+
+/* === SKIP LINK === */
+.skip-link {
+  position: absolute; left: -9999px; top: var(--sp-2); z-index: 9999;
+  padding: var(--sp-2) var(--sp-3); background: var(--accent); color: var(--accent-ink);
+  font-family: var(--mono); font-size: var(--fs-sm);
+}
+.skip-link:focus { left: var(--sp-2); }
+
+/* === TYPOGRAPHY HELPERS === */
+.label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.muted { color: var(--ink-3); }
+.mono-num { font-variant-numeric: tabular-nums; }
+
+/* === LAYOUT === */
+.app {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  min-height: calc(100vh - var(--footer-h));
+  min-height: calc(100dvh - var(--footer-h));
+}
+@media (max-width: 900px) {
+  .app { grid-template-columns: 1fr; }
+}
+
+/* === SIDEBAR === */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  padding: var(--sp-5) var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  min-height: calc(100vh - var(--footer-h));
+  min-height: calc(100dvh - var(--footer-h));
+}
+@media (max-width: 900px) {
+  .sidebar { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+}
+
+.brand {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--line-soft);
+}
+.brand-mark {
+  width: 32px;
+  height: 32px;
+  background: #2D6A3E;
+  color: var(--accent-ink);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: var(--fs-md);
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.brand-text { line-height: 1.2; }
+.brand-name {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.brand-sub {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+.brand-version {
+  margin-left: auto;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  font-size: var(--fs-sm);
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.search:hover { border-color: var(--ink-2); }
+.search-icon { color: var(--ink-3); }
+.search-text { flex: 1; }
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  font-size: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+}
+
+/* === NAV (with grouping) === */
+.nav-group + .nav-group { margin-top: var(--sp-4); }
+.nav-label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  margin-bottom: var(--sp-2);
+  padding: 0 var(--sp-3);
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.nav-item:hover { background: var(--bg); color: var(--ink); }
+.nav-item.active {
+  color: var(--ink);
+  background: var(--bg);
+  border-left-color: var(--accent);
+}
+.nav-num { color: var(--ink-3); width: 22px; font-variant-numeric: tabular-nums; }
+.nav-text { flex: 1; }
+.nav-badge {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+/* === THEME TOGGLE — fixed top-right === */
+.theme-toggle-fixed {
+  position: fixed; top: 16px; right: 16px; z-index: 100;
+  width: 36px; height: 36px; display: grid; place-items: center;
+  background: var(--surface); border: 1px solid var(--line);
+  color: var(--ink-2); cursor: pointer; font-size: 16px;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.theme-toggle-fixed:hover { border-color: var(--ink-2); color: var(--ink); background: var(--bg); }
+@media (max-width: 900px) { .theme-toggle-fixed { top: 12px; right: 12px; width: 32px; height: 32px; font-size: 14px; } }
+
+.sidebar-status {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background: var(--red);
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.dot.green { background: var(--green); }
+
+/* === PULSE === */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.7); }
+}
+.dot.live { animation: pulse-dot 1.8s ease-in-out infinite; }
+.nav-item:not(.active) .dot.live { display: none; }
+.nav-item.active .dot.live { background: var(--accent); }
+@media (prefers-reduced-motion: reduce) {
+  .dot.live { animation: none; }
+}
+
+/* === MAIN === */
+.main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topbar {
+  padding: var(--sp-5) var(--sp-6) var(--sp-4);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-5);
+  flex-wrap: wrap;
+}
+.breadcrumb {
+  width: 100%;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--sp-2);
+}
+.title-block { flex: 1; min-width: 200px; }
+.title {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.title em {
+  font-style: normal;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.actions {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.15s;
+}
+.btn:hover { background: var(--bg); border-color: var(--ink-2); }
+.btn-primary {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+.btn-primary:hover { background: var(--ink-2); border-color: var(--ink-2); }
+.btn-accent {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+.btn-accent:hover { filter: brightness(0.92); border-color: var(--accent); }
+.btn-danger {
+  background: var(--red);
+  color: white;
+  border-color: var(--red);
+}
+.btn-danger:hover { filter: brightness(0.92); }
+.btn-sm {
+  padding: 2px 8px;
+  font-size: var(--fs-xs);
+}
+.btn .kbd {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.25);
+  color: inherit;
+}
+.btn:not(.btn-primary):not(.btn-accent):not(.btn-danger) .kbd {
+  background: var(--bg);
+  border-color: var(--line);
+  color: var(--ink-2);
+}
+.btn-primary .kbd {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.2);
+  color: inherit;
+}
+
+/* === CONTENT === */
+.content {
+  padding: var(--sp-5) var(--sp-6) var(--sp-7);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+}
+@media (max-width: 1100px) { .content { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 700px) { .content { grid-template-columns: 1fr; padding: var(--sp-4); } }
+
+/* === STATUS BAR === */
+.statusbar {
+  margin-top: auto;
+  padding: var(--sp-2) var(--sp-6);
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+@media (max-width: 700px) { .statusbar { padding: var(--sp-2) var(--sp-4); } }
+.statusbar .grow { flex: 1; }
+.statusbar .right { display: flex; gap: var(--sp-4); align-items: center; }
+
+/* === FOOTER === */
+.app-footer {
+  height: var(--footer-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--sp-4);
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+.app-footer .app-name {
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.app-footer .sep {
+  margin: 0 var(--sp-2);
+  color: var(--ink-3);
+}
+
+/* === TOAST SYSTEM === */
+.toast-host {
+  position: fixed;
+  bottom: calc(var(--footer-h) + var(--sp-4));
+  right: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  z-index: 1000;
+  pointer-events: none;
+  max-width: 360px;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--ink);
+  color: var(--bg);
+  font-size: var(--fs-sm);
+  min-width: 200px;
+  pointer-events: auto;
+  border: 1px solid var(--ink);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  animation: toast-in 0.2s ease-out;
+}
+.toast.is-leaving { animation: toast-out 0.2s ease-in forwards; }
+.toast .toast-icon {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.toast.success .toast-icon { background: var(--green); }
+.toast.info .toast-icon { background: var(--accent); }
+.toast.error .toast-icon { background: var(--red); }
+.toast .toast-msg { flex: 1; }
+
+@keyframes toast-in {
+  from { transform: translateY(8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes toast-out {
+  to { transform: translateY(8px); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast { animation: none; }
+}
+
+/* === MODAL SYSTEM === */
+.modal-backdrop { position: fixed; top: 0; left: 0; right: 0; bottom: 0; inset: 0; background: rgba(0,0,0,0.4); z-index: 900; display: none; }
+.modal-backdrop.is-open { display: block; }
+.modal {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background: var(--surface); border: 1px solid var(--line);
+  z-index: 901; display: none; max-width: 90vw; max-height: 90vh;
+  overflow: auto; min-width: 400px;
+}
+.modal.is-open { display: block; }
+.modal-header { padding: var(--sp-4); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-size: var(--fs-md); font-weight: 700; }
+.modal-close { font-size: var(--fs-lg); color: var(--ink-3); cursor: pointer; line-height: 1; }
+.modal-close:hover { color: var(--ink); }
+.modal-body { padding: var(--sp-4); }
+.modal-footer { padding: var(--sp-4); border-top: 1px solid var(--line); display: flex; gap: var(--sp-2); justify-content: flex-end; }
+@media (max-width: 600px) { .modal { min-width: 90vw; } }
+
+/* === SEARCH PALETTE === */
+.search-palette {
+  position: fixed; top: 20%; left: 50%; transform: translateX(-50%);
+  width: 500px; max-width: 90vw; background: var(--surface);
+  border: 1px solid var(--line); z-index: 902; display: none;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+}
+.search-palette.is-open { display: block; }
+.search-palette-input {
+  width: 100%; padding: var(--sp-3) var(--sp-4);
+  border: none; border-bottom: 1px solid var(--line);
+  background: var(--bg); font-size: var(--fs-md); color: var(--ink);
+  font-family: var(--mono); outline: none;
+}
+.search-palette-results { max-height: 300px; overflow: auto; }
+.search-palette-item { padding: var(--sp-3) var(--sp-4); cursor: pointer; display: flex; align-items: center; gap: var(--sp-3); }
+.search-palette-item:hover { background: var(--bg); }
+.search-palette-item.is-selected { background: var(--bg); outline: 2px solid var(--accent); outline-offset: -2px; }
+.search-palette-item-key { margin-left: auto; font-size: var(--fs-xs); color: var(--ink-3); }
+
+/* === HELP MODAL === */
+.help-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+@media (max-width: 600px) { .help-grid { grid-template-columns: 1fr; } }
+.help-item { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-2) 0; }
+.help-key { display: flex; gap: 2px; }
+
+/* === PRINT / PDF === */
+.print-footer { display: none; }
+@media print {
+  @page {
+    margin: 15mm 15mm 20mm 15mm;
+    size: auto;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 10pt;
+  }
+  .sidebar, .actions, .search, .statusbar, .theme-toggle-fixed,
+  .no-print, .app-footer, .toast-host, .modal-backdrop, .modal, .search-palette, .confirm-overlay { display: none !important; }
+  .app {
+    display: block !important;
+    min-height: 0 !important;
+  }
+  .main { border: 0 !important; }
+  .topbar {
+    border: 0 !important;
+    padding: 0 0 8pt !important;
+    border-bottom: 1px solid #999 !important;
+    margin-bottom: 12pt !important;
+  }
+  .breadcrumb { color: #666 !important; }
+  .title em { color: #666 !important; }
+  .content {
+    display: block !important;
+    padding: 0 !important;
+  }
+  .preview-doc {
+    border: 1px solid #999 !important;
+    background: white !important;
+    padding: 10pt !important;
+    margin-bottom: 8pt !important;
+    page-break-inside: avoid;
+    min-height: 0 !important;
+  }
+  .corner { display: none !important; }
+  .big-num { font-size: 22pt !important; }
+  .print-footer {
+    display: flex !important;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 8pt;
+    color: #666;
+    border-top: 1px solid #ccc;
+    padding: 4pt 10mm;
+  }
+}
+
+/* ============================================================
+   LAWNFORMS PRO — APP-SPECIFIC STYLES
+   ============================================================ */
+
+/* === CONTENT OVERRIDE === */
+.content { display: block; }
+
+/* === VIEW CONTAINERS === */
+.view-container { display: none; }
+.view-container.active { display: block; }
+
+/* === EMPTY STATE === */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--ink-2); }
+.empty-title { font-size: var(--fs-md); font-weight: 700; margin-bottom: var(--sp-3); color: var(--ink); }
+.empty-desc { font-size: var(--fs-sm); margin-bottom: var(--sp-4); line-height: 1.5; }
+
+/* === DATA TABLES === */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 calc(-1 * var(--sp-4)); padding: 0 var(--sp-4); }
+@media (min-width: 900px) { .table-wrap { margin: 0; padding: 0; overflow: visible; } }
+.data-table { width: 100%; min-width: 600px; border-collapse: collapse; font-size: var(--fs-sm); }
+.data-table th {
+  text-align: left; padding: var(--sp-3) var(--sp-4); font-size: var(--fs-xs);
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2);
+  font-weight: 500; border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+.data-table td { padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--line-soft); vertical-align: middle; }
+.data-table tr:hover td { background: var(--bg); }
+.data-table .actions-cell { display: flex; gap: var(--sp-1); flex-wrap: wrap; }
+.data-table .actions-cell .btn { padding: var(--sp-1) var(--sp-2); font-size: var(--fs-xs); }
+
+/* === STATS BAR === */
+.stats-bar {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-4); margin-bottom: var(--sp-6);
+}
+@media (max-width: 900px) { .stats-bar { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 500px) { .stats-bar { grid-template-columns: 1fr; } }
+.stat-card {
+  background: var(--surface); border: 1px solid var(--line); padding: var(--sp-5);
+  position: relative;
+  display: flex; flex-direction: column; gap: var(--sp-2);
+  min-height: 96px;
+}
+.stat-num { font-size: 28px; font-weight: 700; color: var(--ink); line-height: 1.1; }
+.stat-label { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2); margin-top: auto; }
+
+/* === FILTER BAR === */
+.filter-bar { display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-5); flex-wrap: wrap; }
+.filter-pills { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.pill {
+  padding: 6px 12px; border: 1px solid var(--line); background: var(--surface);
+  font-size: var(--fs-xs); cursor: pointer; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--ink-2); transition: all 0.1s;
+  font-family: var(--mono);
+}
+.pill:hover { border-color: var(--ink-2); color: var(--ink); }
+.pill.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.pill .pill-count { font-weight: 600; margin-left: 4px; }
+.filter-search {
+  padding: 6px 12px; border: 1px solid var(--line); background: var(--surface);
+  font-size: var(--fs-sm); color: var(--ink); min-width: 200px;
+  font-family: var(--mono);
+}
+
+/* === STATUS BADGES === */
+.status-badge {
+  display: inline-block; padding: 2px 6px; font-size: var(--fs-xs);
+  border: 1px solid var(--line); text-transform: uppercase; letter-spacing: 0.04em;
+  cursor: pointer;
+}
+.status-badge:hover { filter: brightness(0.92); }
+.status-draft { background: var(--bg); color: var(--ink-2); }
+.status-sent { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+.status-signed { background: var(--green); color: white; border-color: var(--green); }
+.status-active { background: var(--accent); color: white; border-color: var(--accent); }
+.status-expired { background: var(--orange); color: white; border-color: var(--orange); }
+.status-cancelled { background: var(--red); color: white; border-color: var(--red); }
+.status-declined { background: var(--red); color: white; border-color: var(--red); }
+.status-renewed { background: var(--green); color: white; border-color: var(--green); }
+
+/* === TEMPLATES GRID === */
+.templates-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-5); }
+@media (max-width: 900px) { .templates-grid { grid-template-columns: 1fr; } }
+.template-card {
+  background: var(--surface); border: 1px solid var(--line); padding: var(--sp-5);
+  position: relative; display: flex; flex-direction: column; gap: var(--sp-4);
+  min-height: 220px;
+}
+.template-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-3); margin-bottom: var(--sp-2); }
+.template-card-title { font-size: var(--fs-md); font-weight: 700; color: var(--ink); }
+.template-card-cat {
+  font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em;
+  background: var(--accent-soft); color: var(--accent); padding: 4px 10px;
+  white-space: nowrap;
+}
+.template-card-desc { font-size: var(--fs-sm); color: var(--ink-2); line-height: 1.5; flex: 1; }
+.template-card-meta { display: flex; gap: var(--sp-4); font-size: var(--fs-xs); color: var(--ink-3); padding-top: var(--sp-2); border-top: 1px solid var(--line-soft); }
+.template-card-meta .meta-item { display: flex; align-items: center; gap: 4px; }
+.template-card-actions { display: flex; gap: var(--sp-2); margin-top: var(--sp-2); }
+.template-card-actions .btn { flex: 1; justify-content: center; padding: var(--sp-2) var(--sp-3); }
+
+/* === FILL FORM LAYOUT === */
+.fill-layout { display: grid; grid-template-columns: 45% 55%; gap: 0; min-height: calc(100vh - 200px); border: 1px solid var(--line); }
+@media (max-width: 1100px) { .fill-layout { grid-template-columns: 1fr; } }
+.fill-form { padding: var(--sp-5); border-right: 1px solid var(--line); overflow-y: auto; max-height: calc(100vh - 200px); }
+@media (max-width: 1100px) { .fill-form { border-right: 0; border-bottom: 1px solid var(--line); max-height: none; } }
+.fill-preview { padding: var(--sp-5); background: var(--bg); overflow-y: auto; max-height: calc(100vh - 200px); }
+@media (max-width: 1100px) { .fill-preview { max-height: none; } }
+
+.template-header { padding-bottom: var(--sp-4); border-bottom: 1px solid var(--line); margin-bottom: var(--sp-5); }
+.template-header-name { font-size: var(--fs-md); font-weight: 700; }
+.template-header-meta { font-size: var(--fs-xs); color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 4px; }
+.template-header-actions { margin-top: var(--sp-3); display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+
+.form-section { margin-bottom: var(--sp-6); }
+.form-section-title { font-size: var(--fs-sm); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink); margin-bottom: var(--sp-4); font-weight: 700; padding-bottom: var(--sp-2); border-bottom: 1px solid var(--line); }
+
+.form-row { display: flex; gap: var(--sp-4); margin-bottom: var(--sp-4); flex-wrap: wrap; }
+.form-row .field { flex: 1; min-width: 160px; }
+.form-row .field label {
+  display: block; font-size: var(--fs-xs); text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--ink-2); margin-bottom: var(--sp-2); font-weight: 500;
+}
+.form-row .field label .req { color: var(--red); }
+.form-row .field input, .form-row .field select, .form-row .field textarea {
+  width: 100%; padding: var(--sp-3); border: 1px solid var(--line);
+  background: var(--bg); color: var(--ink); font-family: var(--mono); font-size: var(--fs-sm);
+}
+.form-row .field input:focus, .form-row .field select:focus, .form-row .field textarea:focus {
+  outline: 2px solid var(--accent); outline-offset: -1px;
+}
+.form-row .field textarea { min-height: 80px; resize: vertical; }
+
+.clause-pick { display: flex; align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3); border: 1px solid var(--line-soft); margin-bottom: var(--sp-2); background: var(--bg); }
+.clause-pick:hover { background: var(--surface); }
+.clause-pick input[type="checkbox"] { margin-top: 4px; transform: scale(1.1); }
+.clause-pick-body { flex: 1; }
+.clause-pick-name { font-weight: 500; font-size: var(--fs-sm); }
+.clause-pick-preview { font-size: var(--fs-xs); color: var(--ink-3); margin-top: 4px; line-height: 1.4; }
+
+.signature-block { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); margin-top: var(--sp-4); }
+.signature-block .sig-field label { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2); display: block; margin-bottom: var(--sp-2); font-weight: 500; }
+.signature-block .sig-line { border-bottom: 1px solid var(--ink); height: 44px; display: flex; align-items: flex-end; padding-bottom: 6px; font-family: var(--mono); color: var(--ink); font-size: var(--fs-md); }
+.signature-block .sig-date { font-size: var(--fs-xs); color: var(--ink-3); margin-top: 4px; }
+.signature-block .sig-input { margin-top: var(--sp-2); width: 100%; padding: var(--sp-2); border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-family: var(--mono); font-size: var(--fs-sm); }
+
+/* === CONTRACT PREVIEW === */
+.preview-doc {
+  background: var(--surface); border: 1px solid var(--line);
+  padding: var(--sp-6); min-height: 600px; font-size: 13px; line-height: 1.6;
+  color: var(--ink); font-family: var(--mono);
+}
+.preview-doc h1 { font-size: 20px; font-weight: 700; text-align: center; margin: 0 0 var(--sp-5); letter-spacing: 0.04em; text-transform: uppercase; }
+.preview-doc h2 { font-size: 14px; font-weight: 700; margin: var(--sp-5) 0 var(--sp-3); text-transform: uppercase; letter-spacing: 0.04em; }
+.preview-doc p { margin: 0 0 var(--sp-3); }
+.preview-doc .parties { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); margin-bottom: var(--sp-4); }
+.preview-doc .party-block { border: 1px solid var(--line); padding: var(--sp-3); }
+.preview-doc .party-block strong { display: block; margin-bottom: 6px; }
+.preview-doc .clause-block { margin-bottom: var(--sp-4); }
+.preview-doc .clause-block .clause-title { font-weight: 700; margin-bottom: 4px; }
+.preview-doc .clause-block .clause-body { color: var(--ink-2); }
+.preview-doc .sig-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); margin-top: var(--sp-6); }
+.preview-doc .sig-block .sig-line { border-top: 1px solid var(--ink); margin-top: 36px; padding-top: 6px; min-height: 22px; font-weight: 700; }
+.preview-doc .sig-block .sig-name { font-weight: 700; margin-top: var(--sp-2); }
+.preview-doc .sig-block .sig-role { font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
+.preview-doc .preview-empty { color: var(--ink-3); text-align: center; padding: 80px 20px; font-style: italic; }
+
+/* === SETTINGS / EXPORT LAYOUT === */
+.settings-layout, .export-layout { display: flex; flex-direction: column; gap: var(--sp-5); max-width: 800px; }
+.settings-section { background: var(--surface); border: 1px solid var(--line); padding: var(--sp-5); }
+.settings-section h3 { font-size: var(--fs-md); font-weight: 700; margin: 0 0 var(--sp-4); padding-bottom: var(--sp-2); border-bottom: 1px solid var(--line); }
+.settings-section .form-row { margin-bottom: var(--sp-4); }
+.settings-section .form-row .field label { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2); display: block; margin-bottom: var(--sp-2); font-weight: 500; }
+.settings-section input, .settings-section select { padding: var(--sp-3); border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-family: var(--mono); font-size: var(--fs-sm); width: 100%; }
+
+/* === STATUS POPOVER === */
+.status-popover {
+  background: var(--surface); border: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18); min-width: 220px; max-width: 280px;
+  z-index: 9999; font-size: var(--fs-sm);
+  opacity: 1;
+  color: var(--ink);
+}
+.status-popover-title {
+  padding: var(--sp-2) var(--sp-3); font-size: var(--fs-xs);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--ink-2); border-bottom: 1px solid var(--line);
+  font-weight: 500;
+}
+.status-popover-current {
+  padding: var(--sp-2) var(--sp-3); font-size: var(--fs-xs);
+  color: var(--ink-2); background: var(--bg);
+}
+.status-popover-current strong { text-transform: uppercase; color: var(--ink); letter-spacing: 0.04em; }
+.status-popover-list { display: flex; flex-direction: column; }
+.status-popover-item {
+  display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3); border: 0; background: transparent; text-align: left;
+  color: var(--ink); font: inherit; cursor: pointer; transition: background 0.1s;
+  border-bottom: 1px solid var(--line);
+}
+.status-popover-item:last-child { border-bottom: 0; }
+.status-popover-item:hover { background: var(--bg); }
+.status-popover-icon { font-size: 14px; text-align: center; }
+.status-popover-label { font-weight: 500; }
+.status-popover-key { font-size: var(--fs-xs); color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.04em; }
+.status-popover-sep { height: 1px; background: var(--line); margin: 0; }
+.status-popover-empty { padding: var(--sp-3); text-align: center; color: var(--ink-3); font-size: var(--fs-xs); }
+
+/* === CONFIRM DIALOG === */
+.confirm-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; inset: 0; background: rgba(0,0,0,0.4); z-index: 900; display: none; align-items: center; justify-content: center; }
+.confirm-overlay.open { display: flex; }
+.confirm-box { background: var(--surface); border: 1px solid var(--line); min-width: 400px; max-width: 90vw; max-height: 90vh; overflow: auto; }
+.confirm-header { padding: var(--sp-4); border-bottom: 1px solid var(--line); font-size: var(--fs-md); font-weight: 700; }
+.confirm-body { padding: var(--sp-4); font-size: var(--fs-sm); line-height: 1.5; white-space: pre-wrap; }
+.confirm-footer { padding: var(--sp-4); border-top: 1px solid var(--line); display: flex; gap: var(--sp-2); justify-content: flex-end; }
+@media (max-width: 600px) { .confirm-box { min-width: 90vw; } }
+
+/* === RESPONSIVE: TABLES === */
+@media (max-width: 700px) {
+  .data-table thead { display: none; }
+  .data-table, .data-table tbody, .data-table tr, .data-table td { display: block; width: 100%; }
+  .data-table tr { margin-bottom: var(--sp-4); border: 1px solid var(--line); padding: var(--sp-2); background: var(--surface); }
+  .data-table td { padding: var(--sp-1) var(--sp-2); border: 0; }
+  .data-table td:before {
+    content: attr(data-label); display: block;
+    font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-3); margin-bottom: 2px; font-weight: 500;
+  }
+  .data-table .actions-cell { padding-top: var(--sp-2); margin-top: var(--sp-2); border-top: 1px solid var(--line); }
+  .data-table .actions-cell:before { display: none; }
+  .data-table { min-width: 0; }
+}
+
+/* === RESPONSIVE: TOPBAR === */
+@media (max-width: 700px) {
+  .topbar { padding: var(--sp-3) var(--sp-4); gap: var(--sp-3); }
+  .title { font-size: var(--fs-lg); }
+  .actions { width: 100%; }
+  .actions .btn { flex: 1; justify-content: center; min-width: 0; padding: var(--sp-1) var(--sp-2); font-size: var(--fs-xs); }
+  .actions .btn .kbd { display: none; }
+}
+
+/* === RESPONSIVE: FILTER PILLS === */
+@media (max-width: 700px) {
+  .filter-bar { flex-direction: column; align-items: stretch; }
+  .filter-pills { flex-wrap: wrap; }
+  .filter-pills .pill { flex: 1; min-width: 0; text-align: center; }
+  .filter-search { width: 100%; }
+}
+
+/* === RESPONSIVE: MODAL === */
+@media (max-width: 600px) {
+  .modal { min-width: 92vw !important; max-width: 92vw !important; margin: var(--sp-3); }
+  .modal-body { padding: var(--sp-3); }
+}
+
+/* === CORNER MARKS === */
+.corner {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  pointer-events: none;
+}
+.corner.tl { top: -1px; left: -1px; }
+.corner.tr { top: -1px; right: -1px; }
+.corner.bl { bottom: -1px; left: -1px; }
+.corner.br { bottom: -1px; right: -1px; }
+
+/* === RESPONSIVE: POPOVER === */
+@media (max-width: 700px) {
+  .status-popover { position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; top: auto !important; width: 100% !important; max-width: 100% !important; min-width: 0 !important; border-bottom: 0; }
+  .status-popover-list { max-height: 50vh; overflow-y: auto; }
+  .status-popover-item { padding: var(--sp-3); min-height: 48px; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<button class="theme-toggle-fixed" id="theme-toggle-btn" title="Toggle dark mode (⌘⇧T)" aria-label="Toggle dark mode">
+  <span id="theme-toggle-icon">☾</span>
+</button>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" aria-label="Application sidebar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">F</div>
+      <div class="brand-text">
+        <div class="brand-name">LawnForms</div>
+        <div class="brand-sub">pro suite</div>
+      </div>
+      <div class="brand-version">v1.0</div>
+    </div>
+
+    <div class="search" id="search-trigger" role="button" tabindex="0" aria-label="Open search palette, Command K">
+      <span class="search-icon" aria-hidden="true">⏵</span>
+      <span class="search-text">jump to anything</span>
+      <span class="kbd" aria-hidden="true">⌘</span><span class="kbd" aria-hidden="true">K</span>
+    </div>
+
+    <nav aria-label="Main navigation">
+      <div class="nav-group">
+        <div class="nav-label" aria-hidden="true">-- workspace</div>
+        <ul role="list">
+          <li class="nav-item active" data-view="templates" role="button" tabindex="0" aria-current="page" aria-label="Templates view">
+            <span class="nav-num" aria-hidden="true">01</span>
+            <span class="nav-text">templates</span>
+            <span class="dot live" aria-hidden="true"></span>
+          </li>
+          <li class="nav-item" data-view="fill" role="button" tabindex="0" aria-label="Fill form view">
+            <span class="nav-num" aria-hidden="true">02</span>
+            <span class="nav-text">fill form</span>
+            <span class="dot live" aria-hidden="true"></span>
+          </li>
+          <li class="nav-item" data-view="contracts" role="button" tabindex="0" aria-label="My contracts view">
+            <span class="nav-num" aria-hidden="true">03</span>
+            <span class="nav-text">my contracts</span>
+            <span class="dot live" aria-hidden="true"></span>
+            <span class="nav-badge" aria-hidden="true" id="nav-contracts-badge">0</span>
+          </li>
+          <li class="nav-item" data-view="clauses" role="button" tabindex="0" aria-label="Clause library view">
+            <span class="nav-num" aria-hidden="true">04</span>
+            <span class="nav-text">clauses</span>
+            <span class="dot live" aria-hidden="true"></span>
+          </li>
+          <li class="nav-item" data-view="customers" role="button" tabindex="0" aria-label="Customers view">
+            <span class="nav-num" aria-hidden="true">05</span>
+            <span class="nav-text">customers</span>
+            <span class="dot live" aria-hidden="true"></span>
+            <span class="nav-badge" aria-hidden="true" id="nav-customers-badge">0</span>
+          </li>
+        </ul>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label" aria-hidden="true">-- system</div>
+        <ul role="list">
+          <li class="nav-item" data-view="settings" role="button" tabindex="0" aria-label="Settings view">
+            <span class="nav-num" aria-hidden="true">06</span>
+            <span class="nav-text">settings</span>
+            <span class="dot live" aria-hidden="true"></span>
+          </li>
+          <li class="nav-item" data-view="export" role="button" tabindex="0" aria-label="Export view">
+            <span class="nav-num" aria-hidden="true">07</span>
+            <span class="nav-text">export</span>
+            <span class="dot live" aria-hidden="true"></span>
+          </li>
+          <li class="nav-item" role="button" tabindex="0" aria-label="Help and keyboard shortcuts" onclick="openModal('modal-help')">
+            <span class="nav-num" aria-hidden="true">08</span>
+            <span class="nav-text">help</span>
+            <span class="dot live" aria-hidden="true"></span>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-status">
+        <span class="dot green" aria-hidden="true"></span>
+        <span>local-only · data on device</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="main-content">
+
+    <header class="topbar" aria-label="Page header">
+      <div class="breadcrumb" id="page-breadcrumb" aria-hidden="true">WORKSPACE / LAWNFORMS / TEMPLATES</div>
+      <div class="title-block">
+        <h1 class="title" id="page-title">Templates <em>— pick a contract</em></h1>
+      </div>
+      <div class="actions" id="topbar-actions" role="toolbar" aria-label="Page actions"></div>
+    </header>
+
+    <section class="content">
+
+      <!-- VIEW: TEMPLATES -->
+      <div class="view-container active" id="view-templates" data-view="templates">
+        <div class="stats-bar" id="templates-stats"></div>
+        <div class="templates-grid" id="templates-grid"></div>
+      </div>
+
+      <!-- VIEW: FILL FORM -->
+      <div class="view-container" id="view-fill" data-view="fill">
+        <div class="fill-layout">
+          <div class="fill-form" id="fill-form"></div>
+          <div class="fill-preview" id="fill-preview"></div>
+        </div>
+      </div>
+
+      <!-- VIEW: CONTRACTS -->
+      <div class="view-container" id="view-contracts" data-view="contracts">
+        <div class="stats-bar" id="contracts-stats"></div>
+        <div class="filter-bar">
+          <div class="filter-pills" id="contracts-status-pills" role="toolbar" aria-label="Filter contracts by status"></div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Contracts">
+            <thead><tr><th scope="col">Contract #</th><th scope="col">Template</th><th scope="col">Customer</th><th scope="col">Created</th><th scope="col">Start Date</th><th scope="col">Status</th><th scope="col">Value</th><th scope="col">Actions</th></tr></thead>
+            <tbody id="contracts-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VIEW: CLAUSES -->
+      <div class="view-container" id="view-clauses" data-view="clauses">
+        <div class="stats-bar" id="clauses-stats"></div>
+        <div class="filter-bar">
+          <div class="filter-pills" id="clauses-cat-pills" role="toolbar" aria-label="Filter clauses by category"></div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Clauses">
+            <thead><tr><th scope="col">Name</th><th scope="col">Category</th><th scope="col">Preview</th><th scope="col">Type</th><th scope="col">Actions</th></tr></thead>
+            <tbody id="clauses-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VIEW: CUSTOMERS -->
+      <div class="view-container" id="view-customers" data-view="customers">
+        <div class="stats-bar" id="customers-stats"></div>
+        <div class="filter-bar">
+          <input type="text" class="filter-search" id="customers-search" placeholder="Search customers..." aria-label="Search customers">
+          <div class="filter-pills" id="customers-type-pills" role="toolbar" aria-label="Filter customers by type"></div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Customers">
+            <thead><tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Phone</th><th scope="col">Address</th><th scope="col">Type</th><th scope="col">Active Contracts</th><th scope="col">Actions</th></tr></thead>
+            <tbody id="customers-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VIEW: SETTINGS -->
+      <div class="view-container" id="view-settings" data-view="settings">
+        <div class="settings-layout" id="settings-layout"></div>
+      </div>
+
+      <!-- VIEW: EXPORT -->
+      <div class="view-container" id="view-export" data-view="export">
+        <div class="export-layout" id="export-layout"></div>
+      </div>
+
+    </section>
+
+    <div class="statusbar">
+      <span><span id="app-appname-display">app</span> pro v<span id="app-version-display">1.0.0</span></span>
+      <span class="grow"></span>
+      <div class="right">
+        <span>last sync: <span class="muted">local only</span></span>
+        <button class="btn" id="btn-help" style="padding:2px 6px;font-size:var(--fs-xs);" title="Keyboard shortcuts (?)" aria-label="Open keyboard shortcuts help">
+          <span class="kbd" aria-hidden="true">?</span> help
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="app-footer">
+  <span>©</span>
+  <span class="sep">2026</span>
+  <span class="app-name">LawnForms Pro</span>
+  <span class="sep">·</span>
+  <span>All Rights Reserved</span>
+</footer>
+
+<!-- Print-only footer -->
+<div class="print-footer">
+  <span class="copyright">© 2026 <span class="app-name">LawnForms Pro</span> · All Rights Reserved · Generated <span id="print-date"></span></span>
+</div>
+
+<!-- MODALS + SEARCH PALETTE + TOAST HOST + CONFIRM DIALOG -->
+<div class="modal-backdrop" id="modal-backdrop" aria-hidden="true"></div>
+
+<div class="search-palette" id="search-palette" role="dialog" aria-modal="true" aria-label="Search">
+  <input type="text" class="search-palette-input" id="search-input"
+         placeholder="Type to search..." aria-label="Search all content"
+         autocomplete="off" spellcheck="false">
+  <div class="search-palette-results" id="search-results"
+       role="listbox" aria-label="Search results" aria-live="polite"></div>
+</div>
+
+<div class="modal" id="modal-help" style="width:560px;" role="dialog" aria-modal="true" aria-labelledby="help-modal-title">
+  <div class="modal-header">
+    <div class="modal-title" id="help-modal-title">Keyboard shortcuts</div>
+    <button type="button" class="modal-close" data-action="close-modal" aria-label="Close dialog">×</button>
+  </div>
+  <div class="modal-body">
+    <div class="help-grid">
+      <div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">K</span></div><span>Open search palette</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">N</span></div><span>New contract</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">S</span></div><span>Save current contract</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">E</span></div><span>Export CSV</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">P</span></div><span>Print / PDF</span></div>
+      </div>
+      <div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">⇧</span><span class="kbd">T</span></div><span>Toggle theme</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">1</span><span class="kbd">-</span><span class="kbd">7</span></div><span>Jump to views 01-07</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">8</span></div><span>Help</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">?</span></div><span>Show this help</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">Esc</span></div><span>Close modal/popover</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn" data-action="close-modal">Close</button>
+  </div>
+</div>
+
+<div class="confirm-overlay" id="confirm-overlay" aria-hidden="true">
+  <div class="confirm-box" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+    <div class="confirm-header">
+      <div class="confirm-title" id="confirm-title">Confirm</div>
+    </div>
+    <div class="confirm-body" id="confirm-body"></div>
+    <div class="confirm-footer">
+      <button type="button" class="btn" onclick="cancelConfirm()">Cancel</button>
+      <button type="button" class="btn btn-accent" id="confirm-action-btn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-host" id="toast-host" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+"use strict";
+
+/* === POLYFILLS === */
+if (!Object.assign) {
+  Object.assign = function(t) {
+    for (var i = 1; i < arguments.length; i++) {
+      var s = arguments[i];
+      if (s) for (var k in s) if (s.hasOwnProperty(k)) t[k] = s[k];
+    }
+    return t;
+  };
+}
+if (!String.prototype.padStart) {
+  String.prototype.padStart = function(t, p) {
+    t = t >> 0; p = String(p || ' ');
+    if (this.length >= t) return String(this);
+    var pad = '';
+    while (pad.length < t - this.length) pad += p;
+    return pad.slice(0, t - this.length) + String(this);
+  };
+}
+if (!Array.prototype.find) {
+  Array.prototype.find = function(f) { for (var i = 0; i < this.length; i++) if (f(this[i], i, this)) return this[i]; };
+}
+if (!Array.prototype.findIndex) {
+  Array.prototype.findIndex = function(f) { for (var i = 0; i < this.length; i++) if (f(this[i], i, this)) return i; return -1; };
+}
+
+/* === APP VERSION === */
+var APP_VERSION = '1.0.0';
+var APP_NAME_SHORT = 'LawnForms';
+function updateAppVersionDisplay() {
+  var s = document.getElementById('app-version-display');
+  if (s) s.textContent = APP_VERSION;
+  var n = document.getElementById('app-appname-display');
+  if (n) n.textContent = APP_NAME_SHORT;
+}
+updateAppVersionDisplay();
+
+/* === THEME MANAGEMENT === */
+var THEME_KEY = 'lawnforms-theme';
+
+function getTheme() {
+  return document.documentElement.getAttribute('data-theme') || 'light';
+}
+
+function resolveTheme(theme) {
+  if (theme === 'system') {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  return theme || 'light';
+}
+
+function setTheme(theme) {
+  var resolved = resolveTheme(theme);
+  document.documentElement.setAttribute('data-theme', resolved);
+  try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+  updateToggleUI();
+}
+
+function toggleTheme() {
+  var next = getTheme() === 'dark' ? 'light' : 'dark';
+  setTheme(next);
+  toast('theme set to ' + next, 'info');
+}
+
+function updateToggleUI() {
+  var t = getTheme();
+  var icon = document.getElementById('theme-toggle-icon');
+  var btn = document.getElementById('theme-toggle-btn');
+  if (icon) icon.textContent = t === 'dark' ? '☀' : '☾';
+  if (btn) btn.setAttribute('aria-label', t === 'dark' ? 'Toggle light mode' : 'Toggle dark mode');
+  if (btn) btn.title = t === 'dark' ? 'Toggle light mode (⌘⇧T)' : 'Toggle dark mode (⌘⇧T)';
+}
+
+updateToggleUI();
+
+/* === PRINT THEME SWAP === */
+window.addEventListener('beforeprint', function () {
+  document.documentElement.setAttribute('data-print-theme', document.documentElement.getAttribute('data-theme') || 'light');
+  document.documentElement.removeAttribute('data-theme');
+});
+window.addEventListener('afterprint', function () {
+  var saved = document.documentElement.getAttribute('data-print-theme');
+  if (saved && saved !== 'light') document.documentElement.setAttribute('data-theme', saved);
+  document.documentElement.removeAttribute('data-print-theme');
+});
+
+/* === TOAST SYSTEM === */
+function toast(message, type) {
+  type = type || 'info';
+  var host = document.getElementById('toast-host');
+  if (!host) { host = document.createElement('div'); host.className = 'toast-host'; host.id = 'toast-host'; document.body.appendChild(host); }
+  var el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = '<span class="toast-icon"></span><span class="toast-msg"></span>';
+  el.querySelector('.toast-msg').textContent = message;
+  host.appendChild(el);
+  setTimeout(function () { el.classList.add('is-leaving'); setTimeout(function () { el.remove(); }, 200); }, 2300);
+}
+
+/* === MODAL SYSTEM === */
+var activeTrapHandler = null;
+
+function trapModalFocus(modal) {
+  var sel = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  var focusable = Array.prototype.slice.call(modal.querySelectorAll(sel));
+  if (!focusable.length) return;
+  var first = focusable[0];
+  var last = focusable[focusable.length - 1];
+  if (activeTrapHandler) document.removeEventListener('keydown', activeTrapHandler);
+  activeTrapHandler = function (e) {
+    if (e.key !== 'Tab') return;
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  };
+  document.addEventListener('keydown', activeTrapHandler);
+}
+
+function openModal(id) {
+  var bd = document.getElementById('modal-backdrop');
+  bd.classList.add('is-open');
+  bd.setAttribute('aria-hidden', 'false');
+  var modal = document.getElementById(id);
+  modal.classList.add('is-open');
+  setTimeout(function () {
+    var firstInput = modal.querySelector('input:not([disabled]), select:not([disabled]), textarea:not([disabled])');
+    var firstFocusable = firstInput || modal.querySelector('button:not([disabled])');
+    if (firstFocusable) firstFocusable.focus();
+    trapModalFocus(modal);
+  }, 50);
+}
+
+function closeAllModals() {
+  document.querySelectorAll('.modal, .search-palette').forEach(function (m) { m.classList.remove('is-open'); });
+  var bd = document.getElementById('modal-backdrop');
+  bd.classList.remove('is-open');
+  bd.setAttribute('aria-hidden', 'true');
+  if (activeTrapHandler) { document.removeEventListener('keydown', activeTrapHandler); activeTrapHandler = null; }
+}
+
+/* === SEARCH PALETTE === */
+var searchSelectedIdx = -1;
+
+function openSearchPalette() {
+  searchSelectedIdx = -1;
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results').innerHTML = '';
+  var bd = document.getElementById('modal-backdrop');
+  bd.classList.add('is-open');
+  bd.setAttribute('aria-hidden', 'false');
+  document.getElementById('search-palette').classList.add('is-open');
+  document.getElementById('search-input').focus();
+}
+
+function updateSearchSelection(items) {
+  items.forEach(function (item, i) {
+    var selected = i === searchSelectedIdx;
+    item.classList.toggle('is-selected', selected);
+    item.setAttribute('aria-selected', selected ? 'true' : 'false');
+    if (selected) item.scrollIntoView({ block: 'nearest' });
+  });
+}
+
+/* === CONFIRM DIALOG === */
+var lastFocusedElement = null;
+var confirmCallback = null;
+var confirmTrapHandler = null;
+
+function cancelConfirm() {
+  var overlay = document.getElementById('confirm-overlay');
+  if (overlay) overlay.classList.remove('open');
+  if (confirmTrapHandler) { document.removeEventListener('keydown', confirmTrapHandler); confirmTrapHandler = null; }
+  document.querySelector('.app').removeAttribute('aria-hidden');
+  var footer = document.querySelector('.app-footer');
+  if (footer) footer.removeAttribute('aria-hidden');
+  if (lastFocusedElement) lastFocusedElement.focus();
+}
+
+function confirmDialog(opts) {
+  lastFocusedElement = document.activeElement;
+  document.getElementById('confirm-title').textContent = opts.title || 'Confirm';
+  if (opts.html) {
+    document.getElementById('confirm-body').innerHTML = opts.html;
+  } else {
+    document.getElementById('confirm-body').textContent = opts.body || 'Are you sure?';
+  }
+  var btn = document.getElementById('confirm-action-btn');
+  btn.textContent = opts.actionText || 'Confirm';
+  btn.className = opts.danger ? 'btn btn-danger' : 'btn btn-accent';
+  confirmCallback = opts.onConfirm || null;
+  var overlay = document.getElementById('confirm-overlay');
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+  document.querySelector('.app').setAttribute('aria-hidden', 'true');
+  var footer = document.querySelector('.app-footer');
+  if (footer) footer.setAttribute('aria-hidden', 'true');
+  var box = overlay.querySelector('.confirm-box');
+  var sel = 'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])';
+  var focusable = Array.prototype.slice.call(box.querySelectorAll(sel));
+  if (focusable.length) {
+    var first = focusable[0];
+    var last = focusable[focusable.length - 1];
+    if (confirmTrapHandler) document.removeEventListener('keydown', confirmTrapHandler);
+    confirmTrapHandler = function(e) {
+      if (e.key === 'Escape') { cancelConfirm(); return; }
+      if (e.key !== 'Tab') return;
+      if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+      else { if (document.activeElement === last) { e.preventDefault(); first.focus(); } }
+    };
+    document.addEventListener('keydown', confirmTrapHandler);
+    setTimeout(function() { first.focus(); }, 50);
+  }
+}
+
+/* === PLACEHOLDER ACTIONS === */
+function exportCSV() { switchView('export'); }
+function newItem() { newContract(); }
+
+/* === WIRING === */
+document.getElementById('search-trigger').addEventListener('click', openSearchPalette);
+document.getElementById('search-trigger').addEventListener('keydown', function (e) {
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); openSearchPalette(); }
+});
+
+document.getElementById('search-input').addEventListener('input', doSearch);
+document.getElementById('search-input').addEventListener('keydown', function (e) {
+  var items = document.querySelectorAll('#search-results .search-palette-item[data-idx]');
+  if (e.key === 'Escape') { closeAllModals(); return; }
+  if (!items.length) return;
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    searchSelectedIdx = Math.min(searchSelectedIdx + 1, items.length - 1);
+    updateSearchSelection(items);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    searchSelectedIdx = Math.max(searchSelectedIdx - 1, 0);
+    updateSearchSelection(items);
+  } else if (e.key === 'Enter') {
+    if (searchSelectedIdx >= 0 && items[searchSelectedIdx]) items[searchSelectedIdx].click();
+  }
+});
+document.getElementById('btn-help').addEventListener('click', function () { openModal('modal-help'); });
+
+document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
+document.getElementById('modal-backdrop').addEventListener('click', closeAllModals);
+
+document.querySelectorAll('.modal').forEach(function (modal) {
+  modal.addEventListener('click', function (e) {
+    if (e.target.closest('[data-action="close-modal"]')) closeAllModals();
+  });
+});
+
+/* Keyboard shortcuts */
+document.addEventListener('keydown', function (e) {
+  var inInput = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT';
+  if (e.key === 'Escape') { closeAllModals(); closeStatusPopover(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearchPalette(); }
+  if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 't') { e.preventDefault(); toggleTheme(); }
+  if (inInput) return;
+  if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'e') { e.preventDefault(); switchView('export'); }
+  if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'p') { e.preventDefault(); printCurrent(); }
+  if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'n') { e.preventDefault(); newContract(); }
+  if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 's') { e.preventDefault(); saveContract(); }
+  if (!e.metaKey && !e.ctrlKey && e.key === '?') { e.preventDefault(); openModal('modal-help'); }
+  if (!e.metaKey && !e.ctrlKey && !e.altKey) {
+    var num = parseInt(e.key, 10);
+    if (num >= 1 && num <= 7) {
+      var views = ['templates', 'fill', 'contracts', 'clauses', 'customers', 'settings', 'export'];
+      if (views[num - 1]) switchView(views[num - 1]);
+    }
+    if (num === 8) openModal('modal-help');
+  }
+});
+
+/* Set print date */
+var pd = document.getElementById('print-date');
+if (pd) pd.textContent = localDate();
+
+/* ============================================================
+   LAWNFORMS PRO — APP LOGIC
+   ============================================================ */
+
+var currentView = 'templates';
+var currentContractId = null;
+var fillFormState = { templateId: null, fields: {}, selectedClauses: [], customClauses: [], signatures: { contractor: null, customer: null }, customerId: null };
+
+/* === DATA MODEL === */
+var STATE_KEY = 'lawnforms-state';
+var defaultState = {
+  business: { name: 'Your Business Name', address: '', phone: '', email: '', licenseNo: '', insurance: '' },
+  customers: [],
+  contracts: [],
+  contractCounter: 0,
+  clauses: [],
+  settings: { theme: 'system', defaultTermMonths: 12, defaultDepositPct: 50 }
+};
+
+var state = JSON.parse(JSON.stringify(defaultState));
+
+/* === 20 PRE-BUILT CLAUSES === */
+var DEFAULT_CLAUSES = [
+  { id: 'cl_pay_50upfront', name: '50% Upfront Deposit', category: 'payment', body: '50% of the total contract price is due upon signing of this agreement. The remaining 50% is due upon completion of all work described herein. Work will not commence until the deposit is received.', isSystem: true },
+  { id: 'cl_pay_net30', name: 'Net 30 Payment Terms', category: 'payment', body: 'Invoices are due within 30 days of issuance. Late payments accrue a finance charge of 1.5% per month (18% APR). Accounts over 60 days past due will suspend service until balance is paid.', isSystem: true },
+  { id: 'cl_pay_net15comm', name: 'Net 15 Commercial Terms', category: 'payment', body: 'Commercial accounts: invoices are due within 15 days of issuance. Accounts over 30 days past due will result in suspension of services. A reconnection fee of $50 may apply to resume service.', isSystem: true },
+  { id: 'cl_pay_late', name: 'Late Payment Fee', category: 'payment', body: 'A late fee of $35.00 will be assessed on any payment received more than 10 days past the due date. This fee is in addition to any finance charges that may apply.', isSystem: true },
+  { id: 'cl_pay_net7auto', name: 'Net 7 with Auto-Pay', category: 'payment', body: 'Payments are due within 7 days of invoice date. Customer authorizes automatic payments via the payment method on file. Customer may revoke authorization with 30 days written notice.', isSystem: true },
+  { id: 'cl_can_30', name: '30-Day Cancellation Notice', category: 'cancellation', body: 'Either party may cancel this agreement with 30 days written notice. Notice must be delivered via email or certified mail. No cancellation fee applies when proper notice is given.', isSystem: true },
+  { id: 'cl_can_seasonal', name: 'Seasonal Lock-In', category: 'cancellation', body: 'This contract covers the [spring/summer/fall/winter] season [start date] through [end date]. Mid-season cancellation is not permitted; customer remains responsible for the full season balance regardless of early termination.', isSystem: true },
+  { id: 'cl_can_fee', name: 'Cancellation Fee', category: 'cancellation', body: 'Early cancellation by the customer requires a fee equal to 25% of the remaining contract value. This fee is due within 15 days of cancellation notice.', isSystem: true },
+  { id: 'cl_lia_damage', name: 'Property Damage Responsibility', category: 'liability', body: 'Contractor agrees to repair any damage to the property caused by Contractor\'s negligence or that of Contractor\'s employees. Customer agrees to mark all sprinkler heads, low-voltage lighting, invisible fences, and other underground hazards prior to service commencement.', isSystem: true },
+  { id: 'cl_lia_weather', name: 'Weather Delay Clause', category: 'liability', body: 'Service may be delayed or rescheduled due to weather conditions including but not limited to: heavy rain, thunderstorms, extreme heat (above 95°F), freezing temperatures, or snow. No refunds or discounts apply for weather-related delays.', isSystem: true },
+  { id: 'cl_lia_811', name: 'Underground Utilities (Call 811)', category: 'liability', body: 'Contractor will call 811 (national dig-safe hotline) at least 3 business days prior to any digging or excavation work. Customer is responsible for marking private utilities (sprinkler lines, low-voltage lighting, dog fences, drainage) not covered by 811.', isSystem: true },
+  { id: 'cl_lia_pest', name: 'Pesticide Application Liability', category: 'liability', body: 'Customer acknowledges that pesticide and/or fertilizer application may temporarily discolor treated areas. Contractor is fully licensed and insured. Customer must keep children and pets off treated areas for the time period specified on the product label (typically 24-48 hours).', isSystem: true },
+  { id: 'cl_svc_access', name: 'Property Access Permission', category: 'service', body: 'Customer grants Contractor permission to access the property during reasonable hours (7am-7pm, 7 days/week) for the purposes of providing contracted services. Customer will ensure gates are unlocked or access codes are provided if applicable.', isSystem: true },
+  { id: 'cl_svc_pet', name: 'Pet/Child Safety', category: 'service', body: 'Customer agrees to restrain pets (kept indoors or secured in a kennel) during service visits. Customer is responsible for informing Contractor of any child safety concerns, invisible fence locations, or known pet escape risks prior to service.', isSystem: true },
+  { id: 'cl_svc_irrigation', name: 'Irrigation System Care', category: 'service', body: 'Contractor will not be responsible for damage to sprinkler heads, irrigation lines, or drainage features not properly marked by Customer prior to mowing or other services. Customer is responsible for marking these hazards with flags or paint.', isSystem: true },
+  { id: 'cl_svc_mow_height', name: 'Mowing Height Standard', category: 'service', body: 'Contractor will maintain lawn at a height of 3-4 inches during the active growing season, never removing more than 1/3 of the grass blade length per cut. This standard promotes root health and weed resistance.', isSystem: true },
+  { id: 'cl_legal_force', name: 'Force Majeure', category: 'legal', body: 'Neither party shall be liable for failure to perform obligations under this agreement due to causes beyond their reasonable control, including but not limited to: natural disasters, pandemics, government restrictions, labor strikes, supply chain failures, or acts of war.', isSystem: true },
+  { id: 'cl_legal_dispute', name: 'Dispute Resolution', category: 'legal', body: 'Any disputes arising from this agreement shall first be addressed through good-faith negotiation between the parties. If unresolved within 30 days, disputes shall be settled through binding arbitration in [city/county], [state] under the rules of the American Arbitration Association.', isSystem: true },
+  { id: 'cl_legal_law', name: 'Governing Law', category: 'legal', body: 'This agreement shall be governed by and construed in accordance with the laws of the State of [state], without regard to its conflict of law principles. The parties consent to the exclusive jurisdiction of the courts of [state].', isSystem: true },
+  { id: 'cl_legal_entire', name: 'Entire Agreement', category: 'legal', body: 'This document constitutes the entire agreement between the parties and supersedes all prior negotiations, representations, or agreements, whether written or oral. Amendments to this agreement must be in writing and signed by both parties.', isSystem: true }
+];
+
+/* === 6 PRE-BUILT TEMPLATES === */
+var DEFAULT_TEMPLATES = [
+  {
+    id: 'tpl_recurring',
+    name: 'Lawn Care Service Agreement',
+    category: 'Recurring',
+    outputTitle: 'LAWN CARE SERVICE AGREEMENT',
+    description: 'Recurring mowing contract — weekly, biweekly, or monthly visits. Includes auto-renewal and 30-day cancellation.',
+    pages: 2,
+    schema: [
+      { key: 'customerName', label: 'Customer name', type: 'text', required: true },
+      { key: 'customerAddress', label: 'Property address', type: 'text', required: true },
+      { key: 'customerPhone', label: 'Customer phone', type: 'text' },
+      { key: 'customerEmail', label: 'Customer email', type: 'email' },
+      { key: 'lotSize', label: 'Lot size (sq ft)', type: 'number', placeholder: 'e.g. 8000' },
+      { key: 'frequency', label: 'Service frequency', type: 'select', options: ['Weekly', 'Biweekly', 'Monthly', 'Custom'], required: true },
+      { key: 'dayPreference', label: 'Day of week preference', type: 'select', options: ['No preference', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] },
+      { key: 'startDate', label: 'Service start date', type: 'date', required: true },
+      { key: 'term', label: 'Contract term', type: 'select', options: ['12 months (auto-renew)', 'Month-to-month', 'Seasonal (6 months)'], required: true },
+      { key: 'pricePerVisit', label: 'Price per visit ($)', type: 'number', required: true },
+      { key: 'specialInstructions', label: 'Special instructions (gated, dogs, etc.)', type: 'textarea' }
+    ],
+    defaultClauses: ['cl_pay_net30', 'cl_can_30', 'cl_svc_access', 'cl_lia_weather', 'cl_svc_mow_height', 'cl_svc_pet', 'cl_legal_force', 'cl_legal_entire']
+  },
+  {
+    id: 'tpl_onetime',
+    name: 'One-Time Service Contract',
+    category: 'One-Time',
+    outputTitle: 'SERVICE CONTRACT',
+    description: 'Single project — mulch install, spring cleanup, leaf removal. Fixed price, 50% deposit, balance on completion.',
+    pages: 1,
+    schema: [
+      { key: 'customerName', label: 'Customer name', type: 'text', required: true },
+      { key: 'customerAddress', label: 'Property address', type: 'text', required: true },
+      { key: 'customerPhone', label: 'Customer phone', type: 'text' },
+      { key: 'customerEmail', label: 'Customer email', type: 'email' },
+      { key: 'projectDescription', label: 'Project description', type: 'textarea', required: true },
+      { key: 'servicesList', label: 'Services to be performed (one per line)', type: 'textarea', required: true },
+      { key: 'materialsProvided', label: 'Materials provided by contractor', type: 'textarea' },
+      { key: 'totalPrice', label: 'Total fixed price ($)', type: 'number', required: true },
+      { key: 'depositAmount', label: 'Deposit required ($)', type: 'number' },
+      { key: 'startDate', label: 'Project start date', type: 'date', required: true },
+      { key: 'completionDate', label: 'Estimated completion date', type: 'date' },
+      { key: 'cleanupIncluded', label: 'Cleanup included', type: 'select', options: ['Yes', 'No'] },
+      { key: 'warrantyDays', label: 'Warranty period (days)', type: 'number' }
+    ],
+    defaultClauses: ['cl_pay_50upfront', 'cl_lia_811', 'cl_lia_weather', 'cl_lia_damage', 'cl_legal_force']
+  },
+  {
+    id: 'tpl_tree',
+    name: 'Tree & Shrub Service Agreement',
+    category: 'Specialty',
+    outputTitle: 'TREE & SHRUB SERVICE AGREEMENT',
+    description: 'Pruning, removal, stump grinding. Tree-by-tree scope, debris removal options, permit responsibility.',
+    pages: 2,
+    schema: [
+      { key: 'customerName', label: 'Customer name', type: 'text', required: true },
+      { key: 'customerAddress', label: 'Property address', type: 'text', required: true },
+      { key: 'customerPhone', label: 'Customer phone', type: 'text' },
+      { key: 'customerEmail', label: 'Customer email', type: 'email' },
+      { key: 'treesList', label: 'Tree/shrub list (e.g. "1x Oak 18in diameter - remove")', type: 'textarea', required: true },
+      { key: 'debrisRemoval', label: 'Debris removal included', type: 'select', options: ['Yes - haul away', 'No - leave on site', 'Chips left as mulch'] },
+      { key: 'stumpGrinding', label: 'Stump grinding included', type: 'select', options: ['Yes', 'No'] },
+      { key: 'totalPrice', label: 'Total price ($)', type: 'number', required: true },
+      { key: 'startDate', label: 'Start date', type: 'date', required: true },
+      { key: 'permitRequired', label: 'Permit required', type: 'select', options: ['No', 'Yes - contractor pulls', 'Yes - customer pulls'] },
+      { key: 'propertyLineMarks', label: 'Property line / utility marks responsibility', type: 'select', options: ['Contractor (via 811)', 'Customer', 'Shared'] }
+    ],
+    defaultClauses: ['cl_pay_50upfront', 'cl_lia_811', 'cl_lia_damage', 'cl_lia_weather', 'cl_legal_force']
+  },
+  {
+    id: 'tpl_snow',
+    name: 'Seasonal Snow Removal Contract',
+    category: 'Seasonal',
+    outputTitle: 'SNOW REMOVAL SERVICE AGREEMENT',
+    description: 'Winter service Nov-Apr. Trigger depth, areas, response time. Per-event, per-month, or seasonal pricing.',
+    pages: 2,
+    schema: [
+      { key: 'customerName', label: 'Customer name', type: 'text', required: true },
+      { key: 'customerAddress', label: 'Property address', type: 'text', required: true },
+      { key: 'customerPhone', label: 'Customer phone', type: 'text' },
+      { key: 'customerEmail', label: 'Customer email', type: 'email' },
+      { key: 'triggerDepth', label: 'Trigger depth (inches)', type: 'select', options: ['1 inch', '2 inches', '3 inches'], required: true },
+      { key: 'areasCleared', label: 'Areas to be cleared', type: 'textarea', required: true, placeholder: 'e.g. driveway, walkway, front steps' },
+      { key: 'serviceType', label: 'Service type', type: 'select', options: ['Per-event', 'Per-month', 'Seasonal flat rate'], required: true },
+      { key: 'priceAmount', label: 'Price ($) — per event, per month, or seasonal', type: 'number', required: true },
+      { key: 'maxEventsPerMonth', label: 'Maximum events per month (cap, 0 for none)', type: 'number' },
+      { key: 'seasonStart', label: 'Season start date', type: 'date', required: true },
+      { key: 'seasonEnd', label: 'Season end date', type: 'date', required: true },
+      { key: 'responseHours', label: 'Response time (hours after snowfall ends)', type: 'number' },
+      { key: 'saltSandIncluded', label: 'Salt/sand application included', type: 'select', options: ['Yes', 'No'] },
+      { key: 'roofClearingIncluded', label: 'Roof clearing included', type: 'select', options: ['Yes', 'No'] }
+    ],
+    defaultClauses: ['cl_pay_net30', 'cl_lia_weather', 'cl_lia_damage', 'cl_can_seasonal', 'cl_legal_force']
+  },
+  {
+    id: 'tpl_hardscape',
+    name: 'Hardscape Installation Contract',
+    category: 'Installation',
+    outputTitle: 'HARDSCAPE INSTALLATION CONTRACT',
+    description: 'Paver patios, retaining walls, fire pits, walkways. Detailed materials list, phased payments, multi-year warranty.',
+    pages: 3,
+    schema: [
+      { key: 'customerName', label: 'Customer name', type: 'text', required: true },
+      { key: 'customerAddress', label: 'Property address', type: 'text', required: true },
+      { key: 'customerPhone', label: 'Customer phone', type: 'text' },
+      { key: 'customerEmail', label: 'Customer email', type: 'email' },
+      { key: 'projectDescription', label: 'Project description', type: 'textarea', required: true },
+      { key: 'designType', label: 'Design', type: 'select', options: ['Contractor basic design', 'Customer-provided design', 'Architect-designed'], required: true },
+      { key: 'materialsList', label: 'Materials list (one per line: item, qty, unit price)', type: 'textarea', required: true },
+      { key: 'materialsCost', label: 'Total materials cost ($)', type: 'number', required: true },
+      { key: 'laborCost', label: 'Labor cost ($)', type: 'number', required: true },
+      { key: 'totalCost', label: 'Total project cost ($)', type: 'number', required: true },
+      { key: 'depositAmount', label: 'Deposit (50% standard) ($)', type: 'number' },
+      { key: 'installStart', label: 'Project start date', type: 'date', required: true },
+      { key: 'installEnd', label: 'Estimated completion date', type: 'date' },
+      { key: 'warrantyYears', label: 'Warranty period (years)', type: 'number' }
+    ],
+    defaultClauses: ['cl_pay_50upfront', 'cl_lia_811', 'cl_lia_damage', 'cl_lia_weather', 'cl_legal_force', 'cl_legal_entire']
+  },
+  {
+    id: 'tpl_commercial',
+    name: 'Commercial Property Maintenance Contract',
+    category: 'Commercial',
+    outputTitle: 'COMMERCIAL MAINTENANCE AGREEMENT',
+    description: 'Multi-property / commercial / HOA. Property list, monthly fee, insurance requirements, Net 15 terms.',
+    pages: 4,
+    schema: [
+      { key: 'customerCompany', label: 'Company / HOA name', type: 'text', required: true },
+      { key: 'customerAddress', label: 'Billing address', type: 'text', required: true },
+      { key: 'contactName', label: 'Primary contact name', type: 'text', required: true },
+      { key: 'contactPhone', label: 'Contact phone', type: 'text' },
+      { key: 'contactEmail', label: 'Contact email', type: 'email' },
+      { key: 'propertyCount', label: 'Property count', type: 'select', options: ['1 property', '2-5 properties', '6-10 properties', '11-25 properties', '26+ properties'], required: true },
+      { key: 'propertiesList', label: 'Property list (address + lot size + services)', type: 'textarea', required: true },
+      { key: 'serviceFrequency', label: 'Service frequency', type: 'select', options: ['Weekly', 'Biweekly', 'Custom schedule'], required: true },
+      { key: 'monthlyFee', label: 'Total monthly fee ($)', type: 'number', required: true },
+      { key: 'contractTerm', label: 'Contract term (months)', type: 'select', options: ['12 months', '24 months', '36 months'], required: true },
+      { key: 'autoRenewal', label: 'Auto-renewal', type: 'select', options: ['Yes', 'No'] },
+      { key: 'terminationDays', label: 'Termination notice (days)', type: 'number' },
+      { key: 'insuranceCert', label: 'Certificate of insurance provided', type: 'select', options: ['Yes', 'No'] },
+      { key: 'liabilityAmount', label: 'Liability coverage amount ($)', type: 'number' },
+      { key: 'workersComp', label: 'Workers\' comp coverage', type: 'select', options: ['Yes', 'No'] }
+    ],
+    defaultClauses: ['cl_pay_net15comm', 'cl_svc_access', 'cl_legal_force', 'cl_legal_law', 'cl_legal_dispute', 'cl_legal_entire']
+  }
+];
+
+/* === SAMPLE DATA === */
+var SAMPLE_CUSTOMERS = [
+  { id: 'cust_1', name: 'Sarah & Mike Henderson', email: 'sarah.henderson@email.com', phone: '555-0123', address: '482 Maple Drive, Springfield, IL 62701', propertyType: 'residential', notes: 'Back gate code: 1492. Two friendly dogs (Goldens). Invisible fence in backyard.' },
+  { id: 'cust_2', name: 'Robert Chen', email: 'r.chen@chenlaw.com', phone: '555-0145', address: '1200 Oak Ridge Lane, Springfield, IL 62702', propertyType: 'residential', notes: 'Corner lot. Sprinkler system with 6 zones. New client.' },
+  { id: 'cust_3', name: 'Maple Heights HOA', email: 'board@mapleheights.org', phone: '555-0178', address: '500 Maple Heights Pkwy, Springfield, IL 62703', propertyType: 'commercial', notes: '45 townhomes. Common areas + front yards. Board approval on file.' },
+  { id: 'cust_4', name: 'Jennifer Walsh', email: 'jwalsh@email.com', phone: '555-0192', address: '78 Birch Court, Springfield, IL 62704', propertyType: 'residential', notes: 'Recently moved in. Wants spring cleanup + weekly mowing.' },
+  { id: 'cust_5', name: 'Lincoln Elementary School', email: 'admin@lincoln-elem.edu', phone: '555-0156', address: '300 School Street, Springfield, IL 62701', propertyType: 'commercial', notes: 'Large field + playground. Service during summer only. Background check required.' }
+];
+
+var SAMPLE_CONTRACTS = [
+  {
+    id: 'ct_1', number: 'LF-2026-0001', templateId: 'tpl_recurring', customerId: 'cust_1',
+    status: 'active',
+    fields: { customerName: 'Sarah & Mike Henderson', customerAddress: '482 Maple Drive, Springfield, IL 62701', customerPhone: '555-0123', customerEmail: 'sarah.henderson@email.com', lotSize: 9500, frequency: 'Weekly', dayPreference: 'Wednesday', startDate: '2026-03-15', term: '12 months (auto-renew)', pricePerVisit: 65, specialInstructions: 'Gated backyard. Code 1492. Two Goldens (Willow and Bear). Invisible fence on north side.' },
+    selectedClauses: ['cl_pay_net30', 'cl_can_30', 'cl_svc_access', 'cl_lia_weather', 'cl_svc_mow_height', 'cl_svc_pet', 'cl_svc_irrigation', 'cl_legal_force', 'cl_legal_entire'],
+    customClauses: [],
+    signatures: { contractor: { name: 'Your Business Name', signedDate: '2026-03-14' }, customer: { name: 'Sarah Henderson', signedDate: '2026-03-14' } },
+    startDate: '2026-03-15', endDate: '2027-03-15', totalValue: 3380, notes: '',
+    createdAt: '2026-03-10', sentAt: '2026-03-12', signedAt: '2026-03-14'
+  },
+  {
+    id: 'ct_2', number: 'LF-2026-0002', templateId: 'tpl_onetime', customerId: 'cust_4',
+    status: 'signed',
+    fields: { customerName: 'Jennifer Walsh', customerAddress: '78 Birch Court, Springfield, IL 62704', customerPhone: '555-0192', customerEmail: 'jwalsh@email.com', projectDescription: 'Spring cleanup and mulch installation', servicesList: 'Leaf removal from entire lot\nBed edging (4 beds, ~200 linear ft)\nWeed barrier fabric installation\nPremium hardwood mulch (8 cubic yards)\nHaul-away of all debris', materialsProvided: 'Mulch, weed barrier, edging materials', totalPrice: 1450, depositAmount: 725, startDate: '2026-04-05', completionDate: '2026-04-07', cleanupIncluded: 'Yes', warrantyDays: 30 },
+    selectedClauses: ['cl_pay_50upfront', 'cl_lia_811', 'cl_lia_weather', 'cl_lia_damage', 'cl_legal_force'],
+    customClauses: [],
+    signatures: { contractor: { name: 'Your Business Name', signedDate: '2026-04-02' }, customer: { name: 'Jennifer Walsh', signedDate: '2026-04-02' } },
+    startDate: '2026-04-05', endDate: '2026-04-07', totalValue: 1450, notes: '',
+    createdAt: '2026-04-01', sentAt: '2026-04-01', signedAt: '2026-04-02'
+  },
+  {
+    id: 'ct_3', number: 'LF-2026-0003', templateId: 'tpl_tree', customerId: 'cust_2',
+    status: 'sent',
+    fields: { customerName: 'Robert Chen', customerAddress: '1200 Oak Ridge Lane, Springfield, IL 62702', customerPhone: '555-0145', customerEmail: 'r.chen@chenlaw.com', treesList: '1x White Oak (~24in diameter) - remove\n1x Dead Maple (~14in diameter) - remove\n1x Storm-damaged Pine (~18in diameter) - prune\nStump grind all 3 (below grade, 6-8in depth)', debrisRemoval: 'Yes - haul away', stumpGrinding: 'Yes', totalPrice: 3200, startDate: '2026-06-15', permitRequired: 'No', propertyLineMarks: 'Contractor (via 811)' },
+    selectedClauses: ['cl_pay_50upfront', 'cl_lia_811', 'cl_lia_damage', 'cl_lia_weather', 'cl_legal_force'],
+    customClauses: [],
+    signatures: { contractor: null, customer: null },
+    startDate: '2026-06-15', endDate: '2026-06-20', totalValue: 3200, notes: 'Customer prefers work done while he is at work (M-F, 9-5).',
+    createdAt: '2026-06-01', sentAt: '2026-06-03', signedAt: null
+  },
+  {
+    id: 'ct_4', number: 'LF-2026-0004', templateId: 'tpl_snow', customerId: 'cust_1',
+    status: 'active',
+    fields: { customerName: 'Sarah & Mike Henderson', customerAddress: '482 Maple Drive, Springfield, IL 62701', customerPhone: '555-0123', customerEmail: 'sarah.henderson@email.com', triggerDepth: '2 inches', areasCleared: 'Driveway (2-car, ~400 sq ft)\nFront walkway\nBack patio (if accessible)', serviceType: 'Per-month', priceAmount: 285, maxEventsPerMonth: 8, seasonStart: '2026-11-01', seasonEnd: '2027-04-01', responseHours: 6, saltSandIncluded: 'Yes', roofClearingIncluded: 'No' },
+    selectedClauses: ['cl_pay_net30', 'cl_lia_weather', 'cl_lia_damage', 'cl_can_seasonal', 'cl_legal_force'],
+    customClauses: [],
+    signatures: { contractor: { name: 'Your Business Name', signedDate: '2026-10-15' }, customer: { name: 'Sarah Henderson', signedDate: '2026-10-15' } },
+    startDate: '2026-11-01', endDate: '2027-04-01', totalValue: 1425, notes: '',
+    createdAt: '2026-10-10', sentAt: '2026-10-12', signedAt: '2026-10-15'
+  },
+  {
+    id: 'ct_5', number: 'LF-2026-0005', templateId: 'tpl_hardscape', customerId: 'cust_4',
+    status: 'draft',
+    fields: { customerName: 'Jennifer Walsh', customerAddress: '78 Birch Court, Springfield, IL 62704', customerPhone: '555-0192', customerEmail: 'jwalsh@email.com', projectDescription: 'Build 350 sq ft paver patio with fire pit area, including base prep, edge restraint, polymeric sand, and 2 tier seating wall.', designType: 'Contractor basic design', materialsList: 'Pavers (350 sq ft) - $2,450\nPaver base (8 ton) - $480\nPolymeric sand (8 bags) - $240\nEdge restraint (60 linear ft) - $180\nSeating wall block (60 units) - $720\nWall caps (12 units) - $360', materialsCost: 4430, laborCost: 3870, totalCost: 8500, depositAmount: 4250, installStart: '2026-07-15', installEnd: '2026-07-30', warrantyYears: 5 },
+    selectedClauses: ['cl_pay_50upfront', 'cl_lia_811', 'cl_lia_damage', 'cl_lia_weather', 'cl_legal_force', 'cl_legal_entire'],
+    customClauses: [],
+    signatures: { contractor: null, customer: null },
+    startDate: '2026-07-15', endDate: '2026-07-30', totalValue: 8500, notes: 'Customer wants a quote comparison with another contractor before signing.',
+    createdAt: '2026-06-12', sentAt: null, signedAt: null
+  },
+  {
+    id: 'ct_6', number: 'LF-2026-0006', templateId: 'tpl_commercial', customerId: 'cust_3',
+    status: 'signed',
+    fields: { customerCompany: 'Maple Heights HOA', customerAddress: '500 Maple Heights Pkwy, Springfield, IL 62703', contactName: 'Patricia Williams (Board President)', contactPhone: '555-0178', contactEmail: 'board@mapleheights.org', propertyCount: '11-25 properties', propertiesList: 'Common areas: 8,500 sq ft total\n45 townhomes (front yards + side yards)\n2 playground areas\nCommunity garden entrance area', serviceFrequency: 'Weekly', monthlyFee: 2400, contractTerm: '24 months', autoRenewal: 'Yes', terminationDays: 90, insuranceCert: 'Yes', liabilityAmount: 2000000, workersComp: 'Yes' },
+    selectedClauses: ['cl_pay_net15comm', 'cl_svc_access', 'cl_legal_force', 'cl_legal_law', 'cl_legal_dispute', 'cl_legal_entire'],
+    customClauses: [
+      { name: 'Board Approval', body: 'This contract is subject to approval by the Maple Heights HOA Board of Directors. Either party may terminate within 30 days of execution if Board approval is not granted.' }
+    ],
+    signatures: { contractor: { name: 'Your Business Name', signedDate: '2026-02-20' }, customer: { name: 'Patricia Williams', signedDate: '2026-02-22' } },
+    startDate: '2026-03-01', endDate: '2028-03-01', totalValue: 57600, notes: 'Vendor onboarding paperwork required (W-9, COI, ACH form).',
+    createdAt: '2026-02-10', sentAt: '2026-02-15', signedAt: '2026-02-22'
+  }
+];
+
+/* === STATE PERSISTENCE === */
+function loadState() {
+  try {
+    var raw = localStorage.getItem(STATE_KEY);
+    if (raw) {
+      var loaded = JSON.parse(raw);
+      state = Object.assign({}, defaultState, loaded);
+      if (!state.clauses || !state.clauses.length) state.clauses = DEFAULT_CLAUSES.slice();
+      if (!state.customers) state.customers = [];
+      if (!state.contracts) state.contracts = [];
+    } else {
+      state.clauses = DEFAULT_CLAUSES.slice();
+      state.customers = SAMPLE_CUSTOMERS.slice();
+      state.contracts = SAMPLE_CONTRACTS.slice();
+      state.contractCounter = 6;
+      saveState();
+    }
+  } catch (e) {
+    state = JSON.parse(JSON.stringify(defaultState));
+    state.clauses = DEFAULT_CLAUSES.slice();
+    state.customers = SAMPLE_CUSTOMERS.slice();
+    state.contracts = SAMPLE_CONTRACTS.slice();
+    state.contractCounter = 6;
+  }
+}
+
+function saveState() {
+  try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch (e) {
+    if (!saveState._errShown) { saveState._errShown = true; toast('storage unavailable — data may not persist', 'error'); }
+  }
+}
+
+/* === HELPERS === */
+function uid(prefix) { return prefix + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+function formatCurrency(n) { if (n == null || isNaN(n)) return '$0.00'; return '$' + Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+function formatDate(s) {
+  if (!s) return '—';
+  var parts = s.split('-');
+  if (parts.length === 3) {
+    var y = parseInt(parts[0], 10), m = parseInt(parts[1], 10) - 1, d = parseInt(parts[2], 10);
+    if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return months[m] + ' ' + d + ', ' + y;
+    }
+  }
+  var d = new Date(s);
+  if (isNaN(d)) return s;
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+}
+function escapeHtml(s) { if (s == null) return ''; return String(s).replace(/[&<>"']/g, function(c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function debounce(fn, ms) { var t; return function() { var args = arguments; var self = this; clearTimeout(t); t = setTimeout(function() { fn.apply(self, args); }, ms); }; }
+function localDate() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+
+function getContractById(id) { for (var i = 0; i < state.contracts.length; i++) if (state.contracts[i].id === id) return state.contracts[i]; return null; }
+function getCustomerById(id) { for (var i = 0; i < state.customers.length; i++) if (state.customers[i].id === id) return state.customers[i]; return null; }
+function getTemplateById(id) { for (var i = 0; i < DEFAULT_TEMPLATES.length; i++) if (DEFAULT_TEMPLATES[i].id === id) return DEFAULT_TEMPLATES[i]; return null; }
+function getClauseById(id) { for (var i = 0; i < state.clauses.length; i++) if (state.clauses[i].id === id) return state.clauses[i]; return null; }
+function getNextContractNumber() { state.contractCounter += 1; return 'LF-2026-' + String(state.contractCounter).padStart(4, '0'); }
+
+function getActiveContractCountForCustomer(customerId) {
+  return state.contracts.filter(function(c) { return c.customerId === customerId && (c.status === 'active' || c.status === 'signed' || c.status === 'sent'); }).length;
+}
+
+function getTotalContractValue() {
+  return state.contracts.filter(function(c) { return c.status === 'active' || c.status === 'signed'; }).reduce(function(s, c) { return s + (c.totalValue || 0); }, 0);
+}
+
+function getActiveContracts() { return state.contracts.filter(function(c) { return c.status === 'active'; }); }
+function getPendingSignature() { return state.contracts.filter(function(c) { return c.status === 'sent'; }); }
+function getTotalContracts() { return state.contracts.length; }
+
+/* === VIEW SWITCHING === */
+function switchView(view) {
+  if (!view) return;
+  currentView = view;
+  document.querySelectorAll('.view-container').forEach(function(v) { v.classList.remove('active'); });
+  var el = document.getElementById('view-' + view);
+  if (el) el.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(function(i) {
+    i.classList.remove('active'); i.removeAttribute('aria-current');
+    if (i.getAttribute('data-view') === view) { i.classList.add('active'); i.setAttribute('aria-current', 'page'); }
+  });
+  updateTopbar(view);
+  if (view === 'templates') renderTemplates();
+  else if (view === 'fill') renderFillForm();
+  else if (view === 'contracts') renderContracts();
+  else if (view === 'clauses') renderClauses();
+  else if (view === 'customers') renderCustomers();
+  else if (view === 'settings') renderSettings();
+  else if (view === 'export') renderExport();
+  saveState();
+}
+
+function updateTopbar(view) {
+  var titles = {
+    templates: ['Templates', 'pick a contract'],
+    fill: ['Fill Form', 'draft a new contract'],
+    contracts: ['My Contracts', 'saved agreements'],
+    clauses: ['Clause Library', '20 pre-built + custom'],
+    customers: ['Customers', 'your client database'],
+    settings: ['Settings', 'preferences & business info'],
+    export: ['Export', 'CSV + JSON backup'],
+    help: ['Help', 'keyboard shortcuts']
+  };
+  var t = titles[view] || ['LawnForms', 'pro suite'];
+  document.getElementById('page-title').innerHTML = t[0] + ' <em>— ' + t[1] + '</em>';
+  document.getElementById('page-breadcrumb').textContent = 'WORKSPACE / LAWNFORMS / ' + t[0].toUpperCase();
+  var actions = document.getElementById('topbar-actions');
+  if (view === 'templates') {
+    actions.innerHTML = '<button type="button" class="btn" onclick="switchView(\'contracts\')" title="View your saved contracts">My contracts</button>';
+  } else if (view === 'contracts') {
+    actions.innerHTML = '<button type="button" class="btn btn-accent" onclick="newContract()" title="Create a new contract (⌘N)"><span>■</span><span>New contract</span><span class="kbd">⌘</span><span class="kbd">N</span></button>';
+  } else if (view === 'clauses') {
+    actions.innerHTML = '<button type="button" class="btn btn-accent" onclick="openAddClauseModal()" title="Add a custom clause">+ Add custom clause</button>';
+  } else if (view === 'customers') {
+    actions.innerHTML = '<button type="button" class="btn btn-accent" onclick="openCustomerForm(null)" title="Add a new customer">+ Add customer</button>';
+  } else if (view === 'settings') {
+    actions.innerHTML = '<button type="button" class="btn btn-accent" onclick="saveSettings()">Save settings</button>';
+  } else if (view === 'export') {
+    actions.innerHTML = '<button type="button" class="btn" onclick="switchView(\'contracts\')" title="Back to contracts">Back to contracts</button>';
+  } else {
+    actions.innerHTML = '';
+  }
+}
+
+/* === VIEW: TEMPLATES === */
+function renderTemplates() {
+  var totalContracts = getTotalContracts();
+  var totalValue = getTotalContractValue();
+  var active = getActiveContracts().length;
+  var pending = getPendingSignature().length;
+  document.getElementById('templates-stats').innerHTML =
+    '<div class="stat-card"><div class="stat-num">' + totalContracts + '</div><div class="stat-label">Total Contracts</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + active + '</div><div class="stat-label">Active</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + pending + '</div><div class="stat-label">Pending Signature</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + formatCurrency(totalValue) + '</div><div class="stat-label">Total Contract Value</div></div>';
+  var html = '<div style="grid-column:1/-1;margin-bottom:var(--sp-5);color:var(--ink-2);font-size:var(--fs-sm);line-height:1.6;max-width:720px;padding:var(--sp-3) 0;">Pick a template, fill in the blanks, sign, and print. Every contract is fully customizable — add or remove clauses before signing. Try filling any template with sample data first to see the output.</div>';
+  html += DEFAULT_TEMPLATES.map(function(t) {
+    return '<div class="template-card">' +
+      '<i class="corner tl" aria-hidden="true"></i><i class="corner tr" aria-hidden="true"></i><i class="corner bl" aria-hidden="true"></i><i class="corner br" aria-hidden="true"></i>' +
+      '<div class="template-card-head">' +
+        '<div class="template-card-title">' + escapeHtml(t.name) + '</div>' +
+        '<div class="template-card-cat">' + escapeHtml(t.category) + '</div>' +
+      '</div>' +
+      '<div class="template-card-desc">' + escapeHtml(t.description) + '</div>' +
+      '<div class="template-card-meta">' +
+        '<span class="meta-item">' + t.pages + ' page' + (t.pages > 1 ? 's' : '') + '</span>' +
+        '<span class="meta-item">' + t.schema.length + ' fields</span>' +
+        '<span class="meta-item">' + (t.defaultClauses ? t.defaultClauses.length : 0) + ' default clauses</span>' +
+      '</div>' +
+      '<div class="template-card-actions">' +
+        '<button type="button" class="btn btn-accent" onclick="newContract(\'' + escapeHtml(t.id) + '\')">Use this template</button>' +
+        '<button type="button" class="btn" onclick="previewTemplate(\'' + escapeHtml(t.id) + '\')">Preview</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+  document.getElementById('templates-grid').innerHTML = html;
+}
+
+function previewTemplate(id) {
+  var t = getTemplateById(id);
+  if (!t) return;
+  confirmDialog({
+    title: t.name,
+    body: t.description + '\n\n' + t.schema.length + ' fields to fill. Output: ' + t.outputTitle + ' (' + t.pages + ' page' + (t.pages > 1 ? 's' : '') + '). Default clauses: ' + (t.defaultClauses || []).length + '.',
+    actionText: 'Use this template',
+    onConfirm: function() { newContract(id); }
+  });
+}
+
+/* === VIEW: FILL FORM === */
+function newContract(templateId) {
+  var t = templateId ? getTemplateById(templateId) : DEFAULT_TEMPLATES[0];
+  if (!t) { toast('template not found', 'error'); return; }
+  currentContractId = null;
+  fillFormState = {
+    templateId: t.id,
+    fields: {},
+    selectedClauses: t.defaultClauses.slice(),
+    customClauses: [],
+    signatures: { contractor: { name: state.business.name, signedDate: null }, customer: null },
+    customerId: null
+  };
+  switchView('fill');
+  toast('new contract started — ' + t.name, 'info');
+}
+
+function loadContractForEdit(id) {
+  var c = getContractById(id);
+  if (!c) { toast('contract not found', 'error'); return; }
+  currentContractId = id;
+  fillFormState = {
+    templateId: c.templateId,
+    fields: Object.assign({}, c.fields),
+    selectedClauses: c.selectedClauses.slice(),
+    customClauses: (c.customClauses || []).slice(),
+    signatures: c.signatures ? JSON.parse(JSON.stringify(c.signatures)) : { contractor: null, customer: null },
+    customerId: c.customerId
+  };
+  /* populate top-level notes into fields so the textarea shows correctly */
+  if (c.notes && !fillFormState.fields.notes) fillFormState.fields.notes = c.notes;
+  switchView('fill');
+}
+
+function renderFillForm() {
+  var t = getTemplateById(fillFormState.templateId);
+  if (!t) {
+    document.getElementById('fill-form').innerHTML = '<div class="empty-state"><div class="empty-title">No template loaded</div><div class="empty-desc">Go to the Templates view and pick one to start a new contract.</div><button class="btn btn-accent" onclick="switchView(\'templates\')">Browse templates</button></div>';
+    document.getElementById('fill-preview').innerHTML = '';
+    return;
+  }
+  var formHtml = '<div class="template-header">' +
+    '<div class="template-header-name">' + escapeHtml(t.name) + '</div>' +
+    '<div class="template-header-meta">' + escapeHtml(t.category) + ' · ' + t.pages + ' page' + (t.pages > 1 ? 's' : '') + ' · ' + t.schema.length + ' fields</div>' +
+    '<div class="template-header-actions">' +
+      '<button type="button" class="btn" onclick="switchView(\'templates\')" title="Back to templates">← Templates</button>' +
+      '<button type="button" class="btn" onclick="saveContract(\'draft\')" title="Save as draft (⌘S)">Save draft</button>' +
+      '<button type="button" class="btn btn-accent" onclick="saveContract(\'sent\')" title="Save and mark as sent">Save & Send</button>' +
+      (currentContractId ? '<button type="button" class="btn" onclick="printCurrent()" title="Print or save as PDF (⌘P)">Print / PDF</button>' : '') +
+    '</div>' +
+  '</div>';
+  formHtml += '<div class="form-section"><div class="form-section-title">Customer</div>';
+  formHtml += '<div class="form-row"><div class="field"><label>Select existing customer <span class="req">*</span></label>' +
+    '<select onchange="bindCustomerToContract(this.value)"><option value="">-- choose a customer --</option>' +
+    state.customers.map(function(c) { var sel = fillFormState.customerId === c.id ? ' selected' : ''; return '<option value="' + escapeHtml(c.id) + '"' + sel + '>' + escapeHtml(c.name) + (c.propertyType ? ' (' + c.propertyType + ')' : '') + '</option>'; }).join('') +
+    '<option value="__new__">+ Add new customer</option>' +
+    '</select></div></div></div>';
+  formHtml += '<div class="form-section"><div class="form-section-title">Contract Details</div>';
+  t.schema.forEach(function(field) {
+    var v = fillFormState.fields[field.key] || '';
+    var req = field.required ? ' <span class="req">*</span>' : '';
+    formHtml += '<div class="form-row"><div class="field">';
+    formHtml += '<label for="ff-' + field.key + '">' + escapeHtml(field.label) + req + '</label>';
+    if (field.type === 'select') {
+      formHtml += '<select id="ff-' + field.key + '" onchange="updateField(\'' + field.key + '\', this.value)">';
+      formHtml += '<option value="">-- select --</option>';
+      (field.options || []).forEach(function(o) {
+        formHtml += '<option value="' + escapeHtml(o) + '"' + (v === o ? ' selected' : '') + '>' + escapeHtml(o) + '</option>';
+      });
+      formHtml += '</select>';
+    } else if (field.type === 'textarea') {
+      formHtml += '<textarea id="ff-' + field.key + '" oninput="updateField(\'' + field.key + '\', this.value)" placeholder="' + (field.placeholder || '') + '">' + escapeHtml(v) + '</textarea>';
+    } else {
+      formHtml += '<input type="' + field.type + '" id="ff-' + field.key + '" value="' + escapeHtml(v) + '" oninput="updateField(\'' + field.key + '\', this.value)" placeholder="' + (field.placeholder || '') + '"/>';
+    }
+    formHtml += '</div></div>';
+  });
+  formHtml += '</div>';
+  formHtml += '<div class="form-section"><div class="form-section-title">Clauses (terms to include)</div>';
+  state.clauses.forEach(function(cl) {
+    var checked = fillFormState.selectedClauses.indexOf(cl.id) >= 0;
+    formHtml += '<label class="clause-pick">' +
+      '<input type="checkbox" ' + (checked ? 'checked' : '') + ' onchange="toggleClause(\'' + escapeHtml(cl.id) + '\', this.checked)"/>' +
+      '<div class="clause-pick-body">' +
+        '<div class="clause-pick-name">' + escapeHtml(cl.name) + ' <span style="font-size:var(--fs-xs);color:var(--ink-3);font-weight:normal;">— ' + cl.category + (cl.isSystem ? ' · built-in' : ' · custom') + '</span></div>' +
+        '<div class="clause-pick-preview">' + escapeHtml(cl.body.slice(0, 120)) + (cl.body.length > 120 ? '...' : '') + '</div>' +
+      '</div>' +
+    '</label>';
+  });
+  if (fillFormState.customClauses.length) {
+    formHtml += '<div style="margin-top:var(--sp-3);font-size:var(--fs-sm);text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-2);margin-bottom:var(--sp-2);font-weight:500;">Custom clauses on this contract</div>';
+    fillFormState.customClauses.forEach(function(cc, i) {
+      formHtml += '<div class="clause-pick" style="display:block;">' +
+        '<div class="clause-pick-body">' +
+          '<div class="clause-pick-name">' + escapeHtml(cc.name) + ' <button type="button" class="btn btn-sm" onclick="removeCustomClause(' + i + ')" style="float:right;padding:2px 6px;">remove</button></div>' +
+          '<div class="clause-pick-preview">' + escapeHtml(cc.body) + '</div>' +
+        '</div>' +
+      '</div>';
+    });
+  }
+  formHtml += '<button type="button" class="btn" onclick="openAddContractClauseModal()" style="margin-top:var(--sp-2);">+ Add custom clause to this contract</button>';
+  formHtml += '</div>';
+  formHtml += '<div class="form-section"><div class="form-section-title">Signatures</div>';
+  formHtml += '<div class="signature-block">' +
+    '<div class="sig-field"><label for="ff-sig-contractor">Contractor signature (your typed name)</label>' +
+    '<div class="sig-line">' + escapeHtml(fillFormState.signatures.contractor ? fillFormState.signatures.contractor.name : '') + '</div>' +
+    '<input class="sig-input" type="text" id="ff-sig-contractor" value="' + escapeHtml(fillFormState.signatures.contractor ? fillFormState.signatures.contractor.name : '') + '" oninput="updateSignature(\'contractor\', this.value)" placeholder="Type your full name to sign"/>' +
+    (fillFormState.signatures.contractor && fillFormState.signatures.contractor.signedDate ? '<div class="sig-date">Signed: ' + formatDate(fillFormState.signatures.contractor.signedDate) + '</div>' : '<div class="sig-date">Not yet signed</div>') +
+    '</div>' +
+    '<div class="sig-field"><label for="ff-sig-customer">Customer signature (their typed name)</label>' +
+    '<div class="sig-line">' + escapeHtml(fillFormState.signatures.customer ? fillFormState.signatures.customer.name : '') + '</div>' +
+    '<input class="sig-input" type="text" id="ff-sig-customer" value="' + escapeHtml(fillFormState.signatures.customer ? fillFormState.signatures.customer.name : '') + '" oninput="updateSignature(\'customer\', this.value)" placeholder="Type the customer\'s full name to sign"/>' +
+    (fillFormState.signatures.customer && fillFormState.signatures.customer.signedDate ? '<div class="sig-date">Signed: ' + formatDate(fillFormState.signatures.customer.signedDate) + '</div>' : '<div class="sig-date">Not yet signed</div>') +
+    '</div>' +
+  '</div></div>';
+  formHtml += '<div class="form-section"><div class="form-section-title">Internal notes (not printed on contract)</div>' +
+    '<textarea id="ff-notes" oninput="updateNotes(this.value)" placeholder="Internal notes for your records..." style="width:100%;min-height:80px;padding:var(--sp-3);border:1px solid var(--line);background:var(--bg);color:var(--ink);font-family:var(--mono);font-size:var(--fs-sm);">' + escapeHtml(fillFormState.fields.notes || '') + '</textarea>' +
+  '</div>';
+  document.getElementById('fill-form').innerHTML = formHtml;
+  renderLivePreview();
+}
+
+var debouncedPreview = debounce(renderLivePreview, 200);
+function updateField(key, value) {
+  fillFormState.fields[key] = value;
+  var el = document.getElementById('ff-' + key);
+  if (el) { el.removeAttribute('aria-invalid'); el.style.borderColor = ''; }
+  debouncedPreview();
+}
+function updateNotes(value) {
+  fillFormState.fields.notes = value;
+  debouncedPreview();
+}
+function updateSignature(party, name) {
+  if (!fillFormState.signatures[party]) fillFormState.signatures[party] = { name: '', signedDate: null };
+  fillFormState.signatures[party].name = name;
+  fillFormState.signatures[party].signedDate = name ? localDate() : null;
+  debouncedPreview();
+}
+function toggleClause(id, checked) {
+  if (checked) { if (fillFormState.selectedClauses.indexOf(id) < 0) fillFormState.selectedClauses.push(id); }
+  else { fillFormState.selectedClauses = fillFormState.selectedClauses.filter(function(x) { return x !== id; }); }
+  debouncedPreview();
+}
+function removeCustomClause(idx) {
+  fillFormState.customClauses.splice(idx, 1);
+  renderFillForm();
+}
+function openAddContractClauseModal() {
+  var html = '<div class="form-row"><div class="field"><label>Clause name</label><input type="text" id="contract-clause-name" placeholder="e.g. Board Approval Required"/></div></div>' +
+    '<div class="form-row"><div class="field"><label>Clause body</label><textarea id="contract-clause-body" placeholder="Full clause text..." style="min-height:100px;"></textarea></div></div>';
+  confirmDialog({
+    title: 'Add custom clause to this contract',
+    html: html,
+    actionText: 'Add clause',
+    onConfirm: function() {
+      var name = document.getElementById('contract-clause-name').value.trim();
+      var body = document.getElementById('contract-clause-body').value.trim();
+      if (!name || !body) { toast('name and body required', 'error'); return; }
+      fillFormState.customClauses.push({ name: name, body: body });
+      renderFillForm();
+      toast('clause added', 'success');
+    }
+  });
+}
+function bindCustomerToContract(custId) {
+  if (custId === '__new__') {
+    openCustomerForm(null);
+    return;
+  }
+  var c = getCustomerById(custId);
+  if (!c) return;
+  fillFormState.customerId = custId;
+  fillFormState.fields.customerName = c.name;
+  fillFormState.fields.customerAddress = c.address || '';
+  fillFormState.fields.customerPhone = c.phone || '';
+  fillFormState.fields.customerEmail = c.email || '';
+  if (c.propertyType === 'commercial') {
+    fillFormState.fields.customerCompany = c.name;
+    fillFormState.fields.contactName = '';
+  }
+  renderFillForm();
+  toast('customer bound: ' + c.name, 'success');
+}
+
+function renderLivePreview() {
+  var t = getTemplateById(fillFormState.templateId);
+  var preview = document.getElementById('fill-preview');
+  if (!t) { preview.innerHTML = ''; return; }
+  var biz = state.business;
+  var f = fillFormState.fields;
+  var html = '<div class="preview-doc">';
+  html += '<h1>' + escapeHtml(t.outputTitle) + '</h1>';
+  html += '<p style="text-align:center;color:var(--ink-3);font-size:10px;text-transform:uppercase;letter-spacing:0.08em;">Contract #' + (currentContractId ? escapeHtml(getContractById(currentContractId).number) : 'LF-2026-#### (DRAFT)') + ' · ' + formatDate(localDate()) + '</p>';
+  html += '<h2>Service Provider</h2>';
+  html += '<p><strong>' + escapeHtml(biz.name || '[Your Business Name]') + '</strong><br/>' + escapeHtml(biz.address || '') + (biz.phone ? '<br/>' + escapeHtml(biz.phone) : '') + (biz.email ? '<br/>' + escapeHtml(biz.email) : '') + '</p>';
+  html += '<h2>Customer</h2>';
+  if (f.customerName || f.customerCompany) {
+    html += '<p><strong>' + escapeHtml(f.customerCompany || f.customerName) + '</strong><br/>' + escapeHtml(f.customerAddress || '') + (f.customerPhone ? '<br/>' + escapeHtml(f.customerPhone) : '') + (f.customerEmail ? '<br/>' + escapeHtml(f.customerEmail) : '') + '</p>';
+  } else {
+    html += '<p style="color:var(--ink-3);font-style:italic;">[Select or add a customer above]</p>';
+  }
+  html += '<h2>Scope of Work & Terms</h2>';
+  t.schema.forEach(function(field) {
+    if (['customerName','customerCompany','customerAddress','customerPhone','customerEmail','contactName','contactPhone','contactEmail','propertiesList'].indexOf(field.key) >= 0) return;
+    var v = f[field.key];
+    if (v === undefined || v === '' || v === null) return;
+    if (field.type === 'textarea') {
+      html += '<p><strong>' + escapeHtml(field.label) + ':</strong><br/>' + escapeHtml(v).replace(/\n/g, '<br/>') + '</p>';
+    } else {
+      var usd = ['pricePerVisit','totalPrice','totalCost','monthlyFee','priceAmount','depositAmount','materialsCost','laborCost','liabilityAmount'].indexOf(field.key) >= 0 ? ' USD' : '';
+      html += '<p><strong>' + escapeHtml(field.label) + ':</strong> ' + escapeHtml(v) + usd + '</p>';
+    }
+  });
+  if (fillFormState.selectedClauses.length || fillFormState.customClauses.length) {
+    html += '<h2>Terms & Conditions</h2>';
+    fillFormState.selectedClauses.forEach(function(cid) {
+      var cl = getClauseById(cid);
+      if (!cl) return;
+      html += '<div class="clause-block"><div class="clause-title">' + escapeHtml(cl.name) + '</div><div class="clause-body">' + escapeHtml(cl.body) + '</div></div>';
+    });
+    fillFormState.customClauses.forEach(function(cc) {
+      html += '<div class="clause-block"><div class="clause-title">' + escapeHtml(cc.name) + '</div><div class="clause-body">' + escapeHtml(cc.body) + '</div></div>';
+    });
+  }
+  html += '<h2>Signatures</h2>';
+  html += '<div class="sig-row">' +
+    '<div class="sig-block"><div class="sig-line">' + escapeHtml(fillFormState.signatures.contractor ? fillFormState.signatures.contractor.name : '') + '</div><div class="sig-name">Contractor</div><div class="sig-role">' + (fillFormState.signatures.contractor && fillFormState.signatures.contractor.signedDate ? 'Signed ' + formatDate(fillFormState.signatures.contractor.signedDate) : 'Pending signature') + '</div></div>' +
+    '<div class="sig-block"><div class="sig-line">' + escapeHtml(fillFormState.signatures.customer ? fillFormState.signatures.customer.name : '') + '</div><div class="sig-name">Customer</div><div class="sig-role">' + (fillFormState.signatures.customer && fillFormState.signatures.customer.signedDate ? 'Signed ' + formatDate(fillFormState.signatures.customer.signedDate) : 'Pending signature') + '</div></div>' +
+  '</div>';
+  html += '<div style="margin-top:40px;font-size:10px;color:var(--ink-3);text-align:center;border-top:1px solid var(--line-soft);padding-top:8px;">Generated by LawnForms Pro · ' + formatDate(localDate()) + '</div>';
+  html += '</div>';
+  preview.innerHTML = html;
+}
+
+/* === SAVE CONTRACT === */
+function saveContract(targetStatus) {
+  var t = getTemplateById(fillFormState.templateId);
+  if (!t) { toast('no template loaded', 'error'); return; }
+  var missing = [];
+  var missingLabels = [];
+  t.schema.forEach(function(field) {
+    if (field.required && !fillFormState.fields[field.key]) { missing.push(field.key); missingLabels.push(field.label); }
+  });
+  if (missing.length) {
+    toast('missing required: ' + missingLabels.join(', '), 'error');
+    var firstEl = null;
+    missing.forEach(function(key) {
+      var el = document.getElementById('ff-' + key);
+      if (el) { el.setAttribute('aria-invalid', 'true'); el.style.borderColor = 'var(--red)'; if (!firstEl) firstEl = el; }
+    });
+    if (firstEl) firstEl.focus();
+    return;
+  }
+  var totalValue = 0;
+  var f = fillFormState.fields;
+  var _pv;
+  /* Fixed one-time prices take priority */
+  _pv = parseFloat(f.totalPrice);
+  if (!isNaN(_pv) && _pv > 0) {
+    totalValue = _pv;
+  /* Hardscape/install total cost */
+  } else if (!isNaN(_pv = parseFloat(f.totalCost)) && _pv > 0) {
+    totalValue = _pv;
+  /* Commercial: monthly fee × contract term in months */
+  } else if (!isNaN(_pv = parseFloat(f.monthlyFee)) && _pv > 0) {
+    var _termStr = f.contractTerm || '';
+    var _termMonths = _termStr.indexOf('24') >= 0 ? 24 : _termStr.indexOf('36') >= 0 ? 36 : 12;
+    totalValue = _pv * _termMonths;
+  /* Recurring: per-visit × visits/year × term fraction */
+  } else if (!isNaN(_pv = parseFloat(f.pricePerVisit)) && _pv > 0) {
+    var _freq = f.frequency || '';
+    var _term = f.term || '';
+    var _visitsPerYear = _freq === 'Biweekly' ? 26 : _freq === 'Monthly' ? 12 : _freq === 'Custom' ? 12 : 52;
+    var _termFactor = (_term.indexOf('Month-to-month') >= 0) ? (1 / 12) : (_term.indexOf('6 months') >= 0 || _term.indexOf('Seasonal') >= 0) ? 0.5 : 1;
+    totalValue = _pv * _visitsPerYear * _termFactor;
+  /* Snow: scale by service type and season length */
+  } else if (!isNaN(_pv = parseFloat(f.priceAmount)) && _pv > 0) {
+    var _svcType = f.serviceType || '';
+    var _snowStart = new Date((f.seasonStart || '') + 'T00:00:00');
+    var _snowEnd   = new Date((f.seasonEnd   || '') + 'T00:00:00');
+    var _snowMonths = 5; /* sensible default Nov-Apr */
+    if (!isNaN(_snowStart) && !isNaN(_snowEnd) && _snowEnd > _snowStart) {
+      _snowMonths = (_snowEnd.getFullYear() - _snowStart.getFullYear()) * 12 + (_snowEnd.getMonth() - _snowStart.getMonth());
+      if (_snowMonths < 1) _snowMonths = 1;
+    }
+    if (_svcType === 'Seasonal flat rate') {
+      totalValue = _pv;
+    } else if (_svcType === 'Per-month') {
+      totalValue = _pv * _snowMonths;
+    } else { /* Per-event */
+      var _eventsPerMonth = parseFloat(f.maxEventsPerMonth);
+      _eventsPerMonth = (!isNaN(_eventsPerMonth) && _eventsPerMonth > 0) ? _eventsPerMonth : 3;
+      totalValue = _pv * _eventsPerMonth * _snowMonths;
+    }
+  }
+  if (currentContractId) {
+    var c = getContractById(currentContractId);
+    c.templateId = fillFormState.templateId;
+    var custMatch = state.customers.find(function(cu) { return cu.name === fillFormState.fields.customerName || cu.name === fillFormState.fields.customerCompany; });
+    c.customerId = custMatch ? custMatch.id : null;
+    c.fields = Object.assign({}, fillFormState.fields);
+    c.selectedClauses = fillFormState.selectedClauses.slice();
+    c.customClauses = fillFormState.customClauses.slice();
+    c.signatures = JSON.parse(JSON.stringify(fillFormState.signatures));
+    c.startDate = fillFormState.fields.startDate || fillFormState.fields.installStart || c.startDate;
+    c.endDate = fillFormState.fields.completionDate || fillFormState.fields.seasonEnd || fillFormState.fields.installEnd || c.endDate;
+    c.totalValue = totalValue;
+    c.notes = fillFormState.fields.notes || '';
+    if (targetStatus && targetStatus !== c.status) {
+      c.status = targetStatus;
+      if (targetStatus === 'sent') c.sentAt = localDate();
+      if (targetStatus === 'signed') c.signedAt = localDate();
+    }
+    toast('contract updated', 'success');
+  } else {
+    var custMatch2 = state.customers.find(function(cu) { return cu.name === fillFormState.fields.customerName || cu.name === fillFormState.fields.customerCompany; });
+    var newC = {
+      id: uid('ct'),
+      number: getNextContractNumber(),
+      templateId: fillFormState.templateId,
+      customerId: custMatch2 ? custMatch2.id : null,
+      status: targetStatus || 'draft',
+      fields: Object.assign({}, fillFormState.fields),
+      selectedClauses: fillFormState.selectedClauses.slice(),
+      customClauses: fillFormState.customClauses.slice(),
+      signatures: JSON.parse(JSON.stringify(fillFormState.signatures)),
+      startDate: fillFormState.fields.startDate || fillFormState.fields.installStart || localDate(),
+      endDate: fillFormState.fields.completionDate || fillFormState.fields.seasonEnd || fillFormState.fields.installEnd || '',
+      totalValue: totalValue,
+      notes: fillFormState.fields.notes || '',
+      createdAt: localDate(),
+      sentAt: targetStatus === 'sent' ? localDate() : null,
+      signedAt: targetStatus === 'signed' ? localDate() : null
+    };
+    state.contracts.push(newC);
+    currentContractId = newC.id;
+    toast('contract saved as ' + newC.status + ' · ' + newC.number, 'success');
+  }
+  saveState();
+  updateNavBadges();
+  renderLivePreview();
+  if (targetStatus === 'sent') {
+    setTimeout(function() { switchView('contracts'); }, 800);
+  }
+}
+
+/* === VIEW: CONTRACTS === */
+var contractsFilter = { status: 'all' };
+function renderContracts() {
+  var total = getTotalContracts();
+  var active = getActiveContracts().length;
+  var pending = getPendingSignature().length;
+  var totalValue = getTotalContractValue();
+  document.getElementById('contracts-stats').innerHTML =
+    '<div class="stat-card"><div class="stat-num">' + total + '</div><div class="stat-label">Total Contracts</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + active + '</div><div class="stat-label">Active</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + pending + '</div><div class="stat-label">Pending Signature</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + formatCurrency(totalValue) + '</div><div class="stat-label">Total Contract Value</div></div>';
+  var statuses = ['all', 'draft', 'sent', 'signed', 'active', 'expired', 'cancelled', 'declined'];
+  var pillsHtml = statuses.map(function(s) {
+    var active = contractsFilter.status === s ? ' active' : '';
+    var count = s === 'all' ? state.contracts.length : state.contracts.filter(function(q) { return q.status === s; }).length;
+    return '<button type="button" class="pill' + active + '" onclick="setContractsFilter(\'' + s + '\')">' + s + ' <span class="pill-count">' + count + '</span></button>';
+  }).join('');
+  document.getElementById('contracts-status-pills').innerHTML = pillsHtml;
+  var rows = state.contracts.filter(function(c) {
+    if (contractsFilter.status === 'all') return true;
+    return c.status === contractsFilter.status;
+  });
+  var statusOrder = { active: 0, sent: 1, signed: 2, draft: 3, expired: 4, cancelled: 5, declined: 6 };
+  rows.sort(function(a, b) {
+    return (statusOrder[a.status] || 9) - (statusOrder[b.status] || 9);
+  });
+  var tbody = document.getElementById('contracts-tbody');
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--ink-2);">No contracts yet. Click "+ New contract" to create one.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(function(c) {
+    var t = getTemplateById(c.templateId);
+    var cust = c.customerId ? getCustomerById(c.customerId) : null;
+    var custName = cust ? cust.name : (c.fields.customerName || c.fields.customerCompany || '—');
+    var actions = '<button type="button" class="btn btn-sm" onclick="loadContractForEdit(\'' + escapeHtml(c.id) + '\')">view</button>';
+    actions += ' <button type="button" class="btn btn-sm" onclick="printContract(\'' + escapeHtml(c.id) + '\')">print</button>';
+    actions += ' <button type="button" class="btn btn-sm" onclick="duplicateContract(\'' + escapeHtml(c.id) + '\')">dup</button>';
+    actions += ' <button type="button" class="btn btn-sm" onclick="deleteContract(\'' + escapeHtml(c.id) + '\')" style="color:var(--red);">del</button>';
+    return '<tr>' +
+      '<td data-label="Contract #" aria-label="Contract number: ' + escapeHtml(c.number) + '"><strong>' + escapeHtml(c.number) + '</strong></td>' +
+      '<td data-label="Template" aria-label="Template: ' + escapeHtml(t ? t.name : '—') + '">' + escapeHtml(t ? t.name : '—') + '</td>' +
+      '<td data-label="Customer" aria-label="Customer: ' + escapeHtml(custName) + '">' + escapeHtml(custName) + '</td>' +
+      '<td data-label="Created" aria-label="Created: ' + formatDate(c.createdAt) + '">' + formatDate(c.createdAt) + '</td>' +
+      '<td data-label="Start Date" aria-label="Start Date: ' + formatDate(c.startDate) + '">' + formatDate(c.startDate) + '</td>' +
+      '<td data-label="Status" aria-label="Status: ' + c.status + '"><button type="button" class="status-badge status-' + c.status + '" onclick="openStatusPopover(event, \'' + escapeHtml(c.id) + '\')" title="Click to change status" aria-haspopup="menu" aria-expanded="false">' + c.status + '</button></td>' +
+      '<td data-label="Value" aria-label="Value: ' + formatCurrency(c.totalValue || 0) + '">' + formatCurrency(c.totalValue || 0) + '</td>' +
+      '<td data-label="Actions" class="actions-cell">' + actions + '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function setContractsFilter(status) { contractsFilter.status = status; renderContracts(); }
+
+function duplicateContract(id) {
+  var c = getContractById(id);
+  if (!c) return;
+  var copy = JSON.parse(JSON.stringify(c));
+  copy.id = uid('ct');
+  copy.number = getNextContractNumber();
+  copy.status = 'draft';
+  copy.signatures = { contractor: { name: state.business.name, signedDate: null }, customer: null };
+  copy.sentAt = null; copy.signedAt = null;
+  copy.createdAt = localDate();
+  state.contracts.push(copy);
+  saveState();
+  renderContracts();
+  toast('contract duplicated — ' + copy.number, 'success');
+}
+
+function deleteContract(id) {
+  var c = getContractById(id);
+  if (!c) return;
+  confirmDialog({
+    title: 'Delete contract?',
+    body: 'Delete ' + c.number + '? This cannot be undone.',
+    danger: true,
+    onConfirm: function() {
+      state.contracts = state.contracts.filter(function(x) { return x.id !== id; });
+      saveState();
+      renderContracts();
+      updateNavBadges();
+      toast('contract deleted', 'info');
+    }
+  });
+}
+
+function printContract(id) {
+  var c = getContractById(id);
+  if (!c) return;
+  loadContractForEdit(id);
+  setTimeout(function() { printCurrent(); }, 100);
+}
+
+/* === VIEW: CLAUSES === */
+var clausesFilter = { category: 'all' };
+function renderClauses() {
+  var total = state.clauses.length;
+  var custom = state.clauses.filter(function(c) { return !c.isSystem; }).length;
+  var byCat = {};
+  state.clauses.forEach(function(c) { byCat[c.category] = (byCat[c.category] || 0) + 1; });
+  var stats = '<div class="stat-card"><div class="stat-num">' + total + '</div><div class="stat-label">Total Clauses</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + custom + '</div><div class="stat-label">Custom Clauses</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + (byCat.payment || 0) + '</div><div class="stat-label">Payment Clauses</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + (byCat.legal || 0) + '</div><div class="stat-label">Legal Clauses</div></div>';
+  document.getElementById('clauses-stats').innerHTML = stats;
+  var cats = ['all', 'payment', 'cancellation', 'liability', 'service', 'legal'];
+  var pillsHtml = cats.map(function(cat) {
+    var active = clausesFilter.category === cat ? ' active' : '';
+    var count = cat === 'all' ? state.clauses.length : state.clauses.filter(function(c) { return c.category === cat; }).length;
+    return '<button type="button" class="pill' + active + '" onclick="setClausesFilter(\'' + cat + '\')">' + cat + ' <span class="pill-count">' + count + '</span></button>';
+  }).join('');
+  document.getElementById('clauses-cat-pills').innerHTML = pillsHtml;
+  var rows = state.clauses.filter(function(c) {
+    if (clausesFilter.category === 'all') return true;
+    return c.category === clausesFilter.category;
+  });
+  var tbody = document.getElementById('clauses-tbody');
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--ink-2);">No clauses in this category.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(function(c) {
+    var actions = c.isSystem ? '<button type="button" class="btn btn-sm" onclick="duplicateSystemClause(\'' + escapeHtml(c.id) + '\')">duplicate & edit</button>' : '<button type="button" class="btn btn-sm" onclick="editClause(\'' + escapeHtml(c.id) + '\')">edit</button> <button type="button" class="btn btn-sm" onclick="deleteClause(\'' + escapeHtml(c.id) + '\')" style="color:var(--red);">del</button>';
+    return '<tr>' +
+      '<td data-label="Name" aria-label="Name: ' + escapeHtml(c.name) + '"><strong>' + escapeHtml(c.name) + '</strong></td>' +
+      '<td data-label="Category" aria-label="Category: ' + c.category + '"><span class="status-badge status-sent">' + c.category + '</span></td>' +
+      '<td data-label="Preview" aria-label="Preview: ' + escapeHtml(c.body.slice(0, 100)) + (c.body.length > 100 ? '...' : '') + '">' + escapeHtml(c.body.slice(0, 100)) + (c.body.length > 100 ? '...' : '') + '</td>' +
+      '<td data-label="Type" aria-label="Type: ' + (c.isSystem ? 'built-in' : 'custom') + '">' + (c.isSystem ? 'built-in' : 'custom') + '</td>' +
+      '<td data-label="Actions" class="actions-cell">' + actions + '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function setClausesFilter(cat) { clausesFilter.category = cat; renderClauses(); }
+
+function openAddClauseModal() {
+  var html = '<div class="form-row"><div class="field"><label>Clause name</label><input type="text" id="new-clause-name" placeholder="e.g. Net 7 Payment"/></div></div>' +
+    '<div class="form-row"><div class="field"><label>Category</label><select id="new-clause-cat"><option value="payment">Payment</option><option value="cancellation">Cancellation</option><option value="liability">Liability</option><option value="service">Service</option><option value="legal">Legal</option></select></div></div>' +
+    '<div class="form-row"><div class="field"><label>Body</label><textarea id="new-clause-body" placeholder="Full clause text..." style="min-height:120px;"></textarea></div></div>';
+  confirmDialog({
+    title: 'Add custom clause',
+    html: html,
+    actionText: 'Add clause',
+    onConfirm: function() {
+      var name = document.getElementById('new-clause-name').value.trim();
+      var cat = document.getElementById('new-clause-cat').value;
+      var body = document.getElementById('new-clause-body').value.trim();
+      if (!name || !body) { toast('name and body required', 'error'); return; }
+      state.clauses.push({ id: uid('cl'), name: name, category: cat, body: body, isSystem: false });
+      saveState();
+      renderClauses();
+      toast('clause added to library', 'success');
+    }
+  });
+}
+
+function editClause(id) {
+  var c = getClauseById(id);
+  if (!c || c.isSystem) return;
+  var html = '<div class="form-row"><div class="field"><label>Clause name</label><input type="text" id="edit-clause-name" value="' + escapeHtml(c.name) + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label>Category</label><select id="edit-clause-cat"><option value="payment"' + (c.category === 'payment' ? ' selected' : '') + '>Payment</option><option value="cancellation"' + (c.category === 'cancellation' ? ' selected' : '') + '>Cancellation</option><option value="liability"' + (c.category === 'liability' ? ' selected' : '') + '>Liability</option><option value="service"' + (c.category === 'service' ? ' selected' : '') + '>Service</option><option value="legal"' + (c.category === 'legal' ? ' selected' : '') + '>Legal</option></select></div></div>' +
+    '<div class="form-row"><div class="field"><label>Body</label><textarea id="edit-clause-body" style="min-height:120px;">' + escapeHtml(c.body) + '</textarea></div></div>';
+  confirmDialog({
+    title: 'Edit clause',
+    html: html,
+    actionText: 'Save changes',
+    onConfirm: function() {
+      c.name = document.getElementById('edit-clause-name').value.trim();
+      c.category = document.getElementById('edit-clause-cat').value;
+      c.body = document.getElementById('edit-clause-body').value.trim();
+      saveState();
+      renderClauses();
+      toast('clause updated', 'success');
+    }
+  });
+}
+
+function deleteClause(id) {
+  var c = getClauseById(id);
+  if (!c || c.isSystem) return;
+  confirmDialog({
+    title: 'Delete clause?',
+    body: 'Delete "' + c.name + '" from your library?',
+    danger: true,
+    onConfirm: function() {
+      state.clauses = state.clauses.filter(function(x) { return x.id !== id; });
+      saveState();
+      renderClauses();
+      toast('clause deleted', 'info');
+    }
+  });
+}
+
+function duplicateSystemClause(id) {
+  var c = getClauseById(id);
+  if (!c) return;
+  var copy = { id: uid('cl'), name: c.name + ' (copy)', category: c.category, body: c.body, isSystem: false };
+  state.clauses.push(copy);
+  saveState();
+  renderClauses();
+  toast('clause duplicated — now editable', 'success');
+}
+
+/* === VIEW: CUSTOMERS === */
+var customersFilter = { type: 'all', search: '' };
+function renderCustomers() {
+  var total = state.customers.length;
+  var residential = state.customers.filter(function(c) { return c.propertyType === 'residential'; }).length;
+  var commercial = state.customers.filter(function(c) { return c.propertyType === 'commercial'; }).length;
+  var withActive = state.customers.filter(function(c) { return getActiveContractCountForCustomer(c.id) > 0; }).length;
+  document.getElementById('customers-stats').innerHTML =
+    '<div class="stat-card"><div class="stat-num">' + total + '</div><div class="stat-label">Total Customers</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + residential + '</div><div class="stat-label">Residential</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + commercial + '</div><div class="stat-label">Commercial</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + withActive + '</div><div class="stat-label">With Active Contracts</div></div>';
+  var types = ['all', 'residential', 'commercial'];
+  var pillsHtml = types.map(function(t) {
+    var active = customersFilter.type === t ? ' active' : '';
+    var count = t === 'all' ? state.customers.length : state.customers.filter(function(c) { return c.propertyType === t; }).length;
+    return '<button type="button" class="pill' + active + '" onclick="setCustomersTypeFilter(\'' + t + '\')">' + t + ' <span class="pill-count">' + count + '</span></button>';
+  }).join('');
+  document.getElementById('customers-type-pills').innerHTML = pillsHtml;
+  var search = (document.getElementById('customers-search') || {}).value || '';
+  customersFilter.search = search.toLowerCase().trim();
+  var filtered = state.customers.filter(function(c) {
+    var matchSearch = !customersFilter.search || (c.name + ' ' + c.email + ' ' + c.phone + ' ' + c.address + ' ' + c.notes).toLowerCase().indexOf(customersFilter.search) !== -1;
+    var matchType = customersFilter.type === 'all' || c.propertyType === customersFilter.type;
+    return matchSearch && matchType;
+  });
+  var tbody = document.getElementById('customers-tbody');
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--ink-2);">No customers match.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = filtered.map(function(c) {
+    var activeCount = getActiveContractCountForCustomer(c.id);
+    var actions = '<button type="button" class="btn btn-sm" onclick="openCustomerForm(\'' + escapeHtml(c.id) + '\')">edit</button>' +
+      '<button type="button" class="btn btn-sm" onclick="deleteCustomer(\'' + escapeHtml(c.id) + '\')" style="color:var(--red);">del</button>';
+    return '<tr>' +
+      '<td data-label="Name" aria-label="Name: ' + escapeHtml(c.name) + '"><strong>' + escapeHtml(c.name) + '</strong></td>' +
+      '<td data-label="Email" aria-label="Email: ' + escapeHtml(c.email || '—') + '">' + escapeHtml(c.email || '—') + '</td>' +
+      '<td data-label="Phone" aria-label="Phone: ' + escapeHtml(c.phone || '—') + '">' + escapeHtml(c.phone || '—') + '</td>' +
+      '<td data-label="Address" aria-label="Address: ' + escapeHtml(c.address || '—') + '">' + escapeHtml(c.address || '—') + '</td>' +
+      '<td data-label="Type" aria-label="Type: ' + (c.propertyType || '—') + '"><span class="status-badge status-sent">' + (c.propertyType || '—') + '</span></td>' +
+      '<td data-label="Active Contracts" aria-label="Active Contracts: ' + activeCount + '">' + activeCount + '</td>' +
+      '<td data-label="Actions" class="actions-cell">' + actions + '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function setCustomersTypeFilter(t) { customersFilter.type = t; renderCustomers(); }
+document.getElementById('customers-search').addEventListener('input', renderCustomers);
+
+function openCustomerForm(id) {
+  var c = id ? getCustomerById(id) : null;
+  var html = '<div class="form-row"><div class="field"><label>Name *</label><input type="text" id="cust-form-name" value="' + escapeHtml(c ? c.name : '') + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label>Email</label><input type="email" id="cust-form-email" value="' + escapeHtml(c ? c.email : '') + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label>Phone</label><input type="text" id="cust-form-phone" value="' + escapeHtml(c ? c.phone : '') + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label>Address</label><input type="text" id="cust-form-address" value="' + escapeHtml(c ? c.address : '') + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label>Property type</label><select id="cust-form-type"><option value="residential"' + (c && c.propertyType === 'residential' ? ' selected' : '') + '>Residential</option><option value="commercial"' + (c && c.propertyType === 'commercial' ? ' selected' : '') + '>Commercial</option></select></div></div>' +
+    '<div class="form-row"><div class="field"><label>Notes</label><textarea id="cust-form-notes" style="min-height:80px;">' + escapeHtml(c ? c.notes : '') + '</textarea></div></div>';
+  confirmDialog({
+    title: id ? 'Edit customer' : 'Add customer',
+    html: html,
+    actionText: id ? 'Save changes' : 'Add customer',
+    onConfirm: function() {
+      var name = document.getElementById('cust-form-name').value.trim();
+      if (!name) { toast('name is required', 'error'); return; }
+      var obj = { id: id || uid('cust'), name: name, email: document.getElementById('cust-form-email').value.trim(), phone: document.getElementById('cust-form-phone').value.trim(), address: document.getElementById('cust-form-address').value.trim(), propertyType: document.getElementById('cust-form-type').value, notes: document.getElementById('cust-form-notes').value };
+      if (id) {
+        var idx = state.customers.findIndex(function(x) { return x.id === id; });
+        if (idx >= 0) state.customers[idx] = obj;
+        toast('customer updated', 'success');
+      } else {
+        state.customers.push(obj);
+        toast('customer added', 'success');
+        if (currentView === 'fill') {
+          fillFormState.customerId = obj.id;
+          fillFormState.fields.customerName = obj.name;
+          fillFormState.fields.customerAddress = obj.address || '';
+          fillFormState.fields.customerPhone = obj.phone || '';
+          fillFormState.fields.customerEmail = obj.email || '';
+          if (obj.propertyType === 'commercial') {
+            fillFormState.fields.customerCompany = obj.name;
+            fillFormState.fields.contactName = '';
+          }
+        }
+      }
+      saveState();
+      renderCustomers();
+      updateNavBadges();
+      if (currentView === 'fill') { renderFillForm(); }
+    }
+  });
+}
+
+function deleteCustomer(id) {
+  var c = getCustomerById(id);
+  if (!c) return;
+  confirmDialog({
+    title: 'Delete customer?',
+    body: 'Delete ' + c.name + '? Existing contracts will remain but show no customer.',
+    danger: true,
+    onConfirm: function() {
+      state.customers = state.customers.filter(function(x) { return x.id !== id; });
+      saveState();
+      renderCustomers();
+      updateNavBadges();
+      toast('customer deleted', 'info');
+    }
+  });
+}
+
+/* === VIEW: SETTINGS === */
+function renderSettings() {
+  var b = state.business;
+  var s = state.settings;
+  document.getElementById('settings-layout').innerHTML =
+    '<div class="settings-section"><h3>Business Profile</h3>' +
+    '<div class="form-row"><div class="field"><label>Business name</label><input type="text" id="set-name" value="' + escapeHtml(b.name) + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label>Address</label><input type="text" id="set-address" value="' + escapeHtml(b.address) + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label>Phone</label><input type="text" id="set-phone" value="' + escapeHtml(b.phone) + '"/></div><div class="field"><label>Email</label><input type="email" id="set-email" value="' + escapeHtml(b.email) + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label>License number</label><input type="text" id="set-license" value="' + escapeHtml(b.licenseNo) + '"/></div><div class="field"><label>Insurance</label><input type="text" id="set-insurance" value="' + escapeHtml(b.insurance) + '" placeholder="e.g. $2M liability, Workers Comp"/></div></div>' +
+    '</div>' +
+    '<div class="settings-section"><h3>Preferences</h3>' +
+    '<div class="form-row"><div class="field"><label>Theme</label><select id="set-theme"><option value="light"' + (s.theme === 'light' ? ' selected' : '') + '>Light</option><option value="dark"' + (s.theme === 'dark' ? ' selected' : '') + '>Dark</option><option value="system"' + (s.theme === 'system' ? ' selected' : '') + '>System (follow computer)</option></select></div>' +
+    '<div class="field"><label>Default contract term (months)</label><input type="number" id="set-term" value="' + (s.defaultTermMonths || 12) + '"/></div>' +
+    '<div class="field"><label>Default deposit (%)</label><input type="number" id="set-deposit" value="' + (s.defaultDepositPct || 50) + '"/></div></div>' +
+    '</div>' +
+    '<div class="settings-section"><h3>Data</h3>' +
+    '<p style="color:var(--ink-2);font-size:var(--fs-sm);margin-bottom:var(--sp-3);">All your data is stored locally in this browser. Back up regularly to a file you can store in Dropbox or iCloud.</p>' +
+    '<div style="display:flex;gap:var(--sp-2);flex-wrap:wrap;">' +
+      '<button type="button" class="btn" onclick="downloadJSONBackup()">Download JSON backup</button>' +
+      '<button type="button" class="btn" onclick="document.getElementById(\'import-file\').click()">Import backup</button>' +
+      '<input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSONBackup(event)"/>' +
+      '<button type="button" class="btn" style="color:var(--red);border-color:var(--red);" onclick="clearAllData()">Clear all data</button>' +
+    '</div>' +
+    '</div>';
+}
+
+function saveSettings() {
+  state.business.name = document.getElementById('set-name').value.trim() || 'Your Business Name';
+  state.business.address = document.getElementById('set-address').value.trim();
+  state.business.phone = document.getElementById('set-phone').value.trim();
+  state.business.email = document.getElementById('set-email').value.trim();
+  state.business.licenseNo = document.getElementById('set-license').value.trim();
+  state.business.insurance = document.getElementById('set-insurance').value.trim();
+  state.settings.theme = document.getElementById('set-theme').value;
+  state.settings.defaultTermMonths = parseInt(document.getElementById('set-term').value) || 12;
+  state.settings.defaultDepositPct = parseInt(document.getElementById('set-deposit').value) || 50;
+  saveState();
+  setTheme(state.settings.theme);
+  toast('settings saved', 'success');
+}
+
+function downloadJSONBackup() {
+  var blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'lawnforms-backup-' + localDate() + '.json';
+  a.click();
+  setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+  toast('backup downloaded', 'success');
+}
+
+function importJSONBackup(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var data = JSON.parse(e.target.result);
+      confirmDialog({
+        title: 'Import backup?',
+        body: 'This will overwrite all current data. Continue?',
+        danger: true,
+        onConfirm: function() {
+          state = Object.assign({}, defaultState, data);
+          saveState();
+          switchView('templates');
+          toast('backup imported', 'success');
+        }
+      });
+    } catch (err) { toast('invalid JSON file', 'error'); }
+  };
+  reader.readAsText(file);
+}
+
+function clearAllData() {
+  confirmDialog({
+    title: 'Clear all data?',
+    body: 'This will erase ALL data permanently. This cannot be undone.',
+    danger: true,
+    onConfirm: function() {
+      localStorage.removeItem(STATE_KEY);
+      location.reload();
+    }
+  });
+}
+
+/* === VIEW: EXPORT === */
+function renderExport() {
+  document.getElementById('export-layout').innerHTML =
+    '<div class="settings-section"><h3>Export Contracts (CSV)</h3>' +
+    '<p style="color:var(--ink-2);font-size:var(--fs-sm);margin-bottom:var(--sp-3);">Excel-ready. UTF-8 encoded. Filter by date range if needed.</p>' +
+    '<div class="form-row"><div class="field"><label>From date</label><input type="date" id="export-from"/></div><div class="field"><label>To date</label><input type="date" id="export-to"/></div></div>' +
+    '<button type="button" class="btn btn-accent" onclick="exportContractsCSV()">Download contracts.csv</button>' +
+    '</div>' +
+    '<div class="settings-section"><h3>Export Customers (CSV)</h3>' +
+    '<p style="color:var(--ink-2);font-size:var(--fs-sm);margin-bottom:var(--sp-3);">All customers with contact info.</p>' +
+    '<button type="button" class="btn btn-accent" onclick="exportCustomersCSV()">Download customers.csv</button>' +
+    '</div>' +
+    '<div class="settings-section"><h3>Export Clauses (CSV)</h3>' +
+    '<p style="color:var(--ink-2);font-size:var(--fs-sm);margin-bottom:var(--sp-3);">All clauses in your library.</p>' +
+    '<button type="button" class="btn btn-accent" onclick="exportClausesCSV()">Download clauses.csv</button>' +
+    '</div>' +
+    '<div class="settings-section"><h3>JSON Backup</h3>' +
+    '<p style="color:var(--ink-2);font-size:var(--fs-sm);margin-bottom:var(--sp-3);">Full state backup. Use this to move to another computer or restore after a browser reset.</p>' +
+    '<button type="button" class="btn btn-accent" onclick="downloadJSONBackup()">Download JSON backup</button>' +
+    '</div>';
+}
+
+function exportContractsCSV() {
+  var from = document.getElementById('export-from').value;
+  var to = document.getElementById('export-to').value;
+  var rows = state.contracts.filter(function(c) {
+    if (from && c.createdAt < from) return false;
+    if (to && c.createdAt > to) return false;
+    return true;
+  }).map(function(c) {
+    var t = getTemplateById(c.templateId);
+    var cust = c.customerId ? getCustomerById(c.customerId) : null;
+    return {
+      'Contract #': c.number, 'Template': t ? t.name : '', 'Customer': cust ? cust.name : '',
+      'Status': c.status, 'Created': c.createdAt, 'Start Date': c.startDate, 'End Date': c.endDate,
+      'Total Value': c.totalValue || 0, 'Sent': c.sentAt || '', 'Signed': c.signedAt || '', 'Notes': c.notes || ''
+    };
+  });
+  downloadCSV('lawnforms-contracts-' + localDate() + '.csv', generateCSV(rows, ['Contract #', 'Template', 'Customer', 'Status', 'Created', 'Start Date', 'End Date', 'Total Value', 'Sent', 'Signed', 'Notes']));
+  toast('contracts.csv exported', 'success');
+}
+
+function exportCustomersCSV() {
+  var rows = state.customers.map(function(c) {
+    return { 'Name': c.name, 'Email': c.email || '', 'Phone': c.phone || '', 'Address': c.address || '', 'Property Type': c.propertyType || '', 'Notes': c.notes || '' };
+  });
+  downloadCSV('lawnforms-customers-' + localDate() + '.csv', generateCSV(rows, ['Name', 'Email', 'Phone', 'Address', 'Property Type', 'Notes']));
+  toast('customers.csv exported', 'success');
+}
+
+function exportClausesCSV() {
+  var rows = state.clauses.map(function(c) {
+    return { 'Name': c.name, 'Category': c.category, 'Body': c.body, 'Type': c.isSystem ? 'built-in' : 'custom' };
+  });
+  downloadCSV('lawnforms-clauses-' + localDate() + '.csv', generateCSV(rows, ['Name', 'Category', 'Body', 'Type']));
+  toast('clauses.csv exported', 'success');
+}
+
+function generateCSV(rows, headers) {
+  if (!rows.length) return headers.join(',') + '\n';
+  var csv = headers.join(',') + '\n';
+  rows.forEach(function(row) {
+    csv += headers.map(function(h) {
+      var v = String(row[h] || '').replace(/"/g, '""');
+      if (/^[+=\-@\t]/.test(v)) v = "'" + v;
+      return '"' + v + '"';
+    }).join(',') + '\n';
+  });
+  return '\uFEFF' + csv;
+}
+
+function downloadCSV(filename, content) {
+  var blob = new Blob([content], { type: 'text/csv;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = filename;
+  a.click();
+  setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+}
+
+/* === STATUS POPOVER === */
+function openStatusPopover(event, id) {
+  if (event) event.stopPropagation();
+  closeStatusPopover();
+  var c = getContractById(id);
+  if (!c) return;
+  var pop = document.createElement('div');
+  pop.className = 'status-popover';
+  pop.id = 'status-popover';
+  pop.setAttribute('role', 'menu');
+  var nextStates = getNextStates(c.status);
+  var html = '<div class="status-popover-title">change status</div>' +
+    '<div class="status-popover-current">currently: <strong>' + c.status + '</strong></div>' +
+    '<div class="status-popover-list">';
+  if (nextStates.length === 0) {
+    html += '<div class="status-popover-empty">no transitions available</div>';
+  } else {
+    nextStates.forEach(function(s) {
+      var label = getStateActionLabel(s);
+      var icon = getStateIcon(s);
+      html += '<button type="button" class="status-popover-item" data-status="' + escapeHtml(s) + '" data-id="' + escapeHtml(id) + '">' +
+        '<span class="status-popover-icon">' + icon + '</span>' +
+        '<span class="status-popover-label">' + escapeHtml(label) + '</span>' +
+        '<span class="status-popover-key">→ ' + s + '</span>' +
+      '</button>';
+    });
+  }
+  html += '</div><div class="status-popover-sep"></div>';
+  html += '<button type="button" class="status-popover-item" onclick="closeStatusPopover(); loadContractForEdit(\'' + escapeHtml(id) + '\')"><span class="status-popover-icon">✎</span><span class="status-popover-label">open in editor</span></button>';
+  html += '<button type="button" class="status-popover-item" onclick="closeStatusPopover(); printContract(\'' + escapeHtml(id) + '\')"><span class="status-popover-icon">⎙</span><span class="status-popover-label">print / pdf</span></button>';
+  html += '<button type="button" class="status-popover-item" style="color:var(--red);" onclick="closeStatusPopover(); deleteContract(\'' + escapeHtml(id) + '\')"><span class="status-popover-icon">×</span><span class="status-popover-label">delete</span></button>';
+  pop.innerHTML = html;
+  var rect = event.currentTarget.getBoundingClientRect();
+  pop.style.position = 'fixed';
+  pop.style.top = (rect.bottom + 4) + 'px';
+  pop.style.left = Math.min(rect.left, window.innerWidth - 240) + 'px';
+  document.body.appendChild(pop);
+  var badge = event.currentTarget;
+  if (badge) badge.setAttribute('aria-expanded', 'true');
+  pop.querySelectorAll('.status-popover-item[data-status]').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      quickChangeStatus(btn.getAttribute('data-id'), btn.getAttribute('data-status'));
+    });
+  });
+  setTimeout(function() { document.addEventListener('click', closeStatusPopover, { once: true }); }, 0);
+}
+
+function closeStatusPopover() {
+  var pop = document.getElementById('status-popover');
+  if (pop) pop.remove();
+  var badge = document.querySelector('.status-badge[aria-expanded="true"]');
+  if (badge) badge.setAttribute('aria-expanded', 'false');
+}
+
+function getNextStates(current) {
+  var t = {
+    draft:    ['sent'],
+    sent:     ['signed', 'declined', 'draft'],
+    signed:   ['active', 'cancelled'],
+    active:   ['expired', 'cancelled'],
+    expired:  ['renewed'],
+    cancelled: ['active'],
+    declined: ['draft'],
+    renewed:  ['active']
+  };
+  return t[current] || [];
+}
+
+function getStateActionLabel(s) {
+  var l = { draft: 'Mark as draft', sent: 'Mark as sent', signed: 'Mark as signed', active: 'Mark as active', expired: 'Mark as expired', cancelled: 'Mark as cancelled', declined: 'Mark as declined', renewed: 'Mark as renewed' };
+  return l[s] || s;
+}
+function getStateIcon(s) {
+  var i = { draft: '✎', sent: '➤', signed: '✓', active: '●', expired: '⌛', cancelled: '×', declined: '–', renewed: '↻' };
+  return i[s] || '·';
+}
+
+function quickChangeStatus(id, status) {
+  closeStatusPopover();
+  var c = getContractById(id);
+  if (!c) return;
+  c.status = status;
+  if (status === 'sent' && !c.sentAt) c.sentAt = localDate();
+  if (status === 'signed' && !c.signedAt) c.signedAt = localDate();
+  saveState();
+  renderContracts();
+  toast('status changed to ' + status, 'success');
+}
+
+/* === PRINT === */
+function printCurrent() {
+  if (currentView !== 'fill' || !fillFormState.templateId) { toast('nothing to print — open a contract first', 'info'); return; }
+  var previewDoc = document.querySelector('.preview-doc');
+  if (!previewDoc) { toast('no preview to print', 'info'); return; }
+  var html = previewDoc.outerHTML;
+  /* always print with light palette — avoids dark backgrounds wasting ink */
+  var cssVars = ':root { --bg: #FFFFFF; --surface: #F8F7F3; --ink: #1A1A1A; --ink-2: #4A4A4A; --ink-3: #8A8A8A; --line: #D9D4C7; --line-soft: #E8E3D6; --accent: #1F5F5B; --accent-ink: #FFFFFF; --accent-soft: #D8E8E6; }';
+  html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Contract</title>' +
+    '<style>' + cssVars +
+    'body{font-family:ui-monospace,SF Mono,Menlo,Consolas,monospace;font-size:12px;color:var(--ink);padding:30px;max-width:800px;margin:0 auto;background:var(--bg);}' +
+    'h1{font-size:20px;text-align:center;margin:0 0 16px;text-transform:uppercase;letter-spacing:0.04em;color:var(--ink);}' +
+    'h2{font-size:14px;margin:16px 0 8px;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid var(--line);padding-bottom:4px;color:var(--ink);}' +
+    '.preview-doc{background:var(--surface);border:1px solid var(--line);padding:24px;min-height:0 !important;}' +
+    '.clause-block{margin-bottom:12px;}.clause-title{font-weight:700;margin-bottom:2px;color:var(--ink);}.clause-body{color:var(--ink-2);}' +
+    '.sig-row{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:40px;}' +
+    '.sig-line{border-top:1px solid var(--ink);margin-top:30px;padding-top:4px;font-weight:700;color:var(--ink);}' +
+    '.sig-role{font-size:10px;color:var(--ink-3);text-transform:uppercase;letter-spacing:0.08em;}' +
+    'p{margin:0 0 8px;line-height:1.5;color:var(--ink-2);}' +
+    '@page{margin:0.75in;}</style></head><body>' + html + '</body></html>';
+  var iframe = document.createElement('iframe');
+  iframe.setAttribute('aria-hidden', 'true');
+  iframe.style.position = 'fixed'; iframe.style.top = '-10000px'; iframe.style.left = '-10000px';
+  iframe.style.width = '1px'; iframe.style.height = '1px'; iframe.style.border = '0';
+  document.body.appendChild(iframe);
+  var cleaned = false;
+  function cleanup() { if (cleaned) return; cleaned = true; if (iframe && iframe.parentNode) iframe.parentNode.removeChild(iframe); }
+  var idoc = iframe.contentWindow.document;
+  idoc.open(); idoc.write(html); idoc.close();
+  iframe.contentWindow.addEventListener('afterprint', cleanup);
+  var printed = false;
+  function doPrint() { if (printed) return; printed = true; iframe.contentWindow.focus(); iframe.contentWindow.print(); }
+  iframe.onload = doPrint;
+  setTimeout(doPrint, 250);
+  setTimeout(cleanup, 10000);
+}
+
+/* === NAV BADGES === */
+function updateNavBadges() {
+  var cb = document.getElementById('nav-contracts-badge');
+  if (cb) cb.textContent = state.contracts.length;
+  var cub = document.getElementById('nav-customers-badge');
+  if (cub) cub.textContent = state.customers.length;
+}
+
+/* === SEARCH === */
+function doSearch() {
+  searchSelectedIdx = -1;
+  var q = document.getElementById('search-input').value.toLowerCase().trim();
+  var results = document.getElementById('search-results');
+  results.innerHTML = '';
+  if (!q) return;
+  var items = [];
+  DEFAULT_TEMPLATES.forEach(function(t) {
+    if (t.name.toLowerCase().indexOf(q) >= 0 || t.description.toLowerCase().indexOf(q) >= 0) {
+      items.push({ name: t.name, sub: 'template · ' + t.category, action: function() { newContract(t.id); } });
+    }
+  });
+  state.contracts.forEach(function(c) {
+    var cust = c.customerId ? getCustomerById(c.customerId) : null;
+    var custName = cust ? cust.name : (c.fields.customerName || c.fields.customerCompany || '—');
+    if (c.number.toLowerCase().indexOf(q) >= 0 || custName.toLowerCase().indexOf(q) >= 0) {
+      items.push({ name: c.number, sub: custName + ' · ' + c.status, action: function() { loadContractForEdit(c.id); } });
+    }
+  });
+  state.customers.forEach(function(c) {
+    if (c.name.toLowerCase().indexOf(q) >= 0 || (c.email || '').toLowerCase().indexOf(q) >= 0) {
+      items.push({ name: c.name, sub: c.address || c.email || '', action: function() { switchView('customers'); } });
+    }
+  });
+  state.clauses.forEach(function(c) {
+    if (c.name.toLowerCase().indexOf(q) >= 0 || c.body.toLowerCase().indexOf(q) >= 0) {
+      items.push({ name: c.name, sub: c.category, action: function() { switchView('clauses'); } });
+    }
+  });
+  var viewMatches = [
+    { view: 'templates', name: 'Templates' }, { view: 'fill', name: 'Fill Form' }, { view: 'contracts', name: 'My Contracts' },
+    { view: 'clauses', name: 'Clauses' }, { view: 'customers', name: 'Customers' }, { view: 'settings', name: 'Settings' }, { view: 'export', name: 'Export' }
+  ];
+  viewMatches.forEach(function(v) {
+    if (v.name.toLowerCase().indexOf(q) >= 0) {
+      items.push({ name: v.name, sub: 'go to view', action: function() { switchView(v.view); } });
+    }
+  });
+  if ('new contract'.indexOf(q) >= 0) items.push({ name: 'New contract', sub: 'start a new contract', action: function() { newContract(); } });
+  if ('export csv'.indexOf(q) >= 0) items.push({ name: 'Export CSV', sub: 'go to export view', action: function() { switchView('export'); } });
+  if ('theme dark'.indexOf(q) >= 0) items.push({ name: 'Switch to dark theme', sub: 'toggle theme', action: function() { setTheme('dark'); } });
+  if ('theme light'.indexOf(q) >= 0) items.push({ name: 'Switch to light theme', sub: 'toggle theme', action: function() { setTheme('light'); } });
+  if (!items.length) { results.innerHTML = '<div class="search-palette-item"><span class="muted">No results for "' + escapeHtml(q) + '"</span></div>'; return; }
+  items.slice(0, 30).forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'search-palette-item';
+    div.id = 'search-item-' + idx;
+    div.setAttribute('data-idx', idx);
+    div.setAttribute('role', 'option');
+    div.setAttribute('aria-selected', 'false');
+    div.innerHTML = '<span><strong>' + escapeHtml(item.name) + '</strong><br><span class="muted">' + escapeHtml(item.sub) + '</span></span><span class="search-palette-item-key">go</span>';
+    div.addEventListener('click', function() { closeAllModals(); item.action(); });
+    results.appendChild(div);
+  });
+}
+
+/* === WIRING === */
+document.querySelectorAll('.nav-item').forEach(function (item) {
+  item.addEventListener('click', function () {
+    var view = item.getAttribute('data-view');
+    if (view) switchView(view);
+  });
+  item.addEventListener('keydown', function (e) {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); item.click(); }
+  });
+});
+
+/* === INIT === */
+function init() {
+  loadState();
+  updateAppVersionDisplay();
+  setTheme(state.settings.theme || 'system');
+  if (window.matchMedia) {
+    var mql = window.matchMedia('(prefers-color-scheme: dark)');
+    if (mql.addEventListener) mql.addEventListener('change', function() { if ((state.settings.theme || 'system') === 'system') setTheme('system'); });
+  }
+  updateNavBadges();
+  document.getElementById('confirm-action-btn').addEventListener('click', function() {
+    if (confirmCallback) confirmCallback();
+    cancelConfirm();
+  });
+  switchView('templates');
+}
+
+init();
+</script>
+</body>
+</html>
