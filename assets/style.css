@@ -227,6 +227,40 @@ main {
   border-color: var(--accent);
 }
 
+/* Two-tier filter: niches (primary) + status (secondary) */
+.filter-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.filter-bar-secondary {
+  opacity: 0.85;
+}
+.filter-bar-secondary .filter-chip {
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+.filter-chip .chip-count {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: inherit;
+}
+.filter-chip.active .chip-count {
+  background: rgba(0, 0, 0, 0.18);
+  color: inherit;
+}
+
 /* =============================================================
    APP GRID
    ============================================================= */
@@ -472,6 +506,21 @@ main {
   color: var(--text-dim);
   font-size: 0.9rem;
 }
+.empty-state .reset-link {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #000;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: 0;
+  font-family: inherit;
+}
+.empty-state .reset-link:hover { filter: brightness(1.08); }
 
 /* =============================================================
    MODAL

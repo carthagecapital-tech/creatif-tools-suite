@@ -67,6 +67,10 @@
   const els = {
     grid:        $('#appGrid'),
     empty:       $('#emptyState'),
+    emptyTitle:  $('#emptyTitle'),
+    emptyText:   $('#emptyText'),
+    emptyReset:  $('#emptyReset'),
+    nicheFilters:$('#nicheFilters'),
     modal:       $('#modal'),
     modalFrame:  $('#modalFrame'),
     modalLoader: $('#modalLoader'),
@@ -94,6 +98,17 @@
   const escapeHtml = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
   ));
+
+  // Turn a niche slug into a friendly display label.
+  // "lawn-care" -> "Lawn Care". "hvac" -> "HVAC". "cleaning" -> "Cleaning".
+  const nicheLabel = (slug) => {
+    if (!slug) return '';
+    return String(slug).split('-').map((w) => {
+      // Preserve all-caps acronyms (HVAC, CRM, SEO, etc.)
+      if (w.length <= 4 && w === w.toUpperCase()) return w;
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    }).join(' ');
+  };
 
   const isLiveApp = (app) => {
     // An app is "live" if it has an Etsy URL and a status of 'live'
@@ -154,6 +169,7 @@
       <article class="${cardClass}"
                data-app="${escapeHtml(app.id)}"
                data-status="${live ? 'live' : 'coming-soon'}"
+               data-niche="${escapeHtml(app.niche || 'other')}"
                style="--app-color: ${escapeHtml(app.color || '#00d4aa')}">
         <div class="card-head">
           <div class="monogram" style="background: ${escapeHtml(app.color || '#00d4aa')}">
@@ -169,7 +185,10 @@
           ${(app.features || []).slice(0, 4).map((f) => `<li>${escapeHtml(f)}</li>`).join('')}
         </ul>
         <div class="card-footer">
-          <div class="price"><strong>${escapeHtml(app.price || '$0')}</strong> one-time</div>
+          <div class="price">${live
+            ? `<strong>${escapeHtml(app.price || '$0')}</strong> one-time`
+            : `<strong>Pricing TBA</strong>`
+          }</div>
           <span class="status-badge ${live ? 'live' : 'coming'}">${live ? 'Available' : 'Coming Soon'}</span>
         </div>
         <div class="card-actions">
@@ -185,14 +204,107 @@
     `;
   }
 
+  /* ------------------------------------------------------------
+     RENDER — niche filter chips (rendered from manifest data)
+     ------------------------------------------------------------ */
+  function getUniqueNiches() {
+    const niches = new Map(); // slug -> displayLabel
+    APPS.forEach((a) => {
+      const slug = a.niche || 'other';
+      if (!niches.has(slug)) niches.set(slug, nicheLabel(slug));
+    });
+    // Stable sort: alphabetical, with "other" pushed to the end.
+    return Array.from(niches.entries())
+      .sort(([a], [b]) => a === 'other' ? 1 : b === 'other' ? -1 : a.localeCompare(b));
+  }
+
+  function renderNicheFilters() {
+    if (!els.nicheFilters) return;
+    const niches = getUniqueNiches();
+    const total = APPS.length;
+    let html = `<button class="filter-chip active" data-niche="all" role="tab" aria-selected="true">All <span class="chip-count">${total}</span></button>`;
+    niches.forEach(([slug, label]) => {
+      const count = APPS.filter((a) => (a.niche || 'other') === slug).length;
+      html += `<button class="filter-chip" data-niche="${escapeHtml(slug)}" role="tab" aria-selected="false">${escapeHtml(label)} <span class="chip-count">${count}</span></button>`;
+    });
+    els.nicheFilters.innerHTML = html;
+  }
+
+  /* ------------------------------------------------------------
+     FILTERS — combined niche + status
+     ------------------------------------------------------------ */
+  let activeNiche = 'all';
+  let activeStatus = 'all';
+
+  function applyFilters() {
+    let visibleCount = 0;
+    document.querySelectorAll('.card').forEach((card) => {
+      const nicheMatch = activeNiche === 'all' || card.dataset.niche === activeNiche;
+      const statusMatch = activeStatus === 'all' || card.dataset.status === activeStatus;
+      const show = nicheMatch && statusMatch;
+      card.style.display = show ? '' : 'none';
+      if (show) visibleCount++;
+    });
+    updateEmptyState(visibleCount);
+  }
+
+  function updateEmptyState(visibleCount) {
+    if (!APPS.length) {
+      // Truly no apps loaded
+      els.empty.style.display = 'block';
+      if (els.emptyTitle) els.emptyTitle.textContent = 'New apps on the way';
+      if (els.emptyText) els.emptyText.textContent = 'The first app is shipping soon. Follow our Etsy shop to be notified when it drops.';
+      if (els.emptyReset) els.emptyReset.style.display = 'none';
+      return;
+    }
+    if (visibleCount === 0) {
+      // Apps exist but current filter combo hides them all
+      els.empty.style.display = 'block';
+      if (els.emptyTitle) els.emptyTitle.textContent = 'No apps match those filters';
+      if (els.emptyText) els.emptyText.textContent = 'Try widening the filters above to see more apps.';
+      if (els.emptyReset) els.emptyReset.style.display = 'inline-block';
+    } else {
+      els.empty.style.display = 'none';
+    }
+  }
+
+  function setActiveNiche(slug) {
+    activeNiche = slug || 'all';
+    document.querySelectorAll('#nicheFilters .filter-chip').forEach((c) => {
+      const isActive = c.dataset.niche === activeNiche;
+      c.classList.toggle('active', isActive);
+      c.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+    applyFilters();
+  }
+
+  function setActiveStatus(status) {
+    activeStatus = status || 'all';
+    document.querySelectorAll('.filter-bar-secondary .filter-chip').forEach((c) => {
+      const isActive = c.dataset.status === activeStatus;
+      c.classList.toggle('active', isActive);
+      c.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+    applyFilters();
+  }
+
+  function resetFilters() {
+    setActiveNiche('all');
+    setActiveStatus('all');
+  }
+
+  /* ------------------------------------------------------------
+     RENDER — main card grid
+     ------------------------------------------------------------ */
   function renderGrid() {
     if (!APPS.length) {
       els.grid.innerHTML = '';
-      els.empty.style.display = 'block';
+      updateEmptyState(0);
       return;
     }
-    els.empty.style.display = 'none';
     els.grid.innerHTML = APPS.map(renderCard).join('');
+    // Initial filter pass (in case a hash was set before render)
+    applyFilters();
   }
 
   /* ------------------------------------------------------------
@@ -339,18 +451,34 @@
       if (demoLimitTimer) { clearTimeout(demoLimitTimer); demoLimitTimer = null; }
     });
 
-    // Filters
-    document.querySelectorAll('.filter-chip').forEach((chip) => {
-      chip.addEventListener('click', () => {
-        document.querySelectorAll('.filter-chip').forEach((c) => c.classList.remove('active'));
-        chip.classList.add('active');
-        const filter = chip.dataset.filter;
-        document.querySelectorAll('.card').forEach((card) => {
-          card.style.display =
-            filter === 'all' || card.dataset.status === filter ? '' : 'none';
-        });
+    // Filters — niche row (rendered dynamically) and status row (static)
+    if (els.nicheFilters) {
+      els.nicheFilters.addEventListener('click', (e) => {
+        const chip = e.target.closest('.filter-chip');
+        if (!chip) return;
+        const slug = chip.dataset.niche;
+        setActiveNiche(slug);
+        // Update URL hash without triggering a page jump
+        const newHash = slug === 'all' ? '' : `#${slug}`;
+        if (window.location.hash !== newHash) {
+          history.replaceState(null, '', window.location.pathname + newHash);
+        }
       });
+    }
+    document.querySelectorAll('.filter-bar-secondary .filter-chip').forEach((chip) => {
+      chip.addEventListener('click', () => setActiveStatus(chip.dataset.status));
     });
+
+    // Reset filters button (in empty state)
+    if (els.emptyReset) {
+      els.emptyReset.addEventListener('click', () => {
+        resetFilters();
+        history.replaceState(null, '', window.location.pathname);
+        // Smooth scroll back to apps section
+        const apps = document.getElementById('apps');
+        if (apps) apps.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
   }
 
   /* ------------------------------------------------------------
@@ -381,7 +509,24 @@
     applyConfig();
     wireEvents();
     APPS = await loadManifest();
+    renderNicheFilters();
     renderGrid();
+    // Apply deep link from URL hash (#cleaning, #lawn-care, etc.)
+    applyHashFilter();
+  }
+
+  // Read window.location.hash and apply the matching niche filter,
+  // if any. Falls back silently for unknown hashes (e.g. #apps).
+  function applyHashFilter() {
+    const hash = (window.location.hash || '').replace(/^#/, '').toLowerCase();
+    if (!hash || hash === 'apps') return;
+    const validNiche = APPS.some((a) => (a.niche || '').toLowerCase() === hash);
+    if (validNiche) {
+      setActiveNiche(hash);
+      // Scroll the apps section into view so the user sees the result
+      const section = document.getElementById('apps');
+      if (section) setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+    }
   }
 
   // Expose buyApp for inline `onclick` use in the modal Buy button.

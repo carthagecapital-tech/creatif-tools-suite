@@ -2,6 +2,7 @@
   {
     "id": "cleanquote-pro",
     "name": "CleanQuote Pro",
+    "niche": "cleaning",
     "tagline": "Quote Calculator",
     "description": "A local-first quote builder for small cleaning businesses. No account, no server. All data stays in your browser.",
     "features": [
@@ -18,6 +19,7 @@
   {
     "id": "cleanroute-pro",
     "name": "CleanRoute Pro",
+    "niche": "cleaning",
     "tagline": "Stop planning routes in your head the night before.",
     "description": "Plan your cleaning jobs in the smartest order. Save time, save gas, finish sooner. Local-first — your data never leaves your browser.",
     "features": [
@@ -34,6 +36,7 @@
   {
     "id": "cleaninspect-pro",
     "name": "CleanInspect Pro",
+    "niche": "cleaning",
     "tagline": "Inspection Checklist",
     "description": "Room-by-room quality control for cleaning pros. Run an inspection, capture inspector notes, generate a signed PDF report — all without leaving the browser. Local-first.",
     "features": [
@@ -50,6 +53,7 @@
   {
     "id": "cleanforms-pro",
     "name": "CleanForms Pro",
+    "niche": "cleaning",
     "tagline": "Forms Bundle",
     "description": "A complete library of 8 cleaning business forms — client intake, service agreement, work order, and more. Fill out, print, and hand to clients. Works offline, no subscription, no account. Local-first.",
     "features": [
@@ -66,6 +70,7 @@
   {
     "id": "cleanschedule-pro",
     "name": "CleanSchedule Pro",
+    "niche": "cleaning",
     "tagline": "Job Scheduler",
     "description": "A complete job scheduler for cleaning service businesses. Schedule one-time and recurring jobs, print the daily route as a PDF, track actual time with a start/stop clock. Works offline, no subscription, no account.",
     "features": [
@@ -82,6 +87,7 @@
   {
     "id": "cleancrm-pro",
     "name": "CleanCRM Pro",
+    "niche": "cleaning",
     "tagline": "Client Manager",
     "description": "A complete client and lead manager for cleaning service businesses. Track prospects through your pipeline, manage client and property profiles, and onboard new clients in 8 guided steps. Works offline, no subscription, no account.",
     "features": [
@@ -98,6 +104,7 @@
   {
     "id": "lawnquote-pro",
     "name": "LawnQuote Pro",
+    "niche": "lawn-care",
     "tagline": "Lawn Care Estimator",
     "description": "Build professional lawn care estimates in under a minute. Line items, taxes, discounts — all automatic. Local-first, no account, no subscription. Built for solo landscapers and small lawn care businesses.",
     "features": [
@@ -114,6 +121,7 @@
   {
     "id": "lawnforms-pro",
     "name": "LawnForms Pro",
+    "niche": "lawn-care",
     "tagline": "Contract Templates",
     "description": "A library of contract templates for lawn care service businesses. Pick a template, fill in the details, sign and print. Works offline, no subscription, no account. Local-first.",
     "features": [
@@ -130,6 +138,7 @@
   {
     "id": "lawnschedule-pro",
     "name": "LawnSchedule Pro",
+    "niche": "lawn-care",
     "tagline": "Job Scheduler",
     "description": "Schedule one-time and recurring lawn care jobs, keep a service log per visit, print the daily route as a PDF. Works offline, no subscription, no account. Built for solo landscapers and small lawn care businesses.",
     "features": [
@@ -142,5 +151,56 @@
     "monogram": "L",
     "price": "$19",
     "etsyUrl": "https://www.etsy.com/listing/4522639270/lawn-care-schedule-app-for-service-pros"
+  },
+  {
+    "id": "carwash-pro",
+    "name": "CarWash Pro",
+    "niche": "car-wash",
+    "tagline": "Mobile Detail Estimator",
+    "description": "A local-first quote builder for mobile car wash and auto detailing businesses. Coming soon — full feature list TBA.",
+    "features": [
+      "Quote builder for mobile car wash services",
+      "Print or export to PDF",
+      "Local-first — your data never leaves your device",
+      "Coming soon — full feature list TBA"
+    ],
+    "color": "#3B82F6",
+    "monogram": "CW",
+    "status": "coming-soon",
+    "price": "TBA"
+  },
+  {
+    "id": "pestpro",
+    "name": "PestPro",
+    "niche": "pest-control",
+    "tagline": "Service Quote Builder",
+    "description": "A local-first quote builder for pest control businesses. Coming soon — full feature list TBA.",
+    "features": [
+      "Quote builder for pest control services",
+      "Print or export to PDF",
+      "Local-first — your data never leaves your device",
+      "Coming soon — full feature list TBA"
+    ],
+    "color": "#B91C1C",
+    "monogram": "PE",
+    "status": "coming-soon",
+    "price": "TBA"
+  },
+  {
+    "id": "poolpro",
+    "name": "PoolPro",
+    "niche": "pool-cleaning",
+    "tagline": "Pool Service Estimator",
+    "description": "A local-first quote builder for pool cleaning and maintenance businesses. Coming soon — full feature list TBA.",
+    "features": [
+      "Quote builder for pool cleaning services",
+      "Print or export to PDF",
+      "Local-first — your data never leaves your device",
+      "Coming soon — full feature list TBA"
+    ],
+    "color": "#0891B2",
+    "monogram": "PL",
+    "status": "coming-soon",
+    "price": "TBA"
   }
 ]

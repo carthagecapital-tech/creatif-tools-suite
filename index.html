@@ -63,10 +63,16 @@
           <h2>The Suite</h2>
           <p>Every app is a single HTML file. No install. No accounts. No tracking.</p>
         </div>
-        <div class="filter-bar" role="tablist" aria-label="Filter apps">
-          <button class="filter-chip active" data-filter="all" role="tab" aria-selected="true">All</button>
-          <button class="filter-chip" data-filter="live" role="tab" aria-selected="false">Available now</button>
-          <button class="filter-chip" data-filter="coming-soon" role="tab" aria-selected="false">Coming soon</button>
+      </div>
+
+      <div class="filter-stack">
+        <div class="filter-bar" id="nicheFilters" role="tablist" aria-label="Filter by niche">
+          <!-- Niche chips rendered by JS based on manifest -->
+        </div>
+        <div class="filter-bar filter-bar-secondary" role="tablist" aria-label="Filter by status">
+          <button class="filter-chip active" data-status="all" role="tab" aria-selected="true">All status</button>
+          <button class="filter-chip" data-status="live" role="tab" aria-selected="false">Available now</button>
+          <button class="filter-chip" data-status="coming-soon" role="tab" aria-selected="false">Coming soon</button>
         </div>
       </div>
 
@@ -78,8 +84,9 @@
             <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
           </svg>
         </div>
-        <h3>New apps on the way</h3>
-        <p>The first app is shipping soon. Follow our Etsy shop to be notified when it drops.</p>
+        <h3 id="emptyTitle">New apps on the way</h3>
+        <p id="emptyText">The first app is shipping soon. Follow our Etsy shop to be notified when it drops.</p>
+        <button class="reset-link" id="emptyReset" type="button" style="display: none;">Show all apps</button>
       </div>
     </section>
 
