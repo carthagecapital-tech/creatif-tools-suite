@@ -1,0 +1,3072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="LawnSchedule Pro — offline job schedule &amp; service log for lawn care professionals.">
+<title>LawnSchedule Pro — Job Schedule & Service Log</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%234A5AC4'/><text x='16' y='22' font-family='ui-monospace,monospace' font-size='18' font-weight='700' fill='white' text-anchor='middle'>S</text></svg>">
+<script>
+  /* Pre-paint theme to prevent FOUC. Resolves 'system' to the OS preference. */
+  (function () {
+    try {
+      var stored = localStorage.getItem('lawnschedule-theme') || localStorage.getItem('cleanbiz-theme');
+      var resolved = 'light';
+      if (stored === 'light' || stored === 'dark') {
+        resolved = stored;
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        resolved = 'dark';
+      }
+      document.documentElement.setAttribute('data-theme', resolved);
+      document.documentElement.setAttribute('data-theme-pref', stored || 'system');
+    } catch (e) { /* localStorage unavailable */ }
+  })();
+</script>
+<style>
+/* ============================================================
+   CLEANBIZ SUITE — BASE TEMPLATE v1.2
+   ============================================================
+   FORK GUIDE — to spin up a new app:
+
+   1. Change the <title> in <head>
+   2. Change the favicon fill color to match --accent (light variant)
+      and update the letter to match .brand-mark
+   3. Change --accent in :root (light) AND in [data-theme="dark"]
+      to the app's signature color (+15% lightness for dark variant)
+      Also update --accent-soft in both themes
+   4. Change the .brand-name text in the sidebar
+   5. Change the .brand-mark letter (currently "C")
+   6. Update the .breadcrumb path
+   7. Update the page <h1 class="title"> heading
+   8. Replace the 3 demo cards with your app's UI
+   9. Re-label the sidebar nav <li> items — update data-view,
+      aria-label, nav-text, and nav-num for each view
+  10. Update the <span class="app-name"> in the footer
+     (also drives the print footer copyright automatically)
+  10b. Update APP_VERSION + APP_NAME_SHORT in the script — drives status bar display
+  11. Override doSearch() with real data lookups for your app
+  12. Override exportCSV() with your app's export logic
+  13. Replace newItem() stub and its button label / keyboard hint
+  14. Update the APP_VERSION constant near the top of the script — drives #app-version-display automatically
+
+   THE DESIGN SYSTEM IS FIXED. Only --accent + content change.
+
+   ACCENT MAP (locked):
+     CleanQuote Pro    light #2C4A7C  · dark #4870B5   cobalt
+     CleanRoute Pro    light #D17A22  · dark #E89A47   burnt orange
+     CleanBoard Pro    light #3D6B47  · dark #5C8A65   forest green
+     CleanCRM Pro      light #6B4A6E  · dark #8E6D90   plum
+     CleanInspect Pro  light #B8462E  · dark #D8664B   rust red
+     CleanSchedule Pro light #4A5AC4  · dark #6E7EDB   electric indigo
+     CleanInvoice Pro  light #2C6E6B  · dark #48A09C   teal
+     CleanStock Pro    light #B8862E  · dark #D4A04C   mustard
+     CleanHours Pro    light #4A5A6B  · dark #7080A0   slate
+
+   DARK MODE:
+     - Fixed button top-right corner, or press ⌘⇧L
+     - System preference detected on first visit
+     - Choice persists in localStorage under 'cleanbiz-theme'
+     - Dark → light swap is automatic before printing (beforeprint/afterprint)
+
+   SEARCH PALETTE:
+     - ⌘K or click "jump to anything" to open
+     - doSearch() is a stub — override it with your app's data
+     - Esc or backdrop click closes it
+
+   HELP MODAL:
+     - ? key or click "? help" in status bar to open
+     - Lists all keyboard shortcuts automatically
+
+   PRINT / PDF:
+     - Click "Print / PDF" in topbar, or press ⌘P
+     - Dark mode is automatically swapped to light before print
+     - Browser-native print dialog → "Save as PDF" or physical printer
+     - Footer copyright + page numbers repeat on every page (legal)
+
+   FOOTER:
+     - Auto-includes app name (from .app-name span)
+     - © + year (2026) + app name + "All Rights Reserved"
+
+   TOAST SYSTEM:
+     - toast(message, type) — type: 'info' | 'success' | 'error'
+     - Auto-dismisses after 2.5s
+     - Stacks vertically in bottom-right
+     - Hidden in print
+
+   TIME PICKER DROPDOWN:
+     - .tp-wrap + .tp-btn + .tp-drop pattern — cleaner than <input type="time">
+     - 33 slots from 5 AM to 9 PM at 30-min intervals + "not set" option
+     - HTML structure for one picker:
+         <div class="tp-wrap">
+           <button type="button" class="tp-btn" id="X-btn" onclick="toggleTimeDrop('X')">
+             <span class="tp-val" id="X-display">not set</span>
+             <span class="tp-clear" onclick="event.stopPropagation();clearTimePicker('X')" title="Clear">×</span>
+             <span class="tp-arrow">▾</span>
+           </button>
+           <div class="tp-drop" id="X-drop"></div>
+           <input type="hidden" id="X" value="">
+         </div>
+     - setTimePicker(id, '09:00') — initializes, snaps to nearest 30-min
+     - getValue: document.getElementById('X').value (returns 'HH:MM' or '')
+     - Respects settings.timeFormat (12h default, 24h if user opts in)
+     - Outside-click closes the dropdown (wired in base)
+
+   FONT NOTE:
+     Uses pure system monospace stack — no Google Fonts CDN call.
+     The stack is: ui-monospace (macOS), SF Mono (macOS), Menlo (macOS),
+     Consolas (Windows), Liberation Mono (Linux), monospace (fallback).
+     This means the app is 100% offline, 100% portable, with zero external
+     network requests. Render is identical in every modern browser.
+   ============================================================ */
+
+:root {
+  /* base palette — never change between apps */
+  --bg: #F2EFE8;
+  --surface: #FBFAF6;
+  --ink: #1A1A1A;
+  --ink-2: #4A4A4A;
+  --ink-3: #6A6A6A;
+  --line: #D9D4C7;
+  --line-soft: #E8E3D6;
+  --red: #C8442A;
+  --orange: #C8843A;
+  --green: #3D7A4E;
+
+  /* ACCENT — light variant (swap per app) */
+  --accent: #4A5AC4;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #DDE1F7;
+
+  /* typography */
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-base: 13px;
+  --fs-md: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 24px;
+  --fs-2xl: 36px;
+  --fs-3xl: 56px;
+
+  /* spacing */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+
+  /* layout */
+  --sidebar-w: 240px;
+  --footer-h: 36px;
+}
+
+/* === DARK THEME === */
+[data-theme="dark"] {
+  --bg: #1A1815;
+  --surface: #25231E;
+  --ink: #F0EDE5;
+  --ink-2: #A8A499;
+  --ink-3: #9A968A;
+  --line: #3A3733;
+  --line-soft: #2D2B26;
+  --red: #E85A3D;
+  --orange: #E09348;
+  --green: #5BAE6E;
+  --accent: #6E7EDB;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #1E2347;
+}
+
+/* === RESET === */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+*:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* The view container is focused programmatically after every nav click (H6).
+   A visible outline would box-in the content, so suppress the visual outline
+   while keeping the focus move for screen-reader announcements. */
+.view-container:focus,
+.view-container:focus-visible { outline: none; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: var(--fs-base);
+  line-height: 1.5;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background 0.2s, color 0.2s;
+}
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+input, select, textarea { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; margin: 0; padding: 0; }
+i { font-style: normal; }
+
+/* === SKIP LINK === */
+.skip-link {
+  position: absolute; left: -9999px; top: var(--sp-2); z-index: 9999;
+  padding: var(--sp-2) var(--sp-3); background: var(--accent); color: var(--accent-ink);
+  font-family: var(--mono); font-size: var(--fs-sm);
+}
+.skip-link:focus { left: var(--sp-2); }
+
+/* === TYPOGRAPHY HELPERS === */
+.label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.muted { color: var(--ink-3); }
+.mono-num { font-variant-numeric: tabular-nums; }
+
+/* === LAYOUT === */
+.app {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  min-height: calc(100vh - var(--footer-h));
+  min-height: calc(100dvh - var(--footer-h));
+}
+@media (max-width: 900px) {
+  .app { grid-template-columns: 1fr; }
+}
+
+/* === SIDEBAR === */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  padding: var(--sp-5) var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  min-height: calc(100vh - var(--footer-h));
+  min-height: calc(100dvh - var(--footer-h));
+}
+@media (max-width: 900px) {
+  .sidebar { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+}
+
+.brand {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--line-soft);
+}
+.brand-mark {
+  width: 32px;
+  height: 32px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: var(--fs-md);
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.brand-text { line-height: 1.2; }
+.brand-name {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.brand-sub {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+.brand-version {
+  margin-left: auto;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  font-size: var(--fs-sm);
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.search:hover { border-color: var(--ink-2); }
+.search-icon { color: var(--ink-3); }
+.search-text { flex: 1; }
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  font-size: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+}
+
+/* === NAV (with grouping) === */
+.nav-group + .nav-group { margin-top: var(--sp-4); }
+.nav-label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  margin-bottom: var(--sp-2);
+  padding: 0 var(--sp-3);
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.nav-item:hover { background: var(--bg); color: var(--ink); }
+.nav-item.active {
+  color: var(--ink);
+  background: var(--bg);
+  border-left-color: var(--accent);
+}
+.nav-num { color: var(--ink-3); width: 22px; font-variant-numeric: tabular-nums; }
+.nav-text { flex: 1; }
+.nav-badge {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+/* === THEME TOGGLE — fixed top-right === */
+.theme-toggle-fixed {
+  position: fixed; top: 16px; right: 16px; z-index: 100;
+  width: 36px; height: 36px; display: grid; place-items: center;
+  background: var(--surface); border: 1px solid var(--line);
+  color: var(--ink-2); cursor: pointer; font-size: 16px;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.theme-toggle-fixed:hover { border-color: var(--ink-2); color: var(--ink); background: var(--bg); }
+@media (max-width: 900px) { .theme-toggle-fixed { top: 12px; right: 12px; width: 32px; height: 32px; font-size: 14px; } }
+
+.sidebar-status {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background: var(--red);
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.dot.green { background: var(--green); }
+
+/* === PULSE — for live/active indicators === */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.7); }
+}
+.dot.live { animation: pulse-dot 1.8s ease-in-out infinite; }
+.nav-item:not(.active) .dot.live { display: none; }
+.nav-item.active .dot.live { background: var(--accent); }
+@media (prefers-reduced-motion: reduce) {
+  .dot.live { animation: none; }
+}
+
+/* === MAIN === */
+.main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topbar {
+  padding: var(--sp-5) var(--sp-6) var(--sp-4);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-5);
+  flex-wrap: wrap;
+}
+.breadcrumb {
+  width: 100%;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--sp-2);
+}
+.title-block { flex: 1; min-width: 200px; }
+.title {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.title em {
+  font-style: normal;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.actions {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.15s;
+}
+.btn:hover { background: var(--bg); border-color: var(--ink-2); }
+.btn-primary {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+.btn-primary:hover { background: var(--ink-2); border-color: var(--ink-2); }
+.btn-accent {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+.btn-accent:hover { filter: brightness(0.92); border-color: var(--accent); }
+.btn .kbd {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.25);
+  color: inherit;
+}
+.btn:not(.btn-primary):not(.btn-accent) .kbd {
+  background: var(--bg);
+  border-color: var(--line);
+  color: var(--ink-2);
+}
+.btn-primary .kbd {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.2);
+  color: inherit;
+}
+.btn-sm { padding: var(--sp-1) var(--sp-2); font-size: var(--fs-xs); }
+
+/* === TIME PICKER DROPDOWN (reusable component) === */
+.tp-wrap { position: relative; }
+.tp-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+  text-align: left;
+  cursor: pointer;
+  border-radius: 0;
+  transition: border-color 0.1s;
+}
+.tp-btn:hover { border-color: var(--ink-2); }
+.tp-btn.is-open { border-color: var(--accent); outline: 2px solid var(--accent); outline-offset: 0; }
+.tp-val { flex: 1; color: var(--ink-3); }
+.tp-val.has-val { color: var(--ink); font-weight: 500; }
+.tp-arrow { color: var(--ink-3); font-size: 10px; margin-left: var(--sp-2); transition: transform 0.15s; }
+.tp-btn.is-open .tp-arrow { transform: rotate(180deg); }
+.tp-clear {
+  color: var(--ink-3);
+  font-size: var(--fs-md);
+  line-height: 1;
+  padding: 0 4px;
+  display: none;
+  cursor: pointer;
+  user-select: none;
+}
+.tp-wrap.has-val .tp-clear { display: inline; }
+.tp-wrap.has-val .tp-clear:hover { color: var(--red); }
+.tp-drop {
+  position: absolute;
+  top: calc(100% + 1px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top-color: var(--line-soft);
+  z-index: 500;
+  display: none;
+  max-height: 220px;
+  overflow-y: auto;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+.tp-drop.open { display: block; }
+.tp-slot {
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  font-family: var(--mono);
+  cursor: pointer;
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--line-soft);
+  transition: background 0.1s, color 0.1s;
+}
+.tp-slot:last-child { border-bottom: 0; }
+.tp-slot:hover { background: var(--bg); color: var(--ink); }
+.tp-slot.is-hour { color: var(--ink); font-weight: 500; }
+.tp-slot.is-selected { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+.tp-slot.not-set {
+  color: var(--ink-3);
+  font-style: italic;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+.tp-slot.not-set:hover { color: var(--ink-2); background: var(--surface); }
+
+/* === CONTENT === */
+.content {
+  padding: var(--sp-5) var(--sp-6) var(--sp-7);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+}
+@media (max-width: 1100px) { .content { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 700px) { .content { grid-template-columns: 1fr; padding: var(--sp-4); } }
+
+/* === CARD with bracket corners === */
+.card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: var(--sp-5);
+  transition: background 0.2s, border-color 0.2s;
+}
+.card:hover { border-color: var(--ink-2); }
+.corner {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  pointer-events: none;
+  transition: border-color 0.2s;
+}
+.corner.tl { top: -1px; left: -1px; border-top: 2px solid var(--ink); border-left: 2px solid var(--ink); }
+.corner.tr { top: -1px; right: -1px; border-top: 2px solid var(--ink); border-right: 2px solid var(--ink); }
+.corner.bl { bottom: -1px; left: -1px; border-bottom: 2px solid var(--ink); border-left: 2px solid var(--ink); }
+.corner.br { bottom: -1px; right: -1px; border-bottom: 2px solid var(--ink); border-right: 2px solid var(--ink); }
+.card:hover .corner { border-color: var(--accent); }
+.stat-card:hover .corner { border-color: var(--accent); }
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-3);
+  gap: var(--sp-3);
+}
+.card-title {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+}
+.card-tag {
+  font-size: var(--fs-xs);
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.big-num {
+  font-size: var(--fs-3xl);
+  font-weight: 700;
+  line-height: 1;
+  margin: var(--sp-3) 0 var(--sp-2);
+  letter-spacing: -0.02em;
+}
+.big-num .unit {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--ink-3);
+  margin-left: 6px;
+  text-transform: lowercase;
+}
+.delta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.delta.up { color: var(--green); }
+.delta.down { color: var(--red); }
+.delta .arr { font-size: var(--fs-xs); }
+.delta .ctx { color: var(--ink-3); }
+
+.chart {
+  margin-top: var(--sp-4);
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 40px;
+}
+.bar {
+  flex: 1;
+  background: var(--ink-2);
+  min-height: 2px;
+  transition: background 0.15s;
+}
+.bar.accent { background: var(--accent); }
+.bar.muted { background: var(--line); }
+.bar.red { background: var(--red); }
+
+
+/* === STATUS BAR === */
+.statusbar {
+  margin-top: auto;
+  padding: var(--sp-2) var(--sp-6);
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+@media (max-width: 700px) { .statusbar { padding: var(--sp-2) var(--sp-4); } }
+.statusbar .grow { flex: 1; }
+.statusbar .right { display: flex; gap: var(--sp-4); align-items: center; }
+
+/* === FOOTER (legal) === */
+.app-footer {
+  height: var(--footer-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--sp-4);
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+.app-footer .app-name {
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.app-footer .sep {
+  margin: 0 var(--sp-2);
+  color: var(--ink-3);
+}
+
+/* === TOAST SYSTEM === */
+.toast-host {
+  position: fixed;
+  bottom: calc(var(--footer-h) + var(--sp-4));
+  right: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  z-index: 1000;
+  pointer-events: none;
+  max-width: 360px;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--ink);
+  color: var(--bg);
+  font-size: var(--fs-sm);
+  min-width: 200px;
+  pointer-events: auto;
+  border: 1px solid var(--ink);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  animation: toast-in 0.2s ease-out;
+}
+.toast.is-leaving { animation: toast-out 0.2s ease-in forwards; }
+.toast .toast-icon {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.toast.success .toast-icon { background: var(--green); }
+.toast.info .toast-icon { background: var(--accent); }
+.toast.error .toast-icon { background: var(--red); }
+.toast .toast-msg { flex: 1; }
+
+@keyframes toast-in {
+  from { transform: translateY(8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes toast-out {
+  to { transform: translateY(8px); opacity: 0; }
+}
+@supports (padding: max(0px)) {
+  /* iOS notch / safe-area handling: push UI inwards from the device bezel. */
+  body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+  .app-footer { padding-bottom: env(safe-area-inset-bottom); }
+  .theme-toggle-fixed { top: calc(16px + env(safe-area-inset-top)); right: calc(16px + env(safe-area-inset-right)); }
+  .toast-host { bottom: calc(var(--footer-h) + var(--sp-4) + env(safe-area-inset-bottom)); right: calc(var(--sp-5) + env(safe-area-inset-right)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast,
+  .toast.is-leaving { animation: none; }
+  .status-popover,
+  .modal,
+  .search-palette,
+  .tp-drop { transition: none !important; animation: none !important; }
+}
+
+/* === MODAL SYSTEM === */
+.modal-backdrop { position: fixed; top: 0; right: 0; bottom: 0; left: 0; inset: 0; background: rgba(0,0,0,0.4); z-index: 900; display: none; }
+.modal-backdrop.is-open { display: block; }
+.modal {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background: var(--surface); border: 1px solid var(--line);
+  z-index: 901; display: none; max-width: 90vw; max-height: 90vh;
+  overflow: auto; min-width: 400px;
+}
+.modal.is-open { display: block; }
+.modal-header { padding: var(--sp-4); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-size: var(--fs-md); font-weight: 700; }
+.modal-close { font-size: var(--fs-lg); color: var(--ink-3); cursor: pointer; line-height: 1; }
+.modal-close:hover { color: var(--ink); }
+.modal-body { padding: var(--sp-4); }
+.modal-footer { padding: var(--sp-4); border-top: 1px solid var(--line); display: flex; gap: var(--sp-2); justify-content: flex-end; }
+@media (max-width: 600px) { .modal { min-width: 90vw; } }
+/* Inputs inside modal forms must honour the dark theme, same as .settings-section */
+.modal-body input, .modal-body select, .modal-body textarea {
+  width: 100%; padding: var(--sp-3); border: 1px solid var(--line);
+  background: var(--bg); color: var(--ink); font-family: var(--mono); font-size: var(--fs-sm);
+}
+.modal-body textarea { min-height: 80px; resize: vertical; }
+.modal-body input:focus, .modal-body select:focus, .modal-body textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.modal-body .form-row { display: flex; gap: var(--sp-4); flex-wrap: wrap; margin-bottom: var(--sp-4); }
+.modal-body .form-row .field { flex: 1; min-width: 160px; }
+.modal-body .form-row .field label { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2); display: block; margin-bottom: var(--sp-2); font-weight: 500; }
+
+/* === SEARCH PALETTE === */
+.search-palette {
+  position: fixed; top: 20%; left: 50%; transform: translateX(-50%);
+  width: 500px; max-width: 90vw; background: var(--surface);
+  border: 1px solid var(--line); z-index: 902; display: none;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+}
+.search-palette.is-open { display: block; }
+.search-palette-input {
+  width: 100%; padding: var(--sp-3) var(--sp-4);
+  border: none; border-bottom: 1px solid var(--line);
+  background: var(--bg); font-size: var(--fs-md); color: var(--ink);
+  font-family: var(--mono); outline: none;
+}
+.search-palette-results { max-height: 300px; overflow: auto; }
+.search-palette-item { padding: var(--sp-3) var(--sp-4); cursor: pointer; display: flex; align-items: center; gap: var(--sp-3); }
+.search-palette-item:hover { background: var(--bg); }
+.search-palette-item.is-selected { background: var(--bg); outline: 2px solid var(--accent); outline-offset: -2px; }
+.search-palette-item-key { margin-left: auto; font-size: var(--fs-xs); color: var(--ink-3); }
+
+/* === HELP MODAL === */
+.help-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+@media (max-width: 600px) { .help-grid { grid-template-columns: 1fr; } }
+.help-item { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-2) 0; }
+.help-key { display: flex; gap: 2px; }
+
+/* === PRINT / PDF === */
+.print-footer { display: none; }
+@media print {
+  @page {
+    margin: 15mm 15mm 20mm 15mm;
+    size: auto;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 10pt;
+  }
+  /* hide all UI chrome */
+  .sidebar, .actions, .search, .statusbar, .theme-toggle-fixed,
+  .no-print, .app-footer, .toast-host, .modal-backdrop, .modal, .search-palette { display: none !important; }
+  /* simplify layout */
+  .app {
+    display: block !important;
+    min-height: 0 !important;
+  }
+  .main { border: 0 !important; }
+  .topbar {
+    border: 0 !important;
+    padding: 0 0 8pt !important;
+    border-bottom: 1px solid #999 !important;
+    margin-bottom: 12pt !important;
+  }
+  .breadcrumb { color: #666 !important; }
+  .title em { color: #666 !important; }
+  .content {
+    display: block !important;
+    padding: 0 !important;
+  }
+  /* cards flatten */
+  .card {
+    border: 1px solid #999 !important;
+    background: white !important;
+    padding: 10pt !important;
+    margin-bottom: 8pt !important;
+    page-break-inside: avoid;
+  }
+  .corner { display: none !important; }
+  .big-num { font-size: 22pt !important; }
+  /* print footer with copyright + page numbers, repeats on every page */
+  .print-footer {
+    display: flex !important;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 8pt;
+    color: #666;
+    border-top: 1px solid #ccc;
+    padding: 4pt 10mm;
+  }
+  .print-footer .page-num::after {
+    content: "Page " counter(page);
+  }
+}
+
+/* === VIEW CONTAINERS === */
+.view-container { display: none; }
+/* The base template's .content is a 3-column grid designed for 3 demo cards.
+   LawnSchedule's schedule is a single full-width view, so the active view
+   needs to span all columns — otherwise it gets squashed into 1/3 of the
+   content width. */
+.view-container.active { display: block; grid-column: 1 / -1; }
+
+/* === UTILITY CLASSES (extracted from inline styles) === */
+.muted-sm { color: var(--ink-2); font-size: var(--fs-sm); margin: 0 0 var(--sp-3); }
+.btn-danger { color: var(--red); }
+.btn-danger:hover { color: var(--red); border-color: var(--red); }
+.crew-row {
+  display: flex; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-2);
+  border: 1px solid var(--line-soft);
+  margin-bottom: var(--sp-1);
+}
+.crew-dot { width: 12px; height: 12px; flex-shrink: 0; }
+.crew-info { flex: 1; }
+.field-checkbox { flex: 0 0 auto; min-width: 200px; }
+.checkbox-label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+input[type="checkbox"].inline { width: auto; }
+
+/* === DATA TABLES (consistent across apps) === */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 calc(-1 * var(--sp-4)); padding: 0 var(--sp-4); }
+@media (min-width: 900px) { .table-wrap { margin: 0; padding: 0; overflow: visible; } }
+.data-table { width: 100%; min-width: 600px; border-collapse: collapse; font-size: var(--fs-sm); }
+.data-table th {
+  text-align: left; padding: var(--sp-3) var(--sp-4); font-size: var(--fs-xs);
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2);
+  font-weight: 500; border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+.data-table td { padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--line-soft); vertical-align: middle; }
+.data-table tr:hover td { background: var(--bg); }
+.data-table .actions-cell { display: flex; gap: var(--sp-1); flex-wrap: wrap; }
+.data-table .actions-cell .btn { padding: var(--sp-1) var(--sp-2); font-size: var(--fs-xs); }
+.export-layout { max-width: 800px; display: flex; flex-direction: column; gap: var(--sp-5); }
+
+/* === STATS BAR === */
+.stats-bar {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-4); margin-bottom: var(--sp-6);
+}
+@media (max-width: 900px) { .stats-bar { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 500px) { .stats-bar { grid-template-columns: 1fr; } }
+.stat-card {
+  background: var(--surface); border: 1px solid var(--line); padding: var(--sp-5);
+  position: relative;
+  display: flex; flex-direction: column; gap: var(--sp-2);
+  min-height: 96px;
+}
+.stat-num { font-size: 28px; font-weight: 700; color: var(--ink); line-height: 1.1; }
+.stat-label { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2); margin-top: auto; }
+
+/* === FILTER BAR === */
+.filter-bar { display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-5); flex-wrap: wrap; }
+.filter-pills { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.pill {
+  padding: 6px 12px; border: 1px solid var(--line); background: var(--surface);
+  font-size: var(--fs-xs); cursor: pointer; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--ink-2); transition: all 0.1s;
+  font-family: var(--mono);
+}
+.pill:hover { border-color: var(--ink-2); color: var(--ink); }
+.pill.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.pill .pill-count { font-weight: 600; margin-left: 4px; }
+.filter-search {
+  padding: 6px 12px; border: 1px solid var(--line); background: var(--surface);
+  font-size: var(--fs-sm); color: var(--ink); min-width: 200px;
+  font-family: var(--mono);
+}
+
+/* === STATUS BADGES === */
+.status-badge {
+  display: inline-block; padding: 2px 6px; font-size: var(--fs-xs);
+  border: 1px solid var(--line); text-transform: uppercase; letter-spacing: 0.04em;
+  cursor: pointer;
+}
+.status-badge:hover { filter: brightness(0.92); }
+.status-scheduled { background: var(--bg); color: var(--ink-2); }
+.status-in_progress { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+.status-completed { background: var(--green); color: white; border-color: var(--green); }
+.status-skipped { background: var(--orange); color: white; border-color: var(--orange); }
+.status-cancelled { background: var(--red); color: white; border-color: var(--red); }
+.status-ok { background: var(--bg); color: var(--ink-2); }
+.status-due_soon { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+.status-overdue { background: var(--red); color: white; border-color: var(--red); animation: pulseOverdue 2s ease-in-out infinite; }
+@keyframes pulseOverdue { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+
+/* === SCHEDULE GRID === */
+.schedule-toolbar {
+  display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-3); border-bottom: 1px solid var(--line);
+}
+.schedule-week-label { font-size: var(--fs-md); font-weight: 700; flex: 1; }
+.schedule-nav-spacer { flex: 1; }
+.schedule-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--sp-2);
+  background: transparent;
+  min-height: 600px;
+}
+@media (max-width: 900px) { .schedule-grid { grid-template-columns: 1fr; } }
+
+.schedule-day {
+  background: var(--surface); padding: var(--sp-3); min-height: 200px;
+  display: flex; flex-direction: column; gap: var(--sp-2);
+  border: 1px solid var(--line);
+}
+.schedule-day-head { padding-bottom: var(--sp-2); border-bottom: 1px solid var(--line-soft); }
+.schedule-day-name { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2); font-weight: 500; }
+.schedule-day-date { font-size: var(--fs-md); font-weight: 700; color: var(--ink); }
+.schedule-day-hours { font-size: var(--fs-xs); color: var(--ink-3); margin-top: 2px; }
+.schedule-day-jobs { display: flex; flex-direction: column; gap: var(--sp-2); flex: 1; }
+.schedule-day-empty { color: var(--ink-3); font-style: italic; font-size: var(--fs-xs); text-align: center; padding: var(--sp-4); }
+.schedule-day.today .schedule-day-date { color: var(--accent); }
+
+.job-card {
+  background: var(--bg); border: 1px solid var(--line-soft); border-left: 3px solid var(--accent);
+  padding: var(--sp-2); cursor: pointer; transition: background 0.1s;
+  font-size: var(--fs-xs);
+}
+.job-card:hover { background: var(--surface); }
+.job-card-property { font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+.job-card-service { color: var(--ink-2); margin-bottom: 2px; }
+.job-card-time { color: var(--ink-3); font-size: 10px; }
+.job-card-crew { color: var(--ink-3); font-size: 10px; margin-top: 2px; }
+.job-card.status-completed { border-left-color: var(--green); opacity: 0.7; }
+.job-card.status-in_progress { border-left-color: var(--accent); background: var(--accent-soft); }
+.job-card.status-skipped { border-left-color: var(--orange); opacity: 0.6; }
+.job-card.status-cancelled { border-left-color: var(--red); opacity: 0.5; }
+
+/* === NEW JOB FORM === */
+.settings-layout { display: flex; flex-direction: column; gap: var(--sp-5); max-width: 800px; }
+.settings-section { background: var(--surface); border: 1px solid var(--line); padding: var(--sp-5); }
+.settings-section h3 { font-size: var(--fs-md); font-weight: 700; margin: 0 0 var(--sp-4); padding-bottom: var(--sp-2); border-bottom: 1px solid var(--line); }
+.settings-section .form-row { margin-bottom: var(--sp-4); display: flex; gap: var(--sp-4); flex-wrap: wrap; }
+.settings-section .form-row .field { flex: 1; min-width: 160px; }
+.settings-section .form-row .field label { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2); display: block; margin-bottom: var(--sp-2); font-weight: 500; }
+.settings-section .form-row .field label .req { color: var(--red); }
+.settings-section input, .settings-section select, .settings-section textarea {
+  width: 100%; padding: var(--sp-3); border: 1px solid var(--line);
+  background: var(--bg); color: var(--ink); font-family: var(--mono); font-size: var(--fs-sm);
+}
+.settings-section textarea { min-height: 80px; resize: vertical; }
+.settings-section input:focus, .settings-section select:focus, .settings-section textarea:focus {
+  outline: 2px solid var(--accent); outline-offset: -1px;
+}
+
+/* === STATUS POPOVER (proven pattern from LawnForms Pro) === */
+.status-popover {
+  background: var(--surface); border: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18); min-width: 220px; max-width: 280px;
+  z-index: 9999; font-size: var(--fs-sm);
+  opacity: 1;
+  color: var(--ink);
+}
+.status-popover-title {
+  padding: var(--sp-2) var(--sp-3); font-size: var(--fs-xs);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--ink-2); border-bottom: 1px solid var(--line);
+  font-weight: 500;
+}
+.status-popover-current {
+  padding: var(--sp-2) var(--sp-3); font-size: var(--fs-xs);
+  color: var(--ink-2); background: var(--bg);
+}
+.status-popover-current strong { text-transform: uppercase; color: var(--ink); letter-spacing: 0.04em; }
+.status-popover-list { display: flex; flex-direction: column; }
+.status-popover-item {
+  display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3); border: 0; background: transparent; text-align: left;
+  color: var(--ink); font: inherit; cursor: pointer; transition: background 0.1s;
+  border-bottom: 1px solid var(--line);
+}
+.status-popover-item:last-child { border-bottom: 0; }
+.status-popover-item:hover { background: var(--bg); }
+.status-popover-icon { font-size: 14px; text-align: center; }
+.status-popover-label { font-weight: 500; }
+.status-popover-key { font-size: var(--fs-xs); color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.04em; }
+.status-popover-sep { height: 1px; background: var(--line); margin: 0; }
+.status-popover-empty { padding: var(--sp-3); text-align: center; color: var(--ink-3); font-size: var(--fs-xs); }
+
+/* === RESPONSIVE: TABLES (stack to cards on small screens) === */
+@media (max-width: 700px) {
+  .data-table thead { display: none; }
+  .data-table, .data-table tbody, .data-table tr, .data-table td { display: block; width: 100%; }
+  .data-table tr { margin-bottom: var(--sp-4); border: 1px solid var(--line); padding: var(--sp-2); background: var(--surface); }
+  .data-table td { padding: var(--sp-1) var(--sp-2); border: 0; }
+  .data-table td:before {
+    content: attr(data-label); display: block;
+    font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-3); margin-bottom: 2px; font-weight: 500;
+  }
+  .data-table .actions-cell { padding-top: var(--sp-2); margin-top: var(--sp-2); border-top: 1px solid var(--line); }
+  .data-table .actions-cell:before { display: none; }
+  .data-table { min-width: 0; }
+}
+
+/* === RESPONSIVE: SCHEDULE (stack days vertically on small screens) === */
+@media (max-width: 900px) {
+  .schedule-grid { grid-template-columns: 1fr; }
+  .schedule-day { min-height: auto; }
+}
+
+/* === RESPONSIVE: TOPBAR === */
+@media (max-width: 700px) {
+  .topbar { padding: var(--sp-3) var(--sp-4); gap: var(--sp-3); }
+  .title { font-size: var(--fs-lg); }
+  .actions { width: 100%; }
+  .actions .btn { flex: 1; justify-content: center; min-width: 0; padding: var(--sp-1) var(--sp-2); font-size: var(--fs-xs); }
+  .actions .btn .kbd { display: none; }
+  .schedule-toolbar { flex-wrap: wrap; }
+  .schedule-week-label { width: 100%; text-align: center; order: -1; }
+}
+
+/* === RESPONSIVE: FILTER PILLS === */
+@media (max-width: 700px) {
+  .filter-bar { flex-direction: column; align-items: stretch; }
+  .filter-pills { flex-wrap: wrap; }
+  .filter-pills .pill { flex: 1; min-width: 0; text-align: center; }
+  .filter-search { width: 100%; }
+}
+
+/* === RESPONSIVE: MODAL === */
+@media (max-width: 600px) {
+  .modal { min-width: 92vw !important; max-width: 92vw !important; margin: var(--sp-3); }
+  .modal-content { padding: var(--sp-3); }
+}
+.modal-wide { min-width: 560px; }
+
+/* === RESPONSIVE: POPOVER (snap to bottom on mobile) === */
+@media (max-width: 700px) {
+  .status-popover { position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; top: auto !important; width: 100% !important; max-width: 100% !important; min-width: 0 !important; border-bottom: 0; }
+  .status-popover-list { max-height: 50vh; overflow-y: auto; }
+  .status-popover-item { padding: var(--sp-3); min-height: 48px; }
+}
+
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<button class="theme-toggle-fixed" id="theme-toggle-btn" title="Toggle dark mode (⌘⇧L)" aria-label="Toggle dark mode">
+  <span id="theme-toggle-icon">☾</span>
+</button>
+
+<div class="app">
+
+  <!-- ============================================================
+       SIDEBAR
+       ============================================================ -->
+  <aside class="sidebar" aria-label="Application sidebar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">S</div>
+      <div class="brand-text">
+        <div class="brand-name">LawnSchedule</div>
+        <div class="brand-sub">pro suite</div>
+      </div>
+      <div class="brand-version">v1.0.0</div>
+    </div>
+
+    <div class="search" id="search-trigger" role="button" tabindex="0" aria-label="Open search palette, Command K" aria-expanded="false" aria-haspopup="dialog">
+      <span class="search-icon" aria-hidden="true">⏵</span>
+      <span class="search-text">jump to anything</span>
+      <span class="kbd" aria-hidden="true">⌘</span><span class="kbd" aria-hidden="true">K</span>
+    </div>
+
+    <nav aria-label="Main navigation">
+      <div class="nav-group">
+        <div class="nav-label" aria-hidden="true">-- workspace</div>
+        <ul role="list">
+          <li class="nav-item active" data-view="schedule" role="button" tabindex="0" aria-current="page" aria-label="Schedule view">
+            <span class="nav-num" aria-hidden="true">01</span>
+            <span class="nav-text">schedule</span>
+            <span class="dot live" aria-hidden="true"></span>
+          </li>
+          <li class="nav-item" data-view="new" role="button" tabindex="0" aria-label="New job view">
+            <span class="nav-num" aria-hidden="true">02</span>
+            <span class="nav-text">new</span>
+            <span class="dot live" aria-hidden="true"></span>
+          </li>
+          <li class="nav-item" data-view="log" role="button" tabindex="0" aria-label="Log view">
+            <span class="nav-num" aria-hidden="true">03</span>
+            <span class="nav-text">log</span>
+            <span class="dot live" aria-hidden="true"></span>
+          </li>
+          <li class="nav-item" data-view="properties" role="button" tabindex="0" aria-label="Properties view">
+            <span class="nav-num" aria-hidden="true">04</span>
+            <span class="nav-text">properties</span>
+            <span class="dot live" aria-hidden="true"></span>
+            <span class="nav-badge" id="nav-properties-badge" aria-hidden="true">0</span>
+          </li>
+          <li class="nav-item" data-view="equipment" role="button" tabindex="0" aria-label="Equipment view">
+            <span class="nav-num" aria-hidden="true">05</span>
+            <span class="nav-text">equipment</span>
+            <span class="dot live" aria-hidden="true"></span>
+            <span class="nav-badge" id="nav-equipment-badge" aria-hidden="true">0</span>
+          </li>
+        </ul>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label" aria-hidden="true">-- system</div>
+        <ul role="list">
+          <li class="nav-item" data-view="settings" role="button" tabindex="0" aria-label="Settings view">
+            <span class="nav-num" aria-hidden="true">06</span>
+            <span class="nav-text">settings</span>
+            <span class="dot live" aria-hidden="true"></span>
+          </li>
+          <li class="nav-item" data-view="export" role="button" tabindex="0" aria-label="Export view">
+            <span class="nav-num" aria-hidden="true">07</span>
+            <span class="nav-text">export</span>
+            <span class="dot live" aria-hidden="true"></span>
+          </li>
+          <li class="nav-item" data-view="help" role="button" tabindex="0" aria-label="Help and keyboard shortcuts">
+            <span class="nav-num" aria-hidden="true">08</span>
+            <span class="nav-text">help</span>
+            <span class="dot live" aria-hidden="true"></span>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-status">
+        <span class="dot green" aria-hidden="true"></span>
+        <span>local-only · data on device</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       MAIN
+       ============================================================ -->
+  <main class="main" id="main-content">
+
+    <header class="topbar" aria-label="Page header">
+      <div class="breadcrumb" aria-hidden="true" id="page-breadcrumb">WORKSPACE / LAWNSCHEDULE / SCHEDULE</div>
+      <div class="title-block">
+        <h1 class="title" id="page-title">Schedule <em>— this week + next</em></h1>
+      </div>
+      <div class="actions" id="topbar-actions" role="toolbar" aria-label="Page actions">
+        <button class="btn" onclick="printWeekSchedule()" title="Print weekly schedule (⌘P)" aria-label="Print weekly schedule, Command P">
+          <span aria-hidden="true">Print</span>
+          <span class="kbd" aria-hidden="true">⌘</span><span class="kbd" aria-hidden="true">P</span>
+        </button>
+        <button class="btn btn-accent" onclick="newJob()" title="Create a new job (⌘N)" aria-label="Create a new job, Command N">
+          <span aria-hidden="true">■</span>
+          <span>New Job</span>
+          <span class="kbd" aria-hidden="true">⌘</span><span class="kbd" aria-hidden="true">N</span>
+        </button>
+      </div>
+    </header>
+
+
+
+    <section class="content">
+
+      <!-- VIEW 01: SCHEDULE -->
+      <div class="view-container active" id="view-schedule" data-view="schedule">
+        <div class="stats-bar" id="schedule-stats"></div>
+        <div class="schedule-toolbar">
+          <button class="btn" onclick="prevWeek()">← Previous</button>
+          <span class="schedule-week-label" id="schedule-week-label">This Week</span>
+          <button class="btn" onclick="nextWeek()">Next →</button>
+          <button class="btn" onclick="goToToday()">Today</button>
+          <div class="schedule-nav-spacer"></div>
+          <button class="btn btn-accent" onclick="newJob()" title="Create a new job (⌘N)">+ New Job</button>
+        </div>
+        <div class="schedule-grid" id="schedule-grid"></div>
+      </div>
+
+      <!-- VIEW 02: NEW JOB -->
+      <div class="view-container" id="view-new" data-view="new">
+        <div class="settings-layout" id="new-form"></div>
+      </div>
+
+      <!-- VIEW 03: LOG -->
+      <div class="view-container" id="view-log" data-view="log">
+        <div class="stats-bar" id="log-stats"></div>
+        <div class="filter-bar">
+          <div class="filter-pills" id="log-status-pills"></div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Date</th><th scope="col">Property</th><th scope="col">Service</th><th scope="col">Crew</th><th scope="col">Duration</th><th scope="col">Status</th><th scope="col">Notes</th><th scope="col">Actions</th></tr></thead>
+            <tbody id="log-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VIEW 04: PROPERTIES -->
+      <div class="view-container" id="view-properties" data-view="properties">
+        <div class="stats-bar" id="properties-stats"></div>
+        <div class="filter-bar">
+          <input type="text" class="filter-search" id="properties-search" aria-label="Search properties" autocomplete="off" placeholder="Search properties...">
+          <div class="filter-pills" id="properties-type-pills"></div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Name</th><th scope="col">Address</th><th scope="col">Type</th><th scope="col">Frequency</th><th scope="col">Last Service</th><th scope="col">Next Service</th><th scope="col">Total Visits</th><th scope="col">Actions</th></tr></thead>
+            <tbody id="properties-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VIEW 05: EQUIPMENT -->
+      <div class="view-container" id="view-equipment" data-view="equipment">
+        <div class="stats-bar" id="equipment-stats"></div>
+        <div class="filter-bar">
+          <div class="filter-pills" id="equipment-type-pills"></div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Make/Model</th><th scope="col">Hours</th><th scope="col">Last Service</th><th scope="col">Next Service Due</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead>
+            <tbody id="equipment-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VIEW 06: SETTINGS -->
+      <div class="view-container" id="view-settings" data-view="settings">
+        <div class="settings-layout" id="settings-layout"></div>
+      </div>
+
+      <!-- VIEW 07: EXPORT -->
+      <div class="view-container" id="view-export" data-view="export">
+        <div class="export-layout" id="export-layout"></div>
+      </div>
+
+    </section>
+
+    <div class="statusbar">
+      <span id="app-appname-display">app</span> pro v<span id="app-version-display">1.0.0</span>
+      <span class="grow"></span>
+      <div class="right">
+        <span>last sync: <span class="muted">local only</span></span>
+        <button class="btn" id="btn-help" style="padding:2px 6px;font-size:var(--fs-xs);" title="Keyboard shortcuts (?)" aria-label="Open keyboard shortcuts help">
+          <span class="kbd" aria-hidden="true">?</span> help
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<!-- ============================================================
+     FOOTER (legal) — outside .app grid
+     ============================================================ -->
+<footer class="app-footer">
+  <span>©</span>
+  <span class="sep" id="footer-year">2026</span>
+  <span class="app-name">LawnSchedule Pro</span>
+  <span class="sep">·</span>
+  <span>All Rights Reserved</span>
+</footer>
+
+<!-- Print-only footer (repeats on every page) -->
+<div class="print-footer">
+  <span class="copyright">© 2026 <span class="app-name">LawnSchedule Pro</span> · All Rights Reserved · Generated <span id="print-date"></span></span>
+  <span class="page-num"></span>
+</div>
+
+<!-- ============================================================
+     MODALS + SEARCH PALETTE + TOAST HOST
+     ============================================================ -->
+<div class="modal-backdrop" id="modal-backdrop" aria-hidden="true"></div>
+
+<div class="search-palette" id="search-palette" role="dialog" aria-modal="true" aria-label="Search">
+  <input type="text" class="search-palette-input" id="search-input" autocomplete="off"
+         placeholder="Type to search..." aria-label="Search all content"
+         autocomplete="off" spellcheck="false">
+  <div class="search-palette-results" id="search-results"
+       role="listbox" aria-label="Search results" aria-live="polite"></div>
+</div>
+
+<div class="modal modal-wide" id="modal-help" role="dialog" aria-modal="true" aria-labelledby="help-modal-title">
+  <div class="modal-header">
+    <div class="modal-title" id="help-modal-title">Keyboard shortcuts</div>
+    <button class="modal-close" data-action="close-modal" aria-label="Close dialog">×</button>
+  </div>
+  <div class="modal-body">
+    <div class="help-grid">
+      <div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">K</span></div><span>Open search palette</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">N</span></div><span>New job</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">P</span></div><span>Print weekly schedule</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">E</span></div><span>Export CSV</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">⇧</span><span class="kbd">T</span></div><span>Toggle theme</span></div>
+      </div>
+      <div>
+        <div class="help-item"><div class="help-key"><span class="kbd">1</span><span class="kbd">-</span><span class="kbd">7</span></div><span>Jump to views 01-07</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">8</span></div><span>Help</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">?</span></div><span>Show this help</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">Esc</span></div><span>Close modal/popover</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-action="close-modal">Close</button>
+  </div>
+</div>
+
+<div class="toast-host" id="toast-host" role="status" aria-live="polite" aria-atomic="false"></div>
+
+<script>
+'use strict';
+/* === APP VERSION (drives status bar + about sections) === */
+var APP_VERSION = '1.0.0';
+var APP_NAME_SHORT = 'LawnSchedule';
+function updateAppVersionDisplay() {
+  var s = document.getElementById('app-version-display');
+  if (s) s.textContent = APP_VERSION;
+  var n = document.getElementById('app-appname-display');
+  if (n) n.textContent = APP_NAME_SHORT;
+}
+updateAppVersionDisplay();
+
+/* === THEME MANAGEMENT === */
+var THEME_KEY = 'lawnschedule-theme';
+
+/* Set footer year dynamically */
+(function() { var fy = document.getElementById('footer-year'); if (fy) fy.textContent = new Date().getFullYear(); })();
+
+function getStoredTheme() {
+  try { return localStorage.getItem(THEME_KEY) || localStorage.getItem('cleanbiz-theme'); } catch (e) { return null; }
+}
+
+// Resolve a theme token ('light' | 'dark' | 'system' | null) into the concrete
+// 'light' or 'dark' that should be applied to the DOM right now.
+function resolveTheme(theme) {
+  if (theme === 'light' || theme === 'dark') return theme;
+  // 'system' or null/undefined — follow the OS preference.
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+  return 'light';
+}
+
+function getTheme() {
+  // The DOM data-theme is always the concrete ('light'/'dark'); the user's
+  // *preference* (which may be 'system') lives in state.settings.theme.
+  return document.documentElement.getAttribute('data-theme') || 'light';
+}
+
+function setTheme(theme) {
+  // Accept 'light' | 'dark' | 'system' | null. 'system' is recorded as the
+  // preference, but the DOM always gets the resolved concrete value.
+  var stored = (theme == null) ? 'system' : theme;
+  if (stored !== 'light' && stored !== 'dark' && stored !== 'system') stored = 'system';
+  try { localStorage.setItem(THEME_KEY, stored); } catch (e) {}
+  var resolved = resolveTheme(stored);
+  document.documentElement.setAttribute('data-theme', resolved);
+  document.documentElement.setAttribute('data-theme-pref', stored);
+  updateToggleUI();
+}
+
+function toggleTheme() {
+  // Cycle light → dark → system → light. Concretely: switch to the opposite
+  // of the *current concrete* theme. The "system" option is exposed via the
+  // settings panel, not the toolbar button.
+  var cur = getTheme();
+  var pref = document.documentElement.getAttribute('data-theme-pref') || 'system';
+  if (pref === 'system') {
+    // First toggle from system — pick dark if currently light, else light.
+    setTheme(cur === 'dark' ? 'light' : 'dark');
+  } else {
+    setTheme(cur === 'dark' ? 'light' : 'dark');
+  }
+  toast('theme: ' + (getTheme() === 'dark' ? 'dark' : 'light'), 'info');
+}
+
+function updateToggleUI() {
+  var t = getTheme();
+  var icon = document.getElementById('theme-toggle-icon');
+  var btn = document.getElementById('theme-toggle-btn');
+  if (icon) icon.textContent = t === 'dark' ? '☀' : '☾';
+  if (btn) btn.setAttribute('aria-label', t === 'dark' ? 'Toggle light mode' : 'Toggle dark mode');
+  if (btn) btn.title = t === 'dark' ? 'Toggle light mode (⌘⇧L)' : 'Toggle dark mode (⌘⇧L)';
+}
+
+updateToggleUI();
+
+/* === PRINT THEME SWAP === */
+window.addEventListener('beforeprint', function () {
+  document.documentElement.setAttribute('data-print-theme', document.documentElement.getAttribute('data-theme') || 'light');
+  document.documentElement.removeAttribute('data-theme');
+});
+window.addEventListener('afterprint', function () {
+  var saved = document.documentElement.getAttribute('data-print-theme');
+  if (saved && saved !== 'light') document.documentElement.setAttribute('data-theme', saved);
+  document.documentElement.removeAttribute('data-print-theme');
+});
+
+/* === TOAST SYSTEM === */
+function toast(message, type) {
+  type = type || 'info';
+  var host = document.getElementById('toast-host');
+  if (!host) { host = document.createElement('div'); host.className = 'toast-host'; host.id = 'toast-host'; host.setAttribute('role', 'status'); host.setAttribute('aria-live', 'polite'); host.setAttribute('aria-atomic', 'false'); document.body.appendChild(host); }
+  var el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = '<span class="toast-icon"></span><span class="toast-msg"></span>';
+  el.querySelector('.toast-msg').textContent = message;
+  host.appendChild(el);
+  setTimeout(function () { el.classList.add('is-leaving'); setTimeout(function () { el.remove(); }, 200); }, 2300);
+}
+
+/* === TIME FORMATTER (helper) === */
+function formatTime12h(timeStr) {
+  if (!timeStr) return '';
+  var parts = String(timeStr).split(':');
+  var h = parseInt(parts[0], 10);
+  var m = parts[1] || '00';
+  var ampm = h >= 12 ? 'PM' : 'AM';
+  var h12 = h % 12 || 12;
+  return h12 + ':' + m + ' ' + ampm;
+}
+function formatTime24(timeStr) {
+  if (!timeStr) return '';
+  var parts = String(timeStr).split(':');
+  var h = parseInt(parts[0], 10);
+  var m = parts[1] || '00';
+  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+}
+function formatTime(timeStr) {
+  // Respects the user's 12h/24h setting (default 12h)
+  var fmt = (state && state.settings && state.settings.timeFormat) || '12h';
+  return fmt === '24h' ? formatTime24(timeStr) : formatTime12h(timeStr);
+}
+
+/* === TIME PICKER DROPDOWN (reusable component) === */
+var TP_SLOTS = (function () {
+  var slots = [];
+  for (var h = 5; h <= 21; h++) {
+    for (var m = 0; m < 60; m += 30) {
+      var hh = String(h).padStart(2, '0');
+      var mm = String(m).padStart(2, '0');
+      slots.push({
+        value: hh + ':' + mm,
+        isHour: m === 0
+      });
+    }
+  }
+  return slots;
+})();
+
+function buildTimeDrop(id) {
+  var drop = document.getElementById(id + '-drop');
+  if (!drop) return;
+  var cur = ((document.getElementById(id) || {}).value) || '';
+  var html = '<div class="tp-slot not-set" data-empty="1" onclick="selectTimePicker(\'' + id + '\',\'\')">not set</div>';
+  html += TP_SLOTS.map(function (s) {
+    var cls = 'tp-slot' + (s.isHour ? ' is-hour' : '') + (s.value === cur ? ' is-selected' : '');
+    return '<div class="' + cls + '" onclick="selectTimePicker(\'' + id + '\',\'' + s.value + '\')">' + formatTime(s.value) + '</div>';
+  }).join('');
+  drop.innerHTML = html;
+  var sel = drop.querySelector('.is-selected');
+  if (sel) setTimeout(function () { sel.scrollIntoView({ block: 'nearest' }); }, 0);
+}
+
+function toggleTimeDrop(id) {
+  var drop = document.getElementById(id + '-drop');
+  var btn = document.getElementById(id + '-btn');
+  if (!drop || !btn) return;
+  var wasOpen = drop.classList.contains('open');
+  closeAllTimePickers();
+  if (!wasOpen) {
+    buildTimeDrop(id);
+    drop.classList.add('open');
+    btn.classList.add('is-open');
+    btn.setAttribute('aria-expanded', 'true');
+  } else {
+    btn.setAttribute('aria-expanded', 'false');
+  }
+}
+
+function closeAllTimePickers() {
+  document.querySelectorAll('.tp-drop.open').forEach(function (d) { d.classList.remove('open'); });
+  document.querySelectorAll('.tp-btn.is-open').forEach(function (b) {
+    b.classList.remove('is-open');
+    b.setAttribute('aria-expanded', 'false');
+  });
+}
+
+function selectTimePicker(id, value) {
+  var hidden = document.getElementById(id);
+  var display = document.getElementById(id + '-display');
+  var btn = document.getElementById(id + '-btn');
+  if (hidden) hidden.value = value;
+  if (display) {
+    display.textContent = value ? formatTime(value) : 'not set';
+    display.classList.toggle('has-val', !!value);
+  }
+  if (btn) {
+    btn.classList.toggle('has-val', !!value);
+    if (btn.parentElement) btn.parentElement.classList.toggle('has-val', !!value);
+  }
+  closeAllTimePickers();
+}
+
+function clearTimePicker(id) {
+  selectTimePicker(id, '');
+}
+
+// Set picker from 24h value (e.g. "09:30") — snaps to nearest 30-min
+function setTimePicker(id, time24) {
+  if (!time24) { clearTimePicker(id); return; }
+  var parts = String(time24).split(':');
+  var h = parseInt(parts[0], 10);
+  var m = parseInt(parts[1] || '0', 10);
+  if (isNaN(h) || isNaN(m)) { clearTimePicker(id); return; }
+  var snapped = String(h).padStart(2, '0') + ':' + String(Math.round(m / 30) * 30 % 60).padStart(2, '0');
+  if (h < 5 || h > 21) { selectTimePicker(id, String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0')); return; }
+  selectTimePicker(id, snapped);
+}
+
+/* === MODAL SYSTEM === */
+var activeTrapHandler = null;
+
+function trapModalFocus(modal) {
+  var sel = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  var focusable = Array.prototype.slice.call(modal.querySelectorAll(sel));
+  if (!focusable.length) return;
+  var first = focusable[0];
+  var last = focusable[focusable.length - 1];
+  if (activeTrapHandler) document.removeEventListener('keydown', activeTrapHandler);
+  activeTrapHandler = function (e) {
+    if (e.key !== 'Tab') return;
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  };
+  document.addEventListener('keydown', activeTrapHandler);
+}
+
+function openModal(id) {
+  lastFocusedBeforeModal = document.activeElement;
+  document.getElementById('modal-backdrop').classList.add('is-open');
+  var modal = document.getElementById(id);
+  modal.classList.add('is-open');
+  setTimeout(function () {
+    var firstInput = modal.querySelector('input:not([disabled]), select:not([disabled]), textarea:not([disabled])');
+    var firstFocusable = firstInput || modal.querySelector('button:not([disabled])');
+    if (firstFocusable) firstFocusable.focus();
+    trapModalFocus(modal);
+  }, 50);
+}
+
+function closeAllModals() {
+  document.querySelectorAll('.modal, .search-palette').forEach(function (m) { m.classList.remove('is-open'); });
+  /* Fix #6: remove dynamically created confirm dialogs from DOM (Esc leaves a ghost otherwise) */
+  var cd = document.getElementById('confirm-dialog-modal');
+  if (cd) cd.remove();
+  document.getElementById('modal-backdrop').classList.remove('is-open');
+  if (activeTrapHandler) { document.removeEventListener('keydown', activeTrapHandler); activeTrapHandler = null; }
+  if (lastFocusedBeforeModal && document.body.contains(lastFocusedBeforeModal)) {
+    try { lastFocusedBeforeModal.focus(); } catch (e) {}
+  }
+  var trig = document.getElementById('search-trigger');
+  if (trig) trig.setAttribute('aria-expanded', 'false');
+  lastFocusedBeforeModal = null;
+}
+
+/* === SEARCH PALETTE === */
+var searchSelectedIdx = -1;
+var lastFocusedBeforeModal = null;
+
+function openSearchPalette() {
+  searchSelectedIdx = -1;
+  lastFocusedBeforeModal = document.activeElement;
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results').innerHTML = '';
+  document.getElementById('modal-backdrop').classList.add('is-open');
+  document.getElementById('search-palette').classList.add('is-open');
+  var palette = document.getElementById('search-palette');
+  trapModalFocus(palette);
+  document.getElementById('search-input').focus();
+  var trig = document.getElementById('search-trigger');
+  if (trig) trig.setAttribute('aria-expanded', 'true');
+}
+
+function updateSearchSelection(items) {
+  var list = document.getElementById('search-results');
+  items.forEach(function (item, i) {
+    var selected = i === searchSelectedIdx;
+    item.classList.toggle('is-selected', selected);
+    if (selected) {
+      item.setAttribute('aria-selected', 'true');
+      list.setAttribute('aria-activedescendant', item.id);
+      item.scrollIntoView({ block: 'nearest' });
+    } else {
+      item.setAttribute('aria-selected', 'false');
+    }
+  });
+  if (searchSelectedIdx < 0) list.removeAttribute('aria-activedescendant');
+}
+
+/* Override this per app with real data sources.
+   Build result divs with class="search-palette-item" + data-idx=N + role="option",
+   then appendChild to results. closeAllModals() + action() on click. */
+function doSearch() {
+  searchSelectedIdx = -1;
+  var q = document.getElementById('search-input').value.toLowerCase().trim();
+  var results = document.getElementById('search-results');
+  results.innerHTML = '';
+  if (!q) return;
+  results.innerHTML = '<div class="search-palette-item"><span class="muted">Wire up doSearch() in your app</span></div>';
+}
+
+
+/* === confirmDialog with html: opt-in support === */
+// Strip script tags and inline event handlers / javascript: URLs from arbitrary HTML
+// before injecting it into the DOM. Callers should still build their HTML from
+// already-escaped user data; this is a safety net, not a primary defence.
+function sanitizeHtml(s) {
+  if (s == null) return '';
+  var str = String(s);
+  // Strip inline SCRIPT blocks entirely.
+  str = str.replace(new RegExp('<script\\b[\\s\\S]*?<\\/script>', 'gi'), '');
+  // Strip dangerous tags: style, iframe, object, embed, meta, link, base.
+  str = str.replace(/<(style|iframe|object|embed|meta|link|base)[\s\S]*?>/gi, '');
+  str = str.replace(/<\/(style|iframe|object|embed|meta|link|base)>/gi, '');
+  // Strip on*="..." inline event handlers (onclick=, onerror=, onload=, ...).
+  str = str.replace(/\s+on[a-z]+\s*=\s*"[^"]*"/gi, '');
+  str = str.replace(/\s+on[a-z]+\s*=\s*'[^']*'/gi, '');
+  str = str.replace(/\s+on[a-z]+\s*=\s*[^\s>]+/gi, '');
+  // Strip javascript: URLs in href/src (including entity-obfuscated variants).
+  str = str.replace(/(href|src|action|formaction)\s*=\s*"[^"]*javascript[^"]*"/gi, '$1="#"');
+  str = str.replace(/(href|src|action|formaction)\s*=\s*'[^']*javascript[^']*'/gi, "$1='#'");
+  return str;
+}
+
+function confirmDialog(opts) {
+  opts = opts || {};
+  var title = opts.title || 'Confirm';
+  var body = opts.body || '';
+  var html = sanitizeHtml(opts.html || '');
+  var actionText = opts.actionText || 'Confirm';
+  var danger = opts.danger || false;
+  var onConfirm = opts.onConfirm || function() {};
+  var onCancel = opts.onCancel || function() {};
+
+  var modal = document.createElement('div');
+  modal.className = 'modal is-open';
+  modal.style.cssText = 'min-width:400px;max-width:560px;';
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+  modal.setAttribute('aria-labelledby', 'cd-title');
+  modal.id = 'confirm-dialog-modal';
+
+  var bodyHtml = '';
+  if (html) {
+    bodyHtml = '<div class="modal-body">' + html + '</div>';
+  } else if (body) {
+    bodyHtml = '<div class="modal-body"><p>' + escapeHtml(body) + '</p></div>';
+  }
+
+  modal.innerHTML =
+    '<div class="modal-header">' +
+      '<div class="modal-title" id="cd-title">' + escapeHtml(title) + '</div>' +
+      '<button class="modal-close" data-action="close-cd" aria-label="Close dialog">×</button>' +
+    '</div>' +
+    bodyHtml +
+    '<div class="modal-footer">' +
+      '<button class="btn" data-action="close-cd">Cancel</button>' +
+      '<button class="btn ' + (danger ? 'btn-primary' : 'btn-accent') + '" data-action="confirm-cd" style="' + (danger ? 'background:var(--red);border-color:var(--red);color:white;' : '') + '">' + escapeHtml(actionText) + '</button>' +
+    '</div>';
+
+  document.body.appendChild(modal);
+  document.getElementById('modal-backdrop').classList.add('is-open');
+  /* Fix #6: save focus target so closeAllModals can restore it */
+  lastFocusedBeforeModal = document.activeElement;
+  trapModalFocus(modal);
+
+  modal.querySelectorAll('[data-action="close-cd"]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.getElementById('modal-backdrop').classList.remove('is-open');
+      modal.remove();
+      onCancel();
+    });
+  });
+
+  modal.querySelector('[data-action="confirm-cd"]').addEventListener('click', function() {
+    document.getElementById('modal-backdrop').classList.remove('is-open');
+    modal.remove();
+    onConfirm();
+  });
+}
+
+
+/* === WIRING (LawnSchedule Pro) === */
+/* properties search listener */
+try { document.getElementById('properties-search').addEventListener('input', renderProperties); } catch(e) {}
+document.querySelectorAll('.nav-item').forEach(function (item) {
+  item.addEventListener('click', function () {
+    var view = item.getAttribute('data-view');
+    if (view === 'help') { openModal('modal-help'); return; }
+    if (view) switchView(view);
+  });
+  item.addEventListener('keydown', function (e) {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); item.click(); }
+  });
+});
+
+document.getElementById('search-trigger').addEventListener('click', openSearchPalette);
+document.getElementById('search-trigger').addEventListener('keydown', function (e) {
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); openSearchPalette(); }
+});
+
+document.getElementById('search-input').addEventListener('input', debounce(doSearch, 150));
+document.getElementById('search-input').addEventListener('keydown', function (e) {
+  var items = document.querySelectorAll('#search-results .search-palette-item[data-idx]');
+  if (e.key === 'Escape') { closeAllModals(); closeStatusPopover(); return; }
+  if (!items.length) return;
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    searchSelectedIdx = Math.min(searchSelectedIdx + 1, items.length - 1);
+    updateSearchSelection(items);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    searchSelectedIdx = Math.max(searchSelectedIdx - 1, 0);
+    updateSearchSelection(items);
+  } else if (e.key === 'Enter') {
+    if (searchSelectedIdx >= 0 && items[searchSelectedIdx]) items[searchSelectedIdx].click();
+  }
+});
+document.getElementById('btn-help').addEventListener('click', function () { openModal('modal-help'); });
+
+document.addEventListener('click', function (e) {
+  if (!e.target.closest('.tp-wrap')) closeAllTimePickers();
+  if (!e.target.closest('.status-popover')) closeStatusPopover();
+});
+document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
+document.getElementById('modal-backdrop').addEventListener('click', closeAllModals);
+
+document.querySelectorAll('.modal').forEach(function (modal) {
+  modal.addEventListener('click', function (e) {
+    if (e.target.closest('[data-action="close-modal"]')) closeAllModals();
+  });
+});
+
+/* Keyboard shortcuts (LawnSchedule Pro) */
+document.addEventListener('keydown', function (e) {
+  var inInput = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT';
+  if (e.key === 'Escape') { closeAllModals(); closeStatusPopover(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearchPalette(); }
+  if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 't') { e.preventDefault(); toggleTheme(); }
+  if (inInput) return;
+  if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'e') { e.preventDefault(); switchView('export'); }
+  if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'p') { e.preventDefault(); printWeekSchedule(); }
+  if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'n') { e.preventDefault(); newJob(); }
+  if (!e.metaKey && !e.ctrlKey && e.key === '?') { e.preventDefault(); openModal('modal-help'); }
+  if (!e.metaKey && !e.ctrlKey && !e.altKey) {
+    var num = parseInt(e.key, 10);
+    if (num >= 1 && num <= 7) {
+      var views = ['schedule', 'new', 'log', 'properties', 'equipment', 'settings', 'export'];
+      if (views[num - 1]) switchView(views[num - 1]);
+    }
+  }
+});
+
+/* Set print date */
+var pd = document.getElementById('print-date');
+if (pd) pd.textContent = localDate();
+
+
+/* ============================================================
+   LAWNSCHEDULE PRO — APP LOGIC
+   ============================================================ */
+
+var currentView = 'schedule';
+var previousView = 'schedule';
+var currentJobId = null;
+var currentWeekStart = null;
+var jobFormState = { jobId: null, fields: {}, assignedCrew: [], assignedEquipment: [] };
+
+/* === DATA MODEL === */
+var STATE_KEY = 'lawnschedule-state';
+var defaultState = {
+  business: { name: 'Your Business Name', address: '', phone: '', email: '' },
+  properties: [],
+  equipment: [],
+  jobs: [],
+  crew: [],
+  log: [],
+  settings: { theme: 'system', weekStartsOn: 0, defaultDuration: 60, timeFormat: '12h' }
+};
+var state = JSON.parse(JSON.stringify(defaultState));
+
+/* === 16 PRE-BUILT SERVICE TYPES === */
+var DEFAULT_SERVICE_TYPES = [
+  { id: 'svc_mow_weekly', name: 'Weekly Mowing', category: 'Mowing', defaultDuration: 60, color: '#2D6A3E' },
+  { id: 'svc_mow_biweekly', name: 'Biweekly Mowing', category: 'Mowing', defaultDuration: 60, color: '#2D6A3E' },
+  { id: 'svc_mow_monthly', name: 'Monthly Service', category: 'Mowing', defaultDuration: 90, color: '#2D6A3E' },
+  { id: 'svc_spring_cleanup', name: 'Spring Cleanup', category: 'Cleanups', defaultDuration: 240, color: '#B8862E' },
+  { id: 'svc_fall_cleanup', name: 'Fall Cleanup', category: 'Cleanups', defaultDuration: 240, color: '#B8862E' },
+  { id: 'svc_leaf_removal', name: 'Leaf Removal', category: 'Cleanups', defaultDuration: 120, color: '#B8862E' },
+  { id: 'svc_fert', name: 'Fertilization Application', category: 'Treatment', defaultDuration: 45, color: '#4FA362' },
+  { id: 'svc_weed', name: 'Weed Control', category: 'Treatment', defaultDuration: 45, color: '#4FA362' },
+  { id: 'svc_aeration', name: 'Lawn Aeration', category: 'Treatment', defaultDuration: 75, color: '#4FA362' },
+  { id: 'svc_overseed', name: 'Overseeding', category: 'Treatment', defaultDuration: 90, color: '#4FA362' },
+  { id: 'svc_hedge', name: 'Hedge Trimming', category: 'Trimming', defaultDuration: 90, color: '#1F5F5B' },
+  { id: 'svc_tree_prune', name: 'Tree Pruning', category: 'Trimming', defaultDuration: 180, color: '#1F5F5B' },
+  { id: 'svc_snow_plow', name: 'Snow Plow', category: 'Snow Removal', defaultDuration: 45, color: '#4870B5' },
+  { id: 'svc_snow_shovel', name: 'Snow Shovel', category: 'Snow Removal', defaultDuration: 60, color: '#4870B5' },
+  { id: 'svc_salt', name: 'Salt/Sand Application', category: 'Snow Removal', defaultDuration: 20, color: '#4870B5' },
+  { id: 'svc_equipment', name: 'Equipment Maintenance', category: 'Maintenance', defaultDuration: 30, color: '#6B6B6B' }
+];
+
+/* === 5 SAMPLE PROPERTIES === */
+var SAMPLE_PROPERTIES = [
+  { id: 'prop_1', name: 'Sarah & Mike Henderson', address: '482 Maple Drive, Springfield, IL 62701', type: 'residential', frequency: 'weekly', lotSize: 9500, contactName: 'Sarah Henderson', contactPhone: '555-0123', contactEmail: 'sarah.henderson@email.com', gateCode: '1492', notes: 'Back gate code: 1492. Two friendly Goldens.', createdAt: '2026-03-10', lastService: '2026-06-12', nextService: '2026-06-19' },
+  { id: 'prop_2', name: 'Robert Chen', address: '1200 Oak Ridge Lane, Springfield, IL 62702', type: 'residential', frequency: 'biweekly', lotSize: 7800, contactName: 'Robert Chen', contactPhone: '555-0145', contactEmail: 'r.chen@chenlaw.com', gateCode: '', notes: 'Corner lot. Sprinkler system, 6 zones.', createdAt: '2026-04-01', lastService: '2026-06-11', nextService: '2026-06-25' },
+  { id: 'prop_3', name: 'Maple Heights HOA', address: '500 Maple Heights Pkwy, Springfield, IL 62703', type: 'commercial', frequency: 'weekly', lotSize: 45000, contactName: 'Patricia Williams (Board)', contactPhone: '555-0178', contactEmail: 'board@mapleheights.org', gateCode: '', notes: '45 townhomes. Common areas + front yards. After-hours OK.', createdAt: '2026-02-15', lastService: '2026-06-13', nextService: '2026-06-20' },
+  { id: 'prop_4', name: 'Jennifer Walsh', address: '78 Birch Court, Springfield, IL 62704', type: 'residential', frequency: 'one-time', lotSize: 6200, contactName: 'Jennifer Walsh', contactPhone: '555-0192', contactEmail: 'jwalsh@email.com', gateCode: '', notes: 'Recently moved in. Spring cleanup done. Considering weekly.', createdAt: '2026-04-01', lastService: '2026-04-07', nextService: null },
+  { id: 'prop_5', name: 'Lincoln Elementary School', address: '300 School Street, Springfield, IL 62701', type: 'commercial', frequency: 'monthly', lotSize: 28000, contactName: 'Office', contactPhone: '555-0156', contactEmail: 'admin@lincoln-elem.edu', gateCode: '', notes: 'Large field + playground. Service during summer only. Background check required.', createdAt: '2026-05-01', lastService: '2026-06-01', nextService: '2026-07-01' }
+];
+
+/* === 4 SAMPLE EQUIPMENT === */
+var SAMPLE_EQUIPMENT = [
+  { id: 'eq_1', name: 'Mower #1 (Honda)', type: 'mower', make: 'Honda', model: 'HRX217VKA', year: 2024, purchaseDate: '2024-04-15', currentHours: 312, serviceInterval: 25, lastServiceDate: '2026-06-01', lastServiceHours: 295, notes: 'Self-propelled, variable speed.' },
+  { id: 'eq_2', name: 'Mower #2 (Honda)', type: 'mower', make: 'Honda', model: 'HRX217VKA', year: 2024, purchaseDate: '2024-04-15', currentHours: 289, serviceInterval: 25, lastServiceDate: '2026-05-28', lastServiceHours: 270, notes: '' },
+  { id: 'eq_3', name: 'Trimmer #1 (Stihl)', type: 'trimmer', make: 'Stihl', model: 'FS 56 RC-E', year: 2023, purchaseDate: '2023-05-01', currentHours: 198, serviceInterval: 20, lastServiceDate: '2026-05-15', lastServiceHours: 180, notes: '' },
+  { id: 'eq_4', name: 'Truck (Ford F-150)', type: 'truck', make: 'Ford', model: 'F-150', year: 2022, purchaseDate: '2022-03-10', currentHours: 48230, serviceInterval: 5000, lastServiceDate: '2026-04-20', lastServiceHours: 45000, notes: 'Oil change every 5,000 mi. Rotate tires every 10K.' }
+];
+
+/* === 3 SAMPLE CREW MEMBERS === */
+var SAMPLE_CREW = [
+  { id: 'crew_1', name: 'You (Owner)', role: 'Owner/Operator', phone: '555-0100', color: '#B8862E' },
+  { id: 'crew_2', name: 'Alex Martinez', role: 'Lead Crew', phone: '555-0101', color: '#1F5F5B' },
+  { id: 'crew_3', name: 'Sam Johnson', role: 'Crew Member', phone: '555-0102', color: '#2D6A3E' }
+];
+
+/* === 14 SAMPLE JOBS (2 weeks of scheduled work) === */
+var SAMPLE_JOBS = (function() {
+  function sampleDate(offsetDays) {
+    var d = new Date();
+    // Snap to current week's Monday
+    var day = d.getDay();
+    var monday = new Date(d);
+    monday.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
+    monday.setDate(monday.getDate() + offsetDays);
+    return monday.getFullYear() + '-' + String(monday.getMonth() + 1).padStart(2, '0') + '-' + String(monday.getDate()).padStart(2, '0');
+  }
+  var prevMon = sampleDate(-7), prevThu = sampleDate(-4), prevFri = sampleDate(-3);
+  var mon = sampleDate(0), tue = sampleDate(1), wed = sampleDate(2), thu = sampleDate(3), fri = sampleDate(4), sat = sampleDate(5);
+  return [
+    { id: 'job_1', serviceTypeId: 'svc_mow_weekly', propertyId: 'prop_1', date: mon, startTime: '08:00', duration: 60, status: 'completed', assignedCrew: ['crew_1'], assignedEquipment: ['eq_1'], notes: '', completedAt: mon + 'T08:55:00', completedNotes: 'Done. Mowed at 3 inches.' },
+    { id: 'job_2', serviceTypeId: 'svc_mow_weekly', propertyId: 'prop_3', date: mon, startTime: '09:30', duration: 180, status: 'completed', assignedCrew: ['crew_2', 'crew_3'], assignedEquipment: ['eq_2', 'eq_3'], notes: 'After-hours preferred (10am+)', completedAt: mon + 'T12:45:00', completedNotes: '' },
+    { id: 'job_3', serviceTypeId: 'svc_mow_biweekly', propertyId: 'prop_2', date: tue, startTime: '08:00', duration: 60, status: 'in_progress', assignedCrew: ['crew_1'], assignedEquipment: ['eq_1'], notes: '', completedAt: null, completedNotes: '' },
+    { id: 'job_4', serviceTypeId: 'svc_weed', propertyId: 'prop_1', date: wed, startTime: '08:00', duration: 45, status: 'scheduled', assignedCrew: ['crew_1'], assignedEquipment: [], notes: 'Spot spray broadleaf weeds.', completedAt: null, completedNotes: '' },
+    { id: 'job_5', serviceTypeId: 'svc_mow_weekly', propertyId: 'prop_3', date: wed, startTime: '10:00', duration: 180, status: 'scheduled', assignedCrew: ['crew_2', 'crew_3'], assignedEquipment: ['eq_2', 'eq_3'], notes: '', completedAt: null, completedNotes: '' },
+    { id: 'job_6', serviceTypeId: 'svc_equipment', propertyId: null, date: thu, startTime: '14:00', duration: 60, status: 'scheduled', assignedCrew: ['crew_1'], assignedEquipment: ['eq_1', 'eq_2'], notes: 'Blade sharpen + oil change on both mowers', completedAt: null, completedNotes: '' },
+    { id: 'job_7', serviceTypeId: 'svc_hedge', propertyId: 'prop_4', date: fri, startTime: '09:00', duration: 90, status: 'scheduled', assignedCrew: ['crew_1'], assignedEquipment: ['eq_3'], notes: 'Front hedge only.', completedAt: null, completedNotes: '' },
+    { id: 'job_8', serviceTypeId: 'svc_mow_weekly', propertyId: 'prop_1', date: fri, startTime: '08:00', duration: 60, status: 'scheduled', assignedCrew: ['crew_1'], assignedEquipment: ['eq_1'], notes: '', completedAt: null, completedNotes: '' },
+    { id: 'job_9', serviceTypeId: 'svc_mow_monthly', propertyId: 'prop_5', date: sat, startTime: '11:00', duration: 120, status: 'scheduled', assignedCrew: ['crew_2', 'crew_3'], assignedEquipment: ['eq_2', 'eq_3'], notes: 'Field + playground perimeter.', completedAt: null, completedNotes: '' },
+    { id: 'job_10', serviceTypeId: 'svc_mow_biweekly', propertyId: 'prop_2', date: sat, startTime: '08:00', duration: 60, status: 'scheduled', assignedCrew: ['crew_1'], assignedEquipment: ['eq_1'], notes: '', completedAt: null, completedNotes: '' },
+    { id: 'job_11', serviceTypeId: 'svc_mow_weekly', propertyId: 'prop_3', date: sat, startTime: '10:00', duration: 180, status: 'scheduled', assignedCrew: ['crew_2', 'crew_3'], assignedEquipment: ['eq_2', 'eq_3'], notes: '', completedAt: null, completedNotes: '' },
+    { id: 'job_12', serviceTypeId: 'svc_mow_weekly', propertyId: 'prop_1', date: prevMon, startTime: '08:00', duration: 60, status: 'completed', assignedCrew: ['crew_1'], assignedEquipment: ['eq_1'], notes: '', completedAt: prevMon + 'T08:50:00', completedNotes: 'Standard mow.' },
+    { id: 'job_13', serviceTypeId: 'svc_spring_cleanup', propertyId: 'prop_4', date: prevThu, startTime: '07:00', duration: 240, status: 'completed', assignedCrew: ['crew_1', 'crew_2'], assignedEquipment: ['eq_1', 'eq_3'], notes: 'Spring cleanup + mulch install.', completedAt: prevThu + 'T11:30:00', completedNotes: 'Mulch done. Looks great.' },
+    { id: 'job_14', serviceTypeId: 'svc_fert', propertyId: 'prop_3', date: prevFri, startTime: '10:00', duration: 90, status: 'skipped', assignedCrew: ['crew_1'], assignedEquipment: [], notes: 'Rescheduled due to rain forecast.', completedAt: null, completedNotes: 'Postponed — rain.' }
+  ];
+})();
+
+/* === STATE PERSISTENCE === */
+function loadState() {
+  try {
+    var raw = localStorage.getItem(STATE_KEY);
+    if (raw) {
+      var loaded = JSON.parse(raw);
+      state = Object.assign({}, defaultState, loaded);
+      if (!state.properties) state.properties = [];
+      if (!state.equipment) state.equipment = [];
+      if (!state.jobs) state.jobs = [];
+      if (!state.crew) state.crew = [];
+      if (!state.log) state.log = [];
+    } else {
+      state.properties = SAMPLE_PROPERTIES.slice();
+      state.equipment = SAMPLE_EQUIPMENT.slice();
+      state.jobs = SAMPLE_JOBS.slice();
+      state.crew = SAMPLE_CREW.slice();
+      saveState();
+    }
+  } catch (e) {
+    state = JSON.parse(JSON.stringify(defaultState));
+    state.properties = SAMPLE_PROPERTIES.slice();
+    state.equipment = SAMPLE_EQUIPMENT.slice();
+    state.jobs = SAMPLE_JOBS.slice();
+    state.crew = SAMPLE_CREW.slice();
+  }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(STATE_KEY, JSON.stringify(state));
+  } catch (e) {
+    // QuotaExceededError, SecurityError (private mode), or serialisation failure.
+    // Surface to the user — silent data loss is worse than a noisy warning.
+    var msg = (e && e.name === 'QuotaExceededError')
+      ? 'storage full — older data not saved. Export a JSON backup.'
+      : 'could not save: ' + (e && e.message ? e.message : 'storage error');
+    if (typeof toast === 'function') toast(msg, 'error');
+  }
+}
+
+/* === HELPERS === */
+function uid(prefix) { return prefix + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+function formatCurrency(n) { if (n == null || isNaN(n)) return '$0.00'; return '$' + Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+function formatDate(s) { if (!s) return '—'; var d = parseLocalDate(s); if (isNaN(d)) return s; var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear(); }
+function escapeHtml(s) { if (s == null) return ''; return String(s).replace(/[&<>"'\/]/g, function(c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '/': '&#x2F;' }[c]; }); }
+var CORNERS = '<span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>';
+function statCard(num, label) { return '<div class="stat-card">' + CORNERS + '<div class="stat-num">' + num + '</div><div class="stat-label">' + escapeHtml(label) + '</div></div>'; }
+// Returns today's date as 'YYYY-MM-DD' in LOCAL time (not UTC — avoids off-by-one-day for Americas timezones)
+function localDate() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+// Parse 'YYYY-MM-DD' as LOCAL midnight (not UTC). new Date('YYYY-MM-DD') is UTC; we want local-day comparisons.
+function parseLocalDate(s) {
+  if (!s) return new Date(NaN);
+  if (s instanceof Date) return new Date(s.getFullYear(), s.getMonth(), s.getDate());
+  var parts = String(s).split('-');
+  if (parts.length === 3) {
+    var y = parseInt(parts[0], 10), m = parseInt(parts[1], 10) - 1, d = parseInt(parts[2], 10);
+    if (!isNaN(y) && !isNaN(m) && !isNaN(d)) return new Date(y, m, d);
+  }
+  var fallback = new Date(s);
+  return new Date(fallback.getFullYear(), fallback.getMonth(), fallback.getDate());
+}
+function debounce(fn, ms) { var t; return function() { var args = arguments; var self = this; clearTimeout(t); t = setTimeout(function() { fn.apply(self, args); }, ms); }; }
+
+function getJobById(id) { for (var i = 0; i < state.jobs.length; i++) if (state.jobs[i].id === id) return state.jobs[i]; return null; }
+function getPropertyById(id) { for (var i = 0; i < state.properties.length; i++) if (state.properties[i].id === id) return state.properties[i]; return null; }
+function getEquipmentById(id) { for (var i = 0; i < state.equipment.length; i++) if (state.equipment[i].id === id) return state.equipment[i]; return null; }
+function getCrewById(id) { for (var i = 0; i < state.crew.length; i++) if (state.crew[i].id === id) return state.crew[i]; return null; }
+function getServiceTypeById(id) { for (var i = 0; i < DEFAULT_SERVICE_TYPES.length; i++) if (DEFAULT_SERVICE_TYPES[i].id === id) return DEFAULT_SERVICE_TYPES[i]; return null; }
+
+function getWeekStart(date) {
+  var d = new Date(date);
+  var day = d.getDay();
+  var diff = (state.settings.weekStartsOn === 1) ? (day === 0 ? -6 : 1 - day) : -day;
+  d.setDate(d.getDate() + diff);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+function getWeekEnd(weekStart) {
+  var d = new Date(weekStart);
+  d.setDate(d.getDate() + 6);
+  return d;
+}
+
+function formatWeekLabel(weekStart) {
+  var end = getWeekEnd(weekStart);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  if (weekStart.getMonth() === end.getMonth()) {
+    return months[weekStart.getMonth()] + ' ' + weekStart.getDate() + ' – ' + end.getDate() + ', ' + weekStart.getFullYear();
+  }
+  return months[weekStart.getMonth()] + ' ' + weekStart.getDate() + ' – ' + months[end.getMonth()] + ' ' + end.getDate() + ', ' + end.getFullYear();
+}
+
+function getJobsForWeek(weekStart) {
+  var weekEnd = getWeekEnd(weekStart);
+  return state.jobs.filter(function(j) {
+    var d = parseLocalDate(j.date);
+    return d >= weekStart && d <= weekEnd;
+  }).sort(function(a, b) {
+    if (a.date !== b.date) return a.date < b.date ? -1 : 1;
+    return (a.startTime || '') < (b.startTime || '') ? -1 : 1;
+  });
+}
+
+function getTotalScheduledHours(jobs) {
+  return jobs.reduce(function(s, j) { return s + (j.duration || 0); }, 0) / 60;
+}
+
+function getCompletionRate(jobs) {
+  if (!jobs.length) return 0;
+  var completed = jobs.filter(function(j) { return j.status === 'completed'; }).length;
+  return Math.round(completed / jobs.length * 100);
+}
+
+/* === VIEW SWITCHING === */
+function switchView(view) {
+  if (!view) return;
+  currentView = view;
+  // Always return to the top of the page when switching views
+  try { document.getElementById('main-content').scrollTop = 0; } catch(e) {}
+  document.querySelectorAll('.view-container').forEach(function(v) { v.classList.remove('active'); });
+  var el = document.getElementById('view-' + view);
+  if (el) el.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(function(i) {
+    i.classList.remove('active'); i.removeAttribute('aria-current');
+    if (i.getAttribute('data-view') === view) { i.classList.add('active'); i.setAttribute('aria-current', 'page'); }
+  });
+  updateTopbar(view);
+  if (view === 'schedule') renderSchedule();
+  else if (view === 'new') renderNewJob();
+  else if (view === 'log') renderLog();
+  else if (view === 'properties') renderProperties();
+  else if (view === 'equipment') renderEquipment();
+  else if (view === 'settings') renderSettings();
+  else if (view === 'export') renderExport();
+  // Move focus into the new view region so screen readers announce the change.
+  // Defer slightly so freshly rendered content is in the DOM first.
+  if (el) {
+    el.setAttribute('tabindex', '-1');
+    setTimeout(function () {
+      try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); }
+      window.scrollTo(0, 0);
+    }, 0);
+  }
+  saveState();
+}
+
+function updateTopbar(view) {
+  var titles = {
+    schedule: ['Schedule', 'this week + next'],
+    'new': ['New Job', 'add to schedule'],
+    log: ['Log', 'completed work history'],
+    properties: ['Properties', 'service locations'],
+    equipment: ['Equipment', 'machines + maintenance'],
+    settings: ['Settings', 'preferences & data'],
+    export: ['Export', 'CSV + JSON backup'],
+    help: ['Help', 'keyboard shortcuts']
+  };
+  var t = titles[view] || ['LawnSchedule', 'pro suite'];
+  document.getElementById('page-title').innerHTML = t[0] + ' <em>— ' + t[1] + '</em>';
+  document.getElementById('page-breadcrumb').textContent = 'WORKSPACE / LAWNSCHEDULE / ' + t[0].toUpperCase();
+  var actions = document.getElementById('topbar-actions');
+  if (view === 'schedule') {
+    actions.innerHTML = '<button class="btn" onclick="printWeekSchedule()" title="Print weekly schedule (⌘P)">Print</button><button class="btn btn-accent" onclick="newJob()" title="Create a new job (⌘N)"><span>■</span><span>New Job</span><span class="kbd">⌘</span><span class="kbd">N</span></button>';
+  } else if (view === 'new') {
+    actions.innerHTML = '<button class="btn" onclick="switchView(\'schedule\')">← Back to schedule</button><button class="btn btn-accent" onclick="saveJob()">Save to Schedule</button>';
+  } else if (view === 'properties') {
+    actions.innerHTML = '<button class="btn btn-accent" onclick="openPropertyForm(null)">+ Add property</button>';
+  } else if (view === 'equipment') {
+    actions.innerHTML = '<button class="btn btn-accent" onclick="openEquipmentForm(null)">+ Add equipment</button>';
+  } else if (view === 'settings') {
+    actions.innerHTML = '<button class="btn btn-accent" onclick="saveSettings()">Save settings</button>';
+  } else if (view === 'export') {
+    actions.innerHTML = '<button class="btn" onclick="switchView(\'schedule\')">Back to schedule</button>';
+  } else {
+    actions.innerHTML = '';
+  }
+}
+
+/* === VIEW 01: SCHEDULE === */
+function renderSchedule() {
+  if (!currentWeekStart) currentWeekStart = getWeekStart(new Date());
+  var weekJobs = getJobsForWeek(currentWeekStart);
+  var hours = getTotalScheduledHours(weekJobs);
+  var completion = getCompletionRate(weekJobs);
+  var propertiesServed = new Set(weekJobs.filter(function(j) { return j.propertyId; }).map(function(j) { return j.propertyId; })).size;
+  document.getElementById('schedule-stats').innerHTML =
+    statCard(weekJobs.length, 'Jobs This Week') +
+    statCard(hours.toFixed(1) + 'h', 'Hours Scheduled') +
+    statCard(propertiesServed, 'Properties Served') +
+    statCard(completion + '%', 'Completion Rate');
+  document.getElementById('schedule-week-label').textContent = formatWeekLabel(currentWeekStart);
+  var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var html = '';
+  for (var i = 0; i < 7; i++) {
+    var day = new Date(currentWeekStart);
+    day.setDate(day.getDate() + i);
+    var isToday = day.getTime() === today.getTime();
+    var dayJobs = weekJobs.filter(function(j) {
+      var jd = parseLocalDate(j.date);
+      return jd.getTime() === day.getTime();
+    });
+    var dayHours = getTotalScheduledHours(dayJobs);
+    html += '<div class="schedule-day' + (isToday ? ' today' : '') + '">';
+    html += '<div class="schedule-day-head"><div class="schedule-day-name">' + days[day.getDay()] + '</div><div class="schedule-day-date">' + (day.getMonth() + 1) + '/' + day.getDate() + '</div><div class="schedule-day-hours">' + dayHours.toFixed(1) + 'h scheduled</div></div>';
+    html += '<div class="schedule-day-jobs">';
+    if (dayJobs.length === 0) {
+      html += '<div class="schedule-day-empty">No jobs</div>';
+    } else {
+      dayJobs.forEach(function(j) {
+        var prop = j.propertyId ? getPropertyById(j.propertyId) : null;
+        var svc = getServiceTypeById(j.serviceTypeId);
+        var crewNames = (j.assignedCrew || []).map(function(cid) { var c = getCrewById(cid); return c ? c.name : '?'; }).join(', ');
+        html += '<div class="job-card status-' + j.status + '" role="button" tabindex="0" aria-haspopup="menu" aria-expanded="false" aria-label="Open job actions for ' + escapeHtml(prop ? prop.name : 'job') + '" data-job-id="' + j.id + '" onclick="openJobPopover(event, \'' + j.id + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openJobPopover(event, \'' + j.id + '\');}">';
+        html += '<div class="job-card-property">' + escapeHtml(prop ? prop.name : 'No property') + '</div>';
+        html += '<div class="job-card-service">' + escapeHtml(svc ? svc.name : 'Service') + '</div>';
+        html += '<div class="job-card-time">' + (j.startTime ? formatTime(j.startTime) : 'All day') + ' · ' + (j.duration || 60) + 'min</div>';
+        if (crewNames) html += '<div class="job-card-crew">👤 ' + escapeHtml(crewNames) + '</div>';
+        html += '</div>';
+      });
+    }
+    html += '</div></div>';
+  }
+  document.getElementById('schedule-grid').innerHTML = html;
+}
+
+function prevWeek() { var d = new Date(currentWeekStart.getTime()); d.setDate(d.getDate() - 7); currentWeekStart = d; renderSchedule(); }
+function nextWeek() { var d = new Date(currentWeekStart.getTime()); d.setDate(d.getDate() + 7); currentWeekStart = d; renderSchedule(); }
+function goToToday() { currentWeekStart = getWeekStart(new Date()); renderSchedule(); }
+
+function newJob() {
+  previousView = currentView;
+  currentJobId = null;
+  jobFormState = { jobId: null, fields: { date: localDate(), duration: 60, status: 'scheduled' }, assignedCrew: [], assignedEquipment: [] };
+  switchView('new');
+  toast('new job form', 'info');
+}
+
+function loadJobForEdit(id) {
+  var j = getJobById(id);
+  if (!j) { toast('job not found', 'error'); return; }
+  previousView = currentView;
+  currentJobId = id;
+  jobFormState = {
+    jobId: id,
+    fields: Object.assign({}, j),
+    assignedCrew: (j.assignedCrew || []).slice(),
+    assignedEquipment: (j.assignedEquipment || []).slice()
+  };
+  switchView('new');
+}
+
+function openJobPopover(event, id) {
+  if (event) event.stopPropagation();
+  closeStatusPopover();
+  var trigger = event ? event.currentTarget : null;
+  /* Fix #7: mark the triggering card as expanded */
+  if (trigger) trigger.setAttribute('aria-expanded', 'true');
+  var j = getJobById(id);
+  if (!j) return;
+  var pop = document.createElement('div');
+  pop.className = 'status-popover';
+  pop.id = 'status-popover';
+  pop.setAttribute('role', 'menu');
+  var html = '<div class="status-popover-title">job actions</div>';
+  html += '<div class="status-popover-current">currently: <strong>' + j.status.replace('_', ' ') + '</strong></div>';
+  html += '<div class="status-popover-list">';
+  var nextStates = getNextJobStates(j.status);
+  if (nextStates.length === 0) {
+    html += '<div class="status-popover-empty">no transitions available</div>';
+  } else {
+    nextStates.forEach(function(s) {
+      var label = getJobStateLabel(s);
+      var icon = getJobStateIcon(s);
+      html += '<button type="button" class="status-popover-item" data-status="' + s + '" data-id="' + id + '"><span class="status-popover-icon">' + icon + '</span><span class="status-popover-label">' + escapeHtml(label) + '</span><span class="status-popover-key">→ ' + s.replace('_', ' ') + '</span></button>';
+    });
+  }
+  html += '</div><div class="status-popover-sep"></div>';
+  html += '<button type="button" class="status-popover-item" onclick="closeStatusPopover(); loadJobForEdit(\'' + id + '\')"><span class="status-popover-icon">✎</span><span class="status-popover-label">edit details</span></button>';
+  html += '<button type="button" class="status-popover-item" onclick="closeStatusPopover(); rescheduleJob(\'' + id + '\')"><span class="status-popover-icon">↻</span><span class="status-popover-label">reschedule</span></button>';
+  html += '<button type="button" class="status-popover-item btn-danger" onclick="closeStatusPopover(); deleteJob(\'' + id + '\')"><span class="status-popover-icon">×</span><span class="status-popover-label">delete</span></button>';
+  pop.innerHTML = html;
+  var rect = event.currentTarget.getBoundingClientRect();
+  pop.style.position = 'fixed';
+  pop.style.visibility = 'hidden';
+  document.body.appendChild(pop);
+  var popRect = pop.getBoundingClientRect();
+  var popW = popRect.width || 240;
+  var popH = popRect.height || 220;
+  var vw = window.innerWidth;
+  var vh = window.innerHeight;
+  var gap = 4;
+  var top = rect.bottom + gap;
+  if (top + popH > vh - 8) top = rect.top - gap - popH;
+  if (top < 8) top = 8;
+  var left = rect.left;
+  if (left + popW > vw - 8) left = vw - 8 - popW;
+  if (left < 8) left = 8;
+  pop.style.top = top + 'px';
+  pop.style.left = left + 'px';
+  pop.style.maxHeight = (vh - 16) + 'px';
+  pop.style.overflowY = 'auto';
+  pop.style.visibility = 'visible';
+  pop.querySelectorAll('.status-popover-item[data-status]').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      quickChangeJobStatus(btn.getAttribute('data-id'), btn.getAttribute('data-status'));
+    });
+  });
+  var firstItem = pop.querySelector('.status-popover-item');
+  if (firstItem) setTimeout(function() { firstItem.focus(); }, 0);
+  pop.addEventListener('keydown', function(e) {
+    var items = Array.prototype.slice.call(pop.querySelectorAll('.status-popover-item'));
+    var idx = items.indexOf(document.activeElement);
+    if (e.key === 'Escape') { e.preventDefault(); closeStatusPopover(); if (trigger) trigger.focus(); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); var next = items[(idx + 1) % items.length]; if (next) next.focus(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); var prev = items[(idx - 1 + items.length) % items.length]; if (prev) prev.focus(); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (document.activeElement && pop.contains(document.activeElement)) document.activeElement.click(); }
+  });
+}
+
+function closeStatusPopover() {
+  var pop = document.getElementById('status-popover');
+  if (pop) pop.remove();
+  /* Fix #7: reset aria-expanded on all job cards when popover closes */
+  document.querySelectorAll('.job-card[aria-expanded="true"]').forEach(function(c) { c.setAttribute('aria-expanded', 'false'); });
+}
+
+function getNextJobStates(current) {
+  return {
+    scheduled:    ['in_progress', 'completed', 'skipped', 'cancelled'],
+    in_progress:  ['completed', 'skipped', 'cancelled'],
+    completed:    [],
+    skipped:      ['scheduled', 'cancelled'],
+    cancelled:    ['scheduled']
+  }[current] || [];
+}
+
+function getJobStateLabel(s) {
+  return { scheduled: 'Mark as scheduled', in_progress: 'Mark in progress', completed: 'Mark as completed', skipped: 'Mark as skipped', cancelled: 'Mark as cancelled' }[s] || s;
+}
+
+function getJobStateIcon(s) {
+  return { scheduled: '📅', in_progress: '▶', completed: '✓', skipped: '⏭', cancelled: '×' }[s] || '·';
+}
+
+function calcNextService(jobDate, frequency) {
+  var days = { weekly: 7, biweekly: 14, monthly: 30 }[frequency];
+  if (!days) return null;
+  var d = parseLocalDate(jobDate);
+  d.setDate(d.getDate() + days);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function quickChangeJobStatus(id, status) {
+  closeStatusPopover();
+  var j = getJobById(id);
+  if (!j) return;
+  j.status = status;
+  if (status === 'completed' && !j.completedAt) j.completedAt = new Date().toISOString();
+  if (status === 'completed' && j.propertyId) {
+    var p = getPropertyById(j.propertyId);
+    if (p) {
+      p.lastService = j.date;
+      /* Fix #9: auto-calculate nextService from frequency + completion date */
+      p.nextService = calcNextService(j.date, p.frequency);
+    }
+  }
+  saveState();
+  renderSchedule();
+  toast('job marked as ' + status.replace('_', ' '), 'success');
+}
+
+function rescheduleJob(id) {
+  loadJobForEdit(id);
+}
+
+function deleteJob(id) {
+  var j = getJobById(id);
+  if (!j) return;
+  confirmDialog({
+    title: 'Delete job?', body: 'Delete this job? This cannot be undone.', danger: true,
+    onConfirm: function() {
+      state.jobs = state.jobs.filter(function(x) { return x.id !== id; });
+      saveState();
+      if (currentView === 'log') renderLog();
+      else renderSchedule();
+      toast('job deleted', 'info');
+    }
+  });
+}
+
+/* === VIEW 02: NEW JOB === */
+function renderNewJob() {
+  var j = jobFormState.jobId ? getJobById(jobFormState.jobId) : null;
+  var f = jobFormState.fields;
+  var html = '<div class="settings-section"><h3>Service Details</h3>';
+  html += '<div class="form-row"><div class="field"><label for="job-svc">Service type <span class="req" aria-hidden="true">*</span></label>';
+  html += '<select id="job-svc" required aria-required="true" onchange="updateJobField(\'serviceTypeId\', this.value); updateJobDuration(this.value)">';
+  html += '<option value="">-- select service --</option>';
+  DEFAULT_SERVICE_TYPES.forEach(function(s) {
+    html += '<option value="' + s.id + '"' + (f.serviceTypeId === s.id ? ' selected' : '') + '>' + s.name + ' (' + s.defaultDuration + 'min)</option>';
+  });
+  html += '</select></div></div>';
+  html += '<div class="form-row">';
+  html += '<div class="field"><label for="job-date">Date <span class="req" aria-hidden="true">*</span></label><input type="date" id="job-date" value="' + escapeHtml(f.date || '') + '" required aria-required="true" onchange="updateJobField(\'date\', this.value)"/></div>';
+  /* Fix #1+#6: tp-clear is now a sibling of tp-btn (not nested inside it), class is tp-val not tp-display */
+  html += '<div class="field"><label for="job-time-btn">Start time</label><div class="tp-wrap"><button type="button" class="tp-btn" id="job-time-btn" aria-expanded="false" aria-haspopup="listbox" onclick="toggleTimeDrop(\'job-time\')"><span class="tp-val" id="job-time-display">not set</span><span class="tp-arrow">▾</span></button><button type="button" class="tp-clear" id="job-time-clear" title="Clear time" onclick="clearTimePicker(\'job-time\')">×</button><div class="tp-drop" id="job-time-drop" role="listbox"></div><input type="hidden" id="job-time" value="' + escapeHtml(f.startTime || '') + '"></div></div>';
+  /* Fix #7: use oninput for real-time sync; saveJob also reads from DOM directly */
+  html += '<div class="field"><label for="job-duration">Duration (minutes)</label><input type="number" id="job-duration" inputmode="numeric" autocomplete="off" value="' + (f.duration || 60) + '" oninput="updateJobField(\'duration\', parseInt(this.value, 10)||0)"/></div>';
+  html += '<div class="field"><label for="job-status">Status</label><select id="job-status" onchange="updateJobField(\'status\', this.value)">';
+  ['scheduled', 'in_progress', 'completed', 'skipped', 'cancelled'].forEach(function(s) {
+    html += '<option value="' + s + '"' + (f.status === s ? ' selected' : '') + '>' + s.replace('_', ' ') + '</option>';
+  });
+  html += '</select></div></div>';
+  html += '</div>';
+  html += '<div class="settings-section"><h3>Property</h3>';
+  html += '<div class="form-row"><div class="field"><label for="job-prop">Property (optional — leave blank for shop work)</label>';
+  html += '<select id="job-prop" onchange="updateJobField(\'propertyId\', this.value)">';
+  html += '<option value="">-- no property --</option>';
+  state.properties.forEach(function(p) {
+    /* Fix #12: escapeHtml on p.type in option text */
+    html += '<option value="' + p.id + '"' + (f.propertyId === p.id ? ' selected' : '') + '>' + escapeHtml(p.name) + (p.type ? ' (' + escapeHtml(p.type) + ')' : '') + '</option>';
+  });
+  html += '</select></div></div></div>';
+  /* Fix #15: wrap checkbox groups in fieldset/legend for screen readers */
+  html += '<div class="settings-section"><fieldset style="border:0;padding:0;margin:0;"><legend style="font-size:var(--fs-md);font-weight:700;margin:0 0 var(--sp-4);padding-bottom:var(--sp-2);border-bottom:1px solid var(--line);width:100%;">Crew Assignment</legend>';
+  html += '<div class="form-row">';
+  state.crew.forEach(function(c) {
+    var checked = jobFormState.assignedCrew.indexOf(c.id) >= 0 ? 'checked' : '';
+    html += '<div class="field field-checkbox"><label class="checkbox-label"><input type="checkbox" class="inline" ' + checked + ' onchange="toggleCrew(\'' + c.id + '\', this.checked)"/>' + escapeHtml(c.name) + '</label></div>';
+  });
+  html += '</div></fieldset></div>';
+  html += '<div class="settings-section"><fieldset style="border:0;padding:0;margin:0;"><legend style="font-size:var(--fs-md);font-weight:700;margin:0 0 var(--sp-4);padding-bottom:var(--sp-2);border-bottom:1px solid var(--line);width:100%;">Equipment</legend>';
+  html += '<div class="form-row">';
+  state.equipment.forEach(function(eq) {
+    var checked = jobFormState.assignedEquipment.indexOf(eq.id) >= 0 ? 'checked' : '';
+    html += '<div class="field field-checkbox"><label class="checkbox-label"><input type="checkbox" class="inline" ' + checked + ' onchange="toggleEquipment(\'' + eq.id + '\', this.checked)"/>' + escapeHtml(eq.name) + '</label></div>';
+  });
+  html += '</div></fieldset></div>';
+  html += '<div class="settings-section"><h3>Notes (internal — not printed)</h3>';
+  /* Fix #7: oninput for textarea so notes aren't lost if user clicks Save without blurring */
+  html += '<textarea id="job-notes" maxlength="2000" aria-label="Internal notes" oninput="updateJobField(\'notes\', this.value)" placeholder="Gate code, dog warning, special instructions...">' + escapeHtml(f.notes || '') + '</textarea>';
+  html += '</div>';
+  html += '<div style="display: flex; gap: var(--sp-2); margin-top: var(--sp-3);">';
+  html += '<button class="btn btn-accent" onclick="saveJob()">' + (j ? 'Update job' : 'Save to Schedule') + '</button>';
+  /* Fix #9: Cancel returns to previousView, not always schedule */
+  html += '<button class="btn" onclick="switchView(previousView || \'schedule\')">Cancel</button>';
+  if (j) html += '<button class="btn" style="color: var(--red); margin-left: auto;" onclick="deleteJob(\'' + j.id + '\');">Delete job</button>';
+  html += '</div>';
+  document.getElementById('new-form').innerHTML = html;
+  if (f.startTime) setTimePicker('job-time', f.startTime);
+}
+
+function updateJobField(key, value) {
+  jobFormState.fields[key] = value;
+}
+
+function updateJobDuration(svcId) {
+  var svc = getServiceTypeById(svcId);
+  if (svc) {
+    jobFormState.fields.duration = svc.defaultDuration;
+    var durEl = document.getElementById('job-duration');
+    if (durEl) durEl.value = svc.defaultDuration;
+  }
+}
+
+function toggleCrew(crewId, checked) {
+  if (checked) { if (jobFormState.assignedCrew.indexOf(crewId) < 0) jobFormState.assignedCrew.push(crewId); }
+  else { jobFormState.assignedCrew = jobFormState.assignedCrew.filter(function(x) { return x !== crewId; }); }
+}
+
+function toggleEquipment(eqId, checked) {
+  if (checked) { if (jobFormState.assignedEquipment.indexOf(eqId) < 0) jobFormState.assignedEquipment.push(eqId); }
+  else { jobFormState.assignedEquipment = jobFormState.assignedEquipment.filter(function(x) { return x !== eqId; }); }
+}
+
+function saveJob() {
+  var f = jobFormState.fields;
+  // Sync time picker value (custom tp-wrap writes to hidden input, not jobFormState)
+  var timeHidden = document.getElementById('job-time');
+  if (timeHidden) f.startTime = timeHidden.value || '';
+  // Fix #7: read notes/duration directly from DOM so blur-before-save isn't required
+  var notesEl = document.getElementById('job-notes');
+  if (notesEl) f.notes = notesEl.value;
+  var durEl = document.getElementById('job-duration');
+  if (durEl) f.duration = parseInt(durEl.value, 10) || 0;
+  if (!f.serviceTypeId) { toast('select a service type', 'error'); return; }
+  if (!f.date) { toast('pick a date', 'error'); return; }
+  // Fix #19: validate duration
+  if (!f.duration || f.duration < 1 || isNaN(f.duration)) { toast('duration must be at least 1 minute', 'error'); return; }
+  if (jobFormState.jobId) {
+    var j = getJobById(jobFormState.jobId);
+    Object.assign(j, f);
+    j.assignedCrew = jobFormState.assignedCrew.slice();
+    j.assignedEquipment = jobFormState.assignedEquipment.slice();
+    toast('job updated', 'success');
+  } else {
+    var newJ = Object.assign({}, f, {
+      id: uid('job'),
+      assignedCrew: jobFormState.assignedCrew.slice(),
+      assignedEquipment: jobFormState.assignedEquipment.slice(),
+      completedAt: null,
+      completedNotes: ''
+    });
+    state.jobs.push(newJ);
+    jobFormState.jobId = newJ.id;
+    currentJobId = newJ.id;
+    toast('job saved', 'success');
+  }
+  saveState();
+  /* Fix #9: update property lastService + nextService whenever a completed job is saved */
+  var savedJob = jobFormState.jobId ? getJobById(jobFormState.jobId) : (state.jobs[state.jobs.length - 1]);
+  if (savedJob && savedJob.status === 'completed' && savedJob.propertyId) {
+    var sp = getPropertyById(savedJob.propertyId);
+    if (sp) { sp.lastService = savedJob.date; sp.nextService = calcNextService(savedJob.date, sp.frequency); saveState(); }
+  }
+  switchView(previousView || 'schedule');
+}
+
+/* === VIEW 03: LOG === */
+var logFilter = { status: 'all' };
+function renderLog() {
+  var all = state.jobs.filter(function(j) { return j.status === 'completed' || j.status === 'skipped' || j.status === 'cancelled'; });
+  var thisWeek = getJobsForWeek(getWeekStart(new Date()));
+  var completedThisWeek = thisWeek.filter(function(j) { return j.status === 'completed'; });
+  var avgDuration = all.length ? all.reduce(function(s, j) { return s + (j.duration || 0); }, 0) / all.length : 0;
+  document.getElementById('log-stats').innerHTML =
+    statCard(all.length, 'Total Logged') +
+    statCard(completedThisWeek.length, 'This Week') +
+    statCard(Math.round(avgDuration) + 'min', 'Avg Duration') +
+    statCard((all.length ? Math.round(all.filter(function(j) { return j.status === 'completed'; }).length / all.length * 100) : 0) + '%', 'Completion Rate');
+  var statuses = ['all', 'completed', 'skipped', 'cancelled'];
+  document.getElementById('log-status-pills').innerHTML = statuses.map(function(s) {
+    var active = logFilter.status === s ? ' active' : '';
+    var count = s === 'all' ? all.length : all.filter(function(j) { return j.status === s; }).length;
+    return '<button class="pill' + active + '" aria-pressed="' + (logFilter.status === s ? 'true' : 'false') + '" onclick="setLogFilter(\'' + s + '\')">' + s + ' <span class="pill-count">' + count + '</span></button>';
+  }).join('');
+  var rows = all.filter(function(j) { return logFilter.status === 'all' || j.status === logFilter.status; });
+  rows.sort(function(a, b) { return a.date < b.date ? 1 : -1; });
+  var tbody = document.getElementById('log-tbody');
+  if (rows.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--ink-2);">No log entries yet. Mark a job as completed to log it.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(function(j) {
+    var prop = j.propertyId ? getPropertyById(j.propertyId) : null;
+    var svc = getServiceTypeById(j.serviceTypeId);
+    var crewNames = (j.assignedCrew || []).map(function(cid) { var c = getCrewById(cid); return c ? c.name : '?'; }).join(', ');
+    var actions = '<button class="btn btn-sm" onclick="loadJobForEdit(\'' + j.id + '\')">view</button> <button class="btn btn-sm btn-danger" onclick="deleteJob(\'' + j.id + '\')">del</button>';
+    return '<tr><td data-label="Date">' + formatDate(j.date) + '</td><td data-label="Property">' + escapeHtml(prop ? prop.name : '—') + '</td><td data-label="Service">' + escapeHtml(svc ? svc.name : '—') + '</td><td data-label="Crew">' + escapeHtml(crewNames || '—') + '</td><td data-label="Duration">' + (j.duration || 0) + 'min</td><td data-label="Status"><span class="status-badge status-' + j.status + '">' + j.status.replace('_', ' ') + '</span></td><td data-label="Notes">' + escapeHtml((j.completedNotes || j.notes || '').slice(0, 60)) + '</td><td data-label="Actions" class="actions-cell">' + actions + '</td></tr>';
+  }).join('');
+}
+
+function setLogFilter(s) { logFilter.status = s; renderLog(); }
+
+/* === VIEW 04: PROPERTIES === */
+var propertiesFilter = { type: 'all', search: '' };
+function renderProperties() {
+  var total = state.properties.length, residential = state.properties.filter(function(p) { return p.type === 'residential'; }).length, commercial = state.properties.filter(function(p) { return p.type === 'commercial'; }).length, withService = state.properties.filter(function(p) { return p.lastService; }).length;
+  document.getElementById('properties-stats').innerHTML =
+    statCard(total, 'Total Properties') +
+    statCard(residential, 'Residential') +
+    statCard(commercial, 'Commercial') +
+    statCard(withService, 'With Service History');
+  var types = ['all', 'residential', 'commercial'];
+  document.getElementById('properties-type-pills').innerHTML = types.map(function(t) {
+    var active = propertiesFilter.type === t ? ' active' : '';
+    var count = t === 'all' ? state.properties.length : state.properties.filter(function(p) { return p.type === t; }).length;
+    return '<button class="pill' + active + '" aria-pressed="' + (propertiesFilter.type === t ? 'true' : 'false') + '" onclick="setPropertiesTypeFilter(\'' + t + '\')">' + t + ' <span class="pill-count">' + count + '</span></button>';
+  }).join('');
+  var search = (document.getElementById('properties-search') || {}).value || '';
+  propertiesFilter.search = search.toLowerCase().trim();
+  var filtered = state.properties.filter(function(p) {
+    var matchSearch = !propertiesFilter.search || (p.name + ' ' + p.address + ' ' + p.contactName + ' ' + p.notes).toLowerCase().indexOf(propertiesFilter.search) !== -1;
+    var matchType = propertiesFilter.type === 'all' || p.type === propertiesFilter.type;
+    return matchSearch && matchType;
+  });
+  var tbody = document.getElementById('properties-tbody');
+  if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--ink-2);">No properties match.</td></tr>'; return; }
+  tbody.innerHTML = filtered.map(function(p) {
+    var totalVisits = state.jobs.filter(function(j) { return j.propertyId === p.id && j.status === 'completed'; }).length;
+    var actions = '<button class="btn btn-sm" onclick="scheduleForProperty(\'' + p.id + '\')">schedule</button> <button class="btn btn-sm" onclick="openPropertyForm(\'' + p.id + '\')">edit</button> <button class="btn btn-sm btn-danger" onclick="deleteProperty(\'' + p.id + '\')">del</button>';
+    return '<tr><td data-label="Name"><strong>' + escapeHtml(p.name) + '</strong></td><td data-label="Address">' + escapeHtml(p.address || '—') + '</td><td data-label="Type"><span class="status-badge status-scheduled">' + (p.type || '—') + '</span></td><td data-label="Frequency">' + (p.frequency || '—') + '</td><td data-label="Last Service">' + formatDate(p.lastService) + '</td><td data-label="Next Service">' + (p.nextService ? formatDate(p.nextService) : '—') + '</td><td data-label="Total Visits">' + totalVisits + '</td><td data-label="Actions" class="actions-cell">' + actions + '</td></tr>';
+  }).join('');
+}
+
+function setPropertiesTypeFilter(t) { propertiesFilter.type = t; renderProperties(); }
+
+function scheduleForProperty(propId) {
+  var p = getPropertyById(propId);
+  if (!p) return;
+  currentJobId = null;
+  jobFormState = { jobId: null, fields: { date: localDate(), duration: 60, status: 'scheduled', propertyId: propId }, assignedCrew: [], assignedEquipment: [] };
+  switchView('new');
+  toast('new job for ' + p.name, 'info');
+}
+
+function openPropertyForm(id) {
+  var p = id ? getPropertyById(id) : null;
+  var html = '<div class="form-row"><div class="field"><label for="prop-name">Name <span class="req" aria-hidden="true">*</span></label><input type="text" id="prop-name" autocomplete="organization" value="' + escapeHtml(p ? p.name : '') + '" required aria-required="true"/></div></div>' +
+    '<div class="form-row"><div class="field"><label for="prop-address">Address</label><input type="text" id="prop-address" autocomplete="street-address" value="' + escapeHtml(p ? p.address : '') + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label for="prop-type">Type</label><select id="prop-type"><option value="residential"' + (p && p.type === 'residential' ? ' selected' : '') + '>Residential</option><option value="commercial"' + (p && p.type === 'commercial' ? ' selected' : '') + '>Commercial</option></select></div>' +
+    '<div class="field"><label for="prop-freq">Service frequency</label><select id="prop-freq"><option value="weekly"' + (p && p.frequency === 'weekly' ? ' selected' : '') + '>Weekly</option><option value="biweekly"' + (p && p.frequency === 'biweekly' ? ' selected' : '') + '>Biweekly</option><option value="monthly"' + (p && p.frequency === 'monthly' ? ' selected' : '') + '>Monthly</option><option value="one-time"' + (p && p.frequency === 'one-time' ? ' selected' : '') + '>One-time</option></select></div></div>' +
+    '<div class="form-row"><div class="field"><label for="prop-lot">Lot size (sq ft)</label><input type="number" id="prop-lot" inputmode="numeric" autocomplete="off" value="' + (p ? p.lotSize || '' : '') + '"/></div>' +
+    '<div class="field"><label for="prop-gate">Gate code</label><input type="text" id="prop-gate" autocomplete="off" value="' + escapeHtml(p ? p.gateCode : '') + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label for="prop-contact-name">Contact name</label><input type="text" id="prop-contact-name" autocomplete="name" value="' + escapeHtml(p ? p.contactName : '') + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label for="prop-contact-phone">Contact phone</label><input type="text" id="prop-contact-phone" autocomplete="tel" value="' + escapeHtml(p ? p.contactPhone : '') + '"/></div>' +
+    '<div class="field"><label for="prop-contact-email">Contact email</label><input type="email" id="prop-contact-email" autocomplete="email" value="' + escapeHtml(p ? p.contactEmail : '') + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label for="prop-notes">Notes</label><textarea id="prop-notes" maxlength="2000">' + escapeHtml(p ? p.notes : '') + '</textarea></div></div>';
+  confirmDialog({ title: id ? 'Edit property' : 'Add property', html: html, actionText: id ? 'Save changes' : 'Add property',
+    onConfirm: function() {
+      var name = document.getElementById('prop-name').value.trim();
+      if (!name) { toast('name is required', 'error'); return; }
+      var obj = { id: id || uid('prop'), name: name, address: document.getElementById('prop-address').value.trim(), type: document.getElementById('prop-type').value, frequency: document.getElementById('prop-freq').value, lotSize: parseInt(document.getElementById('prop-lot').value, 10) || null, gateCode: document.getElementById('prop-gate').value.trim(), contactName: document.getElementById('prop-contact-name').value.trim(), contactPhone: document.getElementById('prop-contact-phone').value.trim(), contactEmail: document.getElementById('prop-contact-email').value.trim(), notes: document.getElementById('prop-notes').value, createdAt: p ? p.createdAt : localDate(), lastService: p ? p.lastService : null, nextService: p ? p.nextService : null };
+      if (id) {
+        var idx = state.properties.findIndex(function(x) { return x.id === id; });
+        if (idx >= 0) state.properties[idx] = obj;
+        toast('property updated', 'success');
+      } else { state.properties.push(obj); toast('property added', 'success'); }
+      saveState(); renderProperties(); updateNavBadges();
+    }
+  });
+}
+
+function deleteProperty(id) {
+  var p = getPropertyById(id);
+  if (!p) return;
+  confirmDialog({ title: 'Delete property?', body: 'Delete ' + p.name + '? Existing jobs will remain but show no property.', danger: true,
+    onConfirm: function() {
+      state.properties = state.properties.filter(function(x) { return x.id !== id; });
+      saveState(); renderProperties(); updateNavBadges();
+      toast('property deleted', 'info');
+    }
+  });
+}
+
+/* === VIEW 05: EQUIPMENT === */
+var equipmentFilter = { type: 'all' };
+function renderEquipment() {
+  var total = state.equipment.length;
+  var dueSoon = state.equipment.filter(function(eq) { return getEquipmentStatus(eq) === 'due_soon' || getEquipmentStatus(eq) === 'overdue'; }).length;
+  var totalHours = state.equipment.reduce(function(s, eq) { return s + (eq.currentHours || 0); }, 0);
+  document.getElementById('equipment-stats').innerHTML =
+    statCard(total, 'Total Equipment') +
+    statCard(dueSoon, 'Service Due') +
+    statCard(totalHours.toFixed(0), 'Total Hours') +
+    statCard(total, 'Items Tracked');
+  var types = ['all', 'mower', 'trimmer', 'blower', 'edger', 'truck', 'other'];
+  document.getElementById('equipment-type-pills').innerHTML = types.map(function(t) {
+    var active = equipmentFilter.type === t ? ' active' : '';
+    var count = t === 'all' ? state.equipment.length : state.equipment.filter(function(eq) { return eq.type === t; }).length;
+    return '<button class="pill' + active + '" aria-pressed="' + (equipmentFilter.type === t ? 'true' : 'false') + '" onclick="setEquipmentTypeFilter(\'' + t + '\')">' + t + ' <span class="pill-count">' + count + '</span></button>';
+  }).join('');
+  var rows = state.equipment.filter(function(eq) { return equipmentFilter.type === 'all' || eq.type === equipmentFilter.type; });
+  var tbody = document.getElementById('equipment-tbody');
+  if (rows.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--ink-2);">No equipment.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(function(eq) {
+    var status = getEquipmentStatus(eq);
+    var nextDue = getNextServiceDate(eq);
+    var actions = '<button class="btn btn-sm" onclick="logEquipmentService(\'' + eq.id + '\')">log service</button> <button class="btn btn-sm" onclick="openEquipmentForm(\'' + eq.id + '\')">edit</button> <button class="btn btn-sm btn-danger" onclick="deleteEquipment(\'' + eq.id + '\')">del</button>';
+    return '<tr><td data-label="Name"><strong>' + escapeHtml(eq.name) + '</strong></td><td data-label="Type"><span class="status-badge status-scheduled">' + (eq.type || '—') + '</span></td><td data-label="Make/Model">' + escapeHtml((eq.make || '') + ' ' + (eq.model || '')) + '</td><td data-label="Hours">' + (eq.currentHours || 0) + (eq.type === 'truck' ? ' mi' : 'h') + '</td><td data-label="Last Service">' + formatDate(eq.lastServiceDate) + '</td><td data-label="Next Due">' + (nextDue ? formatDate(nextDue) : '—') + '</td><td data-label="Status"><span class="status-badge status-' + status + '">' + status.replace('_', ' ') + '</span></td><td data-label="Actions" class="actions-cell">' + actions + '</td></tr>';
+  }).join('');
+}
+
+function setEquipmentTypeFilter(t) { equipmentFilter.type = t; renderEquipment(); }
+
+function getEquipmentStatus(eq) {
+  if (!eq.lastServiceDate) return 'due_soon';
+  var interval = eq.serviceInterval || 25;
+  /* Fix #1: compare usage (hours/miles) against serviceInterval when data is available */
+  if (eq.currentHours != null && eq.lastServiceHours != null) {
+    var usageSince = eq.currentHours - eq.lastServiceHours;
+    if (usageSince >= interval) return 'overdue';
+    if (usageSince >= interval * 0.8) return 'due_soon';
+    return 'ok';
+  }
+  /* Fix #2: parseLocalDate avoids UTC off-by-one in the Americas */
+  var daysSince = Math.floor((new Date() - parseLocalDate(eq.lastServiceDate)) / (1000 * 60 * 60 * 24));
+  if (daysSince > 90) return 'overdue';
+  if (daysSince > 60) return 'due_soon';
+  return 'ok';
+}
+
+function getNextServiceDate(eq) {
+  if (!eq.lastServiceDate) return null;
+  /* When usage data is available, next service is usage-based — no meaningful calendar date to predict */
+  if (eq.currentHours != null && eq.lastServiceHours != null) return null;
+  /* Calendar-day fallback for equipment with no hours/miles tracking */
+  var d = parseLocalDate(eq.lastServiceDate);
+  d.setDate(d.getDate() + 90);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function logEquipmentService(eqId) {
+  var eq = getEquipmentById(eqId);
+  if (!eq) return;
+  var html = '<div class="form-row"><div class="field"><label for="svc-date">Service date</label><input type="date" id="svc-date" autocomplete="off" value="' + localDate() + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label for="svc-hours">Hours at service</label><input type="number" id="svc-hours" inputmode="decimal" autocomplete="off" value="' + (eq.currentHours || 0) + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label for="svc-notes">What was done</label><textarea id="svc-notes" maxlength="2000" placeholder="Oil change, blade sharpen, air filter..."></textarea></div></div>';
+  confirmDialog({ title: 'Log service for ' + eq.name, html: html, actionText: 'Log service',
+    onConfirm: function() {
+      eq.lastServiceDate = document.getElementById('svc-date').value;
+      eq.lastServiceHours = parseFloat(document.getElementById('svc-hours').value) || eq.currentHours;
+      eq.notes = (eq.notes || '') + '\n[' + eq.lastServiceDate + '] ' + document.getElementById('svc-notes').value;
+      saveState(); renderEquipment();
+      toast('service logged for ' + eq.name, 'success');
+    }
+  });
+}
+
+function openEquipmentForm(id) {
+  var eq = id ? getEquipmentById(id) : null;
+  var html = '<div class="form-row"><div class="field"><label for="eq-name">Name <span class="req" aria-hidden="true">*</span></label><input type="text" id="eq-name" autocomplete="off" value="' + escapeHtml(eq ? eq.name : '') + '" placeholder="e.g. Mower #1 (Honda)" required aria-required="true"/></div></div>' +
+    '<div class="form-row"><div class="field"><label for="eq-type">Type</label><select id="eq-type"><option value="mower"' + (eq && eq.type === 'mower' ? ' selected' : '') + '>Mower</option><option value="trimmer"' + (eq && eq.type === 'trimmer' ? ' selected' : '') + '>Trimmer</option><option value="blower"' + (eq && eq.type === 'blower' ? ' selected' : '') + '>Blower</option><option value="edger"' + (eq && eq.type === 'edger' ? ' selected' : '') + '>Edger</option><option value="truck"' + (eq && eq.type === 'truck' ? ' selected' : '') + '>Truck</option><option value="other"' + (eq && eq.type === 'other' ? ' selected' : '') + '>Other</option></select></div>' +
+    '<div class="field"><label for="eq-make">Make</label><input type="text" id="eq-make" autocomplete="off" value="' + escapeHtml(eq ? eq.make : '') + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label for="eq-model">Model</label><input type="text" id="eq-model" autocomplete="off" value="' + escapeHtml(eq ? eq.model : '') + '"/></div>' +
+    '<div class="field"><label for="eq-year">Year</label><input type="number" id="eq-year" inputmode="numeric" autocomplete="off" value="' + (eq ? eq.year || '' : '') + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label for="eq-purchase">Purchase date</label><input type="date" id="eq-purchase" autocomplete="off" value="' + escapeHtml(eq ? eq.purchaseDate : '') + '"/></div>' +
+    '<div class="field"><label for="eq-hours">Current hrs/mi</label><input type="number" id="eq-hours" inputmode="decimal" autocomplete="off" value="' + (eq && eq.currentHours != null ? eq.currentHours : '') + '" placeholder="e.g. 48230"/></div></div>' +
+    '<div class="form-row"><div class="field"><label for="eq-interval">Service interval (hrs/mi)</label><input type="number" id="eq-interval" inputmode="decimal" autocomplete="off" value="' + (eq ? eq.serviceInterval || 25 : 25) + '" placeholder="e.g. 50 for mower, 5000 for truck"/></div>' +
+    '<div class="field"><label for="eq-last-hours">Hrs/mi at last service</label><input type="number" id="eq-last-hours" inputmode="decimal" autocomplete="off" value="' + (eq && eq.lastServiceHours != null ? eq.lastServiceHours : '') + '" placeholder="leave blank if unknown"/></div></div>' +
+    '<div class="form-row"><div class="field"><label for="eq-notes">Notes</label><textarea id="eq-notes" maxlength="2000">' + escapeHtml(eq ? eq.notes : '') + '</textarea></div></div>';
+  confirmDialog({ title: id ? 'Edit equipment' : 'Add equipment', html: html, actionText: id ? 'Save changes' : 'Add equipment',
+    onConfirm: function() {
+      var name = document.getElementById('eq-name').value.trim();
+      if (!name) { toast('name is required', 'error'); return; }
+      var curHours = document.getElementById('eq-hours').value;
+      var lastHours = document.getElementById('eq-last-hours').value;
+      var interval = parseFloat(document.getElementById('eq-interval').value);
+      if (!interval || interval < 1) { toast('service interval must be at least 1', 'error'); return; }
+      var obj = {
+        id: id || uid('eq'),
+        name: name,
+        type: document.getElementById('eq-type').value,
+        make: document.getElementById('eq-make').value.trim(),
+        model: document.getElementById('eq-model').value.trim(),
+        year: parseInt(document.getElementById('eq-year').value, 10) || null,
+        purchaseDate: document.getElementById('eq-purchase').value,
+        currentHours: curHours !== '' ? parseFloat(curHours) : null,
+        serviceInterval: interval,
+        lastServiceDate: eq ? eq.lastServiceDate : null,
+        lastServiceHours: lastHours !== '' ? parseFloat(lastHours) : (eq ? eq.lastServiceHours : null),
+        notes: document.getElementById('eq-notes').value
+      };
+      if (id) {
+        var idx = state.equipment.findIndex(function(x) { return x.id === id; });
+        if (idx >= 0) state.equipment[idx] = obj;
+        toast('equipment updated', 'success');
+      } else { state.equipment.push(obj); toast('equipment added', 'success'); }
+      saveState(); renderEquipment();
+    }
+  });
+}
+
+function deleteEquipment(id) {
+  var eq = getEquipmentById(id);
+  if (!eq) return;
+  confirmDialog({ title: 'Delete equipment?', body: 'Delete ' + eq.name + '?', danger: true,
+    onConfirm: function() {
+      state.equipment = state.equipment.filter(function(x) { return x.id !== id; });
+      saveState(); renderEquipment();
+      toast('equipment deleted', 'info');
+    }
+  });
+}
+
+/* === VIEW 06: SETTINGS === */
+function renderSettings() {
+  var b = state.business, s = state.settings;
+  var html = '<div class="settings-section"><h3>Business Profile</h3>';
+  html += '<div class="form-row"><div class="field"><label for="set-name">Business name</label><input type="text" id="set-name" autocomplete="organization" value="' + escapeHtml(b.name) + '"/></div></div>';
+  html += '<div class="form-row"><div class="field"><label for="set-address">Address</label><input type="text" id="set-address" autocomplete="street-address" value="' + escapeHtml(b.address) + '"/></div></div>';
+  html += '<div class="form-row"><div class="field"><label for="set-phone">Phone</label><input type="text" id="set-phone" autocomplete="tel" value="' + escapeHtml(b.phone) + '"/></div>';
+  html += '<div class="field"><label for="set-email">Email</label><input type="email" id="set-email" autocomplete="email" value="' + escapeHtml(b.email) + '"/></div></div>';
+  html += '</div>';
+  html += '<div class="settings-section"><h3>Preferences</h3>';
+  html += '<div class="form-row"><div class="field"><label for="set-theme">Theme</label><select id="set-theme"><option value="light"' + (s.theme === 'light' ? ' selected' : '') + '>Light</option><option value="dark"' + (s.theme === 'dark' ? ' selected' : '') + '>Dark</option><option value="system"' + (s.theme === 'system' ? ' selected' : '') + '>System</option></select></div>';
+  html += '<div class="field"><label for="set-time">Time format</label><select id="set-time"><option value="12h"' + (s.timeFormat === '12h' ? ' selected' : '') + '>12-hour (AM/PM)</option><option value="24h"' + (s.timeFormat === '24h' ? ' selected' : '') + '>24-hour</option></select></div>';
+  html += '<div class="field"><label for="set-week">Week starts on</label><select id="set-week"><option value="0"' + (s.weekStartsOn === 0 ? ' selected' : '') + '>Sunday</option><option value="1"' + (s.weekStartsOn === 1 ? ' selected' : '') + '>Monday</option></select></div></div>';
+  html += '<div class="form-row"><div class="field"><label for="set-duration">Default job duration (minutes)</label><input type="number" id="set-duration" inputmode="numeric" autocomplete="off" value="' + (s.defaultDuration || 60) + '"/></div></div>';
+  html += '</div>';
+  html += '<div class="settings-section"><h3>Crew</h3>';
+  html += '<p class="muted-sm">Add crew members so you can assign them to jobs.</p>';
+  html += '<div id="crew-list">';
+  state.crew.forEach(function(c) {
+    html += '<div class="crew-row">';
+    html += '<div class="crew-dot" style="background:' + c.color + ';"></div>';
+    html += '<div class="crew-info"><strong>' + escapeHtml(c.name) + '</strong> · ' + escapeHtml(c.role) + '</div>';
+    html += '<button class="btn btn-sm" onclick="editCrewMember(\'' + c.id + '\')">edit</button> ';
+    html += '<button class="btn btn-sm btn-danger" onclick="deleteCrewMember(\'' + c.id + '\')">del</button>';
+    html += '</div>';
+  });
+  html += '</div>';
+  html += '<button class="btn" onclick="editCrewMember(null)" style="margin-top:var(--sp-2);">+ Add crew member</button>';
+  html += '</div>';
+  html += '<div class="settings-section"><h3>Data</h3>';
+  html += '<p class="muted-sm">All your data is stored locally in this browser. Back up regularly to a file you can store in Dropbox or iCloud.</p>';
+  html += '<div style="display:flex;gap:var(--sp-2);flex-wrap:wrap;">';
+  html += '<button class="btn" onclick="downloadJSONBackup()">Download JSON backup</button>';
+  html += '<button class="btn" onclick="document.getElementById(\'import-file\').click()">Import backup</button>';
+  html += '<input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSONBackup(event)"/>';
+  html += '<button class="btn" style="color:var(--red);border-color:var(--red);" onclick="clearAllData()">Clear all data</button>';
+  html += '</div></div>';
+  document.getElementById('settings-layout').innerHTML = html;
+}
+
+function saveSettings() {
+  state.business.name = document.getElementById('set-name').value.trim() || 'Your Business Name';
+  state.business.address = document.getElementById('set-address').value.trim();
+  state.business.phone = document.getElementById('set-phone').value.trim();
+  state.business.email = document.getElementById('set-email').value.trim();
+  state.settings.theme = document.getElementById('set-theme').value;
+  state.settings.timeFormat = document.getElementById('set-time').value;
+  state.settings.weekStartsOn = parseInt(document.getElementById('set-week').value, 10);
+  state.settings.defaultDuration = parseInt(document.getElementById('set-duration').value, 10) || 60;
+  saveState();
+  setTheme(state.settings.theme);
+  toast('settings saved', 'success');
+}
+
+function editCrewMember(id) {
+  var c = id ? state.crew.find(function(x) { return x.id === id; }) : null;
+  var html = '<div class="form-row"><div class="field"><label for="crew-name">Name <span class="req" aria-hidden="true">*</span></label><input type="text" id="crew-name" autocomplete="off" value="' + escapeHtml(c ? c.name : '') + '" required aria-required="true"/></div></div>' +
+    '<div class="form-row"><div class="field"><label for="crew-role">Role</label><input type="text" id="crew-role" autocomplete="off" value="' + escapeHtml(c ? c.role : '') + '" placeholder="e.g. Lead Crew"/></div></div>' +
+    '<div class="form-row"><div class="field"><label for="crew-phone">Phone</label><input type="text" id="crew-phone" autocomplete="tel" value="' + escapeHtml(c ? c.phone : '') + '"/></div></div>' +
+    '<div class="form-row"><div class="field"><label for="crew-color">Color</label><select id="crew-color"><option value="#B8862E"' + (c && c.color === '#B8862E' ? ' selected' : '') + '>Amber</option><option value="#1F5F5B"' + (c && c.color === '#1F5F5B' ? ' selected' : '') + '>Teal</option><option value="#2D6A3E"' + (c && c.color === '#2D6A3E' ? ' selected' : '') + '>Green</option><option value="#4870B5"' + (c && c.color === '#4870B5' ? ' selected' : '') + '>Blue</option><option value="#B85A4A"' + (c && c.color === '#B85A4A' ? ' selected' : '') + '>Red</option></select></div></div>';
+  confirmDialog({ title: id ? 'Edit crew member' : 'Add crew member', html: html, actionText: id ? 'Save changes' : 'Add',
+    onConfirm: function() {
+      var name = document.getElementById('crew-name').value.trim();
+      if (!name) { toast('name is required', 'error'); return; }
+      var obj = { id: id || uid('crew'), name: name, role: document.getElementById('crew-role').value.trim() || 'Crew', phone: document.getElementById('crew-phone').value.trim(), color: document.getElementById('crew-color').value };
+      if (id) {
+        var idx = state.crew.findIndex(function(x) { return x.id === id; });
+        if (idx >= 0) state.crew[idx] = obj;
+        toast('crew member updated', 'success');
+      } else { state.crew.push(obj); toast('crew member added', 'success'); }
+      saveState(); renderSettings();
+    }
+  });
+}
+
+function deleteCrewMember(id) {
+  var c = state.crew.find(function(x) { return x.id === id; });
+  if (!c) return;
+  confirmDialog({ title: 'Delete crew member?', body: 'Delete ' + c.name + '? Existing jobs will remain but show no crew.', danger: true,
+    onConfirm: function() {
+      state.crew = state.crew.filter(function(x) { return x.id !== id; });
+      saveState(); renderSettings();
+      toast('crew member deleted', 'info');
+    }
+  });
+}
+
+function downloadJSONBackup() {
+  var blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'lawnschedule-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+  a.click();
+  setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+  toast('backup downloaded', 'success');
+}
+
+function importJSONBackup(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onerror = function() { toast('could not read file', 'error'); };
+  reader.onload = function(e) {
+    try {
+      var data = JSON.parse(e.target.result);
+      // Fix #10: validate schema before merging
+      if (typeof data !== 'object' || data === null || Array.isArray(data)) { toast('invalid backup file', 'error'); return; }
+      var ARRAY_KEYS = ['jobs', 'properties', 'crew', 'equipment', 'serviceTypes'];
+      var VALID_KEYS = ARRAY_KEYS.concat(['settings', 'version']);
+      var sanitizeObj = function(o) {
+        if (typeof o !== 'object' || o === null) return {};
+        var out = {};
+        Object.keys(o).forEach(function(k) { var v = o[k]; out[k] = typeof v === 'string' ? v : (typeof v === 'number' || typeof v === 'boolean' ? v : (Array.isArray(v) ? v : (typeof v === 'object' && v !== null ? sanitizeObj(v) : ''))); });
+        return out;
+      };
+      var merged = Object.assign({}, defaultState);
+      VALID_KEYS.forEach(function(k) {
+        if (!(k in data)) return;
+        if (ARRAY_KEYS.indexOf(k) >= 0) {
+          if (!Array.isArray(data[k])) { toast('backup has invalid field: ' + k, 'error'); return; }
+          merged[k] = data[k].map(function(item) { return typeof item === 'object' && item !== null ? sanitizeObj(item) : item; });
+        } else {
+          merged[k] = data[k];
+        }
+      });
+      confirmDialog({ title: 'Import backup?', body: 'This will overwrite all current data. Continue?', danger: true,
+        onConfirm: function() {
+          state = merged;
+          saveState(); switchView('schedule');
+          toast('backup imported', 'success');
+        }
+      });
+    } catch (err) { toast('invalid JSON file', 'error'); }
+  };
+  reader.readAsText(file);
+}
+
+function clearAllData() {
+  confirmDialog({ title: 'Clear all data?', body: 'This will erase ALL data permanently. This cannot be undone.', danger: true,
+    onConfirm: function() { localStorage.removeItem(STATE_KEY); location.reload(); }
+  });
+}
+
+/* === VIEW 07: EXPORT === */
+function renderExport() {
+  document.getElementById('export-layout').innerHTML =
+    '<div class="settings-section"><h3>Export Jobs (CSV)</h3>' +
+    '<p class="muted-sm">Excel-ready. UTF-8 encoded. Filter by date range.</p>' +
+    '<div class="form-row"><div class="field"><label for="export-from">From date</label><input type="date" id="export-from"/></div><div class="field"><label for="export-to">To date</label><input type="date" id="export-to"/></div></div>' +
+    '<button class="btn btn-accent" onclick="exportJobsCSV()">Download jobs.csv</button></div>' +
+    '<div class="settings-section"><h3>Export Log (CSV)</h3>' +
+    '<p class="muted-sm">Completed/skipped/cancelled jobs only. Filter by date range.</p>' +
+    '<div class="form-row"><div class="field"><label for="export-log-from">From date</label><input type="date" id="export-log-from"/></div><div class="field"><label for="export-log-to">To date</label><input type="date" id="export-log-to"/></div></div>' +
+    '<button class="btn btn-accent" onclick="exportLogCSV()">Download log.csv</button></div>' +
+    '<div class="settings-section"><h3>Export Properties (CSV)</h3>' +
+    '<button class="btn btn-accent" onclick="exportPropertiesCSV()">Download properties.csv</button></div>' +
+    '<div class="settings-section"><h3>Export Equipment (CSV)</h3>' +
+    '<button class="btn btn-accent" onclick="exportEquipmentCSV()">Download equipment.csv</button></div>' +
+    '<div class="settings-section"><h3>JSON Backup</h3>' +
+    '<button class="btn btn-accent" onclick="downloadJSONBackup()">Download JSON backup</button></div>';
+}
+
+function exportJobsCSV() {
+  var from = document.getElementById('export-from').value;
+  var to = document.getElementById('export-to').value;
+  var rows = state.jobs.filter(function(j) {
+    if (from && j.date < from) return false;
+    if (to && j.date > to) return false;
+    return true;
+  }).map(function(j) {
+    var prop = j.propertyId ? getPropertyById(j.propertyId) : null;
+    var svc = getServiceTypeById(j.serviceTypeId);
+    var crewNames = (j.assignedCrew || []).map(function(cid) { var c = getCrewById(cid); return c ? c.name : ''; }).filter(Boolean).join('; ');
+    return { 'Date': j.date, 'Start Time': j.startTime || '', 'Service': svc ? svc.name : '', 'Property': prop ? prop.name : '', 'Duration (min)': j.duration || 0, 'Status': j.status, 'Crew': crewNames, 'Notes': j.notes || '', 'Completed At': j.completedAt || '' };
+  });
+  downloadCSV('lawnschedule-jobs-' + new Date().toISOString().slice(0, 10) + '.csv', generateCSV(rows, ['Date', 'Start Time', 'Service', 'Property', 'Duration (min)', 'Status', 'Crew', 'Notes', 'Completed At']));
+  toast('jobs.csv exported', 'success');
+}
+
+function exportLogCSV() {
+  var from = document.getElementById('export-log-from').value;
+  var to = document.getElementById('export-log-to').value;
+  var rows = state.jobs.filter(function(j) { return j.status === 'completed' || j.status === 'skipped' || j.status === 'cancelled'; }).filter(function(j) { if (from && j.date < from) return false; if (to && j.date > to) return false; return true; }).map(function(j) {
+    var prop = j.propertyId ? getPropertyById(j.propertyId) : null;
+    var svc = getServiceTypeById(j.serviceTypeId);
+    return { 'Date': j.date, 'Service': svc ? svc.name : '', 'Property': prop ? prop.name : '', 'Duration (min)': j.duration || 0, 'Status': j.status, 'Notes': j.completedNotes || j.notes || '', 'Completed At': j.completedAt || '' };
+  });
+  downloadCSV('lawnschedule-log-' + new Date().toISOString().slice(0, 10) + '.csv', generateCSV(rows, ['Date', 'Service', 'Property', 'Duration (min)', 'Status', 'Notes', 'Completed At']));
+  toast('log.csv exported', 'success');
+}
+
+function exportPropertiesCSV() {
+  var rows = state.properties.map(function(p) { return { 'Name': p.name, 'Address': p.address || '', 'Type': p.type || '', 'Frequency': p.frequency || '', 'Lot Size (sqft)': p.lotSize || '', 'Contact': p.contactName || '', 'Phone': p.contactPhone || '', 'Email': p.contactEmail || '', 'Gate Code': p.gateCode || '', 'Last Service': p.lastService || '', 'Notes': p.notes || '' }; });
+  downloadCSV('lawnschedule-properties-' + new Date().toISOString().slice(0, 10) + '.csv', generateCSV(rows, ['Name', 'Address', 'Type', 'Frequency', 'Lot Size (sqft)', 'Contact', 'Phone', 'Email', 'Gate Code', 'Last Service', 'Notes']));
+  toast('properties.csv exported', 'success');
+}
+
+function exportEquipmentCSV() {
+  var rows = state.equipment.map(function(eq) { return { 'Name': eq.name, 'Type': eq.type || '', 'Make': eq.make || '', 'Model': eq.model || '', 'Year': eq.year || '', 'Current Hours': eq.currentHours || 0, 'Last Service': eq.lastServiceDate || '', 'Status': getEquipmentStatus(eq), 'Notes': eq.notes || '' }; });
+  downloadCSV('lawnschedule-equipment-' + new Date().toISOString().slice(0, 10) + '.csv', generateCSV(rows, ['Name', 'Type', 'Make', 'Model', 'Year', 'Current Hours', 'Last Service', 'Status', 'Notes']));
+  toast('equipment.csv exported', 'success');
+}
+
+function generateCSV(rows, headers) {
+  if (!rows.length) return headers.join(',') + '\n';
+  var csv = headers.join(',') + '\n';
+  rows.forEach(function(row) {
+    csv += headers.map(function(h) {
+      var raw = String(row[h] == null ? '' : row[h]);
+      // OWASP CSV injection guard: a leading =, +, -, @, \t or \r is interpreted as a formula
+      // by Excel/LibreOffice/Google Sheets and can execute on open. Prefix with a single quote
+      // so the cell is treated as a literal string.
+      if (raw.length > 0 && /^[=+\-@\t\r]/.test(raw)) raw = "'" + raw;
+      var v = raw.replace(/"/g, '""');
+      return '"' + v + '"';
+    }).join(',') + '\n';
+  });
+  return '﻿' + csv;
+}
+
+function downloadCSV(filename, content) {
+  var blob = new Blob([content], { type: 'text/csv;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a'); a.href = url; a.download = filename; a.click();
+  setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+}
+
+function printWeekSchedule() {
+  if (!currentWeekStart) return;
+  var weekStart = currentWeekStart;
+  var weekEnd = getWeekEnd(weekStart);
+  var weekJobs = getJobsForWeek(weekStart);
+  var biz = state.business;
+  var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Weekly Schedule</title><style>' +
+    'body{font-family:ui-monospace,monospace;font-size:11px;color:#1a1a1a;padding:20px;max-width:1100px;margin:0 auto;}' +
+    'h1{font-size:18px;margin:0 0 4px;}' +
+    '.biz{color:#666;font-size:10px;margin-bottom:16px;}' +
+    'table{width:100%;border-collapse:collapse;margin-top:12px;}' +
+    'th{text-align:left;padding:6px;border-bottom:2px solid #1a1a1a;font-size:10px;text-transform:uppercase;}' +
+    'td{padding:6px;border-bottom:1px solid #ddd;vertical-align:top;}' +
+    '.day-head{font-weight:700;font-size:12px;background:#f5f5f0;padding:8px;}' +
+    '.job{font-size:10px;margin-bottom:4px;padding:4px;border-left:3px solid #B8862E;background:#fafaf5;}' +
+    '.status-completed{opacity:0.6;border-left-color:#2D6A3E;}' +
+    '.status-skipped{opacity:0.5;border-left-color:#C8843A;}' +
+    '@page{margin:0.5in;}</style></head><body>' +
+    '<h1>Weekly Schedule</h1>' +
+    '<div class="biz">' + escapeHtml(biz.name || '') + ' · ' + escapeHtml(formatWeekLabel(weekStart)) + '</div>' +
+    '<table><thead><tr><th scope="col">Day</th><th scope="col">Date</th><th scope="col">Jobs</th></tr></thead><tbody>';
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(weekStart);
+    d.setDate(d.getDate() + i);
+    var dayJobs = weekJobs.filter(function(j) { var jd = parseLocalDate(j.date); return jd.getTime() === d.getTime(); });
+    html += '<tr><td class="day-head">' + days[d.getDay()] + '</td><td class="day-head">' + (d.getMonth() + 1) + '/' + d.getDate() + '</td><td>';
+    dayJobs.forEach(function(j) {
+      var prop = j.propertyId ? getPropertyById(j.propertyId) : null;
+      var svc = getServiceTypeById(j.serviceTypeId);
+      var crewNames = (j.assignedCrew || []).map(function(cid) { var c = getCrewById(cid); return c ? c.name : ''; }).filter(Boolean).join(', ');
+      html += '<div class="job status-' + j.status + '"><strong>' + escapeHtml(prop ? prop.name : 'No property') + '</strong> · ' + escapeHtml(svc ? svc.name : '') + '<br/>' + (j.startTime ? formatTime(j.startTime) : 'All day') + ' · ' + (j.duration || 0) + 'min' + (crewNames ? ' · ' + escapeHtml(crewNames) : '') + '</div>';
+    });
+    html += '</td></tr>';
+  }
+  html += '</tbody></table><div style="margin-top:30px;font-size:9px;color:#888;text-align:center;">Generated by LawnSchedule Pro · ' + formatDate(localDate()) + '</div></body></html>';
+  var iframe = document.createElement('iframe');
+  iframe.setAttribute('aria-hidden', 'true');
+  iframe.style.position = 'fixed'; iframe.style.top = '-10000px'; iframe.style.left = '-10000px';
+  iframe.style.width = '1px'; iframe.style.height = '1px'; iframe.style.border = '0';
+  document.body.appendChild(iframe);
+  var cleaned = false;
+  function cleanup() { if (cleaned) return; cleaned = true; if (iframe && iframe.parentNode) iframe.parentNode.removeChild(iframe); }
+  var idoc = iframe.contentWindow.document;
+  idoc.open(); idoc.write(html); idoc.close();
+  iframe.contentWindow.addEventListener('afterprint', cleanup);
+  var printed = false;
+  function doPrint() { if (printed) return; printed = true; iframe.contentWindow.focus(); iframe.contentWindow.print(); }
+  iframe.onload = doPrint;
+  setTimeout(doPrint, 250);
+  setTimeout(cleanup, 3000);
+}
+
+/* === NAV BADGES === */
+function updateNavBadges() {
+  var pb = document.getElementById('nav-properties-badge');
+  if (pb) pb.textContent = state.properties.length;
+  var eb = document.getElementById('nav-equipment-badge');
+  if (eb) eb.textContent = state.equipment.length;
+}
+
+/* === SEARCH === */
+function doSearch() {
+  searchSelectedIdx = -1;
+  var q = document.getElementById('search-input').value.toLowerCase().trim();
+  var results = document.getElementById('search-results');
+  results.innerHTML = '';
+  if (!q) return;
+  var items = [];
+  state.properties.forEach(function(p) {
+    if (p.name.toLowerCase().indexOf(q) >= 0 || (p.address || '').toLowerCase().indexOf(q) >= 0) {
+      items.push({ name: p.name, sub: p.address || '', action: function() { switchView('properties'); } });
+    }
+  });
+  state.equipment.forEach(function(eq) {
+    if (eq.name.toLowerCase().indexOf(q) >= 0) {
+      items.push({ name: eq.name, sub: eq.type + ' · ' + (eq.make || ''), action: function() { switchView('equipment'); } });
+    }
+  });
+  state.jobs.forEach(function(j) {
+    var prop = j.propertyId ? getPropertyById(j.propertyId) : null;
+    var propName = prop ? prop.name : '';
+    if (propName.toLowerCase().indexOf(q) >= 0 || j.date.indexOf(q) >= 0) {
+      items.push({ name: propName + ' · ' + formatDate(j.date), sub: getServiceTypeById(j.serviceTypeId).name, action: function() { switchView('schedule'); } });
+    }
+  });
+  DEFAULT_SERVICE_TYPES.forEach(function(s) {
+    if (s.name.toLowerCase().indexOf(q) >= 0) {
+      items.push({ name: s.name, sub: 'service type · ' + s.category, action: function() { switchView('new'); } });
+    }
+  });
+  var viewMatches = [
+    { view: 'schedule', name: 'Schedule' }, { view: 'new', name: 'New Job' }, { view: 'log', name: 'Log' },
+    { view: 'properties', name: 'Properties' }, { view: 'equipment', name: 'Equipment' }, { view: 'settings', name: 'Settings' }, { view: 'export', name: 'Export' }
+  ];
+  viewMatches.forEach(function(v) {
+    if (v.name.toLowerCase().indexOf(q) >= 0) {
+      items.push({ name: v.name, sub: 'go to view', action: function() { switchView(v.view); } });
+    }
+  });
+  if ('new job'.indexOf(q) >= 0) items.push({ name: 'New job', sub: 'create a new job', action: function() { newJob(); } });
+  if ('export csv'.indexOf(q) >= 0) items.push({ name: 'Export CSV', sub: 'go to export view', action: function() { switchView('export'); } });
+  if (!items.length) { results.innerHTML = '<div class="search-palette-item"><span class="muted">No results for "' + escapeHtml(q) + '"</span></div>'; return; }
+  /* Fix #23: slice to 30 BEFORE creating DOM nodes */
+  var visible = items.slice(0, 30);
+  visible.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'search-palette-item';
+    div.id = 'search-item-' + idx;
+    div.setAttribute('data-idx', idx);
+    div.setAttribute('role', 'option');
+    div.setAttribute('aria-selected', 'false');
+    div.innerHTML = '<span><strong>' + escapeHtml(item.name) + '</strong><br><span class="muted">' + escapeHtml(item.sub) + '</span></span><span class="search-palette-item-key">go</span>';
+    div.addEventListener('click', function() { closeAllModals(); item.action(); });
+    results.appendChild(div);
+  });
+}
+
+/* === STUB OVERRIDES (from base v1.3) === */
+function exportCSV() { switchView('export'); }
+function newItem() { newJob(); }
+
+/* === INIT === */
+function init() {
+  loadState();
+  currentWeekStart = getWeekStart(new Date());
+  updateAppVersionDisplay();
+  setTheme(state.settings.theme || 'system');
+  if (window.matchMedia) {
+    var mql = window.matchMedia('(prefers-color-scheme: dark)');
+    if (mql.addEventListener) mql.addEventListener('change', function() { if ((state.settings.theme || 'system') === 'system') setTheme('system'); });
+  }
+  updateNavBadges();
+  switchView('schedule');
+}
+
+init();
+
+</script>
+</body>
+</html>

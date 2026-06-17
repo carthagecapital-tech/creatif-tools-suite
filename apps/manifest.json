@@ -126,5 +126,21 @@
     "monogram": "L",
     "price": "$19",
     "etsyUrl": "https://www.etsy.com/listing/4522365713/lawn-care-contract-template-app-for"
+  },
+  {
+    "id": "lawnschedule-pro",
+    "name": "LawnSchedule Pro",
+    "tagline": "Job Scheduler",
+    "description": "Schedule one-time and recurring lawn care jobs, keep a service log per visit, print the daily route as a PDF. Works offline, no subscription, no account. Built for solo landscapers and small lawn care businesses.",
+    "features": [
+      "One-time and recurring job scheduling",
+      "Service log per visit",
+      "Daily route PDF print",
+      "Works offline — no subscription, no account"
+    ],
+    "color": "#B8862E",
+    "monogram": "L",
+    "price": "$19",
+    "etsyUrl": "https://www.etsy.com/listing/4522639270/lawn-care-schedule-app-for-service-pros"
   }
 ]
