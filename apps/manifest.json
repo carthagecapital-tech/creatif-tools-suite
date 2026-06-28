@@ -9,7 +9,7 @@
       "Build quotes with line items in seconds",
       "Auto-apply taxes & discounts",
       "Print or export to PDF",
-      "Local-first — your data never leaves your device"
+      "Local-first \u2014 your data never leaves your device"
     ],
     "color": "#2C4A7C",
     "monogram": "C",
@@ -21,12 +21,12 @@
     "name": "CleanRoute Pro",
     "niche": "cleaning",
     "tagline": "Stop planning routes in your head the night before.",
-    "description": "Plan your cleaning jobs in the smartest order. Save time, save gas, finish sooner. Local-first — your data never leaves your browser.",
+    "description": "Plan your cleaning jobs in the smartest order. Save time, save gas, finish sooner. Local-first \u2014 your data never leaves your browser.",
     "features": [
       "Drag-to-reorder stops",
       "Total drive time estimate",
       "Print-friendly route sheet",
-      "Local-first — your data never leaves your device"
+      "Local-first \u2014 your data never leaves your device"
     ],
     "color": "#D17A22",
     "monogram": "R",
@@ -38,12 +38,12 @@
     "name": "CleanInspect Pro",
     "niche": "cleaning",
     "tagline": "Inspection Checklist",
-    "description": "Room-by-room quality control for cleaning pros. Run an inspection, capture inspector notes, generate a signed PDF report — all without leaving the browser. Local-first.",
+    "description": "Room-by-room quality control for cleaning pros. Run an inspection, capture inspector notes, generate a signed PDF report \u2014 all without leaving the browser. Local-first.",
     "features": [
       "Room-by-room inspection with sign-off",
       "Inspector notes & issue flagging",
       "Printable PDF report for the client",
-      "Local-first — your data never leaves your device"
+      "Local-first \u2014 your data never leaves your device"
     ],
     "color": "#B8462E",
     "monogram": "I",
@@ -55,12 +55,12 @@
     "name": "CleanForms Pro",
     "niche": "cleaning",
     "tagline": "Forms Bundle",
-    "description": "A complete library of 8 cleaning business forms — client intake, service agreement, work order, and more. Fill out, print, and hand to clients. Works offline, no subscription, no account. Local-first.",
+    "description": "A complete library of 8 cleaning business forms \u2014 client intake, service agreement, work order, and more. Fill out, print, and hand to clients. Works offline, no subscription, no account. Local-first.",
     "features": [
       "8 ready-to-use forms (intake, agreement, work order, and more)",
       "Print welcome packets for new clients",
-      "Works offline — no subscription, no account",
-      "Local-first — your data never leaves your device"
+      "Works offline \u2014 no subscription, no account",
+      "Local-first \u2014 your data never leaves your device"
     ],
     "color": "#3D6B47",
     "monogram": "C",
@@ -77,7 +77,7 @@
       "One-time and recurring job scheduling",
       "Daily route PDF print",
       "Start/stop time tracking per job",
-      "Works offline — no subscription, no account"
+      "Works offline \u2014 no subscription, no account"
     ],
     "color": "#4A5AC4",
     "monogram": "S",
@@ -94,7 +94,7 @@
       "Lead pipeline from first contact to client",
       "8-step client onboarding workflow",
       "Client & property profiles",
-      "Local-first — your data never leaves your device"
+      "Local-first \u2014 your data never leaves your device"
     ],
     "color": "#6B4A6E",
     "monogram": "C",
@@ -106,12 +106,12 @@
     "name": "LawnQuote Pro",
     "niche": "lawn-care",
     "tagline": "Lawn Care Estimator",
-    "description": "Build professional lawn care estimates in under a minute. Line items, taxes, discounts — all automatic. Local-first, no account, no subscription. Built for solo landscapers and small lawn care businesses.",
+    "description": "Build professional lawn care estimates in under a minute. Line items, taxes, discounts \u2014 all automatic. Local-first, no account, no subscription. Built for solo landscapers and small lawn care businesses.",
     "features": [
       "Build estimates with line items in seconds",
       "Auto-apply taxes & discounts",
       "Print or export to PDF",
-      "Local-first — your data never leaves your device"
+      "Local-first \u2014 your data never leaves your device"
     ],
     "color": "#2D6A3E",
     "monogram": "L",
@@ -127,8 +127,8 @@
     "features": [
       "Multiple contract templates ready to fill",
       "Print or export to PDF",
-      "Works offline — no subscription, no account",
-      "Local-first — your data never leaves your device"
+      "Works offline \u2014 no subscription, no account",
+      "Local-first \u2014 your data never leaves your device"
     ],
     "color": "#1F5F5B",
     "monogram": "L",
@@ -145,7 +145,7 @@
       "One-time and recurring job scheduling",
       "Service log per visit",
       "Daily route PDF print",
-      "Works offline — no subscription, no account"
+      "Works offline \u2014 no subscription, no account"
     ],
     "color": "#B8862E",
     "monogram": "L",
@@ -157,12 +157,12 @@
     "name": "CarWash Pro",
     "niche": "car-wash",
     "tagline": "Mobile Detail Estimator",
-    "description": "A local-first quote builder for mobile car wash and auto detailing businesses. Coming soon — full feature list TBA.",
+    "description": "A local-first quote builder for mobile car wash and auto detailing businesses. Coming soon \u2014 full feature list TBA.",
     "features": [
       "Quote builder for mobile car wash services",
       "Print or export to PDF",
-      "Local-first — your data never leaves your device",
-      "Coming soon — full feature list TBA"
+      "Local-first \u2014 your data never leaves your device",
+      "Coming soon \u2014 full feature list TBA"
     ],
     "color": "#3B82F6",
     "monogram": "CW",
@@ -174,12 +174,12 @@
     "name": "PestPro",
     "niche": "pest-control",
     "tagline": "Service Quote Builder",
-    "description": "A local-first quote builder for pest control businesses. Coming soon — full feature list TBA.",
+    "description": "A local-first quote builder for pest control businesses. Coming soon \u2014 full feature list TBA.",
     "features": [
       "Quote builder for pest control services",
       "Print or export to PDF",
-      "Local-first — your data never leaves your device",
-      "Coming soon — full feature list TBA"
+      "Local-first \u2014 your data never leaves your device",
+      "Coming soon \u2014 full feature list TBA"
     ],
     "color": "#B91C1C",
     "monogram": "PE",
@@ -191,16 +191,33 @@
     "name": "PoolPro",
     "niche": "pool-cleaning",
     "tagline": "Pool Service Estimator",
-    "description": "A local-first quote builder for pool cleaning and maintenance businesses. Coming soon — full feature list TBA.",
+    "description": "A local-first quote builder for pool cleaning and maintenance businesses. Coming soon \u2014 full feature list TBA.",
     "features": [
       "Quote builder for pool cleaning services",
       "Print or export to PDF",
-      "Local-first — your data never leaves your device",
-      "Coming soon — full feature list TBA"
+      "Local-first \u2014 your data never leaves your device",
+      "Coming soon \u2014 full feature list TBA"
     ],
     "color": "#0891B2",
     "monogram": "PL",
     "status": "coming-soon",
     "price": "TBA"
+  },
+  {
+    "id": "resellpro",
+    "name": "ResellPro",
+    "niche": "reselling",
+    "tagline": "Reseller Inventory & Profit",
+    "description": "A local-first inventory and profit tracker for eBay, Etsy, Poshmark, and Mercari resellers. Track items, calculate per-item profit after fees and shipping, and export CSV reports. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Track inventory across eBay, Etsy, Poshmark, Mercari",
+      "Per-item profit calculator (buy, sell, fees, shipping)",
+      "Dashboard KPIs: revenue, profit, ROI, margin",
+      "CSV export for reports and accounting"
+    ],
+    "color": "#1E5C3A",
+    "monogram": "R",
+    "price": "$19",
+    "etsyUrl": "https://www.etsy.com/listing/4528711695/reseller-spreadsheet-app-ebay-etsy"
   }
 ]
