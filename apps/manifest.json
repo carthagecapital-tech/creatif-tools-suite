@@ -1,5 +1,73 @@
 [
   {
+    "id": "cleancrm-pro",
+    "name": "CleanCRM Pro",
+    "niche": "cleaning",
+    "tagline": "Client Manager",
+    "description": "A complete client and lead manager for cleaning service businesses. Track prospects through your pipeline, manage client and property profiles, and onboard new clients in 8 guided steps. Works offline, no subscription, no account.",
+    "features": [
+      "Lead pipeline from first contact to client",
+      "8-step client onboarding workflow",
+      "Client & property profiles",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#6B4A6E",
+    "monogram": "C",
+    "price": "$39",
+    "etsyUrl": "https://www.etsy.com/listing/4519939105/cleaning-client-onboarding-app-for"
+  },
+  {
+    "id": "cleanforms-pro",
+    "name": "CleanForms Pro",
+    "niche": "cleaning",
+    "tagline": "Forms Bundle",
+    "description": "A complete library of 8 cleaning business forms \u2014 client intake, service agreement, work order, and more. Fill out, print, and hand to clients. Works offline, no subscription, no account. Local-first.",
+    "features": [
+      "8 ready-to-use forms (intake, agreement, work order, and more)",
+      "Print welcome packets for new clients",
+      "Works offline \u2014 no subscription, no account",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#3D6B47",
+    "monogram": "C",
+    "price": "$29",
+    "etsyUrl": "https://www.etsy.com/listing/4518719013/cleaning-business-forms-bundle-app-for"
+  },
+  {
+    "id": "cleaning-job-pricer",
+    "name": "CleaningPricer Pro",
+    "niche": "cleaning",
+    "tagline": "Job Pricing & Quotes",
+    "description": "A local-first pricing and quote template tool for cleaning businesses. Build job-based quotes with line items, hourly rates, and material costs. Print or export to PDF. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Job-based quote templates with line items",
+      "Hourly rate + material cost breakdown",
+      "Print or export to PDF",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#92400E",
+    "monogram": "JP",
+    "price": "$15",
+    "etsyUrl": "https://www.etsy.com/listing/4509932551/cleaning-job-pricer-and-quote-template"
+  },
+  {
+    "id": "cleaninspect-pro",
+    "name": "CleanInspect Pro",
+    "niche": "cleaning",
+    "tagline": "Inspection Checklist",
+    "description": "Room-by-room quality control for cleaning pros. Run an inspection, capture inspector notes, generate a signed PDF report \u2014 all without leaving the browser. Local-first.",
+    "features": [
+      "Room-by-room inspection with sign-off",
+      "Inspector notes & issue flagging",
+      "Printable PDF report for the client",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#B8462E",
+    "monogram": "I",
+    "price": "$29",
+    "etsyUrl": "https://www.etsy.com/listing/4518461252/house-cleaning-inspection-checklist-app"
+  },
+  {
     "id": "cleanquote-pro",
     "name": "CleanQuote Pro",
     "niche": "cleaning",
@@ -34,40 +102,6 @@
     "etsyUrl": "https://www.etsy.com/listing/4517754673/cleaning-service-route-planner-app-html"
   },
   {
-    "id": "cleaninspect-pro",
-    "name": "CleanInspect Pro",
-    "niche": "cleaning",
-    "tagline": "Inspection Checklist",
-    "description": "Room-by-room quality control for cleaning pros. Run an inspection, capture inspector notes, generate a signed PDF report \u2014 all without leaving the browser. Local-first.",
-    "features": [
-      "Room-by-room inspection with sign-off",
-      "Inspector notes & issue flagging",
-      "Printable PDF report for the client",
-      "Local-first \u2014 your data never leaves your device"
-    ],
-    "color": "#B8462E",
-    "monogram": "I",
-    "price": "$29",
-    "etsyUrl": "https://www.etsy.com/listing/4518461252/house-cleaning-inspection-checklist-app"
-  },
-  {
-    "id": "cleanforms-pro",
-    "name": "CleanForms Pro",
-    "niche": "cleaning",
-    "tagline": "Forms Bundle",
-    "description": "A complete library of 8 cleaning business forms \u2014 client intake, service agreement, work order, and more. Fill out, print, and hand to clients. Works offline, no subscription, no account. Local-first.",
-    "features": [
-      "8 ready-to-use forms (intake, agreement, work order, and more)",
-      "Print welcome packets for new clients",
-      "Works offline \u2014 no subscription, no account",
-      "Local-first \u2014 your data never leaves your device"
-    ],
-    "color": "#3D6B47",
-    "monogram": "C",
-    "price": "$29",
-    "etsyUrl": "https://www.etsy.com/listing/4518719013/cleaning-business-forms-bundle-app-for"
-  },
-  {
     "id": "cleanschedule-pro",
     "name": "CleanSchedule Pro",
     "niche": "cleaning",
@@ -83,40 +117,6 @@
     "monogram": "S",
     "price": "$29",
     "etsyUrl": "https://www.etsy.com/listing/4519362297/cleaning-schedule-app-for-service-pros"
-  },
-  {
-    "id": "cleancrm-pro",
-    "name": "CleanCRM Pro",
-    "niche": "cleaning",
-    "tagline": "Client Manager",
-    "description": "A complete client and lead manager for cleaning service businesses. Track prospects through your pipeline, manage client and property profiles, and onboard new clients in 8 guided steps. Works offline, no subscription, no account.",
-    "features": [
-      "Lead pipeline from first contact to client",
-      "8-step client onboarding workflow",
-      "Client & property profiles",
-      "Local-first \u2014 your data never leaves your device"
-    ],
-    "color": "#6B4A6E",
-    "monogram": "C",
-    "price": "$39",
-    "etsyUrl": "https://www.etsy.com/listing/4519939105/cleaning-client-onboarding-app-for"
-  },
-  {
-    "id": "lawnquote-pro",
-    "name": "LawnQuote Pro",
-    "niche": "lawn-care",
-    "tagline": "Lawn Care Estimator",
-    "description": "Build professional lawn care estimates in under a minute. Line items, taxes, discounts \u2014 all automatic. Local-first, no account, no subscription. Built for solo landscapers and small lawn care businesses.",
-    "features": [
-      "Build estimates with line items in seconds",
-      "Auto-apply taxes & discounts",
-      "Print or export to PDF",
-      "Local-first \u2014 your data never leaves your device"
-    ],
-    "color": "#2D6A3E",
-    "monogram": "L",
-    "price": "$39",
-    "etsyUrl": "https://www.etsy.com/listing/4520752842/lawn-care-estimate-app-for-service-pros"
   },
   {
     "id": "lawnforms-pro",
@@ -136,6 +136,23 @@
     "etsyUrl": "https://www.etsy.com/listing/4522365713/lawn-care-contract-template-app-for"
   },
   {
+    "id": "lawnquote-pro",
+    "name": "LawnQuote Pro",
+    "niche": "lawn-care",
+    "tagline": "Lawn Care Estimator",
+    "description": "Build professional lawn care estimates in under a minute. Line items, taxes, discounts \u2014 all automatic. Local-first, no account, no subscription. Built for solo landscapers and small lawn care businesses.",
+    "features": [
+      "Build estimates with line items in seconds",
+      "Auto-apply taxes & discounts",
+      "Print or export to PDF",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#2D6A3E",
+    "monogram": "L",
+    "price": "$39",
+    "etsyUrl": "https://www.etsy.com/listing/4520752842/lawn-care-estimate-app-for-service-pros"
+  },
+  {
     "id": "lawnschedule-pro",
     "name": "LawnSchedule Pro",
     "niche": "lawn-care",
@@ -151,6 +168,142 @@
     "monogram": "L",
     "price": "$19",
     "etsyUrl": "https://www.etsy.com/listing/4522639270/lawn-care-schedule-app-for-service-pros"
+  },
+  {
+    "id": "amazon-calculator",
+    "name": "AmazonCalc Pro",
+    "niche": "reselling",
+    "tagline": "Amazon FBA Profit Calculator",
+    "description": "A local-first Amazon FBA profit and fee calculator. Calculate per-product profit after Amazon referral fees, FBA fulfillment fees, storage fees, and ad spend. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Calculate per-product FBA fees (referral, fulfillment, storage)",
+      "Multi-marketplace support (US, EU, JP, AU)",
+      "Profit per unit after all Amazon fees",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#FF9900",
+    "monogram": "A",
+    "price": "$15",
+    "etsyUrl": "https://www.etsy.com/listing/4509844860/amazon-fba-profit-calculator-fee"
+  },
+  {
+    "id": "etsy-profit-calc",
+    "name": "EtsyProfit Pro",
+    "niche": "reselling",
+    "tagline": "Etsy Profit Calculator",
+    "description": "A local-first Etsy profit calculator with multi-country fee support. Calculate per-order profit after Etsy transaction fees, Offsite Ads costs, and shipping. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Multi-country Etsy fee support (US, UK, EU, AU)",
+      "Per-order profit after fees, Offsite Ads, and shipping",
+      "Listing price recommendations by target margin",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#F1641E",
+    "monogram": "E",
+    "price": "$15",
+    "etsyUrl": "https://www.etsy.com/listing/4510395297/etsy-profit-calculator-multi-country-fee"
+  },
+  {
+    "id": "handmade-pricing-calc",
+    "name": "HandmadePrice Pro",
+    "niche": "reselling",
+    "tagline": "Handmade Goods Pricing",
+    "description": "A local-first pricing calculator for handmade goods sellers on Etsy, Shopify, and craft fairs. Calculate material costs, labor, overhead, and target margin in one click. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Material + labor + overhead cost breakdown",
+      "Target margin pricing (wholesale and retail)",
+      "Multi-platform: Etsy, Shopify, craft fairs",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#B45309",
+    "monogram": "H",
+    "price": "$15",
+    "etsyUrl": "https://www.etsy.com/listing/4510258431/handmade-pricing-calculator-etsy-shopify"
+  },
+  {
+    "id": "pod-profit-calculator",
+    "name": "PODProfit Pro",
+    "niche": "reselling",
+    "tagline": "Print-on-Demand Profit",
+    "description": "A local-first profit calculator for print-on-demand sellers on Etsy, Shopify, and Merch by Amazon. Calculate per-design profit after production costs, platform fees, and ads. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Per-design profit after POD production fees",
+      "Multi-platform: Etsy, Shopify, Merch by Amazon",
+      "Ad spend break-even calculator",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#7C3AED",
+    "monogram": "P",
+    "price": "$15",
+    "etsyUrl": "https://www.etsy.com/listing/4510236033/pod-profit-calculator-etsy-shopify"
+  },
+  {
+    "id": "reseller-profit-calc",
+    "name": "ResellerProfit Pro",
+    "niche": "reselling",
+    "tagline": "Multi-Platform Reseller Profit",
+    "description": "A local-first profit calculator for multi-platform resellers. Track profit per item across eBay, Etsy, Poshmark, Mercari, and Facebook Marketplace with per-platform fee rules. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Multi-platform profit: eBay, Etsy, Poshmark, Mercari",
+      "Per-item ROI after fees, shipping, and ad spend",
+      "Bulk calculate profit across your inventory",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#BE185D",
+    "monogram": "RP",
+    "price": "$15",
+    "etsyUrl": "https://www.etsy.com/listing/4510170252/reseller-profit-calculator-multi"
+  },
+  {
+    "id": "resellpro",
+    "name": "ResellPro",
+    "niche": "reselling",
+    "tagline": "Reseller Inventory & Profit",
+    "description": "A local-first inventory and profit tracker for eBay, Etsy, Poshmark, and Mercari resellers. Track items, calculate per-item profit after fees and shipping, and export CSV reports. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Track inventory across eBay, Etsy, Poshmark, Mercari",
+      "Per-item profit calculator (buy, sell, fees, shipping)",
+      "Dashboard KPIs: revenue, profit, ROI, margin",
+      "CSV export for reports and accounting"
+    ],
+    "color": "#1E5C3A",
+    "monogram": "R",
+    "price": "$19",
+    "etsyUrl": "https://www.etsy.com/listing/4528711695/reseller-spreadsheet-app-ebay-etsy"
+  },
+  {
+    "id": "couples-budget-splitter",
+    "name": "CouplesBudget Pro",
+    "niche": "budgeting",
+    "tagline": "Bill Splitter for Couples",
+    "description": "A local-first bill splitter and shared-expense tracker for couples. Track shared bills, recurring expenses, and one-off costs. Auto-calculate who owes what each month and settle up in one click. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Track shared bills and recurring expenses",
+      "Auto-calculate who owes what each month",
+      "Settle-up summary for any date range",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#0EA5E9",
+    "monogram": "CB",
+    "price": "$15",
+    "etsyUrl": "https://www.etsy.com/listing/4510416471/couples-budget-splitter-split-bills-and"
+  },
+  {
+    "id": "food-business-cost-calc",
+    "name": "FoodCost Pro",
+    "niche": "food-business",
+    "tagline": "Recipe Cost Calculator",
+    "description": "A local-first recipe and menu cost calculator for food businesses. Break down ingredient costs per recipe, set menu prices with target margins, and scale batch costs. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Ingredient cost breakdown per recipe",
+      "Menu price with target margin",
+      "Batch cost scaling (1x, 10x, 100x)",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#DC2626",
+    "monogram": "F",
+    "price": "$15",
+    "etsyUrl": "https://www.etsy.com/listing/4510294912/food-business-cost-calculator-recipe"
   },
   {
     "id": "carwash-pro",
@@ -202,22 +355,5 @@
     "monogram": "PL",
     "status": "coming-soon",
     "price": "TBA"
-  },
-  {
-    "id": "resellpro",
-    "name": "ResellPro",
-    "niche": "reselling",
-    "tagline": "Reseller Inventory & Profit",
-    "description": "A local-first inventory and profit tracker for eBay, Etsy, Poshmark, and Mercari resellers. Track items, calculate per-item profit after fees and shipping, and export CSV reports. No account, no subscription, all data stays in your browser.",
-    "features": [
-      "Track inventory across eBay, Etsy, Poshmark, Mercari",
-      "Per-item profit calculator (buy, sell, fees, shipping)",
-      "Dashboard KPIs: revenue, profit, ROI, margin",
-      "CSV export for reports and accounting"
-    ],
-    "color": "#1E5C3A",
-    "monogram": "R",
-    "price": "$19",
-    "etsyUrl": "https://www.etsy.com/listing/4528711695/reseller-spreadsheet-app-ebay-etsy"
   }
 ]

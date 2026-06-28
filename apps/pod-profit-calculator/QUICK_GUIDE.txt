@@ -1,0 +1,55 @@
+========================================
+ POD Profit Calculator Pro
+ QUICK GUIDE – Get Started in 2 Minutes
+========================================
+
+1. OPEN THE APP
+   Double‑click POD_Profit_Calculator.html. The Calculator view appears.
+
+2. ENTER YOUR PRODUCT
+   • Name: e.g., "Vintage Cat Tee"
+   • Product Type: T‑Shirt, Hoodie, Mug, etc.
+   • Supplier: Printify, Printful, Gelato, or Manual
+   • Base Cost: Auto‑filled from presets; adjust if needed
+   • Selling Channel: Etsy, Shopify, Direct
+   • Selling Price: Your retail price
+   • Shipping Cost: Per‑unit shipping (usually $4–$6)
+   • Shipping Paid By: Toggle whether you or the buyer pays
+
+3. SEE RESULTS
+   The Results cards update live:
+   • Net Profit per unit
+   • Profit Margin %
+   • Markup %
+   • Total Fees breakdown (bar chart)
+   • Break‑Even Price (minimum to cover costs)
+   • Suggested Price (to hit your target margin)
+
+4. ADJUST YOUR TARGET MARGIN
+   Use the slider to set your desired profit margin. The Suggested Price will change accordingly.
+
+5. SAVE A PRODUCT
+   Click "Save Product" (or press Ctrl+S). The product appears in the Saved Products view.
+
+6. COMPARE SCENARIOS
+   • Fill in a product in the Calculator, then click "Send to Compare".
+   • Switch to the Compare view (nav 03) to see side‑by‑side numbers.
+
+7. MANAGE YOUR LIST
+   Go to Saved Products (nav 02). You can:
+   • Search, sort, filter by supplier or profitability
+   • Select multiple products and delete them
+   • Load any product back into the Calculator
+   • Duplicate or delete individual items
+   • Export all saved data as CSV (Ctrl+E)
+
+8. CHECK ANALYTICS
+   The Analytics view (nav 04) shows bar charts, a cost breakdown donut, and summary stats.
+
+9. CUSTOMISE SETTINGS
+   In Settings (nav 05) you can change defaults, accent colour, manage custom suppliers, export/import full JSON backups, and clear all data.
+
+10. LEARN MORE
+    Open Help (nav 06) for formula references, fee tables, keyboard shortcuts, and privacy info.
+
+That’s it! You’re ready to price your POD products with confidence.

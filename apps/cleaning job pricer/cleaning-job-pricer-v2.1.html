@@ -1,0 +1,2614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CleanPro Job Pricing Tool</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%B9%3C/text%3E%3C/svg%3E">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   MICROAPP SHELL v6 — Design System Template
+   Copy EVERYTHING below this line into your app. Change only app-name,
+   nav items, view sections, and the JavaScript business logic.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("data:font/woff2;base64,d09GMgABAAAAAJ3UABQAAAABfDgAAJ1eAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGoFfG4dOHIGacj9IVkFSiUwGYD9TVEFUgWInJgCFIi9qEQgKgdw4gawuC4YWADCCojABNgIkA4waBCAFiUwHowwMB1u3X3GC6aZjD165bQA/5feRJ7EK5KabcjtIaXvmyAJ27AXYOIA2Nl6c/f//eUlFjkrrJK3ZxsGPe0vJiQjkUtZVnoqpDZk2jITW1o6lySayOlsmsTuc7x7N+YLeweTE5EQKOul1EKTJpAnWK4MLsRcl7bXlKtx/uM/FDpQILw/Vx+Z727G1y+Ojue5TfpDHCTmX7myGnztttzQa90eGEX/4yR1NWGhKKEKKDNIhTUSJg27w+0IgVhWmy/s/QBMhM7ppeJsVbfMfW+mooSNQ/QePQ//wOSf52+lqLusAuwX/YpIyLMfTSvh/+Dbt3DeDDXhIvMSMujpdN/tS/6v6+v/o9b07+fLpBQ3gJBMM9deshVKtWFVbbbunx8/T3N79WxVjazbGYHNElCBgA0YTJmAmJZhgN7SBUYXZhFGUIOy2u+FJN/+h8CGgVAFRgQyySSBrXi53GZdNjiOBcIwAiUBYMlRctKJ1zO/EsUCt/+OYfEcdqwPnV+uodFHdOLsWzKBmOT5nZj1rxYpITlJrredaScVasWLdbxrEiieDWCvWipXZT0SsBEVERa8W6g5hPPNcG1zykQYL72SUNYoOE7C9iRSRIEAkiYq37iIiYe1OtvgpAIRQJgpRI2bLbdqcNMd32eP3vmYQ2pNPhn/495DDJE+zpcQc5UIESwf8j9+zc9xGDPE0LKP3SFri1Ff/Pc7J3/86Z8CgMPEl8SaypNZhT/1XIIO1rujUF3NY8ADodPtwuc5XHl/uHG1PfoBBy05BlkGxLtmWCJG3zfzm1/pFGMMbGCpAKagoEdzzStYfLCRB21/Im8mvk2gpIsv8IZwIAnKiKYmfM62gQgHG1kMM9KC6taSrrqtQDh+64SAMSakpNOLVjY3ZUWETn1ppKXCiWqrg1/f9r7cv3mmjwAy/RIU4qQkXYKNc9M3/3wio+ChUpAHZXMSYK+H+d/nsl6AajAojChejG7eHfepY9J/Oaec6yZuBa+o9koGvxKV9VfeVF3ZvL+jI1uJN0dpKZWeAPxOdbZGcWjsf/7gA01IEGQ1uyVYIShL//vc63eyXDzD1PxvD0i9Bniy7wQLY+WPoYYkdqrFZugYJc7XK1PH2oAEAWddmiGiU5hsAlDvSBafphTwFo0KnfiyTYIIoASYAoAiNsk2InsdP+Xa6V6dfttukRrv9pqctUSn3dl9ccpzjFSfffW6qV/geS0qfk8gKeKU/D3gOaE5wTc+WSrD3uMz1//+5md/8GyEYDlJogLTYgedSkLLsByjIA2S6iAdAESXlJ+pKP49RcRwOUZyBKswtJVg19zXFqZ8/ziLY2iGayCTfcDbIJJwn2PrJ8k2izeIN0g2T9TzPLFPgNaF8PCBk7V7N3mYwNL3Yt71MfZB/dwM5wupuLHYDcOc+zPna9c0YkR2bIlaec5SahQikN5D+uZTbZt1MgTsuqwnyZOls1uJSdAoGrbB2iJNQVig9QAqmz9vy+Zc1OPFL2h8PI3X1YMXTYmrhDiqF/1YW53lO4EP0ZA1hcFBIZjZAYAfTyQ2dzLSMftsTpFuk7VkIfY3mErJDsMCaUWxITwf3oo8jRh8gSgpTz3ap6nvZy2qWRppDCLyGEECS9OfO3+5wEawoZGoHdbIphcZHiCCF89fDfQv/V947d9dKG4LrRL25iGJRFWcTyvOi3lLYsZ4vAxAkVJUHW7/1v2k/rHxq39DdJt2JHQEFBJQpm727+4xWLWquISBEPmA5NpKopuC18fObc/Rlr/vBY2+1+/27HVUlKSkqKgID4NLbbQziknP9RdRNEPhFEeDQQTZqI");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ── COLOR SYSTEM ── */
+:root {
+  --accent-h: 32;
+  --accent:    oklch(0.555 0.180 var(--accent-h));
+  --accent-2:  oklch(0.65  0.14  var(--accent-h));
+  --accent-3:  oklch(0.42  0.18  var(--accent-h));
+  --accent-soft:   oklch(0.555 0.180 var(--accent-h) / .10);
+  --accent-soft-2: oklch(0.555 0.180 var(--accent-h) / .06);
+  --accent-glow:   oklch(0.555 0.180 var(--accent-h) / .15);
+  --paper:  oklch(0.962 0.012 85);
+  --paper-2:oklch(0.945 0.014 84);
+  --ink:    oklch(0.185 0.012 55);
+  --ink-2:  oklch(0.32  0.012 55);
+  --mid:    oklch(0.52  0.010 60);
+  --rule:   oklch(0.865 0.010 70);
+  --rule-2: oklch(0.91  0.010 70);
+  --signal: oklch(0.68 0.16 145);
+  --warn:   oklch(0.78 0.16 85);
+  --danger: oklch(0.60 0.18 25);
+  --shadow: 0 1px 0 oklch(0.18 0.012 55 / .04), 0 14px 30px -22px oklch(0.18 0.012 55 / .35);
+  --shadow-lg: 0 4px 20px oklch(0.18 0.012 55 / .15);
+  --sidebar-w: 248px;
+  --toggle-icon: "☾";
+}
+[data-theme="dark"] {
+  --paper:  oklch(0.18 0.012 55);
+  --paper-2:oklch(0.22 0.014 60);
+  --ink:    oklch(0.92 0.012 85);
+  --ink-2:  oklch(0.78 0.012 80);
+  --mid:    oklch(0.60 0.010 70);
+  --rule:   oklch(0.35 0.010 45);
+  --rule-2: oklch(0.30 0.010 40);
+  --accent-soft:   oklch(0.65 0.180 var(--accent-h) / .15);
+  --accent-soft-2: oklch(0.65 0.180 var(--accent-h) / .08);
+  --accent-glow:   oklch(0.65 0.180 var(--accent-h) / .20);
+  --shadow: 0 1px 0 oklch(0.10 0.012 40 / .3), 0 14px 30px -22px oklch(0.05 0.012 20 / .5);
+  --shadow-lg: 0 4px 20px oklch(0.05 0.012 20 / .4);
+  --toggle-icon: "☀";
+}
+
+/* ── RESET & BASE ── */
+* { box-sizing:border-box; margin:0; padding:0 }
+html, body { height:100% }
+body {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-feature-settings: "ss01","ss02","cv11","tnum","zero";
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  background: radial-gradient(1200px 700px at 80% -10%, oklch(0.97 0.02 80) 0%, transparent 60%),
+              radial-gradient(900px 500px at -10% 110%, oklch(0.93 0.02 60) 0%, transparent 55%),
+              var(--paper);
+  background-attachment: fixed;
+  font-size:13px; line-height:1.45;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  transition: background .3s ease, color .3s ease;
+}
+[data-theme="dark"] body {
+  background: radial-gradient(1200px 700px at 80% -10%, oklch(0.25 0.02 80) 0%, transparent 60%),
+              radial-gradient(900px 500px at -10% 110%, oklch(0.20 0.02 60) 0%, transparent 55%),
+              var(--paper);
+}
+.app { min-height:100vh; min-height:100dvh; display:grid; grid-template-columns: var(--sidebar-w) 1fr; }
+
+/* ── SIDEBAR ── */
+aside { border-right:1px solid var(--rule); background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%); display:flex; flex-direction:column; position:sticky; top:0; height:100vh; height:100dvh; z-index:10; }
+.brand { padding: 20px 22px 18px; border-bottom:1px solid var(--rule); display:grid; grid-template-columns: auto 1fr auto; align-items:center; gap:12px; }
+.mark { width:24px; height:24px; position:relative; border:1.25px solid var(--ink); display:grid; place-items:center; background:var(--paper); flex-shrink:0; }
+.mark::before { content:""; width:8px; height:8px; background:var(--accent); box-shadow: 0 0 0 2.5px var(--paper); }
+.mark::after  { content:""; position:absolute; inset:-4px; border-top:1px solid var(--ink); border-left:1px solid var(--ink); width:5px; height:5px; }
+.wordmark { font-weight:700; font-size:12.5px; letter-spacing:.04em; text-transform:uppercase; }
+.wordmark .slash { color:var(--accent); font-weight:500; margin:0 1px }
+.wordmark small { display:block; font-weight:400; font-size:9.5px; letter-spacing:.18em; color:var(--mid); margin-top:2px; }
+.ver { font-size:9px; letter-spacing:.12em; color:var(--mid); border:1px solid var(--rule); padding:2px 5px; flex-shrink:0; }
+.theme-toggle { width:22px; height:22px; border:1px solid var(--rule); background:var(--paper-2); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:11px; color:var(--ink-2); margin-left:4px; flex-shrink:0; transition: all .15s; }
+.theme-toggle:hover { border-color:var(--accent); color:var(--accent); }
+.theme-toggle::before { content:var(--toggle-icon); }
+
+.find { margin: 14px 14px 6px; border:1px solid var(--rule); background:var(--paper); display:flex; align-items:center; gap:8px; padding:7px 10px; font-size:11.5px; }
+.find .find-icon { color:var(--mid); font-size:13px; }
+.find input { flex:1; border:none; background:transparent; outline:none; font:inherit; font-size:11.5px; color:var(--ink); min-width:0; }
+.find input::placeholder { color:var(--mid); }
+.find .kbd { margin-left:auto; display:inline-flex; gap:2px; }
+.kbd span { border:1px solid var(--rule); background:linear-gradient(180deg,var(--paper),var(--paper-2)); padding:1px 5px; border-radius:2px; font-size:9.5px; color:var(--ink-2); box-shadow: 0 1px 0 var(--rule); }
+
+.nav-title { padding: 18px 22px 8px; font-size:9.5px; letter-spacing:.22em; color:var(--mid); display:flex; justify-content:space-between; }
+nav { flex:1; display:flex; flex-direction:column; overflow-y:auto; }
+.nav-list { display:flex; flex-direction:column; }
+.nav-item { display:grid; grid-template-columns: 28px 1fr auto; align-items:center; gap:0; padding: 8px 22px; color:var(--ink-2); text-decoration:none; font-size:12px; letter-spacing:.02em; border-left:2px solid transparent; position:relative; transition: background .12s; cursor:pointer; }
+.nav-item .idx { font-size:9.5px; color:var(--mid); letter-spacing:.1em; }
+.nav-item .lbl { text-transform:lowercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.nav-item .meta { font-size:9.5px; color:var(--mid); border:1px solid var(--rule); padding:1px 5px; background:var(--paper); flex-shrink:0; margin-left:8px; }
+.nav-item:hover { background: var(--accent-soft-2) }
+.nav-item.active { background: var(--paper); color:var(--ink); border-left-color: var(--accent); font-weight:600; }
+.nav-item.active::after { content:""; position:absolute; right:18px; top:50%; transform:translateY(-50%); width:5px; height:5px; background:var(--accent); }
+.nav-item.active .idx { color:var(--accent) }
+
+.runtime { margin: 8px 14px 14px; border:1px solid var(--rule); background:var(--paper); padding:12px 12px 10px; flex-shrink:0; }
+.runtime h4 { font-size:9.5px; letter-spacing:.2em; color:var(--mid); font-weight:500; margin-bottom:8px; display:flex; justify-content:space-between; }
+.runtime .row { display:flex; justify-content:space-between; align-items:baseline; font-size:11px; color:var(--ink-2); padding:3px 0; }
+.runtime .row b { font-weight:600; color:var(--ink) }
+.runtime .bar { height:3px; background:var(--rule-2); margin-top:8px; position:relative; overflow:hidden; }
+.runtime .bar-fill { position:absolute; inset:0; background:var(--ink); }
+.runtime .bar-fill.warn { background:var(--accent); left:auto; right:0; width:22%; }
+
+.op { border-top:1px solid var(--rule); padding:12px 22px; display:grid; grid-template-columns:24px 1fr auto; align-items:center; gap:10px; flex-shrink:0; }
+.avatar { width:24px; height:24px; border:1px solid var(--ink); background: repeating-linear-gradient(45deg, var(--ink) 0 1px, transparent 1px 4px), var(--paper); position:relative; flex-shrink:0; }
+.avatar::after { content:""; position:absolute; right:-3px; bottom:-3px; width:7px; height:7px; background:var(--signal); border:1.5px solid var(--paper); }
+.op .who { font-size:11px; line-height:1.3; min-width:0; }
+.op .who small { display:block; color:var(--mid); font-size:9.5px; letter-spacing:.1em }
+.op .out { font-size:9.5px; color:var(--mid); letter-spacing:.1em; border:1px solid var(--rule); padding:2px 5px; flex-shrink:0; cursor:pointer; }
+.op .out:hover { background:var(--paper-2); }
+
+/* ── MAIN & HEADER ── */
+main { min-width:0; display:flex; flex-direction:column; }
+header { border-bottom:1px solid var(--rule); background: linear-gradient(180deg, var(--paper) 0%, oklch(from var(--paper) l c h / 98%) 100%); padding: 16px 28px 14px; display:grid; grid-template-columns: 1fr auto; align-items:end; gap:24px; position:sticky; top:0; z-index:5; }
+.crumbs { font-size:10px; letter-spacing:.18em; color:var(--mid); text-transform:uppercase; display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
+.crumbs .live { display:inline-flex; align-items:center; gap:5px; color:var(--ink); }
+.crumbs .live i { width:6px; height:6px; background:var(--accent); display:inline-block; box-shadow: 0 0 0 3px var(--accent-soft); }
+h1 { font-size:28px; font-weight:700; letter-spacing:-.01em; line-height:1; color:var(--ink); display:flex; flex-direction:column; align-items:flex-start; }
+h1 .of { color:var(--mid); font-weight:300; font-size:.42em; letter-spacing:.04em; margin-top:4px; }
+
+.topbar-right { display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+.telemetry { display:grid; grid-auto-flow:column; gap:0; border:1px solid var(--rule); background:var(--paper); }
+.telemetry div { padding:8px 14px; border-right:1px solid var(--rule); font-size:10px; letter-spacing:.12em; color:var(--mid); display:flex; flex-direction:column; gap:2px; line-height:1; }
+.telemetry div:last-child { border-right:none }
+.telemetry b { color:var(--ink); font-size:12px; font-weight:600; letter-spacing:.02em; }
+
+/* ── BUTTONS ── */
+.btn { font: inherit; cursor:pointer; display:inline-flex; align-items:center; gap:10px; border:1px solid var(--rule); background:var(--paper); color:var(--ink); padding:9px 14px; font-size:11.5px; letter-spacing:.04em; text-decoration:none; box-shadow: var(--shadow); position:relative; transition: background .12s; white-space:nowrap; }
+.btn:hover { background: var(--accent-soft-2) }
+.btn:active { transform:translateY(1px) }
+.btn .k { font-size:9px; letter-spacing:.12em; color:var(--mid); border-left:1px solid var(--rule); padding-left:10px; margin-left:4px; }
+.btn.primary { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.btn.primary:hover { background:oklch(from var(--ink) calc(l + 0.08) c h) }
+.btn.primary .k { color:oklch(0.7 0.01 60); border-left-color: oklch(0.32 0.012 55) }
+.btn.primary::before { content:""; width:6px; height:6px; background:var(--accent); }
+.btn.danger { border-color:var(--danger); color:var(--danger); }
+.btn.danger:hover { background:oklch(0.60 0.18 25 / .10); }
+
+/* ── CANVAS ── */
+.canvas { padding: 28px 28px 40px; position:relative; background: radial-gradient(circle at 1px 1px, oklch(from var(--ink) l c h / 0.08) 1px, transparent 1.5px) 0 0 / 22px 22px; }
+.canvas::before, .canvas::after { content:""; position:absolute; width:18px; height:18px; border:1px solid var(--ink); pointer-events:none; }
+.canvas::before { top:14px; left:14px; border-right:none; border-bottom:none }
+.canvas::after  { top:14px; right:14px; border-left:none; border-bottom:none }
+
+/* ── SECTIONS ── */
+.section-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px; }
+.section-head h2 { font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; color:var(--ink-2); display:flex; align-items:center; gap:10px; }
+.section-head h2 .num { color:var(--accent); font-weight:500; }
+
+/* ── FORMS ── */
+.form-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px 20px; margin-bottom: 20px; }
+.form-group { display:flex; flex-direction:column; gap:6px; }
+.form-group.full-width { grid-column: 1 / -1; }
+.form-group label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--mid); font-weight: 500; display:flex; align-items:center; gap:8px; }
+.form-group label .hint { font-size: 9px; letter-spacing: .08em; color: var(--mid); border: 1px solid var(--rule); padding: 1px 5px; background: var(--paper-2); text-transform: none; }
+.form-group input, .form-group select, .form-group textarea { font: inherit; font-size: 13px; border: 1px solid var(--rule); background: var(--paper); padding: 10px 12px; color: var(--ink); outline: none; width: 100%; transition: border-color .15s, box-shadow .15s; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.form-group input::placeholder { color: var(--mid); opacity: .6; }
+.form-group input[type="number"] { font-variant-numeric: tabular-nums; }
+.form-group select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23555' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+[data-theme="dark"] .form-group select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23aaa' stroke-width='1.5'/%3E%3C/svg%3E"); }
+
+.toggle-wrap { display:flex; align-items:center; gap: 10px; }
+.toggle-wrap .toggle-label { font-size: 12px; color: var(--ink-2); }
+.toggle-switch { position: relative; width: 36px; height: 20px; cursor: pointer; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-switch .track { position: absolute; inset: 0; background: var(--rule-2); border-radius: 20px; transition: background .2s; }
+.toggle-switch .track::after { content: ""; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; background: var(--paper); border-radius: 50%; transition: transform .2s; box-shadow: 0 1px 3px oklch(0 0 0 / .2); }
+.toggle-switch input:checked + .track { background: var(--accent); }
+.toggle-switch input:checked + .track::after { transform: translateX(16px); }
+
+.slider-wrap { display:flex; align-items:center; gap: 12px; }
+.slider-wrap input[type="range"] { flex: 1; -webkit-appearance: none; appearance: none; height: 4px; background: var(--rule-2); border-radius: 2px; outline: none; }
+.slider-wrap input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid var(--paper); cursor: pointer; box-shadow: 0 0 0 2px var(--accent-soft); }
+.slider-wrap input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid var(--paper); cursor: pointer; }
+.slider-wrap .slider-val { font-size: 12px; font-weight: 600; color: var(--accent); min-width: 40px; text-align: right; }
+
+/* ── CARDS ── */
+.stats { display:grid; grid-template-columns: repeat(3, 1fr); gap:0; border:1px solid var(--rule); background:var(--paper); box-shadow: var(--shadow); position:relative; }
+.card { padding: 22px 22px 18px; border-right:1px solid var(--rule); position:relative; display:flex; flex-direction:column; min-height: 140px; }
+.card:last-child { border-right:none }
+.card::before, .card::after { content:""; position:absolute; width:10px; height:10px; border:1px solid var(--ink-2); opacity:.7; pointer-events:none; }
+.card::before { top:8px; left:8px; border-right:none; border-bottom:none }
+.card::after  { bottom:8px; right:8px; border-left:none; border-top:none }
+.card .lbl { font-size:10px; letter-spacing:.2em; color:var(--mid); text-transform:uppercase; display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.card .lbl .tag { font-size:9px; letter-spacing:.14em; border:1px solid var(--rule); padding:2px 6px; color:var(--ink-2); background:var(--paper-2); }
+.card .val { font-size:36px; font-weight:600; letter-spacing:-.02em; line-height:1; color:var(--ink); display:flex; align-items:baseline; gap:8px; }
+.card .val .u { font-size:14px; font-weight:400; color:var(--mid); letter-spacing:.04em; }
+.card .delta { font-size:11px; letter-spacing:.03em; display:flex; align-items:center; gap:8px; margin-top:10px; color:var(--ink-2); }
+.delta .pill { display:inline-flex; align-items:center; gap:5px; border:1px solid var(--rule); background:var(--paper-2); padding:2px 7px; font-size:10.5px; font-weight:600; }
+.delta .pill.up   { color: var(--signal); border-color: oklch(from var(--signal) l calc(c * 0.5) h) }
+.delta .pill.down { color: var(--danger); border-color: oklch(from var(--danger) l calc(c * 0.5) h) }
+.delta .pill.neutral { color: var(--mid); border-color: var(--rule) }
+.delta .pill::before { content:""; width:0; height:0; border-style:solid; }
+.delta .pill.up::before   { border-width:0 4px 5px 4px; border-color:transparent transparent currentColor transparent }
+.delta .pill.down::before { border-width:5px 4px 0 4px; border-color: currentColor transparent transparent transparent }
+.delta .pill.neutral::before { border:none; width:8px; height:1px; background:currentColor; }
+.delta .since { color:var(--mid); font-size:10px; letter-spacing:.06em }
+
+/* ── TABLE ── */
+.tbl-wrap { margin-top:24px; border:1px solid var(--rule); background:var(--paper); box-shadow: var(--shadow); }
+.tbl-head { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--rule); background:linear-gradient(180deg,var(--paper),var(--paper-2)); flex-wrap:wrap; gap:10px; }
+.tbl-head .ttl { font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; display:flex; align-items:center; gap:10px; }
+.tbl-head .ttl .num { color:var(--accent) }
+.tbl-head .ttl .ct { color:var(--mid); font-weight:400; letter-spacing:.12em; border-left:1px solid var(--rule); padding-left:10px; margin-left:4px; }
+.filters { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.chip { font-size:10px; letter-spacing:.12em; text-transform:uppercase; border:1px solid var(--rule); padding:5px 9px; background:var(--paper); display:inline-flex; align-items:center; gap:6px; color:var(--ink-2); cursor:pointer; transition: all .12s; }
+.chip.on, .chip:hover { background:var(--ink); color:var(--paper); border-color:var(--ink) }
+.chip i { width:5px; height:5px; background:currentColor; display:inline-block; }
+.chip.del { color: var(--danger); border-color: var(--danger); }
+.chip.del:hover { background: var(--danger); color: var(--paper); }
+table { width:100%; border-collapse:collapse; font-size:12px; }
+thead th { font-weight:500; font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--mid); text-align:left; padding:10px 18px; border-bottom:1px solid var(--rule); background:var(--paper-2); position:relative; cursor: pointer; user-select: none; white-space: nowrap; }
+thead th:hover { color: var(--ink); background: var(--accent-soft-2); }
+thead th.sortable::after { content: " \2195"; font-size: 8px; opacity: .4; }
+thead th.sort-asc::after { content: " \2191"; opacity: 1; color: var(--accent); }
+thead th.sort-desc::after { content: " \2193"; opacity: 1; color: var(--accent); }
+thead th + th::before { content:""; position:absolute; left:0; top:25%; bottom:25%; border-left:1px solid var(--rule-2); }
+thead th.num, tbody td.num { text-align:right; font-variant-numeric:tabular-nums }
+tbody td { padding:14px 18px; border-bottom:1px solid var(--rule-2); color:var(--ink-2); vertical-align:middle; }
+tbody tr:last-child td { border-bottom:none }
+tbody tr:hover td { background: var(--accent-soft-2) }
+.id { display:inline-flex; align-items:center; gap:10px; }
+.id .dot { width:8px; height:8px; background:var(--ink); display:inline-block; flex-shrink:0; }
+.id .dot.red    { background:var(--danger) }
+.id .dot.green  { background:var(--signal) }
+.id .dot.amber  { background:var(--warn) }
+.id .dot.gray   { background:var(--mid) }
+.id b { font-weight:600; color:var(--ink); letter-spacing:.01em }
+.id small { display:block; color:var(--mid); font-size:10px; letter-spacing:.08em; margin-top:2px }
+
+/* ── EMPTY STATE ── */
+.empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 60px 40px; text-align: center; gap: 16px; border: 1px dashed var(--rule); background: var(--paper); }
+.empty-state .empty-icon { width: 48px; height: 48px; border: 2px dashed var(--rule); display: grid; place-items: center; font-size: 20px; color: var(--mid); }
+.empty-state h3 { font-size: 14px; letter-spacing: .1em; color: var(--ink-2); font-weight: 600; }
+.empty-state p { font-size: 12px; color: var(--mid); max-width: 320px; line-height: 1.6; }
+
+/* ── PAGINATION ── */
+.pagination { display:flex; align-items:center; justify-content:center; gap: 4px; padding: 14px 18px; border-top: 1px solid var(--rule); }
+.pagination button { font: inherit; font-size: 11px; border: 1px solid var(--rule); background: var(--paper); color: var(--ink-2); padding: 5px 10px; cursor: pointer; min-width: 32px; text-align: center; transition: all .12s; }
+.pagination button:hover:not(:disabled) { background: var(--accent-soft-2); border-color: var(--accent); color: var(--ink); }
+.pagination button:disabled { opacity: .4; cursor: not-allowed; }
+.pagination button.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.pagination .page-info { font-size: 10px; color: var(--mid); letter-spacing: .1em; margin: 0 12px; }
+
+/* ── TOASTS ── */
+.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast { pointer-events: all; display: flex; align-items: center; gap: 12px; padding: 12px 18px; min-width: 280px; max-width: 420px; border: 1px solid var(--rule); background: var(--paper); box-shadow: var(--shadow-lg); font-size: 12px; color: var(--ink); animation: toastIn .3s ease forwards; position: relative; overflow: hidden; }
+.toast.toast-out { animation: toastOut .3s ease forwards; }
+.toast.success { border-left: 3px solid var(--signal); }
+.toast.error   { border-left: 3px solid var(--danger); }
+.toast.info    { border-left: 3px solid var(--accent-2); }
+.toast .toast-icon { font-size: 14px; flex-shrink: 0; }
+.toast .toast-msg { flex: 1; line-height: 1.4; }
+.toast .toast-close { cursor: pointer; color: var(--mid); font-size: 16px; line-height: 1; padding: 2px; }
+.toast .toast-close:hover { color: var(--ink); }
+.toast .toast-bar { position: absolute; bottom: 0; left: 0; height: 2px; background: var(--accent-soft); }
+@keyframes toastIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(20px); } }
+@keyframes shrink { from { width: 100%; } to { width: 0%; } }
+
+/* ── MODAL ── */
+.modal-overlay { position: fixed; inset: 0; z-index: 200; background: oklch(0.10 0.012 55 / .55); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--paper); border: 1px solid var(--rule); box-shadow: var(--shadow-lg); width: 90%; max-width: 520px; max-height: 85vh; display: flex; flex-direction: column; transform: translateY(-20px) scale(0.97); transition: transform .25s ease; }
+.modal-overlay.open .modal { transform: translateY(0) scale(1); }
+.modal-header { padding: 18px 22px 14px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; justify-content: space-between; }
+.modal-header h3 { font-size: 13px; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; color: var(--ink); }
+.modal-close { cursor: pointer; color: var(--mid); font-size: 18px; line-height: 1; padding: 4px; border: none; background: none; }
+.modal-close:hover { color: var(--ink); }
+.modal-body { padding: 22px; overflow-y: auto; font-size: 12px; line-height: 1.6; color: var(--ink-2); }
+.modal-footer { padding: 14px 22px; border-top: 1px solid var(--rule); display: flex; justify-content: flex-end; gap: 10px; }
+
+/* ── SETTINGS ── */
+.settings-section { margin-bottom: 32px; }
+.settings-section h3 { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.settings-section h3 .num { color: var(--accent); font-weight: 500; }
+.settings-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border: 1px solid var(--rule); background: var(--paper); margin-bottom: -1px; }
+.settings-row label { font-size: 12px; color: var(--ink-2); }
+.settings-row .desc { font-size: 10px; color: var(--mid); margin-top: 4px; letter-spacing: .04em; }
+.settings-row input, .settings-row select { font: inherit; font-size: 13px; border: 1px solid var(--rule); background: var(--paper); padding: 8px 10px; color: var(--ink); outline: none; }
+.settings-row input:focus, .settings-row select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+/* ── HELP ── */
+.help-block { border: 1px solid var(--rule); background: var(--paper); padding: 22px; margin-bottom: 20px; }
+.help-block h3 { font-size: 12px; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.help-block h3 .num { color: var(--accent); font-weight: 500; }
+.help-block p { font-size: 12px; color: var(--ink-2); line-height: 1.7; margin-bottom: 8px; }
+.help-block ul { margin: 8px 0; padding-left: 20px; }
+.help-block li { font-size: 12px; color: var(--ink-2); line-height: 1.7; margin-bottom: 4px; }
+.help-block .fee-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--rule-2); font-size: 12px; }
+.help-block .fee-row:last-child { border-bottom: none; }
+.help-block .fee-row b { color: var(--ink); font-weight: 600; }
+.help-block .fee-row span { color: var(--ink-2); }
+
+/* ── FOOTER ── */
+.canvas-foot { position:relative }
+.canvas-foot::before, .canvas-foot::after { content:""; position:absolute; width:18px; height:18px; border:1px solid var(--ink); pointer-events:none; }
+.canvas-foot::before { bottom:14px; left:14px; border-right:none; border-top:none }
+.canvas-foot::after  { bottom:14px; right:14px; border-left:none; border-top:none }
+.footstrip { margin-top:22px; display:flex; justify-content:space-between; align-items:center; font-size:10px; letter-spacing:.14em; color:var(--mid); text-transform:uppercase; padding: 12px 4px 4px; flex-wrap:wrap; gap:8px; }
+.footstrip .l, .footstrip .r { display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+.footstrip .sep { width:24px; border-top:1px solid var(--rule) }
+.footstrip b { color:var(--ink); font-weight:500; letter-spacing:.06em }
+
+/* ── PRINT ── */
+@media print {
+  .sidebar-toggle, aside, .theme-toggle, .find, .op, .btn .k, .toast-container, .pagination, .nav-item { display: none !important; }
+  .app { grid-template-columns: 1fr !important; }
+  body { background: white !important; color: black !important; }
+  .canvas { background: none !important; padding: 20px !important; }
+  .stats, .tbl-wrap, .form-grid, .chart-wrap, .help-block, .settings-row { box-shadow: none !important; border: 1px solid #ccc !important; }
+  .card { border-right: 1px solid #ccc !important; break-inside: avoid; }
+  header { position: static !important; background: white !important; border-bottom: 2px solid #333 !important; }
+  h1 { font-size: 24px !important; }
+  .footstrip { border-top: 2px solid #333; margin-top: 30px; }
+}
+
+/* ── RESPONSIVE ── */
+.sidebar-toggle { display:none; position:fixed; top:12px; left:12px; z-index:100; width:36px; height:36px; border:1px solid var(--rule); background:var(--paper); align-items:center; justify-content:center; cursor:pointer; font-size:16px; color:var(--ink); }
+@media (max-width: 1024px) {
+  .app { grid-template-columns: 1fr; }
+  aside { position:fixed; left:0; top:0; height:100vh; height:100dvh; transform: translateX(-100%); transition: transform .25s ease; }
+  aside.open { transform: translateX(0); }
+  .sidebar-toggle { display:flex; }
+  .stats { grid-template-columns: 1fr; }
+  .card { border-right:none; border-bottom:1px solid var(--rule); }
+  .card:last-child { border-bottom:none; }
+  header { padding-left: 56px; }
+  h1 { font-size:22px; }
+}
+@media (max-width: 640px) {
+  .canvas { padding: 20px 16px 32px; }
+  header { padding: 12px 16px 12px 56px; }
+  .telemetry { display:none; }
+  .topbar-right { gap:8px; }
+  .btn { padding:7px 10px; font-size:10.5px; }
+  .btn .k { display:none; }
+  table { font-size:11px; }
+  tbody td, thead th { padding:10px 12px; }
+  .card .val { font-size:28px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .modal { width: 95%; max-height: 90vh; }
+  .toast-container { left: 16px; right: 16px; bottom: 16px; }
+  .toast { min-width: auto; max-width: none; }
+}
+
+/* ── VIEW SYSTEM ── */
+.view { display: none; }
+.view.active { display: block; }
+.hidden { display:none !important; }
+
+/* ── CHIPS / TOGGLE CHIPS ── */
+.chip-group { display:flex; flex-wrap:wrap; gap:8px; }
+.chip-toggle { font:inherit; font-size:11px; letter-spacing:.06em; border:1px solid var(--rule); background:var(--paper); padding:7px 12px; color:var(--ink-2); cursor:pointer; transition: all .12s; display:inline-flex; align-items:center; gap:6px; }
+.chip-toggle:hover { background:var(--accent-soft-2); }
+.chip-toggle.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.chip-toggle.on::before { content:""; width:6px; height:6px; background:var(--accent); display:inline-block; }
+.chip-toggle:disabled { opacity:.4; cursor:not-allowed; }
+/* ── RESULT CARDS ── */
+.result-cards { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:16px; margin: 20px 0; }
+.result-card { border:1px solid var(--rule); background:var(--paper); padding:18px; position:relative; box-shadow: var(--shadow); }
+.result-card .rc-lbl { font-size:10px; letter-spacing:.2em; color:var(--mid); text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; }
+.result-card .rc-val { font-size:28px; font-weight:600; color:var(--ink); letter-spacing:-.02em; line-height:1; }
+.result-card .rc-sub { font-size:11px; color:var(--ink-2); margin-top:8px; }
+.result-card .rc-tag { font-size:9px; letter-spacing:.14em; border:1px solid var(--rule); padding:2px 6px; background:var(--paper-2); }
+.result-card.highlight { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+/* ── COST BREAKDOWN BAR ── */
+.cost-bar-wrap { margin: 20px 0; }
+.cost-bar-track { height:36px; display:flex; border:1px solid var(--rule); overflow:hidden; position:relative; }
+.cost-seg { height:100%; transition: width .3s ease, background .3s ease; position:relative; min-width: 2px; }
+.cost-seg-labor { background: var(--accent); }
+.cost-seg-supplies { background: oklch(0.65 0.12 var(--accent-h)); }
+.cost-seg-mileage { background: oklch(0.75 0.08 var(--accent-h)); }
+.cost-seg-drive { background: oklch(0.55 0.06 var(--accent-h)); }
+.cost-bar-labels { display:flex; margin-top:8px; gap: 16px; font-size:11px; color:var(--ink-2); flex-wrap:wrap; }
+.cost-bar-labels .cl { display:flex; align-items:center; gap:6px; }
+.cost-bar-labels .cl i { width:10px; height:10px; display:inline-block; }
+/* ── STEP CONTROL ── */
+.step-control { display:flex; align-items:stretch; border:1px solid var(--rule); width:fit-content; }
+.step-control button { width:36px; border:none; background:var(--paper-2); color:var(--ink); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition: background .12s; }
+.step-control button:hover { background:var(--accent-soft-2); }
+.step-control input { width:60px; text-align:center; border:none; border-left:1px solid var(--rule); border-right:1px solid var(--rule); background:var(--paper); font:inherit; font-size:13px; color:var(--ink); outline:none; -moz-appearance:textfield; }
+.step-control input::-webkit-outer-spin-button, .step-control input::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+/* ── SUGGESTED PRICE ── */
+.suggested-price { border:1px solid var(--accent); background:var(--accent-soft-2); padding:14px 18px; margin:16px 0; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.suggested-price .sp-lbl { font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--mid); }
+.suggested-price .sp-val { font-size:22px; font-weight:600; color:var(--ink); }
+.suggested-price .sp-delta { font-size:11px; display:flex; align-items:center; gap:6px; }
+/* ── DISCOUNT BADGE ── */
+.discount-badge { display:inline-flex; align-items:center; gap:6px; font-size:11px; color:var(--signal); border:1px solid oklch(from var(--signal) l calc(c * 0.5) h); padding:3px 8px; background:oklch(from var(--signal) l c h / .08); }
+.discount-badge::before { content:""; width:0; height:0; border-style:solid; border-width:4px 4px 4px 0; border-color:transparent var(--signal) transparent transparent; }
+/* ── MANUAL TAG ── */
+.manual-tag { font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); border:1px solid var(--accent); padding:1px 5px; margin-left:6px; background:var(--accent-soft); display:none; }
+.manual-tag.on { display:inline; }
+/* ── AUTOCOMPLETE ── */
+.ac-wrap { position:relative; }
+.ac-list { position:absolute; top:100%; left:0; right:0; z-index:20; border:1px solid var(--rule); border-top:none; background:var(--paper); max-height:160px; overflow-y:auto; box-shadow:var(--shadow-lg); }
+.ac-list div { padding:8px 12px; font-size:12px; color:var(--ink-2); cursor:pointer; border-bottom:1px solid var(--rule-2); }
+.ac-list div:hover, .ac-list div.active { background:var(--accent-soft-2); color:var(--ink); }
+/* ── CLIENT CARDS ── */
+.client-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px; }
+.client-card { border:1px solid var(--rule); background:var(--paper); padding:18px; cursor:pointer; transition: all .15s; box-shadow:var(--shadow); position:relative; }
+.client-card:hover { border-color:var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.client-card .cc-name { font-size:14px; font-weight:600; color:var(--ink); margin-bottom:10px; }
+.client-card .cc-row { display:flex; justify-content:space-between; font-size:11px; color:var(--ink-2); padding:4px 0; border-bottom:1px solid var(--rule-2); }
+.client-card .cc-row:last-child { border-bottom:none; }
+.client-card .cc-row b { color:var(--ink); }
+.client-card .cc-btn { margin-top:10px; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); border:1px solid var(--accent); padding:5px 10px; background:transparent; cursor:pointer; transition: all .12s; display:inline-block; text-decoration:none; }
+.client-card .cc-btn:hover { background:var(--accent); color:var(--paper); }
+/* ── CHARTS ── */
+.chart-wrap { border:1px solid var(--rule); background:var(--paper); padding:22px; margin-bottom:20px; box-shadow:var(--shadow); }
+.chart-title { font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; color:var(--ink-2); margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+.chart-title .num { color:var(--accent); font-weight:500; }
+.bar-chart { display:flex; align-items:flex-end; gap: 4px; height:180px; padding: 10px 0 24px; position:relative; }
+.bar-chart .bar { flex: 1; background: var(--accent); min-height: 2px; transition: height .4s ease; position:relative; border-radius: 2px 2px 0 0; }
+.bar-chart .bar:hover { opacity:.8; }
+.bar-chart .bar-label { position:absolute; bottom:-20px; left:50%; transform:translateX(-50%); font-size:9px; color:var(--mid); white-space:nowrap; }
+.bar-chart .bar-val { position:absolute; top:-18px; left:50%; transform:translateX(-50%); font-size:9px; color:var(--ink-2); white-space:nowrap; }
+.histogram { display:flex; align-items:flex-end; gap: 12px; height:160px; padding: 10px 30px 28px 0; }
+.hist-bar { flex: 1; background: var(--accent); min-height: 2px; transition: height .4s ease; position:relative; border-radius: 2px 2px 0 0; opacity: 0.75; }
+.hist-bar:nth-child(1) { background: var(--danger); opacity: 0.7; }
+.hist-bar:nth-child(2) { background: var(--warn); opacity: 0.8; }
+.hist-bar:nth-child(3) { background: var(--accent-2); }
+.hist-bar:nth-child(4) { background: var(--signal); opacity: 0.85; }
+.hist-bar:nth-child(5) { background: var(--accent-3); }
+.hist-label { position:absolute; bottom:-24px; left:50%; transform:translateX(-50%); font-size:9px; color:var(--mid); white-space:nowrap; }
+.hist-count { position:absolute; top:-18px; left:50%; transform:translateX(-50%); font-size:9px; color:var(--ink-2); white-space:nowrap; }
+/* ── COMPARE MODAL (wider) ── */
+.modal.wide { max-width: 920px; }
+.compare-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.compare-col { border:1px solid var(--rule); padding:16px; }
+.compare-col h4 { font-size:11px; letter-spacing:.15em; text-transform:uppercase; margin-bottom:12px; color:var(--ink-2); }
+.compare-col.winner { border-color:var(--signal); box-shadow:0 0 0 3px oklch(from var(--signal) l c h / .15); }
+.winner-banner { text-align:center; padding:10px; background:var(--signal); color:var(--paper); font-size:12px; letter-spacing:.1em; text-transform:uppercase; font-weight:600; margin:-16px -16px 12px; }
+/* ── BUTTON GROUP ── */
+.btn-group { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+/* ── FORM NOTE ── */
+.form-note { font-size:10px; color:var(--mid); letter-spacing:.04em; margin-top:4px; }
+/* ── BULK BAR ── */
+.bulk-bar { display:flex; align-items:center; justify-content:space-between; padding:10px 18px; background:var(--paper-2); border-bottom:1px solid var(--rule); font-size:12px; }
+/* ── JSON TEXTAREA ── */
+.json-area { width:100%; min-height:200px; font:inherit; font-size:11px; line-height:1.5; border:1px solid var(--rule); background:var(--paper); padding:12px; color:var(--ink); resize:vertical; tab-size:2; font-family: 'JetBrains Mono', monospace; }
+/* ── SUMMARY STATS ROW ── */
+.summary-stats { display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:0; border:1px solid var(--rule); background:var(--paper); box-shadow:var(--shadow); margin-bottom:20px; }
+.summary-stat { padding:18px; border-right:1px solid var(--rule); text-align:center; }
+.summary-stat:last-child { border-right:none; }
+.summary-stat .ss-val { font-size:22px; font-weight:600; color:var(--ink); letter-spacing:-.02em; }
+.summary-stat .ss-lbl { font-size:9px; letter-spacing:.18em; color:var(--mid); text-transform:uppercase; margin-top:6px; }
+/* ── SCENARIO SELECTOR IN COMPARE ── */
+.scenario-result { border:1px solid var(--rule-2); padding:12px; margin-top:12px; background:var(--paper-2); }
+.scenario-result .sr-row { display:flex; justify-content:space-between; font-size:11px; padding:3px 0; color:var(--ink-2); }
+.scenario-result .sr-row b { color:var(--ink); }
+.scenario-result .sr-total { border-top:1px solid var(--rule); margin-top:6px; padding-top:6px; font-size:13px; font-weight:600; color:var(--ink); }
+</style>
+</head>
+<body>
+
+<button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="toggle menu">&#9776;</button>
+<div class="app">
+  <aside id="sidebar">
+    <div class="brand">
+      <div class="mark" aria-hidden="true"></div>
+      <div class="wordmark"><span>clean</span><span class="slash">/</span><span>pro</span><small>job pricing tool</small></div>
+      <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
+        <div class="ver">v2.1</div>
+        <button class="theme-toggle" onclick="toggleTheme()" title="toggle dark mode" aria-label="toggle dark mode"></button>
+      </div>
+    </div>
+    <div class="find"><span class="find-icon">&#8981;</span><input type="text" id="search-input" placeholder="search..." autocomplete="off"><span class="kbd"><span>&#8984;</span><span>K</span></span></div>
+    <div class="nav-title"><span>&#8212;&#8212; menu</span></div>
+    <nav>
+      <div class="nav-list" id="nav-list">
+        <a class="nav-item active" href="#" data-view="main" onclick="navigateTo('main', event)"><span class="idx">01</span><span class="lbl">calculator</span></a>
+        <a class="nav-item" href="#" data-view="jobs" onclick="navigateTo('jobs', event)"><span class="idx">02</span><span class="lbl">jobs</span><span class="meta" id="nav-jobs-count">0</span></a>
+        <a class="nav-item" href="#" data-view="clients" onclick="navigateTo('clients', event)"><span class="idx">03</span><span class="lbl">clients</span><span class="meta" id="nav-clients-count">0</span></a>
+        <a class="nav-item" href="#" data-view="analytics" onclick="navigateTo('analytics', event)"><span class="idx">04</span><span class="lbl">analytics</span></a>
+        <a class="nav-item" href="#" data-view="settings" onclick="navigateTo('settings', event)"><span class="idx">05</span><span class="lbl">settings</span></a>
+        <a class="nav-item" href="#" data-view="help" onclick="navigateTo('help', event)"><span class="idx">06</span><span class="lbl">help</span></a>
+      </div>
+      <div class="runtime" id="runtime-block">
+        <h4><span>summary</span><span style="color:var(--signal)">live</span></h4>
+        <div id="runtime-rows">
+          <div class="row"><span>jobs</span><b id="rt-count">0</b></div>
+          <div class="row"><span>avg margin</span><b id="rt-margin">--</b></div>
+        </div>
+        <div class="bar" aria-hidden="true"><div class="bar-fill" id="rt-bar"></div></div>
+      </div>
+    </nav>
+    <div class="op">
+      <div class="avatar" aria-hidden="true"></div>
+      <div class="who"><span>user</span><small>active</small></div>
+      <div class="out">status</div>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <div>
+        <div class="crumbs"><span>clean</span><span>/</span><span class="live"><i></i><span id="crumb-view">calculator</span></span></div>
+        <h1><span id="page-title">Quote Calculator</span> <span class="of">&#8212; <span id="page-subtitle">price cleaning jobs</span></span></h1>
+      </div>
+      <div class="topbar-right">
+        <div class="telemetry" aria-hidden="true">
+          <div><span>quoted price</span><b id="tele-quoted">$0</b></div>
+          <div><span>active jobs</span><b id="tele-jobs">0</b></div>
+        </div>
+        <div id="topbar-buttons">
+          <button class="btn" type="button" onclick="exportToCSV()">export csv<span class="k">E</span></button>
+          <button class="btn" type="button" onclick="openCompareModal()">compare</button>
+          <button class="btn" type="button" onclick="window.print()">print<span class="k">P</span></button>
+          <button class="btn primary" type="button" onclick="saveJob()">save job<span class="k">S</span></button>
+        </div>
+      </div>
+    </header>
+
+    <section class="canvas" id="canvas">
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           VIEW 1 — CALCULATOR (MAIN)
+           ════════════════════════════════════════════════════════════════════ -->
+      <div class="view active" id="view-main">
+
+        <!-- Section: Job Details Form -->
+        <div class="section-head"><h2><span class="num">&#167; 01</span>job details</h2></div>
+        <div class="form-grid">
+          <!-- Row 1 -->
+          <div class="form-group">
+            <label>client name *</label>
+            <div class="ac-wrap" id="client-ac-wrap">
+              <input type="text" id="clientName" placeholder="Enter client name..." autocomplete="off">
+              <div id="client-ac-list" class="ac-list"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>job address <span class="hint">optional</span></label>
+            <input type="text" id="jobAddress" placeholder="123 Main St...">
+          </div>
+          <!-- Row 2 -->
+          <div class="form-group">
+            <label>cleaning type</label>
+            <select id="cleaningType">
+              <option value="Standard" selected>Standard</option>
+              <option value="Deep Clean">Deep Clean</option>
+              <option value="Move-in/Move-out">Move-in/Move-out</option>
+              <option value="Post-Construction">Post-Construction</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>frequency</label>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <select id="frequency">
+                <option value="One-time" selected>One-time</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Bi-weekly">Bi-weekly</option>
+                <option value="Monthly">Monthly</option>
+              </select>
+              <span id="discount-badge" class="discount-badge" style="display:none"></span>
+            </div>
+          </div>
+          <!-- Row 3 -->
+          <div class="form-group">
+            <label>square footage</label>
+            <input type="number" id="squareFootage" min="0" step="50" placeholder="e.g. 1500">
+            <div class="form-note" id="sqft-note"></div>
+          </div>
+          <div class="form-group">
+            <label>bedrooms</label>
+            <div class="step-control"><button onclick="stepVal('bedrooms',-1)">-</button><input id="bedrooms" type="number" value="2" min="0" max="10"><button onclick="stepVal('bedrooms',1)">+</button></div>
+          </div>
+          <div class="form-group">
+            <label>bathrooms</label>
+            <div class="step-control"><button onclick="stepVal('bathrooms',-1)">-</button><input id="bathrooms" type="number" value="1" min="0" max="8"><button onclick="stepVal('bathrooms',1)">+</button></div>
+          </div>
+          <!-- Row 4 -->
+          <div class="form-group full-width">
+            <label>extra rooms</label>
+            <div class="chip-group" id="extra-rooms-group">
+              <button type="button" class="chip-toggle on" data-room="Kitchen" onclick="toggleExtraRoom(this)" disabled>Kitchen</button>
+              <button type="button" class="chip-toggle" data-room="Living Room" onclick="toggleExtraRoom(this)">Living Room</button>
+              <button type="button" class="chip-toggle" data-room="Dining Room" onclick="toggleExtraRoom(this)">Dining Room</button>
+              <button type="button" class="chip-toggle" data-room="Office" onclick="toggleExtraRoom(this)">Office</button>
+              <button type="button" class="chip-toggle" data-room="Basement" onclick="toggleExtraRoom(this)">Basement</button>
+              <button type="button" class="chip-toggle" data-room="Garage" onclick="toggleExtraRoom(this)">Garage</button>
+            </div>
+          </div>
+          <!-- Row 5 -->
+          <div class="form-group">
+            <label>cleaners</label>
+            <div class="step-control"><button onclick="stepVal('numCleaners',-1)">-</button><input id="numCleaners" type="number" value="1" min="1" max="6"><button onclick="stepVal('numCleaners',1)">+</button></div>
+          </div>
+          <div class="form-group">
+            <label>est. hours</label>
+            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+              <input type="number" id="estimatedHours" min="0.25" step="0.25" value="2" style="width:100px;">
+              <span id="manual-tag" class="manual-tag">manual</span>
+              <button type="button" class="btn" style="margin-left:8px;padding:4px 8px;font-size:10px" id="hours-reset-btn" onclick="resetHours()">auto</button>
+            </div>
+            <div class="form-note" id="hours-note">auto-estimated from sq ft + rooms</div>
+          </div>
+          <div class="form-group">
+            <label>labor rate $/hr</label>
+            <input type="number" id="laborRatePerHr" min="1" step="0.5" value="35">
+          </div>
+          <!-- Row 6 -->
+          <div class="form-group">
+            <label>supplies cost $</label>
+            <input type="number" id="suppliesCost" min="0" step="5" value="15">
+          </div>
+          <div class="form-group">
+            <label>drive distance (mi one-way)</label>
+            <input type="number" id="driveMiles" min="0" step="0.5" value="5">
+          </div>
+          <div class="form-group">
+            <label>drive time (min one-way)</label>
+            <input type="number" id="driveMinutes" min="0" step="5" value="15">
+          </div>
+          <!-- Row 7 -->
+          <div class="form-group">
+            <label>target margin %</label>
+            <div class="slider-wrap"><input type="range" id="targetMargin" min="10" max="80" value="40"><span id="targetMargin-val" class="slider-val">40%</span></div>
+          </div>
+          <div class="form-group">
+            <label>job status</label>
+            <select id="jobStatus">
+              <option value="Quoted" selected>Quoted</option>
+              <option value="Booked">Booked</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+          <!-- Row 8 -->
+          <div class="form-group full-width">
+            <label>notes</label>
+            <textarea id="notes" rows="2" placeholder="Any special requirements..."></textarea>
+          </div>
+        </div>
+
+        <div class="btn-group" style="margin: 20px 0;">
+          <button class="btn primary" type="button" onclick="saveJob()">save job<span class="k">S</span></button>
+          <button class="btn" type="button" onclick="resetForm()">reset form</button>
+          <button class="btn" type="button" onclick="openCompareModal()">send to compare</button>
+        </div>
+
+        <!-- Section: Live Results -->
+        <div class="section-head" style="margin-top:32px;"><h2><span class="num">&#167; 02</span>quote breakdown</h2></div>
+
+        <div class="result-cards">
+          <div class="result-card" id="rc-quoted">
+            <div class="rc-lbl">quoted price<span class="rc-tag">FINAL</span></div>
+            <div class="rc-val" id="res-quotedPrice">$&#8212;</div>
+            <div class="rc-sub" id="res-quotedSub"></div>
+          </div>
+          <div class="result-card" id="rc-cost">
+            <div class="rc-lbl">total cost<span class="rc-tag">COST</span></div>
+            <div class="rc-val" id="res-totalCost">$&#8212;</div>
+            <div class="rc-sub" id="res-costSub"></div>
+          </div>
+          <div class="result-card" id="rc-profit">
+            <div class="rc-lbl">net profit<span class="rc-tag">PROFIT</span></div>
+            <div class="rc-val" id="res-netProfit">$&#8212;</div>
+            <div class="rc-sub"><span id="res-marginPill" class="pill neutral">--%</span></div>
+          </div>
+        </div>
+
+        <div class="suggested-price" id="suggested-banner">
+          <div>
+            <div class="sp-lbl">suggested price (to hit target margin)</div>
+            <div class="sp-val" id="res-suggestedPrice">$&#8212;</div>
+          </div>
+          <div class="sp-delta" id="res-suggestedDelta"></div>
+        </div>
+
+        <div id="margin-warning" style="display:none;margin:12px 0;padding:10px 14px;font-size:11px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink-2);"></div>
+
+        <div class="cost-bar-wrap">
+          <div class="cost-bar-track" id="cost-bar">
+            <div class="cost-seg cost-seg-labor" id="seg-labor" style="width:0%"></div>
+            <div class="cost-seg cost-seg-supplies" id="seg-supplies" style="width:0%"></div>
+            <div class="cost-seg cost-seg-mileage" id="seg-mileage" style="width:0%"></div>
+            <div class="cost-seg cost-seg-drive" id="seg-drive" style="width:0%"></div>
+          </div>
+          <div class="cost-bar-labels">
+            <span class="cl"><i class="cost-seg-labor"></i> Labor <b id="lbl-labor">$0</b></span>
+            <span class="cl"><i class="cost-seg-supplies"></i> Supplies <b id="lbl-supplies">$0</b></span>
+            <span class="cl"><i class="cost-seg-mileage"></i> Mileage <b id="lbl-mileage">$0</b></span>
+            <span class="cl"><i class="cost-seg-drive"></i> Drive Time <b id="lbl-drive">$0</b></span>
+          </div>
+        </div>
+
+        <div style="font-size:11px;color:var(--mid);margin-top:12px;">
+          Estimated hours: <b id="res-hours">&#8212;</b>
+          <span id="res-hoursFormula" style="opacity:.7"></span>
+        </div>
+
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           VIEW 2 — JOBS
+           ════════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-jobs">
+        <div class="tbl-wrap">
+          <div class="tbl-head">
+            <div class="ttl"><span class="num">&#167; 02</span>saved jobs<span class="ct" id="jobs-count-label">0 total</span></div>
+            <div class="filters">
+              <span class="chip on" data-filter="all" onclick="filterJobs('status','all')">All</span>
+              <span class="chip" data-filter="Quoted" onclick="filterJobs('status','Quoted')">Quoted</span>
+              <span class="chip" data-filter="Booked" onclick="filterJobs('status','Booked')">Booked</span>
+              <span class="chip" data-filter="Completed" onclick="filterJobs('status','Completed')">Completed</span>
+              <span style="width:1px;background:var(--rule);margin:0 4px;"></span>
+              <span class="chip" data-filter="Standard" onclick="filterJobs('type','Standard')">Standard</span>
+              <span class="chip" data-filter="Deep Clean" onclick="filterJobs('type','Deep Clean')">Deep</span>
+              <span class="chip" data-filter="Move-in/Move-out" onclick="filterJobs('type','Move-in/Move-out')">Move</span>
+              <span class="chip" data-filter="Post-Construction" onclick="filterJobs('type','Post-Construction')">Post</span>
+            </div>
+          </div>
+          <div style="padding:8px 18px;border-bottom:1px solid var(--rule);">
+            <input type="text" id="jobs-search" placeholder="Search clients or notes..." style="font:inherit;font-size:12px;border:1px solid var(--rule);background:var(--paper);padding:6px 10px;width:100%;max-width:320px;color:var(--ink);" oninput="searchJobs(this.value)">
+          </div>
+          <div class="bulk-bar" id="bulk-bar" style="display:none;">
+            <span id="bulk-count">0 selected</span>
+            <button class="btn danger" type="button" onclick="bulkDelete()" style="padding:5px 10px;font-size:11px;">Delete Selected</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:32px;"><input type="checkbox" id="select-all" onclick="toggleSelectAll()"></th>
+                <th class="sortable" onclick="sortJobs('client')">Client</th>
+                <th class="sortable" onclick="sortJobs('type')">Type</th>
+                <th class="sortable num" onclick="sortJobs('sqft')">Sq Ft</th>
+                <th class="sortable num" onclick="sortJobs('quoted')">Quoted</th>
+                <th class="sortable num" onclick="sortJobs('cost')">Cost</th>
+                <th class="sortable num" onclick="sortJobs('profit')">Profit</th>
+                <th class="sortable num" onclick="sortJobs('margin')">Margin %</th>
+                <th class="sortable" onclick="sortJobs('status')">Status</th>
+                <th class="sortable" onclick="sortJobs('date')">Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="jobs-tbody">
+              <tr><td colspan="11"><div class="empty-state"><div class="empty-icon">&#8709;</div><h3>NO SAVED JOBS</h3><p>Save a job from the calculator to see it here.</p></div></td></tr>
+            </tbody>
+          </table>
+          <div class="pagination" id="jobs-pagination"></div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           VIEW 3 — CLIENTS
+           ════════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-clients">
+        <div class="section-head"><h2><span class="num">&#167; 03</span>client roster</h2></div>
+        <div class="client-grid" id="clients-grid"></div>
+        <div id="clients-empty" style="display:none;">
+          <div class="empty-state"><div class="empty-icon">&#8709;</div><h3>NO CLIENTS</h3><p>Save jobs with client names to build your roster.</p></div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           VIEW 4 — ANALYTICS
+           ════════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-analytics">
+        <div class="section-head"><h2><span class="num">&#167; 04</span>business analytics</h2></div>
+
+        <div class="summary-stats" id="analytics-summary">
+          <div class="summary-stat"><div class="ss-val" id="stat-totalRevenue">$0</div><div class="ss-lbl">total revenue</div></div>
+          <div class="summary-stat"><div class="ss-val" id="stat-totalProfit">$0</div><div class="ss-lbl">total profit</div></div>
+          <div class="summary-stat"><div class="ss-val" id="stat-avgMargin">0%</div><div class="ss-lbl">avg margin</div></div>
+          <div class="summary-stat"><div class="ss-val" id="stat-bestClient">&#8212;</div><div class="ss-lbl">best client</div></div>
+          <div class="summary-stat"><div class="ss-val" id="stat-busiestType">&#8212;</div><div class="ss-lbl">busiest type</div></div>
+          <div class="summary-stat"><div class="ss-val" id="stat-totalJobs">0</div><div class="ss-lbl">total jobs</div></div>
+        </div>
+
+        <div class="chart-wrap">
+          <div class="chart-title"><span class="num">&#167; 4.1</span>revenue by month</div>
+          <div class="bar-chart" id="revenue-chart"></div>
+        </div>
+
+        <div class="chart-wrap">
+          <div class="chart-title"><span class="num">&#167; 4.2</span>margin distribution</div>
+          <div class="histogram" id="margin-chart"></div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           VIEW 5 — SETTINGS
+           ════════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-settings">
+        <div class="section-head"><h2><span class="num">&#167; 05</span>settings</h2></div>
+
+        <div class="settings-section">
+          <h3><span class="num">&#167; 01</span>business defaults</h3>
+          <div class="settings-row">
+            <label>Default Labor Rate ($/hr)</label>
+            <input type="number" id="set-laborRate" step="0.5" value="35">
+          </div>
+          <div class="settings-row">
+            <div>
+              <label>Mileage Rate ($/mile)</label>
+              <div class="desc">IRS 2025 rate: $0.67/mile</div>
+            </div>
+            <input type="number" id="set-mileageRate" step="0.01" value="0.67">
+          </div>
+          <div class="settings-row">
+            <label>Target Margin (%)</label>
+            <input type="number" id="set-targetMargin" min="10" max="80" value="40">
+          </div>
+          <div class="settings-row">
+            <label>Default Supplies Cost ($)</label>
+            <input type="number" id="set-suppliesCost" step="5" value="15">
+          </div>
+          <div class="settings-row">
+            <label>Default Drive Distance (miles)</label>
+            <input type="number" id="set-driveDistance" step="0.5" value="5">
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3><span class="num">&#167; 02</span>appearance</h3>
+          <div class="settings-row">
+            <label>Accent Hue</label>
+            <div class="slider-wrap"><input type="range" id="set-accentHue" min="0" max="360" value="32"><span id="set-accentHue-val" class="slider-val">32&deg;</span></div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3><span class="num">&#167; 03</span>data management</h3>
+          <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:10px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <label>JSON Export</label>
+              <button class="btn" type="button" onclick="copyExportJSON()" style="padding:5px 10px;font-size:11px;">Copy JSON</button>
+            </div>
+            <textarea id="json-export" class="json-area" readonly></textarea>
+          </div>
+          <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:10px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <label>JSON Import</label>
+              <button class="btn primary" type="button" onclick="importJSON()" style="padding:5px 10px;font-size:11px;">Import</button>
+            </div>
+            <textarea id="json-import" class="json-area" placeholder="Paste JSON here..."></textarea>
+          </div>
+          <div class="settings-row">
+            <label>Delete all jobs and reset settings</label>
+            <button class="btn danger" type="button" onclick="confirmClearAll()">Clear All Data</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           VIEW 6 — HELP
+           ════════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-help">
+        <div class="section-head"><h2><span class="num">&#167; 06</span>reference</h2></div>
+
+        <div class="help-block">
+          <h3><span class="num">&#167; 01</span>formula reference</h3>
+          <p><b>Hour Estimate:</b> <code>baseHours = (sqFt / 1000) &times; 1.5 &times; typeMult + bathrooms &times; 0.5 &times; typeMult + max(0, bedrooms &minus; 1) &times; 0.25 + extraRoomHours &times; typeMult</code>, rounded up to 0.25h</p>
+          <p><b>Labor Cost:</b> <code>cleaners &times; rate &times; hours</code></p>
+          <p><b>Mileage:</b> <code>miles &times; 2 &times; mileageRate</code> (round trip)</p>
+          <p><b>Drive Time Cost:</b> <code>cleaners &times; rate &times; (minutes &times; 2 / 60)</code></p>
+          <p><b>Total Cost:</b> <code>labor + supplies + mileage + drive time</code></p>
+          <p><b>Base Price:</b> <code>totalCost / (1 &minus; targetMargin/100)</code></p>
+          <p><b>Quoted:</b> <code>basePrice &times; (1 &minus; frequencyDiscount/100)</code></p>
+          <p><b>Profit:</b> <code>quotedPrice &minus; totalCost</code></p>
+          <p><b>Margin:</b> <code>(profit / quotedPrice) &times; 100</code></p>
+        </div>
+
+        <div class="help-block">
+          <h3><span class="num">&#167; 02</span>cleaning type guide</h3>
+          <div class="fee-row"><b>Standard</b><span>1.0&times; — regular maintenance cleaning</span></div>
+          <div class="fee-row"><b>Deep Clean</b><span>1.65&times; — thorough cleaning of all surfaces</span></div>
+          <div class="fee-row"><b>Move-in/out</b><span>2.0&times; — intensive cleaning for transitions</span></div>
+          <div class="fee-row"><b>Post-Construction</b><span>2.5&times; — debris and dust removal</span></div>
+        </div>
+
+        <div class="help-block">
+          <h3><span class="num">&#167; 03</span>frequency discounts</h3>
+          <div class="fee-row"><b>One-time</b><span>0% (no discount)</span></div>
+          <div class="fee-row"><b>Weekly</b><span>15% off</span></div>
+          <div class="fee-row"><b>Bi-weekly</b><span>10% off</span></div>
+          <div class="fee-row"><b>Monthly</b><span>5% off</span></div>
+          <p style="margin-top:10px;font-size:11px;color:var(--mid);">Note: discount applies to quoted price only, not costs</p>
+        </div>
+
+        <div class="help-block">
+          <h3><span class="num">&#167; 04</span>keyboard shortcuts</h3>
+          <ul>
+            <li><b>Ctrl+S</b> — Save job</li>
+            <li><b>Ctrl+K</b> — Focus search</li>
+            <li><b>Ctrl+E</b> — Export CSV</li>
+            <li><b>Ctrl+P</b> — Print</li>
+            <li><b>Escape</b> — Close modal</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- FOOTER (shared across all views) -->
+      <div class="canvas-foot"></div>
+      <div class="footstrip">
+        <div class="l"><span>doc &#183; <b>CLNPR-v2.1</b></span><span class="sep"></span><span>rev <b>2026&#183;05&#183;21</b></span><span class="sep"></span><span>Licensed for personal use</span></div>
+        <div class="r"><span>page <b id="foot-page">01 / 06</b></span><span class="sep"></span><span>by <b>cleanpro</b></span></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- COMPARE MODAL (wider) -->
+<div class="modal-overlay" id="compare-modal-overlay" onclick="if(event.target===this)closeCompareModal()">
+  <div class="modal wide" onclick="event.stopPropagation()">
+    <div class="modal-header"><h3 id="compare-modal-title">Compare Jobs</h3><button class="modal-close" onclick="closeCompareModal()">&#215;</button></div>
+    <div class="modal-body" id="compare-modal-body"></div>
+    <div class="modal-footer" id="compare-modal-footer">
+      <button class="btn" type="button" onclick="closeCompareModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header"><h3 id="modal-title">Dialog</h3><button class="modal-close" onclick="closeModal()">&#215;</button></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<script>'use strict';
+
+/* ─────────────────────────────────────────
+   CONSTANTS
+   ───────────────────────────────────────── */
+const CLEANING_TYPE_MULTIPLIERS = {
+  'Standard': 1.0,
+  'Deep Clean': 1.65,
+  'Move-in/Move-out': 2.0,
+  'Post-Construction': 2.5
+};
+const EXTRA_ROOM_HOURS = {
+  'Living Room': 0.25, 'Dining Room': 0.20, 'Office': 0.30,
+  'Basement': 0.50, 'Garage': 0.75
+};
+const FREQUENCY_DISCOUNTS = {
+  'One-time': 0, 'Weekly': 15, 'Bi-weekly': 10, 'Monthly': 5
+};
+const DEFAULT_SETTINGS = {
+  laborRate: 35,
+  mileageRate: 0.67,
+  targetMargin: 40,
+  suppliesCost: 15,
+  driveDistance: 5,
+  accentHue: 32
+};
+const LS_PREFIX = 'clnpr_';
+
+/* ─────────────────────────────────────────
+   LS HELPER
+   ───────────────────────────────────────── */
+const LS = {
+  get: (k, def) => {
+    try {
+      const v = localStorage.getItem(LS_PREFIX + k);
+      return v === null ? def : JSON.parse(v);
+    } catch (e) { return def; }
+  },
+  set: (k, v) => {
+    try { localStorage.setItem(LS_PREFIX + k, JSON.stringify(v)); } catch (e) {}
+  },
+  del: (k) => {
+    try { localStorage.removeItem(LS_PREFIX + k); } catch (e) {}
+  }
+};
+
+/* ─────────────────────────────────────────
+   STATE
+   ───────────────────────────────────────── */
+let jobs = [];
+let settings = {};
+let hoursMode = 'auto';
+let currentJobId = null;
+let sortCol = 'savedAt';
+let sortAsc = false;
+let filterStatus = 'all';
+let filterType = 'all';
+let searchText = '';
+let currentPage = 1;
+const PAGE_SIZE = 10;
+let selectedJobIds = new Set();
+
+/* ─────────────────────────────────────────
+   VIEWS CONFIG
+   ───────────────────────────────────────── */
+const VIEWS = {
+  main:      { title: 'Calculator',   subtitle: 'quote builder & cost estimator',   crumb: 'calculator', page: '01 / 06' },
+  jobs:      { title: 'Jobs',         subtitle: 'saved quotes & bookings',          crumb: 'jobs',       page: '02 / 06' },
+  clients:   { title: 'Clients',      subtitle: 'client roster & history',          crumb: 'clients',    page: '03 / 06' },
+  analytics: { title: 'Analytics',    subtitle: 'business performance metrics',     crumb: 'analytics',  page: '04 / 06' },
+  settings:  { title: 'Settings',     subtitle: 'defaults & data management',       crumb: 'settings',   page: '05 / 06' },
+  help:      { title: 'Help',         subtitle: 'formulas & reference',             crumb: 'help',       page: '06 / 06' }
+};
+
+/* ─────────────────────────────────────────
+   UTILITY FUNCTIONS
+   ───────────────────────────────────────── */
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text === null || text === undefined ? '' : String(text);
+  return div.innerHTML;
+}
+
+function fmtMoney(n) {
+  if (typeof n !== 'number' || isNaN(n) || !isFinite(n)) return '$\u2014';
+  return '$' + n.toFixed(2);
+}
+
+function fmtPct(n) {
+  if (typeof n !== 'number' || isNaN(n) || !isFinite(n)) return '\u2014%';
+  return n.toFixed(1) + '%';
+}
+
+function nowISO() {
+  return new Date().toISOString();
+}
+
+function uniqueId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+/* ─────────────────────────────────────────
+   CALCULATION ENGINE
+   ───────────────────────────────────────── */
+function calculateAutoHours(data) {
+  const mult = CLEANING_TYPE_MULTIPLIERS[data.cleaningType] || 1.0;
+  const extraRoomHours = data.extraRooms.reduce((sum, r) => {
+    return sum + (EXTRA_ROOM_HOURS[r] || 0);
+  }, 0);
+  const base =
+    (data.squareFootage / 1000) * 1.5 * mult +
+    data.bathrooms * 0.5 * mult +
+    Math.max(0, data.bedrooms - 1) * 0.25 +
+    extraRoomHours * mult;
+  const hours = Math.ceil(base * 4) / 4;
+  return Math.max(1.0, hours);
+}
+
+function calculateJob(data) {
+  const result = Object.assign({}, data);
+  const estimatedHours = data.estimatedHours;
+  const laborCost = data.numCleaners * data.laborRatePerHr * estimatedHours;
+  const mileageCost = data.driveMiles * 2 * data.mileageRate;
+  const driveTimeCost = data.numCleaners * data.laborRatePerHr * (data.driveMinutes * 2 / 60);
+  const totalCost = laborCost + data.suppliesCost + mileageCost + driveTimeCost;
+  const discount = (FREQUENCY_DISCOUNTS[data.frequency] || 0) / 100;
+  let basePrice = 0;
+  if (data.targetMargin < 100) {
+    basePrice = totalCost / (1 - data.targetMargin / 100);
+  }
+  const quotedPrice = basePrice * (1 - discount);
+  const netProfit = quotedPrice - totalCost;
+  const profitMargin = quotedPrice > 0 ? (netProfit / quotedPrice) * 100 : 0;
+  const suggestedPrice = basePrice;
+
+  result.estimatedHours = estimatedHours;
+  result.laborCost = laborCost;
+  result.mileageCost = mileageCost;
+  result.driveTimeCost = driveTimeCost;
+  result.totalCost = totalCost;
+  result.discount = discount;
+  result.basePrice = basePrice;
+  result.quotedPrice = quotedPrice;
+  result.netProfit = netProfit;
+  result.profitMargin = profitMargin;
+  result.suggestedPrice = suggestedPrice;
+  return result;
+}
+
+/* ─────────────────────────────────────────
+   FORM READING
+   ───────────────────────────────────────── */
+function getExtraRooms() {
+  const btns = document.querySelectorAll('#extra-rooms-group .chip-toggle.on');
+  return Array.from(btns).map(btn => btn.dataset.room);
+}
+
+function getFormData() {
+  const sqFt = parseFloat(document.getElementById('squareFootage').value) || 0;
+  return {
+    clientName: (document.getElementById('clientName').value || '').trim(),
+    jobAddress: (document.getElementById('jobAddress').value || '').trim(),
+    cleaningType: document.getElementById('cleaningType').value,
+    frequency: document.getElementById('frequency').value,
+    squareFootage: sqFt,
+    bedrooms: parseInt(document.getElementById('bedrooms').value, 10) || 0,
+    bathrooms: parseInt(document.getElementById('bathrooms').value, 10) || 0,
+    extraRooms: getExtraRooms(),
+    numCleaners: parseInt(document.getElementById('numCleaners').value, 10) || 1,
+    estimatedHours: parseFloat(document.getElementById('estimatedHours').value) || 1,
+    laborRatePerHr: parseFloat(document.getElementById('laborRatePerHr').value) || 0,
+    suppliesCost: parseFloat(document.getElementById('suppliesCost').value) || 0,
+    driveMiles: parseFloat(document.getElementById('driveMiles').value) || 0,
+    driveMinutes: parseFloat(document.getElementById('driveMinutes').value) || 0,
+    targetMargin: parseFloat(document.getElementById('targetMargin').value) || 0,
+    jobStatus: document.getElementById('jobStatus').value,
+    notes: document.getElementById('notes').value || '',
+    mileageRate: settings.mileageRate || DEFAULT_SETTINGS.mileageRate
+  };
+}
+
+/* ─────────────────────────────────────────
+   LIVE RECALCULATION
+   ───────────────────────────────────────── */
+function recalculate() {
+  const data = getFormData();
+  if (hoursMode === 'auto' && document.getElementById('estimatedHours')) {
+    const autoHrs = calculateAutoHours(data);
+    document.getElementById('estimatedHours').value = autoHrs.toFixed(2);
+    data.estimatedHours = autoHrs;
+  }
+  const r = calculateJob(data);
+
+  // Quote results
+  const elQuotedPrice = document.getElementById('res-quotedPrice');
+  const elQuotedSub = document.getElementById('res-quotedSub');
+  const elTotalCost = document.getElementById('res-totalCost');
+  const elCostSub = document.getElementById('res-costSub');
+  const elNetProfit = document.getElementById('res-netProfit');
+  const elMarginPill = document.getElementById('res-marginPill');
+  const elSuggestedPrice = document.getElementById('res-suggestedPrice');
+  const elSuggestedDelta = document.getElementById('res-suggestedDelta');
+  const elResHours = document.getElementById('res-hours');
+  const elResHoursFormula = document.getElementById('res-hoursFormula');
+  const elBanner = document.getElementById('suggested-banner');
+
+  if (elQuotedPrice) elQuotedPrice.textContent = fmtMoney(r.quotedPrice);
+  if (elQuotedSub) elQuotedSub.textContent = 'Base: ' + fmtMoney(r.basePrice) + (r.discount > 0 ? ' \u2212 ' + (r.discount * 100).toFixed(0) + '% freq. discount' : '');
+  if (elTotalCost) elTotalCost.textContent = fmtMoney(r.totalCost);
+  if (elCostSub) elCostSub.textContent = r.numCleaners + ' cleaner' + (r.numCleaners > 1 ? 's' : '') + ' \u00d7 ' + r.estimatedHours.toFixed(2) + ' hrs @ ' + fmtMoney(r.laborRatePerHr) + '/hr';
+  if (elNetProfit) elNetProfit.textContent = fmtMoney(r.netProfit);
+  if (elMarginPill) {
+    elMarginPill.textContent = fmtPct(r.profitMargin);
+    elMarginPill.className = 'pill';
+    if (r.profitMargin >= 40) elMarginPill.classList.add('up');
+    else if (r.profitMargin >= 20) elMarginPill.classList.add('neutral');
+    else elMarginPill.classList.add('down');
+  }
+  if (elSuggestedPrice) elSuggestedPrice.textContent = fmtMoney(r.suggestedPrice);
+  if (elSuggestedDelta) {
+    const delta = r.quotedPrice - r.suggestedPrice;
+    if (Math.abs(delta) < 0.01) {
+      elSuggestedDelta.textContent = 'On target';
+      elSuggestedDelta.className = 'delta neutral';
+    } else if (delta > 0) {
+      elSuggestedDelta.textContent = '+' + fmtMoney(delta) + ' over';
+      elSuggestedDelta.className = 'delta over';
+    } else {
+      elSuggestedDelta.textContent = fmtMoney(Math.abs(delta)) + ' under';
+      elSuggestedDelta.className = 'delta under';
+    }
+  }
+  const elWarn = document.getElementById('margin-warning');
+  if (elWarn) {
+    if (r.profitMargin < 20 && r.quotedPrice > 0) {
+      elWarn.style.display = 'block';
+      elWarn.textContent = 'Low margin \u2014 consider raising price';
+      elWarn.style.borderColor = 'var(--danger)';
+      elWarn.style.background = 'oklch(from var(--danger) l c h / 0.08)';
+      elWarn.style.color = 'var(--danger)';
+    } else if (r.profitMargin > 60 && r.quotedPrice > 0) {
+      elWarn.style.display = 'block';
+      elWarn.textContent = 'High margin \u2014 price may be competitive';
+      elWarn.style.borderColor = 'var(--accent-2)';
+      elWarn.style.background = 'oklch(from var(--accent-2) l c h / 0.08)';
+      elWarn.style.color = 'var(--accent-2)';
+    } else {
+      elWarn.style.display = 'none';
+    }
+  }
+  if (elResHours) elResHours.textContent = r.estimatedHours.toFixed(2) + ' hrs';
+  if (elResHoursFormula) {
+    const mult = CLEANING_TYPE_MULTIPLIERS[r.cleaningType] || 1.0;
+    const extraHrs = r.extraRooms.reduce((s, room) => s + (EXTRA_ROOM_HOURS[room] || 0), 0) * mult;
+    let parts = [];
+    if (r.squareFootage > 0) parts.push(((r.squareFootage / 1000) * 1.5 * mult).toFixed(2) + ' base');
+    if (r.bathrooms > 0) parts.push((r.bathrooms * 0.5 * mult).toFixed(2) + ' bath');
+    if (r.bedrooms > 1) parts.push((Math.max(0, r.bedrooms - 1) * 0.25).toFixed(2) + ' bed');
+    if (extraHrs > 0) parts.push(extraHrs.toFixed(2) + ' extra');
+    elResHoursFormula.textContent = parts.join(' + ') || 'Base minimum';
+  }
+
+  // Cost breakdown segments
+  const segLabor = document.getElementById('seg-labor');
+  const segSupplies = document.getElementById('seg-supplies');
+  const segMileage = document.getElementById('seg-mileage');
+  const segDrive = document.getElementById('seg-drive');
+  const lblLabor = document.getElementById('lbl-labor');
+  const lblSupplies = document.getElementById('lbl-supplies');
+  const lblMileage = document.getElementById('lbl-mileage');
+  const lblDrive = document.getElementById('lbl-drive');
+
+  const maxCost = Math.max(r.totalCost, 0.01);
+  if (segLabor) segLabor.style.width = ((r.laborCost / maxCost) * 100).toFixed(1) + '%';
+  if (segSupplies) segSupplies.style.width = ((r.suppliesCost / maxCost) * 100).toFixed(1) + '%';
+  if (segMileage) segMileage.style.width = ((r.mileageCost / maxCost) * 100).toFixed(1) + '%';
+  if (segDrive) segDrive.style.width = ((r.driveTimeCost / maxCost) * 100).toFixed(1) + '%';
+  if (lblLabor) lblLabor.textContent = 'Labor ' + fmtMoney(r.laborCost);
+  if (lblSupplies) lblSupplies.textContent = 'Supplies ' + fmtMoney(r.suppliesCost);
+  if (lblMileage) lblMileage.textContent = 'Mileage ' + fmtMoney(r.mileageCost);
+  if (lblDrive) lblDrive.textContent = 'Drive ' + fmtMoney(r.driveTimeCost);
+
+  return r;
+}
+
+
+/* ─────────────────────────────────────────
+   FORM INTERACTION
+   ───────────────────────────────────────── */
+function stepVal(id, delta) {
+  const input = document.getElementById(id);
+  if (!input) return;
+  const step = parseFloat(input.step) || 1;
+  const min = parseFloat(input.min) !== undefined ? parseFloat(input.min) : -Infinity;
+  const max = parseFloat(input.max) !== undefined ? parseFloat(input.max) : Infinity;
+  let val = (parseFloat(input.value) || 0) + delta * step;
+  if (input.min !== '') val = Math.max(parseFloat(input.min), val);
+  if (input.max !== '') val = Math.min(parseFloat(input.max), val);
+  const decimals = (input.step || '').split('.')[1] ? (input.step).split('.')[1].length : 0;
+  input.value = decimals > 0 ? val.toFixed(decimals) : String(Math.round(val));
+  if (id === 'estimatedHours') onHoursChange();
+  recalculate();
+}
+
+function toggleExtraRoom(btn) {
+  btn.classList.toggle('on');
+  if (hoursMode === 'auto') recalculate();
+}
+
+function onHoursChange() {
+  hoursMode = 'manual';
+  const tag = document.getElementById('manual-tag');
+  const note = document.getElementById('hours-note');
+  if (tag) tag.classList.add('on');
+  if (note) note.textContent = 'Manual override \u2014 auto-calculation paused';
+  recalculate();
+}
+
+function resetHours() {
+  hoursMode = 'auto';
+  const tag = document.getElementById('manual-tag');
+  const note = document.getElementById('hours-note');
+  if (tag) tag.classList.remove('on');
+  if (note) note.textContent = 'Hours auto-calculated from rooms & square footage';
+  recalculate();
+}
+
+function onFrequencyChange() {
+  const freq = document.getElementById('frequency').value;
+  const badge = document.getElementById('discount-badge');
+  const disc = FREQUENCY_DISCOUNTS[freq] || 0;
+  if (badge) {
+    if (disc > 0) {
+      badge.style.display = 'inline-block';
+      badge.textContent = disc + '% off';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+  recalculate();
+}
+
+/* ─────────────────────────────────────────
+   SAVE / LOAD / RESET
+   ───────────────────────────────────────── */
+function saveJob() {
+  const clientName = (document.getElementById('clientName').value || '').trim();
+  if (!clientName) {
+    showToast('Client name is required', 'error');
+    document.getElementById('clientName').focus();
+    return;
+  }
+  const data = getFormData();
+  if (hoursMode === 'auto') {
+    data.estimatedHours = calculateAutoHours(data);
+    document.getElementById('estimatedHours').value = data.estimatedHours.toFixed(2);
+  }
+  const calc = calculateJob(data);
+  const job = Object.assign({}, calc, {
+    id: currentJobId || uniqueId(),
+    savedAt: nowISO(),
+    hoursMode: hoursMode
+  });
+  if (currentJobId) {
+    const idx = jobs.findIndex(j => j.id === currentJobId);
+    if (idx >= 0) jobs[idx] = job;
+    else jobs.push(job);
+  } else {
+    jobs.push(job);
+  }
+  persistJobs();
+  showToast(currentJobId ? 'Job updated' : 'Job saved', 'success');
+  updateCounts();
+  currentJobId = null;
+}
+
+function persistJobs() {
+  LS.set('jobs', jobs);
+}
+
+function loadJob(id) {
+  const job = jobs.find(j => j.id === id);
+  if (!job) return;
+  populateForm(job);
+  currentJobId = id;
+  navigateTo('main');
+  showToast('Job loaded for editing', 'info');
+}
+
+function duplicateJob(id) {
+  const job = jobs.find(j => j.id === id);
+  if (!job) return;
+  const clone = Object.assign({}, job);
+  delete clone.id;
+  delete clone.savedAt;
+  populateForm(clone);
+  currentJobId = null;
+  navigateTo('main');
+  showToast('Job duplicated \u2014 ready to edit', 'info');
+}
+
+function populateForm(job) {
+  document.getElementById('clientName').value = job.clientName || '';
+  document.getElementById('jobAddress').value = job.jobAddress || '';
+  document.getElementById('cleaningType').value = job.cleaningType || 'Standard';
+  document.getElementById('frequency').value = job.frequency || 'One-time';
+  document.getElementById('squareFootage').value = job.squareFootage || 0;
+  document.getElementById('bedrooms').value = job.bedrooms || 0;
+  document.getElementById('bathrooms').value = job.bathrooms || 0;
+  document.getElementById('numCleaners').value = job.numCleaners || 1;
+  document.getElementById('estimatedHours').value = job.estimatedHours || 1;
+  document.getElementById('laborRatePerHr').value = job.laborRatePerHr || settings.laborRate || DEFAULT_SETTINGS.laborRate;
+  document.getElementById('suppliesCost').value = job.suppliesCost !== undefined ? job.suppliesCost : (settings.suppliesCost || DEFAULT_SETTINGS.suppliesCost);
+  document.getElementById('driveMiles').value = job.driveMiles || 0;
+  document.getElementById('driveMinutes').value = job.driveMinutes || 0;
+  document.getElementById('targetMargin').value = job.targetMargin || settings.targetMargin || DEFAULT_SETTINGS.targetMargin;
+  const tVal = document.getElementById('targetMargin-val');
+  if (tVal) tVal.textContent = (job.targetMargin || settings.targetMargin || DEFAULT_SETTINGS.targetMargin) + '%';
+  document.getElementById('jobStatus').value = job.jobStatus || 'Quoted';
+  document.getElementById('notes').value = job.notes || '';
+
+  // Extra rooms
+  document.querySelectorAll('#extra-rooms-group .chip-toggle').forEach(btn => {
+    btn.classList.toggle('on', (job.extraRooms || []).includes(btn.dataset.room));
+  });
+
+  // Hours mode
+  if (job.hoursMode === 'manual') {
+    hoursMode = 'manual';
+    const tag = document.getElementById('manual-tag');
+    const note = document.getElementById('hours-note');
+    if (tag) tag.classList.add('on');
+    if (note) note.textContent = 'Manual override \u2014 auto-calculation paused';
+  } else {
+    hoursMode = 'auto';
+    const tag = document.getElementById('manual-tag');
+    const note = document.getElementById('hours-note');
+    if (tag) tag.classList.remove('on');
+    if (note) note.textContent = 'Hours auto-calculated from rooms & square footage';
+  }
+
+  onFrequencyChange();
+  recalculate();
+}
+
+function deleteJob(id) {
+  const job = jobs.find(j => j.id === id);
+  openModal(
+    'Delete Job',
+    '<p>Are you sure you want to delete the job for <strong>' + escapeHtml(job ? job.clientName : 'this job') + '</strong>?</p><p>This action cannot be undone.</p>',
+    '<button class="btn btn" onclick="closeModal()">Cancel</button>' +
+    '<button class="btn btn danger" onclick="confirmDeleteJob(\'' + id + '\')">Delete</button>'
+  );
+}
+
+function confirmDeleteJob(id) {
+  const idx = jobs.findIndex(j => j.id === id);
+  if (idx >= 0) {
+    jobs.splice(idx, 1);
+    persistJobs();
+    selectedJobIds.delete(id);
+    showToast('Job deleted', 'info');
+    closeModal();
+    updateCounts();
+    renderJobsTable();
+    renderClients();
+    renderAnalytics();
+  }
+}
+
+function markCompleted(id) {
+  const job = jobs.find(j => j.id === id);
+  if (!job) return;
+  job.jobStatus = 'Completed';
+  persistJobs();
+  showToast('Job marked as completed', 'success');
+  renderJobsTable();
+  renderAnalytics();
+}
+
+function resetForm() {
+  openModal(
+    'Reset Form',
+    '<p>Clear all fields and start over?</p>',
+    '<button class="btn btn" onclick="closeModal()">Cancel</button>' +
+    '<button class="btn btn danger" onclick="confirmResetForm()">Reset</button>'
+  );
+}
+
+function confirmResetForm() {
+  document.getElementById('clientName').value = '';
+  document.getElementById('jobAddress').value = '';
+  document.getElementById('cleaningType').value = 'Standard';
+  document.getElementById('frequency').value = 'One-time';
+  document.getElementById('squareFootage').value = '';
+  document.getElementById('bedrooms').value = 2;
+  document.getElementById('bathrooms').value = 1;
+  document.getElementById('numCleaners').value = 1;
+  document.getElementById('estimatedHours').value = 2;
+  document.getElementById('laborRatePerHr').value = settings.laborRate || DEFAULT_SETTINGS.laborRate;
+  document.getElementById('suppliesCost').value = settings.suppliesCost || DEFAULT_SETTINGS.suppliesCost;
+  document.getElementById('driveMiles').value = settings.driveDistance || DEFAULT_SETTINGS.driveDistance;
+  document.getElementById('driveMinutes').value = 15;
+  document.getElementById('targetMargin').value = settings.targetMargin || DEFAULT_SETTINGS.targetMargin;
+  const tVal = document.getElementById('targetMargin-val');
+  if (tVal) tVal.textContent = (settings.targetMargin || DEFAULT_SETTINGS.targetMargin) + '%';
+  document.getElementById('jobStatus').value = 'Quoted';
+  document.getElementById('notes').value = '';
+  document.querySelectorAll('#extra-rooms-group .chip-toggle').forEach(btn => { btn.classList.toggle('on', btn.dataset.room === 'Kitchen'); });
+  currentJobId = null;
+  hoursMode = 'auto';
+  const tag = document.getElementById('manual-tag');
+  const note = document.getElementById('hours-note');
+  const badge = document.getElementById('discount-badge');
+  if (tag) tag.classList.remove('on');
+  if (note) note.textContent = 'Hours auto-calculated from rooms & square footage';
+  if (badge) badge.style.display = 'none';
+  closeModal();
+  recalculate();
+  showToast('Form reset', 'info');
+}
+
+/* ─────────────────────────────────────────
+   JOBS TABLE
+   ───────────────────────────────────────── */
+function getFilteredJobs() {
+  return jobs.filter(job => {
+    if (filterStatus !== 'all' && job.jobStatus !== filterStatus) return false;
+    if (filterType !== 'all' && job.cleaningType !== filterType) return false;
+    if (searchText) {
+      const terms = searchText.toLowerCase().split(/\s+/).filter(Boolean);
+      const hay = ((job.clientName || '') + ' ' + (job.notes || '') + ' ' + (job.jobAddress || '')).toLowerCase();
+      return terms.every(t => hay.includes(t));
+    }
+    return true;
+  });
+}
+
+function getSortedJobs(jobsArr) {
+  const col = sortCol;
+  const asc = sortAsc ? 1 : -1;
+  return jobsArr.slice().sort((a, b) => {
+    let av = a[col];
+    let bv = b[col];
+    if (typeof av === 'string') av = av.toLowerCase();
+    if (typeof bv === 'string') bv = bv.toLowerCase();
+    if (av === undefined) av = '';
+    if (bv === undefined) bv = '';
+    if (av < bv) return -1 * asc;
+    if (av > bv) return 1 * asc;
+    return 0;
+  });
+}
+
+function renderJobsTable() {
+  const tbody = document.getElementById('jobs-tbody');
+  const countLabel = document.getElementById('jobs-count-label');
+  const wrap = document.getElementById('view-jobs');
+  if (!tbody) return;
+
+  const filtered = getFilteredJobs();
+  const sorted = getSortedJobs(filtered);
+  const total = sorted.length;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  if (currentPage > totalPages) currentPage = totalPages;
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = sorted.slice(start, start + PAGE_SIZE);
+
+  if (countLabel) countLabel.textContent = total + ' job' + (total !== 1 ? 's' : '');
+
+  if (total === 0) {
+    tbody.innerHTML = '<tr><td colspan="11"><div class="empty-state"><div class="empty-icon">&#8709;</div><h3>NO JOBS FOUND</h3><p>Try adjusting filters or save a new quote.</p></div></td></tr>';
+    renderPagination(total);
+    updateBulkBar();
+    return;
+  }
+
+  let html = '';
+  pageItems.forEach(job => {
+    const isSel = selectedJobIds.has(job.id);
+    const marginClass = job.profitMargin >= 40 ? 'up' : job.profitMargin >= 20 ? 'neutral' : 'down';
+    const statusDotClass = job.jobStatus === 'Completed' ? 'green' : job.jobStatus === 'Booked' ? 'amber' : 'gray';
+    const dateStr = job.savedAt ? new Date(job.savedAt).toLocaleDateString() : '\u2014';
+
+    html += '<tr>';
+    html += '<td><input type="checkbox" class="job-check" data-id="' + job.id + '"' + (isSel ? ' checked' : '') + ' onchange="toggleJobSelect(\'' + job.id + '\')"></td>';
+    html += '<td><strong>' + escapeHtml(job.clientName) + '</strong></td>';
+    html += '<td>' + escapeHtml(job.cleaningType) + '</td>';
+    html += '<td>' + (job.squareFootage || 0).toLocaleString() + '</td>';
+    html += '<td>' + fmtMoney(job.quotedPrice) + '</td>';
+    html += '<td>' + fmtMoney(job.totalCost) + '</td>';
+    html += '<td>' + fmtMoney(job.netProfit) + '</td>';
+    html += '<td><span class="pill ' + marginClass + '">' + fmtPct(job.profitMargin) + '</span></td>';
+    html += '<td><span class="id"><span class="dot ' + statusDotClass + '"></span>' + escapeHtml(job.jobStatus) + '</span></td>';
+    html += '<td>' + dateStr + '</td>';
+    html += '<td class="actions">';
+    html += '<button class="btn" title="Load" onclick="loadJob(\'' + job.id + '\')">\ud83d\udcdd</button>';
+    html += '<button class="btn" title="Duplicate" onclick="duplicateJob(\'' + job.id + '\')">\ud83d\udc65</button>';
+    if (job.jobStatus !== 'Completed') {
+      html += '<button class="btn" title="Complete" onclick="markCompleted(\'' + job.id + '\')">\u2705</button>';
+    }
+    html += '<button class="btn" title="Delete" onclick="deleteJob(\'' + job.id + '\')">\ud83d\uddd1\ufe0f</button>';
+    html += '</td>';
+    html += '</tr>';
+  });
+
+  tbody.innerHTML = html;
+  renderPagination(total);
+  updateBulkBar();
+}
+
+function renderPagination(total) {
+  const el = document.getElementById('jobs-pagination');
+  if (!el) return;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  if (currentPage > totalPages) currentPage = totalPages;
+
+  let html = '';
+  html += '<button class="page-btn" ' + (currentPage <= 1 ? 'disabled' : 'onclick="gotoPage(' + (currentPage - 1) + ')"') + '>&lsaquo;</button>';
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+      html += '<button class="page-btn' + (i === currentPage ? ' active' : '') + '" onclick="gotoPage(' + i + ')">' + i + '</button>';
+    } else if (i === currentPage - 2 || i === currentPage + 2) {
+      html += '<span class="page-ellip">&hellip;</span>';
+    }
+  }
+  html += '<button class="page-btn" ' + (currentPage >= totalPages ? 'disabled' : 'onclick="gotoPage(' + (currentPage + 1) + ')"') + '>&rsaquo;</button>';
+  el.innerHTML = html;
+}
+
+function gotoPage(p) {
+  currentPage = p;
+  renderJobsTable();
+}
+
+function toggleSelectAll() {
+  const cb = document.getElementById('select-all');
+  if (!cb) return;
+  const checked = cb.checked;
+  const filtered = getFilteredJobs();
+  const sorted = getSortedJobs(filtered);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = sorted.slice(start, start + PAGE_SIZE);
+  pageItems.forEach(job => {
+    if (checked) selectedJobIds.add(job.id);
+    else selectedJobIds.delete(job.id);
+  });
+  renderJobsTable();
+  updateBulkBar();
+}
+
+function toggleJobSelect(id) {
+  if (selectedJobIds.has(id)) selectedJobIds.delete(id);
+  else selectedJobIds.add(id);
+  updateBulkBar();
+}
+
+function updateBulkBar() {
+  const bar = document.getElementById('bulk-bar');
+  if (!bar) return;
+  if (selectedJobIds.size > 0) {
+    bar.style.display = 'flex';
+    document.getElementById('bulk-count').textContent = selectedJobIds.size + ' selected';
+  } else {
+    bar.style.display = 'none';
+  }
+}
+
+function bulkDelete() {
+  if (selectedJobIds.size === 0) return;
+  openModal(
+    'Delete Selected Jobs',
+    '<p>Delete ' + selectedJobIds.size + ' selected job' + (selectedJobIds.size !== 1 ? 's' : '') + '? This cannot be undone.</p>',
+    '<button class="btn btn" onclick="closeModal()">Cancel</button>' +
+    '<button class="btn btn danger" onclick="confirmBulkDelete()">Delete All</button>'
+  );
+}
+
+function confirmBulkDelete() {
+  jobs = jobs.filter(j => !selectedJobIds.has(j.id));
+  persistJobs();
+  selectedJobIds.clear();
+  showToast('Selected jobs deleted', 'info');
+  closeModal();
+  updateCounts();
+  renderJobsTable();
+  renderClients();
+  renderAnalytics();
+}
+
+
+/* ─────────────────────────────────────────
+   CLIENTS
+   ───────────────────────────────────────── */
+function getClients() {
+  const map = {};
+  jobs.forEach(job => {
+    const name = job.clientName || 'Unknown';
+    if (!map[name]) {
+      map[name] = { name: name, jobCount: 0, totalRevenue: 0, margins: [], lastServiceDate: null };
+    }
+    map[name].jobCount += 1;
+    map[name].totalRevenue += job.quotedPrice || 0;
+    map[name].margins.push(job.profitMargin || 0);
+    const d = job.savedAt ? new Date(job.savedAt) : null;
+    if (d && (!map[name].lastServiceDate || d > new Date(map[name].lastServiceDate))) {
+      map[name].lastServiceDate = job.savedAt;
+    }
+  });
+  return map;
+}
+
+function renderClients() {
+  const grid = document.getElementById('clients-grid');
+  const empty = document.getElementById('clients-empty');
+  if (!grid) return;
+  const map = getClients();
+  const list = Object.values(map).sort((a, b) => b.totalRevenue - a.totalRevenue);
+
+  if (list.length === 0) {
+    grid.style.display = 'none';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  grid.style.display = '';
+  if (empty) empty.style.display = 'none';
+
+  let html = '';
+  list.forEach(c => {
+    const avgMargin = c.margins.length > 0 ? c.margins.reduce((s, v) => s + v, 0) / c.margins.length : 0;
+    const lastDate = c.lastServiceDate ? new Date(c.lastServiceDate).toLocaleDateString() : '\u2014';
+    html += '<div class="client-card" onclick="filterJobsByClient(\'' + escapeHtml(c.name).replace(/'/g, "\\'") + '\')">';
+    html += '<div class="cc-name">' + escapeHtml(c.name) + '</div>';
+    html += '<div class="client-meta">' + c.jobCount + ' job' + (c.jobCount !== 1 ? 's' : '') + ' \u00b7 Avg margin ' + fmtPct(avgMargin) + '</div>';
+    html += '<div class="cc-row"><b>Revenue</b><span>' + fmtMoney(c.totalRevenue) + '</span></div>';
+    html += '<div class="cc-row"><b>Last Service</b><span>' + lastDate + '</span></div>';
+    html += '<span class="cc-btn">View Jobs &rarr;</span>';
+    html += '</div>';
+  });
+  grid.innerHTML = html;
+}
+
+function filterJobsByClient(name) {
+  navigateTo('jobs');
+  searchText = name;
+  const searchEl = document.getElementById('jobs-search');
+  if (searchEl) searchEl.value = name;
+  renderJobsTable();
+}
+
+/* ─────────────────────────────────────────
+   ANALYTICS
+   ───────────────────────────────────────── */
+function renderAnalytics() {
+  const statRevenue = document.getElementById('stat-totalRevenue');
+  const statProfit = document.getElementById('stat-totalProfit');
+  const statAvgMargin = document.getElementById('stat-avgMargin');
+  const statBestClient = document.getElementById('stat-bestClient');
+  const statBusiest = document.getElementById('stat-busiestType');
+  const statTotalJobs = document.getElementById('stat-totalJobs');
+  const revChart = document.getElementById('revenue-chart');
+  const marginChart = document.getElementById('margin-chart');
+
+  if (jobs.length === 0) {
+    if (statRevenue) statRevenue.textContent = fmtMoney(0);
+    if (statProfit) statProfit.textContent = fmtMoney(0);
+    if (statAvgMargin) statAvgMargin.textContent = fmtPct(0);
+    if (statBestClient) statBestClient.textContent = '\u2014';
+    if (statBusiest) statBusiest.textContent = '\u2014';
+    if (statTotalJobs) statTotalJobs.textContent = '0';
+    if (revChart) revChart.innerHTML = '<div class="empty-state" style="border:none;padding:30px"><div class="empty-icon">&#8709;</div><h3>NO DATA</h3><p>Save jobs to see analytics.</p></div>';
+    if (marginChart) marginChart.innerHTML = '<div class="empty-state" style="border:none;padding:30px"><div class="empty-icon">&#8709;</div><h3>NO DATA</h3><p>Save jobs to see analytics.</p></div>';
+    return;
+  }
+
+  // Summary stats
+  const completedJobs = jobs.filter(j => j.jobStatus === 'Completed');
+  const totalRevenue = completedJobs.reduce((s, j) => s + (j.quotedPrice || 0), 0);
+  const totalProfit = completedJobs.reduce((s, j) => s + (j.netProfit || 0), 0);
+  const avgMargin = jobs.length > 0 ? jobs.reduce((s, j) => s + (j.profitMargin || 0), 0) / jobs.length : 0;
+
+  // Best client
+  const clientMap = getClients();
+  const bestClient = Object.values(clientMap).sort((a, b) => b.totalRevenue - a.totalRevenue)[0];
+
+  // Busiest type
+  const typeCounts = {};
+  jobs.forEach(j => { typeCounts[j.cleaningType] = (typeCounts[j.cleaningType] || 0) + 1; });
+  const busiestType = Object.entries(typeCounts).sort((a, b) => b[1] - a[1])[0];
+
+  if (statRevenue) statRevenue.textContent = fmtMoney(totalRevenue);
+  if (statProfit) statProfit.textContent = fmtMoney(totalProfit);
+  if (statAvgMargin) statAvgMargin.textContent = fmtPct(avgMargin);
+  if (statBestClient) statBestClient.textContent = bestClient ? bestClient.name : '\u2014';
+  if (statBusiest) statBusiest.textContent = busiestType ? busiestType[0] + ' (' + busiestType[1] + ')' : '\u2014';
+  if (statTotalJobs) statTotalJobs.textContent = String(jobs.length);
+
+  // Revenue chart - last 12 months
+  const now = new Date();
+  const months = [];
+  for (let i = 11; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+    const label = d.toLocaleDateString(undefined, { month: 'short', year: 'numeric' });
+    months.push({ key: key, label: label, revenue: 0 });
+  }
+  jobs.forEach(job => {
+    if (!job.savedAt) return;
+    const d = new Date(job.savedAt);
+    const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+    const m = months.find(mo => mo.key === key);
+    if (m) m.revenue += job.quotedPrice || 0;
+  });
+  const maxRev = Math.max(...months.map(m => m.revenue), 1);
+
+  if (revChart) {
+    let html = '';
+    months.forEach(m => {
+      const h = (m.revenue / maxRev * 100).toFixed(1);
+      html += '<div class="bar" style="height:' + h + '%">';
+      html += '<div class="bar-val">' + fmtMoney(m.revenue) + '</div>';
+      html += '<div class="bar-label">' + m.label + '</div>';
+      html += '</div>';
+    });
+    revChart.innerHTML = html;
+  }
+
+  // Margin histogram
+  const buckets = [
+    { label: '<0%', min: -Infinity, max: 0, count: 0 },
+    { label: '0-20%', min: 0, max: 20, count: 0 },
+    { label: '20-40%', min: 20, max: 40, count: 0 },
+    { label: '40-60%', min: 40, max: 60, count: 0 },
+    { label: '>60%', min: 60, max: Infinity, count: 0 }
+  ];
+  jobs.forEach(job => {
+    const m = job.profitMargin || 0;
+    for (const b of buckets) {
+      if (m >= b.min && m < b.max) { b.count++; break; }
+      if (b.max === Infinity && m >= b.min) { b.count++; break; }
+    }
+  });
+  const maxCount = Math.max(...buckets.map(b => b.count), 1);
+
+  if (marginChart) {
+    let html = '';
+    buckets.forEach((b, i) => {
+      const h = (b.count / maxCount * 100).toFixed(1);
+      html += '<div class="hist-bar" style="height:' + h + '%">';
+      html += '<div class="hist-count">' + b.count + '</div>';
+      html += '<div class="hist-label">' + b.label + '</div>';
+      html += '</div>';
+    });
+    marginChart.innerHTML = html;
+  }
+}
+
+/* ─────────────────────────────────────────
+   SETTINGS
+   ───────────────────────────────────────── */
+function loadSettings() {
+  settings = LS.get('settings', null);
+  if (!settings) {
+    settings = Object.assign({}, DEFAULT_SETTINGS);
+    LS.set('settings', settings);
+  }
+}
+
+function saveSettings() {
+  LS.set('settings', settings);
+}
+
+function applySettings() {
+  const s = settings;
+  const laborEl = document.getElementById('laborRatePerHr');
+  const suppliesEl = document.getElementById('suppliesCost');
+  const driveMilesEl = document.getElementById('driveMiles');
+  const driveMinutesEl = document.getElementById('driveMinutes');
+  const marginEl = document.getElementById('targetMargin');
+  const marginVal = document.getElementById('targetMargin-val');
+
+  if (laborEl && (!laborEl.value || parseFloat(laborEl.value) === 0)) laborEl.value = s.laborRate;
+  if (suppliesEl && (!suppliesEl.value || parseFloat(suppliesEl.value) === 0)) suppliesEl.value = s.suppliesCost;
+  if (driveMilesEl && (!driveMilesEl.value || parseFloat(driveMilesEl.value) === 0)) driveMilesEl.value = s.driveDistance;
+  if (marginEl) marginEl.value = s.targetMargin;
+  if (marginVal) marginVal.textContent = s.targetMargin + '%';
+
+  applyAccent(s.accentHue);
+}
+
+function renderSettings() {
+  const elLabor = document.getElementById('set-laborRate');
+  const elMileage = document.getElementById('set-mileageRate');
+  const elMargin = document.getElementById('set-targetMargin');
+  const elSupplies = document.getElementById('set-suppliesCost');
+  const elDrive = document.getElementById('set-driveDistance');
+  const elHue = document.getElementById('set-accentHue');
+  const elHueVal = document.getElementById('set-accentHue-val');
+
+  if (elLabor) elLabor.value = settings.laborRate;
+  if (elMileage) elMileage.value = settings.mileageRate;
+  if (elMargin) elMargin.value = settings.targetMargin;
+  if (elSupplies) elSupplies.value = settings.suppliesCost;
+  if (elDrive) elDrive.value = settings.driveDistance;
+  if (elHue) elHue.value = settings.accentHue;
+  if (elHueVal) elHueVal.textContent = settings.accentHue;
+}
+
+function onSettingChange() {
+  const elLabor = document.getElementById('set-laborRate');
+  const elMileage = document.getElementById('set-mileageRate');
+  const elMargin = document.getElementById('set-targetMargin');
+  const elSupplies = document.getElementById('set-suppliesCost');
+  const elDrive = document.getElementById('set-driveDistance');
+  const elHue = document.getElementById('set-accentHue');
+  const elHueVal = document.getElementById('set-accentHue-val');
+
+  if (elLabor) settings.laborRate = parseFloat(elLabor.value) || DEFAULT_SETTINGS.laborRate;
+  if (elMileage) settings.mileageRate = parseFloat(elMileage.value) || DEFAULT_SETTINGS.mileageRate;
+  if (elMargin) settings.targetMargin = parseFloat(elMargin.value) || DEFAULT_SETTINGS.targetMargin;
+  if (elSupplies) settings.suppliesCost = parseFloat(elSupplies.value) || DEFAULT_SETTINGS.suppliesCost;
+  if (elDrive) settings.driveDistance = parseFloat(elDrive.value) || DEFAULT_SETTINGS.driveDistance;
+  if (elHue) settings.accentHue = parseFloat(elHue.value) || DEFAULT_SETTINGS.accentHue;
+  if (elHueVal) elHueVal.textContent = settings.accentHue;
+
+  saveSettings();
+  applyAccent(settings.accentHue);
+}
+
+function exportJSON() {
+  const payload = { jobs: jobs, settings: settings, exportedAt: nowISO() };
+  const json = JSON.stringify(payload, null, 2);
+  const ta = document.getElementById('json-export');
+  if (ta) ta.value = json;
+  return json;
+}
+
+function importJSON() {
+  const ta = document.getElementById('json-import');
+  if (!ta || !ta.value.trim()) {
+    showToast('Paste JSON data to import', 'error');
+    return;
+  }
+  let payload;
+  try {
+    payload = JSON.parse(ta.value);
+  } catch (e) {
+    showToast('Invalid JSON: ' + e.message, 'error');
+    return;
+  }
+  if (!payload || typeof payload !== 'object') {
+    showToast('Invalid JSON structure', 'error');
+    return;
+  }
+
+  openModal(
+    'Import Data',
+    '<p>How would you like to import this data?</p><p><strong>' + (payload.jobs ? payload.jobs.length : 0) + '</strong> jobs found.</p>',
+    '<button class="btn btn" onclick="closeModal()">Cancel</button>' +
+    '<button class="btn btn" onclick="confirmImportJSON(\'merge\')">Merge</button>' +
+    '<button class="btn btn primary" onclick="confirmImportJSON(\'replace\')">Replace All</button>'
+  );
+}
+
+function confirmImportJSON(mode) {
+  const ta = document.getElementById('json-import');
+  if (!ta) { closeModal(); return; }
+  let payload;
+  try { payload = JSON.parse(ta.value); } catch (e) { closeModal(); return; }
+  closeModal();
+
+  if (mode === 'replace') {
+    if (Array.isArray(payload.jobs)) jobs = payload.jobs;
+    if (payload.settings && typeof payload.settings === 'object') {
+      settings = Object.assign({}, DEFAULT_SETTINGS, payload.settings);
+    }
+  } else if (mode === 'merge') {
+    if (Array.isArray(payload.jobs)) {
+      payload.jobs.forEach(newJob => {
+        const existing = jobs.find(j => j.id === newJob.id);
+        if (!existing) jobs.push(newJob);
+      });
+    }
+    if (payload.settings && typeof payload.settings === 'object') {
+      settings = Object.assign({}, settings, payload.settings);
+    }
+  }
+
+  persistJobs();
+  saveSettings();
+  applySettings();
+  renderSettings();
+  updateCounts();
+  renderJobsTable();
+  renderClients();
+  renderAnalytics();
+  ta.value = '';
+  showToast('Import complete', 'success');
+}
+
+function confirmClearAll() {
+  openModal(
+    'Clear All Data',
+    '<p>This will delete ALL saved jobs and reset ALL settings. This action cannot be undone.</p>',
+    '<button class="btn btn" onclick="closeModal()">Cancel</button>' +
+    '<button class="btn btn danger" onclick="doClearAll()">Clear Everything</button>'
+  );
+}
+
+function doClearAll() {
+  try {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith(LS_PREFIX)) keys.push(k);
+    }
+    keys.forEach(k => localStorage.removeItem(k));
+  } catch (e) {}
+  closeModal();
+  showToast('All data cleared. Reloading...', 'info');
+  setTimeout(() => { window.location.reload(); }, 800);
+}
+
+function copyExportJSON() {
+  const ta = document.getElementById('json-export');
+  if (!ta || !ta.value) { exportJSON(); }
+  const target = ta || document.getElementById('json-export');
+  if (target && target.value) {
+    navigator.clipboard.writeText(target.value).then(() => {
+      showToast('JSON copied to clipboard', 'success');
+    }).catch(() => {
+      target.select();
+      document.execCommand('copy');
+      showToast('JSON copied to clipboard', 'success');
+    });
+  }
+}
+
+
+/* ─────────────────────────────────────────
+   CSV EXPORT
+   ───────────────────────────────────────── */
+function escapeCSV(val) {
+  const s = val === null || val === undefined ? '' : String(val);
+  if (s.includes(',') || s.includes('"') || s.includes('\n') || s.includes('\r')) {
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+  return s;
+}
+
+function exportToCSV() {
+  if (jobs.length === 0) { showToast('No jobs to export', 'error'); return; }
+  const columns = [
+    'id', 'clientName', 'jobAddress', 'cleaningType', 'frequency',
+    'squareFootage', 'bedrooms', 'bathrooms', 'extraRooms',
+    'numCleaners', 'estimatedHours', 'laborRatePerHr', 'suppliesCost',
+    'driveMiles', 'driveMinutes', 'targetMargin', 'jobStatus', 'notes',
+    'quotedPrice', 'totalCost', 'netProfit', 'profitMargin',
+    'laborCost', 'mileageCost', 'driveTimeCost', 'basePrice', 'discount',
+    'savedAt', 'hoursMode'
+  ];
+  let csv = columns.map(escapeCSV).join(',') + '\n';
+  jobs.forEach(job => {
+    const row = columns.map(col => {
+      let v = job[col];
+      if (Array.isArray(v)) v = v.join('; ');
+      return escapeCSV(v);
+    });
+    csv += row.join(',') + '\n';
+  });
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'cleaning-jobs-' + new Date().toISOString().slice(0, 10) + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('CSV exported', 'success');
+}
+
+/* ─────────────────────────────────────────
+   COMPARE MODAL
+   ───────────────────────────────────────── */
+function openCompareModal() {
+  const data = getFormData();
+  const calc = calculateJob(data);
+
+  let bodyHtml = '<div class="compare-grid">';
+
+  // Left column: current results
+  bodyHtml += '<div class="compare-col compare-left">';
+  bodyHtml += '<h3>Current Calculator</h3>';
+  bodyHtml += '<div class="compare-section">';
+  bodyHtml += '<div class="compare-row"><span>Client</span><strong>' + escapeHtml(data.clientName || '\u2014') + '</strong></div>';
+  bodyHtml += '<div class="compare-row"><span>Type</span><strong>' + escapeHtml(data.cleaningType) + '</strong></div>';
+  bodyHtml += '<div class="compare-row"><span>Sq Ft</span><strong>' + (data.squareFootage || 0).toLocaleString() + '</strong></div>';
+  bodyHtml += '<div class="compare-row"><span>Bed/Bath</span><strong>' + data.bedrooms + '/' + data.bathrooms + '</strong></div>';
+  bodyHtml += '<div class="compare-row"><span>Cleaners</span><strong>' + data.numCleaners + '</strong></div>';
+  bodyHtml += '<div class="compare-row"><span>Hours</span><strong>' + data.estimatedHours.toFixed(2) + '</strong></div>';
+  bodyHtml += '<div class="compare-row"><span>Rate/hr</span><strong>' + fmtMoney(data.laborRatePerHr) + '</strong></div>';
+  bodyHtml += '<div class="compare-row"><span>Supplies</span><strong>' + fmtMoney(data.suppliesCost) + '</strong></div>';
+  bodyHtml += '<div class="compare-row"><span>Drive</span><strong>' + data.driveMiles + ' mi / ' + data.driveMinutes + ' min</strong></div>';
+  bodyHtml += '<div class="compare-row"><span>Margin target</span><strong>' + fmtPct(data.targetMargin) + '</strong></div>';
+  bodyHtml += '</div>';
+  bodyHtml += '<div class="compare-results">';
+  bodyHtml += '<div class="compare-result-row"><span>Quoted</span><strong>' + fmtMoney(calc.quotedPrice) + '</strong></div>';
+  bodyHtml += '<div class="compare-result-row"><span>Cost</span><strong>' + fmtMoney(calc.totalCost) + '</strong></div>';
+  bodyHtml += '<div class="compare-result-row"><span>Profit</span><strong>' + fmtMoney(calc.netProfit) + '</strong></div>';
+  bodyHtml += '<div class="compare-result-row"><span>Margin</span><strong>' + fmtPct(calc.profitMargin) + '</strong></div>';
+  bodyHtml += '</div>';
+  bodyHtml += '</div>';
+
+  // Right column: editable clone
+  bodyHtml += '<div class="compare-col compare-right">';
+  bodyHtml += '<h3>Compare Scenario</h3>';
+  bodyHtml += '<div class="compare-section">';
+  bodyHtml += '<div class="compare-row"><span>Sq Ft</span><input type="number" id="cmp-sqft" value="' + data.squareFootage + '" oninput="recalcCompare()"></div>';
+  bodyHtml += '<div class="compare-row"><span>Bedrooms</span><input type="number" id="cmp-bed" value="' + data.bedrooms + '" oninput="recalcCompare()"></div>';
+  bodyHtml += '<div class="compare-row"><span>Bathrooms</span><input type="number" id="cmp-bath" value="' + data.bathrooms + '" oninput="recalcCompare()"></div>';
+  bodyHtml += '<div class="compare-row"><span>Type</span><select id="cmp-type" onchange="recalcCompare()">';
+  ['Standard', 'Deep Clean', 'Move-in/Move-out', 'Post-Construction'].forEach(t => {
+    bodyHtml += '<option value="' + t + '"' + (t === data.cleaningType ? ' selected' : '') + '>' + t + '</option>';
+  });
+  bodyHtml += '</select></div>';
+  bodyHtml += '<div class="compare-row"><span>Cleaners</span><input type="number" id="cmp-cleaners" value="' + data.numCleaners + '" oninput="recalcCompare()"></div>';
+  bodyHtml += '<div class="compare-row"><span>Hours</span><input type="number" id="cmp-hours" value="' + data.estimatedHours.toFixed(2) + '" step="0.25" oninput="recalcCompare()"></div>';
+  bodyHtml += '<div class="compare-row"><span>Rate/hr</span><input type="number" id="cmp-rate" value="' + data.laborRatePerHr + '" step="0.5" oninput="recalcCompare()"></div>';
+  bodyHtml += '<div class="compare-row"><span>Supplies</span><input type="number" id="cmp-supplies" value="' + data.suppliesCost + '" oninput="recalcCompare()"></div>';
+  bodyHtml += '<div class="compare-row"><span>Drive mi</span><input type="number" id="cmp-miles" value="' + data.driveMiles + '" step="0.5" oninput="recalcCompare()"></div>';
+  bodyHtml += '<div class="compare-row"><span>Drive min</span><input type="number" id="cmp-min" value="' + data.driveMinutes + '" step="5" oninput="recalcCompare()"></div>';
+  bodyHtml += '<div class="compare-row"><span>Margin %</span><input type="number" id="cmp-margin" value="' + data.targetMargin + '" oninput="recalcCompare()"></div>';
+  bodyHtml += '</div>';
+  bodyHtml += '<div class="compare-results" id="cmp-results">';
+  // Will be filled by recalcCompare
+  bodyHtml += '</div>';
+  bodyHtml += '</div>';
+
+  // Winner banner
+  bodyHtml += '<div class="compare-winner" id="cmp-winner"></div>';
+  bodyHtml += '</div>';
+
+  const footerHtml = '<button class="btn btn" onclick="closeModal()">Close</button>';
+  openModal('Compare Scenarios', bodyHtml, footerHtml);
+  setTimeout(recalcCompare, 0);
+}
+
+function recalcCompare() {
+  const cmpData = {
+    clientName: '',
+    jobAddress: '',
+    cleaningType: document.getElementById('cmp-type').value,
+    frequency: 'One-time',
+    squareFootage: parseFloat(document.getElementById('cmp-sqft').value) || 0,
+    bedrooms: parseInt(document.getElementById('cmp-bed').value, 10) || 0,
+    bathrooms: parseInt(document.getElementById('cmp-bath').value, 10) || 0,
+    extraRooms: [],
+    numCleaners: parseInt(document.getElementById('cmp-cleaners').value, 10) || 1,
+    estimatedHours: parseFloat(document.getElementById('cmp-hours').value) || 1,
+    laborRatePerHr: parseFloat(document.getElementById('cmp-rate').value) || 0,
+    suppliesCost: parseFloat(document.getElementById('cmp-supplies').value) || 0,
+    driveMiles: parseFloat(document.getElementById('cmp-miles').value) || 0,
+    driveMinutes: parseFloat(document.getElementById('cmp-min').value) || 0,
+    targetMargin: parseFloat(document.getElementById('cmp-margin').value) || 0,
+    jobStatus: 'Quoted',
+    notes: '',
+    mileageRate: settings.mileageRate || DEFAULT_SETTINGS.mileageRate
+  };
+  const cmp = calculateJob(cmpData);
+
+  const resEl = document.getElementById('cmp-results');
+  if (resEl) {
+    let html = '';
+    html += '<div class="compare-result-row"><span>Quoted</span><strong>' + fmtMoney(cmp.quotedPrice) + '</strong></div>';
+    html += '<div class="compare-result-row"><span>Cost</span><strong>' + fmtMoney(cmp.totalCost) + '</strong></div>';
+    html += '<div class="compare-result-row"><span>Profit</span><strong>' + fmtMoney(cmp.netProfit) + '</strong></div>';
+    html += '<div class="compare-result-row"><span>Margin</span><strong>' + fmtPct(cmp.profitMargin) + '</strong></div>';
+    resEl.innerHTML = html;
+  }
+
+  const winnerEl = document.getElementById('cmp-winner');
+  const leftData = getFormData();
+  const leftCalc = calculateJob(leftData);
+  if (winnerEl) {
+    if (cmp.netProfit > leftCalc.netProfit) {
+      winnerEl.textContent = 'Scenario wins \u2192 +' + fmtMoney(cmp.netProfit - leftCalc.netProfit) + ' more profit';
+      winnerEl.className = 'compare-winner right-wins';
+    } else if (leftCalc.netProfit > cmp.netProfit) {
+      winnerEl.textContent = 'Current wins \u2190 +' + fmtMoney(leftCalc.netProfit - cmp.netProfit) + ' more profit';
+      winnerEl.className = 'compare-winner left-wins';
+    } else {
+      winnerEl.textContent = 'Equal profit';
+      winnerEl.className = 'compare-winner tie';
+    }
+  }
+}
+
+/* ─────────────────────────────────────────
+   NAVIGATION & UI
+   ───────────────────────────────────────── */
+function navigateTo(viewName, e) {
+  if (e && e.preventDefault) e.preventDefault();
+
+  // Hide all views
+  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+
+  // Show target view
+  const target = document.getElementById('view-' + viewName);
+  if (target) target.classList.add('active');
+
+  // Update header
+  const cfg = VIEWS[viewName];
+  if (cfg) {
+    const elTitle = document.getElementById('page-title');
+    const elSub = document.getElementById('page-subtitle');
+    const elCrumb = document.getElementById('crumb-view');
+    const elFoot = document.getElementById('foot-page');
+    if (elTitle) elTitle.textContent = cfg.title;
+    if (elSub) elSub.textContent = cfg.subtitle;
+    if (elCrumb) elCrumb.textContent = cfg.crumb;
+    if (elFoot) elFoot.textContent = cfg.page;
+  }
+
+  // Sidebar nav active state
+  document.querySelectorAll('.nav-item').forEach(link => {
+    link.classList.toggle('active', link.dataset.view === viewName);
+  });
+
+  // Render data views
+  if (viewName === 'jobs') { renderJobsTable(); }
+  if (viewName === 'clients') { renderClients(); }
+  if (viewName === 'analytics') { renderAnalytics(); }
+  if (viewName === 'settings') { renderSettings(); }
+
+  // Close sidebar on mobile
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar && sidebar.classList.contains('open')) {
+    sidebar.classList.remove('open');
+  }
+}
+
+function initTheme() {
+  const saved = LS.get('theme', '');
+  if (saved === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  } else if (saved === 'light') {
+    document.documentElement.removeAttribute('data-theme');
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'dark';
+  if (isDark) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  LS.set('theme', isDark ? 'dark' : 'light');
+}
+
+function applyAccent(hue) {
+  document.documentElement.style.setProperty('--accent-h', String(hue));
+}
+
+function showToast(msg, type, dur) {
+  const container = document.getElementById('toast-container');
+  if (!container) return;
+  const toast = document.createElement('div');
+  toast.className = 'toast ' + (type || 'info');
+  toast.textContent = msg;
+  container.appendChild(toast);
+  requestAnimationFrame(() => { toast.classList.add('show'); });
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 300);
+  }, dur || 3000);
+}
+
+function openModal(title, body, footer) {
+  const overlay = document.getElementById('modal-overlay');
+  const mTitle = document.getElementById('modal-title');
+  const mBody = document.getElementById('modal-body');
+  const mFooter = document.getElementById('modal-footer');
+  if (overlay) overlay.classList.add('open');
+  if (mTitle) mTitle.textContent = title || '';
+  if (mBody) mBody.innerHTML = body || '';
+  if (mFooter) mFooter.innerHTML = footer || '';
+}
+
+function closeModal() {
+  const overlay = document.getElementById('modal-overlay');
+  if (overlay) overlay.classList.remove('open');
+  const mBody = document.getElementById('modal-body');
+  const mFooter = document.getElementById('modal-footer');
+  if (mBody) mBody.innerHTML = '';
+  if (mFooter) mFooter.innerHTML = '';
+}
+
+/* ─────────────────────────────────────────
+   SEARCH
+   ───────────────────────────────────────── */
+function onSidebarSearch(val) {
+  searchText = val;
+  const activeView = document.querySelector('.view.active');
+  if (activeView && activeView.id === 'view-jobs') {
+    renderJobsTable();
+  } else {
+    // If not on jobs view, switch to it and search
+    navigateTo('jobs');
+    renderJobsTable();
+  }
+}
+
+/* ─────────────────────────────────────────
+   UPDATE COUNTS
+   ───────────────────────────────────────── */
+function updateCounts() {
+  const navJobs = document.getElementById('nav-jobs-count');
+  const navClients = document.getElementById('nav-clients-count');
+  const teleQuoted = document.getElementById('tele-quoted');
+  const teleJobs = document.getElementById('tele-jobs');
+  const rtCount = document.getElementById('rt-count');
+  const rtStatus = document.getElementById('rt-status');
+  const rtBar = document.getElementById('rt-bar');
+  const rtMargin = document.getElementById('rt-margin');
+
+  const totalJobs = jobs.length;
+  const quotedJobs = jobs.filter(j => j.jobStatus === 'Quoted').length;
+  const clientNames = new Set(jobs.map(j => j.clientName).filter(Boolean));
+
+  if (navJobs) navJobs.textContent = String(totalJobs);
+  if (navClients) navClients.textContent = String(clientNames.size);
+  if (teleQuoted) teleQuoted.textContent = String(quotedJobs);
+  if (teleJobs) teleJobs.textContent = String(totalJobs);
+  if (rtCount) rtCount.textContent = String(totalJobs);
+  if (rtStatus) rtStatus.textContent = totalJobs === 0 ? 'No jobs' : quotedJobs > 0 ? quotedJobs + ' pending' : 'All caught up';
+
+  // Wire rt-bar: average margin across all jobs
+  if (totalJobs > 0) {
+    const avgMargin = jobs.reduce((s, j) => s + (j.profitMargin || 0), 0) / totalJobs;
+    if (rtMargin) rtMargin.textContent = avgMargin.toFixed(1) + '%';
+    if (rtBar) rtBar.style.width = Math.min(100, Math.max(0, avgMargin)) + '%';
+  } else {
+    if (rtMargin) rtMargin.textContent = '--';
+    if (rtBar) rtBar.style.width = '0%';
+  }
+}
+
+/* ─────────────────────────────────────────
+   KEYBOARD SHORTCUTS
+   ───────────────────────────────────────── */
+function onKeyDown(e) {
+  if (e.ctrlKey || e.metaKey) {
+    if (e.key === 's') { e.preventDefault(); saveJob(); }
+    else if (e.key === 'k') { e.preventDefault(); const s = document.getElementById('search-input'); if (s) s.focus(); }
+    else if (e.key === 'e') { e.preventDefault(); exportToCSV(); }
+    else if (e.key === 'p') { e.preventDefault(); window.print(); }
+  }
+  if (e.key === 'Escape') {
+    closeModal();
+  }
+}
+
+/* ─────────────────────────────────────────
+   AUTOCOMPLETE
+   ───────────────────────────────────────── */
+function setupAutocomplete() {
+  const input = document.getElementById('clientName');
+  const wrap = document.getElementById('client-ac-wrap');
+  const list = document.getElementById('client-ac-list');
+  if (!input || !wrap || !list) return;
+
+  input.addEventListener('input', () => {
+    const val = input.value.trim().toLowerCase();
+    if (val.length < 1) { list.style.display = 'none'; return; }
+    const names = [...new Set(jobs.map(j => j.clientName).filter(n => n && n.toLowerCase().includes(val)))].slice(0, 8);
+    if (names.length === 0) { list.style.display = 'none'; return; }
+    list.innerHTML = names.map(n => '<div class="ac-item" onclick="selectClientName(this)">' + escapeHtml(n) + '</div>').join('');
+    list.style.display = 'block';
+  });
+
+  input.addEventListener('blur', () => {
+    setTimeout(() => { if (list) list.style.display = 'none'; }, 200);
+  });
+
+  input.addEventListener('focus', () => {
+    if (input.value.trim().length > 0) {
+      input.dispatchEvent(new Event('input'));
+    }
+  });
+}
+
+function selectClientName(el) {
+  const input = document.getElementById('clientName');
+  if (input) input.value = el.textContent;
+  const list = document.getElementById('client-ac-list');
+  if (list) list.style.display = 'none';
+  // Also fill address if we know it
+  const match = jobs.find(j => j.clientName === el.textContent);
+  if (match && match.jobAddress) {
+    const addr = document.getElementById('jobAddress');
+    if (addr && !addr.value) addr.value = match.jobAddress;
+  }
+}
+
+
+/* ─────────────────────────────────────────
+   INIT — Event Listeners & Boot
+   ───────────────────────────────────────── */
+let _searchDebounceTimer = null;
+
+function init() {
+  // Settings
+  loadSettings();
+  applySettings();
+
+  // Jobs
+  jobs = LS.get('jobs', []);
+
+  // Populate form defaults from settings
+  const elLabor = document.getElementById('laborRatePerHr');
+  const elSupplies = document.getElementById('suppliesCost');
+  const elDriveMiles = document.getElementById('driveMiles');
+  const elMargin = document.getElementById('targetMargin');
+  const elMarginVal = document.getElementById('targetMargin-val');
+
+  if (elLabor) elLabor.value = settings.laborRate || DEFAULT_SETTINGS.laborRate;
+  if (elSupplies) elSupplies.value = settings.suppliesCost || DEFAULT_SETTINGS.suppliesCost;
+  if (elDriveMiles) elDriveMiles.value = settings.driveDistance || DEFAULT_SETTINGS.driveDistance;
+  if (elMargin) elMargin.value = settings.targetMargin || DEFAULT_SETTINGS.targetMargin;
+  if (elMarginVal) elMarginVal.textContent = (settings.targetMargin || DEFAULT_SETTINGS.targetMargin) + '%';
+
+  // Theme
+  initTheme();
+
+  // Calculator inputs → recalculate
+  const calcInputIds = [
+    'clientName', 'jobAddress', 'cleaningType', 'frequency',
+    'squareFootage', 'bedrooms', 'bathrooms', 'numCleaners',
+    'laborRatePerHr', 'suppliesCost', 'driveMiles', 'driveMinutes',
+    'jobStatus', 'notes'
+  ];
+  calcInputIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', recalculate);
+      el.addEventListener('change', recalculate);
+    }
+  });
+
+  // Hours field: change event triggers manual mode
+  const elHours = document.getElementById('estimatedHours');
+  if (elHours) {
+    elHours.addEventListener('change', onHoursChange);
+  }
+
+  // Hours reset button
+  const elHoursReset = document.getElementById('hours-reset-btn');
+  if (elHoursReset) elHoursReset.addEventListener('click', resetHours);
+
+  // Manual tag click → also resets to auto
+  const elManualTag = document.getElementById('manual-tag');
+  if (elManualTag) elManualTag.addEventListener('click', resetHours);
+
+  // Frequency change
+  const elFreq = document.getElementById('frequency');
+  if (elFreq) elFreq.addEventListener('change', onFrequencyChange);
+
+  // Target margin slider
+  const elMarginSlider = document.getElementById('targetMargin');
+  if (elMarginSlider) {
+    elMarginSlider.addEventListener('input', () => {
+      const valEl = document.getElementById('targetMargin-val');
+      if (valEl) valEl.textContent = elMarginSlider.value + '%';
+      recalculate();
+    });
+  }
+
+  // Extra room toggles
+  document.querySelectorAll('#extra-rooms-group .chip-toggle').forEach(btn => {
+    btn.addEventListener('click', () => toggleExtraRoom(btn));
+  });
+
+  // Settings inputs
+  const settingIds = ['set-laborRate', 'set-mileageRate', 'set-targetMargin', 'set-suppliesCost', 'set-driveDistance', 'set-accentHue'];
+  settingIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', onSettingChange);
+      el.addEventListener('change', onSettingChange);
+    }
+  });
+
+  // Jobs search (debounced)
+  const elJobsSearch = document.getElementById('jobs-search');
+  if (elJobsSearch) {
+    elJobsSearch.addEventListener('input', () => {
+      searchText = elJobsSearch.value;
+      clearTimeout(_searchDebounceTimer);
+      _searchDebounceTimer = setTimeout(() => { renderJobsTable(); }, 200);
+    });
+  }
+
+  // Sidebar search (debounced)
+  const elSidebarSearch = document.getElementById('search-input');
+  if (elSidebarSearch) {
+    elSidebarSearch.addEventListener('input', () => {
+      clearTimeout(_searchDebounceTimer);
+      _searchDebounceTimer = setTimeout(() => { onSidebarSearch(elSidebarSearch.value); }, 200);
+    });
+  }
+
+  // Filter chips
+  document.querySelectorAll('[data-filter]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const filter = chip.dataset.filter;
+      const value = chip.dataset.value;
+      if (filter === 'status') filterStatus = value;
+      if (filter === 'type') filterType = value;
+      // Update active class
+      document.querySelectorAll('[data-filter="' + filter + '"]').forEach(c => c.classList.remove('on'));
+      chip.classList.add('on');
+      currentPage = 1;
+      renderJobsTable();
+    });
+  });
+
+  // Select all checkbox
+  const elSelectAll = document.getElementById('select-all');
+  if (elSelectAll) elSelectAll.addEventListener('change', toggleSelectAll);
+
+  // Bulk delete button
+  const elBulkDelete = document.getElementById('bulk-delete');
+  if (elBulkDelete) elBulkDelete.addEventListener('click', bulkDelete);
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', onKeyDown);
+
+  // Modal overlay click to close
+  const elOverlay = document.getElementById('modal-overlay');
+  if (elOverlay) {
+    elOverlay.addEventListener('click', (e) => {
+      if (e.target === elOverlay) closeModal();
+    });
+  }
+
+  // Sidebar toggle (mobile)
+  const elSidebarToggle = document.getElementById('sidebar-toggle');
+  if (elSidebarToggle) {
+    elSidebarToggle.addEventListener('click', () => {
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar) sidebar.classList.toggle('open');
+    });
+  }
+
+  // Nav links
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (e) => navigateTo(link.dataset.view, e));
+  });
+
+  // Autocomplete
+  setupAutocomplete();
+
+  // Initial recalculation & counts
+  recalculate();
+  onFrequencyChange();
+  updateCounts();
+
+  // Show calculator view by default
+  navigateTo('main');
+
+  // Welcome toast
+  if (jobs.length === 0) {
+    showToast('Welcome! Create your first cleaning quote.', 'info', 5000);
+  } else {
+    showToast('Loaded ' + jobs.length + ' job' + (jobs.length !== 1 ? 's' : ''), 'success', 2000);
+  }
+}
+
+// Run init when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
+/* ---- STORAGE AVAILABILITY CHECK ---- */
+(function() {
+  try {
+    const t = '__storage_test__';
+    localStorage.setItem(t, t);
+    localStorage.removeItem(t);
+  } catch(e) {
+    document.addEventListener('DOMContentLoaded', function() {
+      showToast('Private mode detected — data will not be saved when this tab closes', 'error', 8000);
+    });
+  }
+})();
+
+/* ─── MISSING FUNCTIONS CALLED BY HTML ─── */
+function filterJobs(type, value) {
+  if (type === 'status') {
+    filterStatus = value;
+    document.querySelectorAll('#view-jobs .chip').forEach(c => {
+      const onclick = c.getAttribute('onclick') || '';
+      if (onclick.indexOf("'status'") !== -1) {
+        c.classList.toggle('on', onclick.indexOf("'" + value + "'") !== -1);
+      }
+    });
+  } else if (type === 'type') {
+    filterType = value;
+    document.querySelectorAll('#view-jobs .chip').forEach(c => {
+      const onclick = c.getAttribute('onclick') || '';
+      if (onclick.indexOf("'type'") !== -1) {
+        c.classList.toggle('on', onclick.indexOf("'" + value + "'") !== -1);
+      }
+    });
+  }
+  currentPage = 1;
+  renderJobsTable();
+}
+
+function sortJobs(col) {
+  if (sortCol === col) sortAsc = !sortAsc;
+  else { sortCol = col; sortAsc = true; }
+  renderJobsTable();
+}
+
+function searchJobs(val) {
+  searchText = val;
+  currentPage = 1;
+  renderJobsTable();
+}
+
+function deleteSelectedJobs() {
+  bulkDelete();
+}
+
+function closeCompareModal() {
+  document.getElementById('compare-modal-overlay').classList.remove('open');
+}
+
+
+
+function copyExportJSON() {
+  const ta = document.getElementById('json-export');
+  if (!ta) return;
+  ta.select();
+  try {
+    navigator.clipboard.writeText(ta.value);
+    showToast('JSON copied to clipboard', 'success');
+  } catch (e) {
+    showToast('JSON copied (Ctrl+C)', 'info');
+  }
+}
+</script>
+</body>
+</html>

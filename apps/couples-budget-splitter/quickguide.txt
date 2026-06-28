@@ -1,0 +1,53 @@
+==========================================================
+ SPLITTER / BUDGET – Quick Start Guide
+==========================================================
+
+FIRST STEPS
+--------------------------------
+1. Open the HTML file.
+2. Click on "Settings" in the left menu.
+3. Change the partner names to yours.
+4. Set each partner’s monthly income (used for fair splits).
+5. Click any other tab – your settings are saved automatically.
+
+ADDING YOUR FIRST EXPENSE
+--------------------------------
+1. Click "Expenses" in the left menu.
+2. Fill in:
+      • Name (e.g. "Grocery run")
+      • Amount (in dollars/pounds/euros etc.)
+      • Who paid (you or your partner)
+      • Date (defaults to today)
+      • Split type (see below)
+3. Click "+ Add Expense"
+
+Your expense is saved immediately. The Dashboard updates
+automatically.
+
+SPLIT TYPES (QUICK EXPLANATION)
+--------------------------------
+• 50/50 Even – both pay half.
+• Income-Based – split according to your incomes.
+• Custom % – you set each partner's percentage.
+• Fixed Amount – each pays a specific dollar figure.
+
+ADDING A RECURRING SUBSCRIPTION
+--------------------------------
+1. Click "Subscriptions" in the menu.
+2. Add the name, cost per billing cycle, who pays, and cycle.
+3. The app shows the monthly equivalent cost and splits it
+  50/50.
+
+VIEWING YOUR BALANCE
+--------------------------------
+The Dashboard shows who owes who. A positive balance means
+partner 2 owes partner 1 (and vice‑versa). It’s that simple!
+
+BACKING UP YOUR DATA
+--------------------------------
+Go to Settings → "Export All Data" (or "Export Expenses Only").
+Save the CSV file somewhere safe. To restore, use "Import
+Expenses" in the same section.
+
+That’s all you need to start! For more details, see the
+User Guide.

@@ -1,0 +1,81 @@
+═══════════════════════════════════════════════════════
+  FOOD BUSINESS COST CALCULATOR — QUICK GUIDE
+═══════════════════════════════════════════════════════
+
+STEP 1 — COST A RECIPE
+────────────────────────
+Go to the Recipe Calculator tab (01).
+
+Fill in:
+  • Recipe Name and Category
+  • Batch Yield         (how many units this recipe makes)
+  • Ingredients         (click "Add Ingredient" for each one)
+    - Purchase quantity + price paid
+    - Recipe quantity used
+    - Yield loss %       (waste from peeling, trimming, etc.)
+  • Hours to make the batch
+  • Hourly Rate         (what you want to earn per hour)
+  • Packaging cost per unit
+  • Kitchen overhead for the batch
+  • Booth Fee           (if selling at a farmers market)
+  • Expected units sold at the event
+  • Round trip miles to market
+
+Use "I want to make" to scale the batch up or down —
+all ingredient quantities and costs rescale automatically.
+
+Adjust the Target Margin % slider to see how different
+pricing affects your profit and true hourly wage.
+
+Results update in real time:
+  Cost Per Unit / Suggested Price / Net Profit /
+  Profit Per Unit / Margin % / True Hourly Wage /
+  Break-Even Price
+
+Click "Save Recipe" (or Ctrl + S) to store it.
+
+─────────────────────────────────────────────────────
+
+STEP 2 — COMPARE RECIPES
+──────────────────────────
+Go to the Compare tab (03).
+
+Load two saved recipes or set up two scenarios manually
+and see cost, profit, margin, and true hourly wage
+side-by-side — useful for comparing batch sizes or
+testing different pricing strategies.
+
+─────────────────────────────────────────────────────
+
+STEP 3 — REVIEW SAVED RECIPES
+────────────────────────────────
+Go to Saved Recipes (02).
+
+  • Filter by category (Baked Goods, Jams, Sauces, etc.)
+  • Sort any column
+  • Export to CSV (Ctrl + E)
+  • Edit or delete entries
+
+Each recipe displays a profitability badge:
+  Strong      — Margin 40%+
+  Healthy     — Margin 20-40%
+  Low Margin  — Margin under 20%
+  Underpriced — True wage below 80% of your target rate
+
+─────────────────────────────────────────────────────
+
+STEP 4 — CHECK ANALYTICS
+──────────────────────────
+Go to Analytics (04) for a visual breakdown of margins,
+true hourly wages, and cost composition across all
+saved recipes.
+
+═══════════════════════════════════════════════════════
+KEYBOARD SHORTCUTS
+──────────────────
+  Ctrl + S   Save recipe
+  Ctrl + K   Focus search
+  Ctrl + E   Export CSV
+  Ctrl + P   Print
+  Escape     Close any dialog
+═══════════════════════════════════════════════════════

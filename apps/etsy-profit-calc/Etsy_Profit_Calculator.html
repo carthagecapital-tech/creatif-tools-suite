@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Etsy Profit Calculator Pro — Seller Fee &amp; Pricing Tool</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23c1772f' rx='18' width='100' height='100'/%3E%3Ctext x='50' y='68' font-size='52' font-family='Georgia' font-weight='bold' fill='white' text-anchor='middle'%3EE%3C/text%3E%3C/svg%3E" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src data:; connect-src 'none';">
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   ETSY PROFIT CALCULATOR — v2.0 (full file, all fixes applied)
+   ═══════════════════════════════════════════════════════════════════════════ */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("data:font/woff2;base64,d09GMgABAAAAAJ3UABQAAAABfDgAAJ1eAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGoFfG4dOHIGacj9IVkFSiUwGYD9TVEFUgWInJgCFIi9qEQgKgdw4gawuC4YWADCCojABNgIkA4waBCAFiUwHowwMB1u3X3GC6aZjD165bQA/5feRJ7EK5KabcjtIaXvmyAJ27AXYOIA2Nl6c/f//eUlFjkrrJK3ZxsGPe0vJiQjkUtZVnoqpDZk2jITW1o6lySayOlsmsTuc7x7N+YLeweTE5EQKOul1EKTJpAnWK4MLsRcl7bXlKtx/uM/FDpQILw/Vx+Z727G1y+Ojue5TfpDHCTmX7myGnztttzQa90eGEX/4yR1NWGhKKEKKDNIhTUSJg27w+0IgVhWmy/s/QBMhM7ppeJsVbfMfW+mooSNQ/QePQ//wOSf52+lqLusAuwX/YpIyLMfTSvh/+Dbt3DeDDXhIvMSMujpdN/tS/6v6+v/o9b07+fLpBQ3gJBMM9deshVKtWFVbbbunx8/T3N79WxVjazbGYHNElCBgA0YTJmAmJZhgN7SBUYXZhFGUIOy2u+FJN/+h8CGgVAFRgQyySSBrXi53GZdNjiOBcIwAiUBYMlRctKJ1zO/EsUCt/+OYfEcdqwPnV+uodFHdOLsWzKBmOT5nZj1rxYpITlJrredaScVasWLdbxrEiieDWCvWipXZT0SsBBERa8W6g5hPPNcG1zykQYL72SUNYoOE7C9iRSRIEAkiYq37iYiYe1OtvgpAIRQJgpRI2bLbdqcNMd32eP3vmYQ2pNPhn/495DDJE+zpcQc5UIESwf8j9+zc9xGDPE0LKP3SFri1Ff/Pc7J3/86Z8CgMPEl8SaypNZhT/1XIIO1rujUF3NY8ADodPtwuc5XHl/uHG1PfoBBy05BlkGxLtmWCJG3zfzm1/pFGMMbGCpAKagoEdzzStYfLCRB21/Im8mvk2gpIsv8IZwIAnKiKYmfM62gQgHG1kMM9KC6taSrrqtQDh+64SAMSakpNOLVjY3ZUWETn1ppKXCiWqrg1/f9r7cv3mmjwAy/RIU4qQkXYKNc9M3/3wio+ChUpAHZXMSYK+H+d/nsl6AajAojChejG7eHfepY9J/Oaec6yZuBa+o9koGvxKV9VfeVF3ZvL+jI1uJN0dpKZWeAPxOdbZGcWjsf/7gA01IEGQ1uyVYIShL//vc63eyXDzD1PxvD0i9Bniy7wQLY+WPoYYkdqrFZugYJc7XK1PH2oAEAWddmiGiU5hsAlDvSBafphTwFo0KnfiyTYIIoASYAoAiNsk2InsdP+Xa6V6dfttukRrv9pqctUSn3dl9ccpzjFSfffW6qV/geS0qfk8gKeKU/D3gOaE5wTc+WSrD3uMz1//+5md/8GyEYDlJogLTYgedSkLLsByjIA2S6iAdAESXlJ+pKP49RcRwOUZyBKswtJVg19zXFqZ8/ziLY2iGayCTfcDbIJJwn2PrJ8k2izeIN0g2T9TzPLFPgNaF8PCBk7V7N3mYwNL3Yt71MfZB/dwM5wupuLHYDcOc+zPna9c0YkR2bIlaec5SahQikN5D+uZTbZt1MgTsuqwnyZOls1uJSdAoGrbB2iJNQVig9QAqmz9vy+Zc1OPFL2h8PI3X1YMXTYmrhDiqF/1YW53lO4EP0ZA1hcFBIZjZAYAfTyQ2dzLSMftsTpFuk7VkIfY3mErJDsMCaUWxITwf3oo8jRh8gSgpTz3ap6nvZy2qWRppDCLyGEECS9OfO3+5wEawoZGoHdbIphcZHiCCF89fDfQv/V547d9dKG4LrRL25iGJRFWcTyvOi3lLYsZ4vAxAkVJUHW7/1v2k/rHxq39DdJt2JHQEFBJQpm727+4xWLWquISBEPmA5NpKopuC18fObc/Rlr/vBY2+1+/27HVUlKSkqKgID4NLbbXziknP9RdRNEPhFEeDQQTZqIr");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Safari fallback for oklch */
+:root {
+  --accent-fallback: #c1772f;
+  --accent-2-fallback: #d49a55;
+  --paper-fallback: #f8f4f0;
+  --paper-2-fallback: #efe6dd;
+  --ink-fallback: #2c241b;
+  --ink-2-fallback: #4a3f35;
+  --mid-fallback: #6b6259;
+  --rule-fallback: #d9d1c7;
+  --rule-2-fallback: #e8e1d9;
+  --signal-fallback: #4caf50;
+  --warn-fallback: #ff9800;
+  --danger-fallback: #e53935;
+}
+@supports not (color: oklch(0 0 0)) {
+  :root {
+    --accent: var(--accent-fallback);
+    --accent-2: var(--accent-2-fallback);
+    --paper: var(--paper-fallback);
+    --paper-2: var(--paper-2-fallback);
+    --ink: var(--ink-fallback);
+    --ink-2: var(--ink-2-fallback);
+    --mid: var(--mid-fallback);
+    --rule: var(--rule-fallback);
+    --rule-2: var(--rule-2-fallback);
+    --signal: var(--signal-fallback);
+    --warn: var(--warn-fallback);
+    --danger: var(--danger-fallback);
+  }
+}
+:root {
+  --accent-h: 32;
+  --accent:    oklch(0.555 0.180 var(--accent-h));
+  --accent-2:  oklch(0.65  0.14  var(--accent-h));
+  --accent-3:  oklch(0.42  0.18  var(--accent-h));
+  --accent-soft:   oklch(0.555 0.180 var(--accent-h) / .10);
+  --accent-soft-2: oklch(0.555 0.180 var(--accent-h) / .06);
+  --accent-glow:   oklch(0.555 0.180 var(--accent-h) / .15);
+  --paper:  oklch(0.962 0.012 85);
+  --paper-2:oklch(0.945 0.014 84);
+  --ink:    oklch(0.185 0.012 55);
+  --ink-2:  oklch(0.32  0.012 55);
+  --mid:    oklch(0.52  0.010 60);
+  --rule:   oklch(0.865 0.010 70);
+  --rule-2: oklch(0.91  0.010 70);
+  --signal: oklch(0.68 0.16 145);
+  --warn:   oklch(0.78 0.16 85);
+  --danger: oklch(0.60 0.18 25);
+  --shadow: 0 1px 0 oklch(0.18 0.012 55 / .04), 0 14px 30px -22px oklch(0.18 0.012 55 / .35);
+  --shadow-lg: 0 4px 20px oklch(0.18 0.012 55 / .15);
+  --sidebar-w: 248px;
+  --toggle-icon: "☾";
+}
+[data-theme="dark"] {
+  --paper:  oklch(0.18 0.012 55);
+  --paper-2:oklch(0.22 0.014 60);
+  --ink:    oklch(0.92 0.012 85);
+  --ink-2:  oklch(0.78 0.012 80);
+  --mid:    oklch(0.60 0.010 70);
+  --rule:   oklch(0.35 0.010 45);
+  --rule-2: oklch(0.30 0.010 40);
+  --accent-soft:   oklch(0.65 0.180 var(--accent-h) / .15);
+  --accent-soft-2: oklch(0.65 0.180 var(--accent-h) / .08);
+  --accent-glow:   oklch(0.65 0.180 var(--accent-h) / .20);
+  --shadow: 0 1px 0 oklch(0.10 0.012 40 / .3), 0 14px 30px -22px oklch(0.05 0.012 20 / .5);
+  --shadow-lg: 0 4px 20px oklch(0.05 0.012 20 / .4);
+  --toggle-icon: "☀";
+}
+* { box-sizing:border-box; margin:0; padding:0 }
+html, body { height:100% }
+html { font-size: 100%; }
+body {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-feature-settings: "ss01","ss02","cv11","tnum","zero";
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  background: radial-gradient(1200px 700px at 80% -10%, oklch(0.97 0.02 80) 0%, transparent 60%), radial-gradient(900px 500px at -10% 110%, oklch(0.93 0.02 60) 0%, transparent 55%), var(--paper);
+  background-attachment: scroll;
+  font-size: 0.8125rem;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+[data-theme="dark"] body {
+  background: radial-gradient(1200px 700px at 80% -10%, oklch(0.25 0.02 80) 0%, transparent 60%), radial-gradient(900px 500px at -10% 110%, oklch(0.20 0.02 60) 0%, transparent 55%), var(--paper);
+}
+.app { min-height:100vh; min-height:100dvh; display:grid; grid-template-columns: var(--sidebar-w) 1fr; }
+
+/* Sidebar */
+aside { border-right:1px solid var(--rule); background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%); display:flex; flex-direction:column; position:sticky; top:0; height:100vh; height:100dvh; z-index:10; }
+.brand { padding: 1.25rem 1.375rem 1.125rem; border-bottom:1px solid var(--rule); display:grid; grid-template-columns: auto 1fr auto; align-items:center; gap:0.75rem; }
+.mark { width:1.5rem; height:1.5rem; position:relative; border:1.25px solid var(--ink); display:grid; place-items:center; background:var(--paper); flex-shrink:0; }
+.mark::before { content:""; width:0.5rem; height:0.5rem; background:var(--accent); box-shadow: 0 0 0 2.5px var(--paper); }
+.mark::after  { content:""; position:absolute; inset:-0.25rem; border-top:1px solid var(--ink); border-left:1px solid var(--ink); width:0.3125rem; height:0.3125rem; }
+.wordmark { font-weight:700; font-size:0.78125rem; letter-spacing:.04em; text-transform:uppercase; }
+.wordmark .slash { color:var(--accent); font-weight:500; margin:0 1px }
+.wordmark small { display:block; font-weight:400; font-size:0.59375rem; letter-spacing:.18em; color:var(--mid); margin-top:2px; }
+.ver { font-size:0.5625rem; letter-spacing:.12em; color:var(--mid); border:1px solid var(--rule); padding:2px 5px; flex-shrink:0; }
+.theme-toggle { width:1.375rem; height:1.375rem; border:1px solid var(--rule); background:var(--paper-2); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:0.6875rem; color:var(--ink-2); margin-left:0.25rem; flex-shrink:0; transition: all .15s; }
+.theme-toggle:hover { border-color:var(--accent); color:var(--accent); }
+.theme-toggle::before { content:var(--toggle-icon); }
+.find { margin: 0.875rem 0.875rem 0.375rem; border:1px solid var(--rule); background:var(--paper); display:flex; align-items:center; gap:0.5rem; padding:0.4375rem 0.625rem; font-size:0.71875rem; }
+.find .find-icon { color:var(--mid); font-size:0.8125rem; }
+.find input { flex:1; border:none; background:transparent; outline:none; font:inherit; font-size:0.71875rem; color:var(--ink); min-width:0; }
+.find input::placeholder { color:var(--mid); }
+.find .kbd { margin-left:auto; display:inline-flex; gap:2px; }
+.kbd span { border:1px solid var(--rule); background:linear-gradient(180deg,var(--paper),var(--paper-2)); padding:1px 5px; border-radius:2px; font-size:0.59375rem; color:var(--ink-2); box-shadow: 0 1px 0 var(--rule); }
+.nav-title { padding: 1.125rem 1.375rem 0.5rem; font-size:0.59375rem; letter-spacing:.22em; color:var(--mid); display:flex; justify-content:space-between; }
+nav { flex:1; display:flex; flex-direction:column; overflow-y:auto; }
+.nav-list { display:flex; flex-direction:column; }
+.nav-item { display:grid; grid-template-columns: 1.75rem 1fr auto; align-items:center; gap:0; padding: 0.5rem 1.375rem; color:var(--ink-2); text-decoration:none; font-size:0.75rem; letter-spacing:.02em; border-left:2px solid transparent; position:relative; transition: background .12s; cursor:pointer; background:none; border:none; border-radius:0; text-align:left; font-family:inherit; }
+.nav-item .idx { font-size:0.59375rem; color:var(--mid); letter-spacing:.1em; }
+.nav-item .lbl { text-transform:lowercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.nav-item .meta { font-size:0.59375rem; color:var(--mid); border:1px solid var(--rule); padding:1px 5px; background:var(--paper); flex-shrink:0; margin-left:0.5rem; }
+.nav-item:hover { background: var(--accent-soft-2) }
+.nav-item.active { background: var(--paper); color:var(--ink); border-left-color: var(--accent); font-weight:600; }
+.nav-item.active::after { content:""; position:absolute; right:1.125rem; top:50%; transform:translateY(-50%); width:0.3125rem; height:0.3125rem; background:var(--accent); }
+.nav-item.active .idx { color:var(--accent) }
+.runtime { margin: 0.5rem 0.875rem 0.875rem; border:1px solid var(--rule); background:var(--paper); padding:0.75rem 0.75rem 0.625rem; flex-shrink:0; }
+.runtime h4 { font-size:0.59375rem; letter-spacing:.2em; color:var(--mid); font-weight:500; margin-bottom:0.5rem; display:flex; justify-content:space-between; }
+.runtime .row { display:flex; justify-content:space-between; align-items:baseline; font-size:0.6875rem; color:var(--ink-2); padding:3px 0; }
+.runtime .row b { font-weight:600; color:var(--ink) }
+.runtime .bar { height:3px; background:var(--rule-2); margin-top:0.5rem; position:relative; overflow:hidden; }
+.runtime .bar-fill { position:absolute; inset:0; background:var(--ink); }
+.runtime .bar-fill.warn { background:var(--accent); left:auto; right:0; width:22%; }
+.op { border-top:1px solid var(--rule); padding:0.75rem 1.375rem; display:grid; grid-template-columns:1.5rem 1fr auto; align-items:center; gap:0.625rem; flex-shrink:0; }
+.avatar { width:1.5rem; height:1.5rem; border:1px solid var(--ink); background: repeating-linear-gradient(45deg, var(--ink) 0 1px, transparent 1px 4px), var(--paper); position:relative; flex-shrink:0; }
+.avatar::after { content:""; position:absolute; right:-3px; bottom:-3px; width:0.4375rem; height:0.4375rem; background:var(--signal); border:1.5px solid var(--paper); }
+.op .who { font-size:0.6875rem; line-height:1.3; min-width:0; }
+.op .who small { display:block; color:var(--mid); font-size:0.59375rem; letter-spacing:.1em }
+.op .out { font-size:0.59375rem; color:var(--mid); letter-spacing:.1em; border:1px solid var(--rule); padding:2px 5px; flex-shrink:0; cursor:pointer; background:none; font-family:inherit; }
+.op .out:hover { background:var(--paper-2); }
+
+/* Main */
+main { min-width:0; display:flex; flex-direction:column; }
+header { border-bottom:1px solid var(--rule); background: linear-gradient(180deg, var(--paper) 0%, oklch(from var(--paper) l c h / 98%) 100%); padding: 1rem 1.75rem 0.875rem; display:grid; grid-template-columns: 1fr auto; align-items:end; gap:1.5rem; position:sticky; top:0; z-index:5; }
+.crumbs { font-size:0.625rem; letter-spacing:.18em; color:var(--mid); text-transform:uppercase; display:flex; align-items:center; gap:0.5rem; margin-bottom:0.375rem; flex-wrap:wrap; }
+.crumbs .live { display:inline-flex; align-items:center; gap:5px; color:var(--ink); }
+.crumbs .live i { width:0.375rem; height:0.375rem; background:var(--accent); display:inline-block; box-shadow: 0 0 0 3px var(--accent-soft); }
+h1 { font-size:1.75rem; font-weight:700; letter-spacing:-.01em; line-height:1; color:var(--ink); display:flex; flex-direction:column; align-items:flex-start; }
+h1 .of { color:var(--mid); font-weight:300; font-size:0.42em; letter-spacing:.04em; margin-top:0.25rem; }
+.topbar-right { display:flex; align-items:center; gap:1.125rem; flex-wrap:wrap; }
+.telemetry { display:grid; grid-auto-flow:column; gap:0; border:1px solid var(--rule); background:var(--paper); }
+.telemetry div { padding:0.5rem 0.875rem; border-right:1px solid var(--rule); font-size:0.625rem; letter-spacing:.12em; color:var(--mid); display:flex; flex-direction:column; gap:2px; line-height:1; }
+.telemetry div:last-child { border-right:none }
+.telemetry b { color:var(--ink); font-size:0.75rem; font-weight:600; letter-spacing:.02em; }
+.btn { font: inherit; cursor:pointer; display:inline-flex; align-items:center; gap:0.625rem; border:1px solid var(--rule); background:var(--paper); color:var(--ink); padding:0.5625rem 0.875rem; font-size:0.71875rem; letter-spacing:.04em; text-decoration:none; box-shadow: var(--shadow); position:relative; transition: background .12s; white-space:nowrap; }
+.btn:hover { background: var(--accent-soft-2) }
+.btn:active { transform:translateY(1px) }
+.btn .k { font-size:0.5625rem; letter-spacing:.12em; color:var(--mid); border-left:1px solid var(--rule); padding-left:0.625rem; margin-left:0.25rem; }
+.btn.primary { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.btn.primary:hover { background:oklch(from var(--ink) calc(l + 0.08) c h) }
+.btn.primary .k { color:oklch(0.7 0.01 60); border-left-color: oklch(0.32 0.012 55) }
+.btn.primary::before { content:""; width:0.375rem; height:0.375rem; background:var(--accent); }
+.btn.danger { border-color:var(--danger); color:var(--danger); }
+.btn.danger:hover { background:oklch(0.60 0.18 25 / .10); }
+
+/* Canvas */
+.canvas { padding: 1.75rem 1.75rem 2.5rem; position:relative; background: radial-gradient(circle at 1px 1px, oklch(from var(--ink) l c h / 0.08) 1px, transparent 1.5px) 0 0 / 22px 22px; }
+.canvas::before, .canvas::after { content:""; position:absolute; width:1.125rem; height:1.125rem; border:1px solid var(--ink); pointer-events:none; }
+.canvas::before { top:0.875rem; left:0.875rem; border-right:none; border-bottom:none }
+.canvas::after  { top:0.875rem; right:0.875rem; border-left:none; border-bottom:none }
+
+/* Section header */
+.section-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:0.875rem; flex-wrap:wrap; gap:0.5rem; }
+.section-head h2 { font-size:0.6875rem; letter-spacing:.22em; text-transform:uppercase; font-weight:600; color:var(--ink-2); display:flex; align-items:center; gap:0.625rem; }
+.section-head h2 .num { color:var(--accent); font-weight:500; }
+
+/* Form */
+.form-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem 1.25rem; margin-bottom: 1.25rem; }
+.form-group { display:flex; flex-direction:column; gap:0.375rem; }
+.form-group.full-width { grid-column: 1 / -1; }
+.form-group label { font-size: 0.625rem; letter-spacing: .2em; text-transform: uppercase; color: var(--mid); font-weight: 500; display:flex; align-items:center; gap:0.5rem; }
+.form-group label .hint { font-size: 0.5625rem; letter-spacing: .08em; color: var(--mid); border: 1px solid var(--rule); padding: 1px 5px; background: var(--paper-2); text-transform: none; }
+.form-group input[type="text"], .form-group input[type="number"], .form-group select, .form-group textarea { font: inherit; font-size: 0.8125rem; border: 1px solid var(--rule); background: var(--paper); padding: 0.625rem 0.75rem; color: var(--ink); outline: none; width: 100%; transition: border-color .15s, box-shadow .15s; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.form-group input::placeholder { color: var(--mid); opacity: .6; }
+.form-group input[type="number"] { font-variant-numeric: tabular-nums; }
+.form-group select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23555' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 2rem; }
+[data-theme="dark"] .form-group select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23aaa' stroke-width='1.5'/%3E%3C/svg%3E"); }
+.toggle-wrap { display:flex; align-items:center; gap: 0.625rem; }
+.toggle-wrap .toggle-label { font-size: 0.75rem; color: var(--ink-2); }
+.toggle-switch { position: relative; width: 2.25rem; height: 1.25rem; cursor: pointer; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-switch .track { position: absolute; inset: 0; background: var(--rule-2); border-radius: 20px; transition: background .2s; }
+.toggle-switch .track::after { content: ""; position: absolute; left: 2px; top: 2px; width: 1rem; height: 1rem; background: var(--paper); border-radius: 50%; transition: transform .2s; box-shadow: 0 1px 3px oklch(0 0 0 / .2); }
+.toggle-switch input:checked + .track { background: var(--accent); }
+.toggle-switch input:checked + .track::after { transform: translateX(1rem); }
+.slider-wrap { display:flex; align-items:center; gap: 0.75rem; }
+.slider-wrap input[type="range"] { flex: 1; -webkit-appearance: none; appearance: none; height: 4px; background: var(--rule-2); border-radius: 2px; outline: none; }
+.slider-wrap input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 1rem; height: 1rem; border-radius: 50%; background: var(--accent); border: 2px solid var(--paper); cursor: pointer; box-shadow: 0 0 0 2px var(--accent-soft); }
+.slider-wrap input[type="range"]::-moz-range-thumb { width: 1rem; height: 1rem; border-radius: 50%; background: var(--accent); border: 2px solid var(--paper); cursor: pointer; }
+.slider-wrap .slider-val { font-size: 0.75rem; font-weight: 600; color: var(--accent); min-width: 2.5rem; text-align: right; }
+.form-actions { display:flex; gap: 0.75rem; margin-top: 0.5rem; flex-wrap: wrap; }
+
+/* Cards */
+.stats { display:grid; grid-template-columns: repeat(3, 1fr); gap:0; border:1px solid var(--rule); background:var(--paper); box-shadow: var(--shadow); position:relative; }
+.card { padding: 1.375rem 1.375rem 1.125rem; border-right:1px solid var(--rule); position:relative; display:flex; flex-direction:column; min-height: 8.75rem; }
+.card:last-child { border-right:none }
+.card::before, .card::after { content:""; position:absolute; width:0.625rem; height:0.625rem; border:1px solid var(--ink-2); opacity:.7; pointer-events:none; }
+.card::before { top:0.5rem; left:0.5rem; border-right:none; border-bottom:none }
+.card::after  { bottom:0.5rem; right:0.5rem; border-left:none; border-top:none }
+.card .lbl { font-size:0.625rem; letter-spacing:.2em; color:var(--mid); text-transform:uppercase; display:flex; align-items:center; justify-content:space-between; margin-bottom:0.875rem; }
+.card .lbl .tag { font-size:0.5625rem; letter-spacing:.14em; border:1px solid var(--rule); padding:2px 6px; color:var(--ink-2); background:var(--paper-2); }
+.card .lbl .copy-btn { font-size: 0.5625rem; letter-spacing: .1em; color: var(--mid); cursor: pointer; border: 1px solid var(--rule); padding: 2px 6px; background: transparent; transition: all .12s; text-transform: uppercase; }
+.card .lbl .copy-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.card .val { font-size:2.25rem; font-weight:600; letter-spacing:-.02em; line-height:1; color:var(--ink); display:flex; align-items:baseline; gap:0.5rem; }
+.card .val .u { font-size:0.875rem; font-weight:400; color:var(--mid); letter-spacing:.04em; }
+.card .delta { font-size:0.6875rem; letter-spacing:.03em; display:flex; align-items:center; gap:0.5rem; margin-top:0.625rem; color:var(--ink-2); }
+.delta .pill { display:inline-flex; align-items:center; gap:5px; border:1px solid var(--rule); background:var(--paper-2); padding:2px 7px; font-size:0.65625rem; font-weight:600; }
+.delta .pill.up   { color: var(--signal); border-color: oklch(from var(--signal) l calc(c * 0.5) h) }
+.delta .pill.down { color: var(--danger); border-color: oklch(from var(--danger) l calc(c * 0.5) h) }
+.delta .pill.neutral { color: var(--mid); border-color: var(--rule) }
+.delta .pill::before { content:""; width:0; height:0; border-style:solid; }
+.delta .pill.up::before   { border-width:0 4px 5px 4px; border-color:transparent transparent currentColor transparent }
+.delta .pill.down::before { border-width:5px 4px 0 4px; border-color: currentColor transparent transparent transparent }
+.delta .pill.neutral::before { border:none; width:8px; height:1px; background:currentColor; }
+.delta .since { color:var(--mid); font-size:0.625rem; letter-spacing:.06em }
+
+/* Result cards */
+.result-card { min-height: auto; padding: 1.125rem 1.25rem 0.875rem; }
+.result-card .val { font-size: 1.75rem; }
+.result-card.positive .val { color: var(--signal); }
+.result-card.negative .val { color: var(--danger); }
+.result-card.neutral .val { color: var(--ink); }
+
+/* Fee breakdown bar */
+.fee-bar { display:flex; height: 2rem; border: 1px solid var(--rule); margin-top: 1.25rem; overflow: hidden; position: relative; }
+.fee-bar div { display:flex; align-items:center; justify-content:center; font-size: 0.625rem; letter-spacing: .08em; color: var(--paper); font-weight: 500; transition: width .4s ease; }
+.fee-bar .listing { background: var(--mid); }
+.fee-bar .transaction { background: var(--accent); }
+.fee-bar .payment { background: var(--accent-2); }
+.fee-bar .ads { background: var(--warn); color: var(--ink); }
+.fee-bar .shipping { background: var(--ink-2); }
+
+/* Charts */
+.chart-wrap { border:1px solid var(--rule); background:var(--paper); box-shadow: var(--shadow); padding: 1.5rem; }
+.chart-title { font-size: 0.6875rem; letter-spacing: .22em; text-transform: uppercase; font-weight: 600; color: var(--ink-2); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.625rem; }
+.chart-title .num { color: var(--accent); font-weight: 500; }
+.bar-chart { display: flex; align-items: flex-end; gap: 0.5rem; height: 11.25rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--rule-2); position: relative; }
+.bar-chart .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.375rem; }
+.bar-chart .bar { width: 100%; background: var(--accent); opacity: 0.85; transition: height .4s ease; position: relative; }
+.bar-chart .bar:hover { opacity: 1; }
+.bar-chart .bar-label { font-size: 0.5625rem; letter-spacing: .08em; color: var(--mid); text-align: center; }
+.bar-chart .bar-val { font-size: 0.625rem; font-weight: 600; color: var(--ink); }
+.pie-wrap { width: 11.25rem; height: 11.25rem; border-radius: 50%; position: relative; margin: 0 auto; }
+.pie-legend { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
+.pie-legend .leg-item { display: flex; align-items: center; gap: 0.625rem; font-size: 0.6875rem; color: var(--ink-2); }
+.pie-legend .leg-dot { width: 0.625rem; height: 0.625rem; flex-shrink: 0; }
+.pie-legend .leg-pct { margin-left: auto; font-weight: 600; color: var(--ink); }
+
+/* Table */
+.tbl-wrap { margin-top:1.5rem; border:1px solid var(--rule); background:var(--paper); box-shadow: var(--shadow); }
+.tbl-head { display:flex; align-items:center; justify-content:space-between; padding:0.875rem 1.125rem; border-bottom:1px solid var(--rule); background:linear-gradient(180deg,var(--paper),var(--paper-2)); flex-wrap:wrap; gap:0.625rem; }
+.tbl-head .ttl { font-size:0.6875rem; letter-spacing:.22em; text-transform:uppercase; font-weight:600; display:flex; align-items:center; gap:0.625rem; }
+.tbl-head .ttl .num { color:var(--accent) }
+.tbl-head .ttl .ct { color:var(--mid); font-weight:400; letter-spacing:.12em; border-left:1px solid var(--rule); padding-left:0.625rem; margin-left:0.25rem; }
+.filters { display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; }
+.chip { font-size:0.625rem; letter-spacing:.12em; text-transform:uppercase; border:1px solid var(--rule); padding:0.3125rem 0.5625rem; background:var(--paper); display:inline-flex; align-items:center; gap:0.375rem; color:var(--ink-2); cursor:pointer; transition: all .12s; font-family:inherit; }
+.chip.on, .chip:hover { background:var(--ink); color:var(--paper); border-color:var(--ink) }
+.chip i { width:0.3125rem; height:0.3125rem; background:currentColor; display:inline-block; }
+.chip.del { color: var(--danger); border-color: var(--danger); }
+.chip.del:hover { background: var(--danger); color: var(--paper); }
+table { width:100%; border-collapse:collapse; font-size:0.75rem; }
+thead th { font-weight:500; font-size:0.59375rem; letter-spacing:.22em; text-transform:uppercase; color:var(--mid); text-align:left; padding:0.625rem 1.125rem; border-bottom:1px solid var(--rule); background:var(--paper-2); position:relative; user-select: none; white-space: nowrap; }
+thead th button { font:inherit; color:inherit; background:none; border:none; cursor:pointer; text-transform:inherit; letter-spacing:inherit; font-weight:inherit; padding:0; width:100%; text-align:left; }
+thead th button:hover { color: var(--ink); }
+thead th.sortable button::after { content: " ↕"; font-size: 0.5rem; opacity: .4; }
+thead th.sort-asc button::after { content: " ↑"; opacity: 1; color: var(--accent); }
+thead th.sort-desc button::after { content: " ↓"; opacity: 1; color: var(--accent); }
+thead th + th::before { content:""; position:absolute; left:0; top:25%; bottom:25%; border-left:1px solid var(--rule-2); }
+thead th.num, tbody td.num { text-align:right; font-variant-numeric:tabular-nums }
+tbody td { padding:0.875rem 1.125rem; border-bottom:1px solid var(--rule-2); color:var(--ink-2); vertical-align:middle; }
+tbody tr:last-child td { border-bottom:none }
+tbody tr:hover td { background: var(--accent-soft-2) }
+.id { display:inline-flex; align-items:center; gap:0.625rem; }
+.id .dot { width:0.5rem; height:0.5rem; background:var(--ink); display:inline-block; flex-shrink:0; }
+.id .dot.red    { background:var(--danger) }
+.id .dot.green  { background:var(--signal) }
+.id .dot.amber  { background:var(--warn) }
+.id .dot.gray   { background:var(--mid) }
+.id b { font-weight:600; color:var(--ink); letter-spacing:.01em }
+.id small { display:block; color:var(--mid); font-size:0.625rem; letter-spacing:.08em; margin-top:2px }
+
+/* Empty state */
+.empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 3.75rem 2.5rem; text-align: center; gap: 1rem; border: 1px dashed var(--rule); background: var(--paper); }
+.empty-state .empty-icon { width: 3rem; height: 3rem; border: 2px dashed var(--rule); display: grid; place-items: center; font-size: 1.25rem; color: var(--mid); }
+.empty-state h3 { font-size: 0.875rem; letter-spacing: .1em; color: var(--ink-2); font-weight: 600; }
+.empty-state p { font-size: 0.75rem; color: var(--mid); max-width: 20rem; line-height: 1.6; }
+
+/* Pagination */
+.pagination { display:flex; align-items:center; justify-content:center; gap: 0.25rem; padding: 0.875rem 1.125rem; border-top: 1px solid var(--rule); }
+.pagination button { font: inherit; font-size: 0.6875rem; border: 1px solid var(--rule); background: var(--paper); color: var(--ink-2); padding: 0.3125rem 0.625rem; cursor: pointer; min-width: 2rem; text-align: center; transition: all .12s; }
+.pagination button:hover:not(:disabled) { background: var(--accent-soft-2); border-color: var(--accent); color: var(--ink); }
+.pagination button:disabled { opacity: .4; cursor: not-allowed; }
+.pagination button.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.pagination .page-info { font-size: 0.625rem; color: var(--mid); letter-spacing: .1em; margin: 0 0.75rem; }
+
+/* Toasts */
+.toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 1000; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
+.toast { pointer-events: all; display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1.125rem; min-width: 17.5rem; max-width: 26.25rem; border: 1px solid var(--rule); background: var(--paper); box-shadow: var(--shadow-lg); font-size: 0.75rem; color: var(--ink); animation: toastIn .3s ease forwards; position: relative; overflow: hidden; }
+.toast.toast-out { animation: toastOut .3s ease forwards; }
+.toast.success { border-left: 3px solid var(--signal); }
+.toast.error   { border-left: 3px solid var(--danger); }
+.toast.info    { border-left: 3px solid var(--accent-2); }
+.toast .toast-icon { font-size: 0.875rem; flex-shrink: 0; }
+.toast .toast-msg { flex: 1; line-height: 1.4; }
+.toast .toast-close { cursor: pointer; color: var(--mid); font-size: 1rem; line-height: 1; padding: 2px; }
+.toast .toast-close:hover { color: var(--ink); }
+@keyframes toastIn { from { opacity: 0; transform: translateY(1.25rem) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(1.25rem); } }
+
+/* Modal */
+.modal-overlay { position: fixed; inset: 0; z-index: 200; background: oklch(0.10 0.012 55 / .55); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--paper); border: 1px solid var(--rule); box-shadow: var(--shadow-lg); width: 90%; max-width: 32.5rem; max-height: 85vh; display: flex; flex-direction: column; transform: translateY(-1.25rem) scale(0.97); transition: transform .25s ease; }
+.modal-overlay.open .modal { transform: translateY(0) scale(1); }
+.modal-header { padding: 1.125rem 1.375rem 0.875rem; border-bottom: 1px solid var(--rule); display: flex; align-items: center; justify-content: space-between; }
+.modal-header h3 { font-size: 0.8125rem; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; color: var(--ink); }
+.modal-close { cursor: pointer; color: var(--mid); font-size: 1.125rem; line-height: 1; padding: 4px; border: none; background: none; }
+.modal-close:hover { color: var(--ink); }
+.modal-body { padding: 1.375rem; overflow-y: auto; font-size: 0.75rem; line-height: 1.6; color: var(--ink-2); }
+.modal-footer { padding: 0.875rem 1.375rem; border-top: 1px solid var(--rule); display: flex; justify-content: flex-end; gap: 0.625rem; }
+
+/* Settings */
+.settings-section { margin-bottom: 2rem; }
+.settings-section h3 { font-size: 0.6875rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.625rem; }
+.settings-section h3 .num { color: var(--accent); font-weight: 500; }
+.settings-row { display: flex; justify-content: space-between; align-items: center; padding: 0.875rem 1.125rem; border: 1px solid var(--rule); background: var(--paper); margin-bottom: -1px; }
+.settings-row label { font-size: 0.75rem; color: var(--ink-2); }
+.settings-row .desc { font-size: 0.625rem; color: var(--mid); margin-top: 0.25rem; letter-spacing: .04em; }
+.settings-row .settings-right { display: flex; align-items: center; gap: 0.75rem; }
+.settings-row input[type="number"] { font: inherit; font-size: 0.8125rem; border: 1px solid var(--rule); background: var(--paper); padding: 0.5rem 0.625rem; color: var(--ink); outline: none; width: 7.5rem; font-variant-numeric: tabular-nums; }
+.settings-row input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.settings-row select { font: inherit; font-size: 0.8125rem; border: 1px solid var(--rule); background: var(--paper); padding: 0.5rem 0.625rem; color: var(--ink); outline: none; cursor: pointer; }
+.settings-row select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+/* Help */
+.help-block { border: 1px solid var(--rule); background: var(--paper); padding: 1.375rem; margin-bottom: 1.25rem; }
+.help-block h3 { font-size: 0.75rem; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; color: var(--ink); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.625rem; }
+.help-block h3 .num { color: var(--accent); font-weight: 500; }
+.help-block p { font-size: 0.75rem; color: var(--ink-2); line-height: 1.7; margin-bottom: 0.5rem; }
+.help-block ul { margin: 0.5rem 0; padding-left: 1.25rem; }
+.help-block li { font-size: 0.75rem; color: var(--ink-2); line-height: 1.7; margin-bottom: 0.25rem; }
+.help-block .fee-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--rule-2); font-size: 0.75rem; }
+.help-block .fee-row:last-child { border-bottom: none; }
+.help-block .fee-row b { color: var(--ink); font-weight: 600; }
+.help-block .fee-row span { color: var(--ink-2); }
+
+/* Footer */
+.canvas-foot { position:relative }
+.canvas-foot::before, .canvas-foot::after { content:""; position:absolute; width:1.125rem; height:1.125rem; border:1px solid var(--ink); pointer-events:none; }
+.canvas-foot::before { bottom:0.875rem; left:0.875rem; border-right:none; border-top:none }
+.canvas-foot::after  { bottom:0.875rem; right:0.875rem; border-left:none; border-top:none }
+.footstrip { margin-top:1.375rem; display:flex; justify-content:space-between; align-items:center; font-size:0.625rem; letter-spacing:.14em; color:var(--mid); text-transform:uppercase; padding: 0.75rem 0.25rem 0.25rem; flex-wrap:wrap; gap:0.5rem; }
+.footstrip .l, .footstrip .r { display:flex; gap:1.125rem; align-items:center; flex-wrap:wrap; }
+.footstrip .sep { width:1.5rem; border-top:1px solid var(--rule) }
+.footstrip b { color:var(--ink); font-weight:500; letter-spacing:.06em }
+
+/* Print */
+@media print {
+  .sidebar-toggle, aside, .theme-toggle, .find, .op, .btn .k, .form-actions,
+  .toast-container, .pagination, .chip, .nav-item { display: none !important; }
+  .app { grid-template-columns: 1fr !important; }
+  body { background: white !important; color: black !important; }
+  .canvas { background: none !important; padding: 1.25rem !important; }
+  .stats, .tbl-wrap, .form-grid, .chart-wrap, .help-block, .settings-row { box-shadow: none !important; border: 1px solid #ccc !important; }
+  .card { border-right: 1px solid #ccc !important; break-inside: avoid; }
+  header { position: static !important; background: white !important; border-bottom: 2px solid #333 !important; }
+  h1 { font-size: 1.5rem !important; }
+  .footstrip { border-top: 2px solid #333; margin-top: 1.875rem; }
+}
+
+/* Responsive */
+.sidebar-toggle { display:none; position:fixed; top:0.75rem; left:0.75rem; z-index:100; width:2.25rem; height:2.25rem; border:1px solid var(--rule); background:var(--paper); align-items:center; justify-content:center; cursor:pointer; font-size:1rem; color:var(--ink); }
+@media (max-width: 1024px) {
+  .app { grid-template-columns: 1fr; }
+  aside { position:fixed; left:0; top:0; height:100vh; height:100dvh; transform: translateX(-100%); transition: transform .25s ease; }
+  aside.open { transform: translateX(0); }
+  .sidebar-toggle { display:flex; }
+  .stats { grid-template-columns: 1fr; }
+  .card { border-right:none; border-bottom:1px solid var(--rule); }
+  .card:last-child { border-bottom:none; }
+  header { padding-left: 3.5rem; }
+  h1 { font-size:1.375rem; }
+  .analytics-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .canvas { padding: 1.25rem 1rem 2rem; }
+  header { padding: 0.75rem 1rem 0.75rem 3.5rem; }
+  .telemetry { display:none; }
+  .topbar-right { gap:0.5rem; }
+  .btn { padding:0.4375rem 0.625rem; font-size:0.65625rem; }
+  .btn .k { display:none; }
+  table { font-size:0.6875rem; }
+  tbody td, thead th { padding:0.625rem 0.75rem; }
+  .card .val { font-size:1.75rem; }
+  .form-grid { grid-template-columns: 1fr; }
+  .modal { width: 95%; max-height: 90vh; }
+  .toast-container { left: 1rem; right: 1rem; bottom: 1rem; }
+  .toast { min-width: auto; max-width: none; }
+}
+.hidden { display:none !important; }
+.view { display: none; }
+.view.active { display: block; }
+.analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+
+/* Accessibility */
+.skip-link { position:absolute; top:-100px; left:0; z-index:300; background:var(--paper); color:var(--ink); padding:0.5rem 1rem; border:1px solid var(--rule); }
+.skip-link:focus { top:0; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="toggle menu">&#9776;</button>
+<div class="app">
+  <aside id="sidebar" aria-expanded="false">
+    <div class="brand">
+      <div class="mark" aria-hidden="true"></div>
+      <div class="wordmark"><span>etsy</span><span class="slash">/</span><span>calc</span><small>profit engine</small></div>
+      <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
+        <div class="ver">v2.0</div>
+        <button class="theme-toggle" onclick="toggleTheme()" title="toggle dark mode" aria-label="toggle dark mode"></button>
+      </div>
+    </div>
+    <div class="find"><span class="find-icon">&#8981;</span><input type="text" id="search-input" placeholder="search listings..." autocomplete="off"><span class="kbd"><span>&#8984;</span><span>K</span></span></div>
+    <div class="nav-title"><span>&#8212;&#8212; menu</span></div>
+    <nav>
+      <div class="nav-list" id="nav-list">
+        <button class="nav-item active" data-view="calculator" onclick="navigateTo('calculator', event)" aria-current="page"><span class="idx">01</span><span class="lbl">calculator</span></button>
+        <button class="nav-item" data-view="saved" onclick="navigateTo('saved', event)"><span class="idx">02</span><span class="lbl">saved listings</span><span class="meta" id="nav-saved-count">0</span></button>
+        <button class="nav-item" data-view="analytics" onclick="navigateTo('analytics', event)"><span class="idx">03</span><span class="lbl">analytics</span></button>
+        <button class="nav-item" data-view="settings" onclick="navigateTo('settings', event)"><span class="idx">04</span><span class="lbl">settings</span></button>
+        <button class="nav-item" data-view="help" onclick="navigateTo('help', event)"><span class="idx">05</span><span class="lbl">help</span></button>
+      </div>
+      <div class="runtime" id="runtime-block">
+        <h4><span>profit summary</span><span id="runtime-status" style="color:var(--signal)">live</span></h4>
+        <div id="runtime-rows">
+          <div class="row"><span>saved</span><b id="rt-saved">0</b></div>
+          <div class="row"><span>avg margin</span><b id="rt-margin">--</b></div>
+          <div class="row"><span>best</span><b id="rt-best">--</b></div>
+        </div>
+        <div class="bar" aria-hidden="true"><div class="bar-fill" id="bar-fill-main" style="right:0%;width:0%"></div><div class="bar-fill warn" id="bar-fill-warn" style="width:0%"></div></div>
+      </div>
+    </nav>
+    <div class="op">
+      <div class="avatar" aria-hidden="true"></div>
+      <div class="who"><span>seller</span><small>active &#183; <span id="current-country">US</span></small></div>
+      <button class="out" id="op-count" onclick="navigateTo('saved', event)">0 saved</button>
+    </div>
+  </aside>
+  <main id="main-content">
+    <header>
+      <div>
+        <div class="crumbs" id="crumbs"><span>etsy</span><span>/</span><span id="crumb-view">calculator</span></div>
+        <h1><span id="page-title">Profit Calculator</span> <span class="of">&#8212; <span id="page-subtitle">live pricing engine</span></span></h1>
+      </div>
+      <div class="topbar-right">
+        <div class="telemetry" id="telemetry" aria-hidden="true">
+          <div><span>country</span><b id="tm-country">US</b></div>
+          <div><span>currency</span><b id="tm-currency">USD</b></div>
+          <div><span>fee rate</span><b id="tm-fee">6.5%</b></div>
+        </div>
+        <div id="topbar-buttons">
+          <button class="btn" type="button" onclick="exportSavedToCSV()">export csv<span class="k">E</span></button>
+          <button class="btn" type="button" onclick="window.print()">print<span class="k">P</span></button>
+          <button class="btn primary" type="button" id="btn-primary-action" onclick="saveCurrentListing()">save listing<span class="k">S</span></button>
+        </div>
+      </div>
+    </header>
+
+    <section class="canvas" id="canvas">
+      <!-- VIEW: CALCULATOR -->
+      <div class="view active" id="view-calculator">
+        <div class="section-head"><h2><span class="num">&#167; 01</span>listing details</h2></div>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="inp-name">product name</label>
+            <input type="text" id="inp-name" placeholder="e.g. Handmade Ceramic Vase" oninput="debouncedCalculate(); debouncedSaveDraft();">
+          </div>
+          <div class="form-group">
+            <label for="inp-country">market / country <span class="hint">affects fees</span></label>
+            <select id="inp-country" onchange="changeCountry(this.value); debouncedCalculate(); saveDraft();">
+              <option value="us">United States (USD)</option>
+              <option value="uk">United Kingdom (GBP)</option>
+              <option value="eu">European Union (EUR)</option>
+              <option value="ca">Canada (CAD)</option>
+              <option value="au">Australia (AUD)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="inp-price">selling price <span class="hint">per item</span></label>
+            <input type="number" id="inp-price" placeholder="0.00" min="0" step="0.01" oninput="debouncedCalculate(); debouncedSaveDraft();">
+          </div>
+          <div class="form-group">
+            <label for="inp-shipping">shipping cost <span class="hint">you pay</span></label>
+            <input type="number" id="inp-shipping" placeholder="0.00" min="0" step="0.01" oninput="debouncedCalculate(); debouncedSaveDraft();">
+          </div>
+          <div class="form-group">
+            <label for="inp-material">material cost <span class="hint">per item</span></label>
+            <input type="number" id="inp-material" placeholder="0.00" min="0" step="0.01" oninput="debouncedCalculate(); debouncedSaveDraft();">
+          </div>
+          <div class="form-group">
+            <label for="inp-packaging">packaging cost <span class="hint">per item</span></label>
+            <input type="number" id="inp-packaging" placeholder="0.00" min="0" step="0.01" oninput="debouncedCalculate(); debouncedSaveDraft();">
+          </div>
+          <div class="form-group">
+            <label>etsy ads / offsite ads</label>
+            <div class="toggle-wrap">
+              <label class="toggle-switch">
+                <input type="checkbox" id="inp-ads" aria-labelledby="ads-label">
+                <span class="track"></span>
+              </label>
+              <span class="toggle-label" id="ads-label">Off</span>
+            </div>
+          </div>
+          <div class="form-group" id="ads-pct-group" style="opacity:0.4;pointer-events:none">
+            <label for="inp-ads-pct">ad fee percentage <span class="hint">of order value</span></label>
+            <input type="number" id="inp-ads-pct" placeholder="15" value="15" min="0" max="100" step="0.1" oninput="debouncedCalculate(); debouncedSaveDraft();">
+            <small id="ads-tip" style="font-size:0.59375rem;color:var(--mid);letter-spacing:.04em;margin-top:2px;display:block;">Etsy charges 15% for most sellers; 12% if you make over $10k/year. Adjust if needed.</small>
+          </div>
+          <div class="form-group full-width" style="margin-top:0.5rem">
+            <label>target profit margin <span class="hint">for price suggestion</span></label>
+            <div class="slider-wrap">
+              <input type="range" id="inp-margin-target" min="10" max="80" value="40" step="5" oninput="updateMarginLabel(); debouncedCalculate(); debouncedSaveDraft();">
+              <span class="slider-val" id="margin-label">40%</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:0.625rem;color:var(--mid);letter-spacing:.04em;margin-bottom:0.625rem;border-left:2px solid var(--accent);padding-left:0.625rem;">Fees accurate as of May 2026. Verify current fees at <a href="https://www.etsy.com/fees" target="_blank">etsy.com/fees</a> before pricing.</div>
+        <div class="section-head" style="margin-top:0"><h2><span class="num">&#167; 02</span>fee breakdown</h2></div>
+        <div class="stats" id="fee-cards">
+          <div class="card result-card neutral">
+            <div class="lbl"><span>listing fee</span><span class="tag">ETSY</span></div>
+            <div class="val" id="res-listing">--</div>
+            <div class="delta"><span class="pill neutral">fixed</span><span class="since">per listing</span></div>
+          </div>
+          <div class="card result-card neutral">
+            <div class="lbl"><span>transaction fee</span><span class="tag">6.5%</span></div>
+            <div class="val" id="res-transaction">--</div>
+            <div class="delta"><span class="pill neutral">%</span><span class="since">of sale price</span></div>
+          </div>
+          <div class="card result-card neutral">
+            <div class="lbl"><span>payment processing</span><span class="tag">PROC</span></div>
+            <div class="val" id="res-payment">--</div>
+            <div class="delta"><span class="pill neutral">var</span><span class="since">% + fixed</span></div>
+          </div>
+        </div>
+
+        <div class="section-head" style="margin-top:1.75rem"><h2><span class="num">&#167; 03</span>profit analysis</h2></div>
+        <div class="stats" id="profit-cards">
+          <div class="card result-card positive">
+            <div class="lbl"><span>net profit</span><span class="tag">NET</span></div>
+            <div class="val" id="res-profit">--</div>
+            <div class="delta"><span class="pill up">per item</span><span class="since">after all fees</span></div>
+          </div>
+          <div class="card result-card neutral">
+            <div class="lbl"><span>profit margin</span><span class="tag">%</span></div>
+            <div class="val" id="res-margin">--</div>
+            <div class="delta"><span class="pill neutral">ratio</span><span class="since">profit / price</span></div>
+          </div>
+          <div class="card result-card neutral">
+            <div class="lbl"><span>total costs</span><span class="tag">COST</span></div>
+            <div class="val" id="res-total-cost">--</div>
+            <div class="delta"><span class="pill down">fees + materials</span><span class="since">all expenses</span></div>
+          </div>
+        </div>
+
+        <div class="stats" style="margin-top:0; border-top:none;">
+          <div class="card result-card neutral">
+            <div class="lbl"><span>break-even price</span><span class="tag">MIN</span></div>
+            <div class="val" id="res-breakeven">--</div>
+            <div class="delta"><span class="pill neutral">zero profit</span><span class="since">minimum viable</span></div>
+          </div>
+          <div class="card result-card positive">
+            <div class="lbl"><span>suggested price</span><span class="tag" id="suggest-tag">40% MARGIN</span></div>
+            <div class="val" id="res-suggested">--</div>
+            <div class="delta"><span class="pill up">target</span><span class="since">based on costs</span></div>
+          </div>
+          <div class="card result-card neutral">
+            <div class="lbl"><span>total etsy fees</span><span class="tag">FEES</span></div>
+            <div class="val" id="res-total-fees">--</div>
+            <div class="delta"><span class="pill neutral">all fees</span><span class="since">etsy charges</span></div>
+          </div>
+        </div>
+
+        <div class="section-head" style="margin-top:1.75rem"><h2><span class="num">&#167; 04</span>fee visualization</h2></div>
+        <div class="fee-bar" id="fee-bar">
+          <div class="listing" id="bar-listing" style="width:0%"></div>
+          <div class="transaction" id="bar-transaction" style="width:0%"></div>
+          <div class="payment" id="bar-payment" style="width:0%"></div>
+          <div class="ads" id="bar-ads" style="width:0%"></div>
+          <div class="shipping" id="bar-shipping" style="width:0%"></div>
+        </div>
+        <div style="display:flex; gap:1rem; margin-top:0.625rem; flex-wrap:wrap; font-size:0.625rem; letter-spacing:.08em; color:var(--mid);">
+          <span style="display:flex;align-items:center;gap:6px"><span style="width:0.625rem;height:0.625rem;background:var(--mid);display:inline-block"></span>Listing</span>
+          <span style="display:flex;align-items:center;gap:6px"><span style="width:0.625rem;height:0.625rem;background:var(--accent);display:inline-block"></span>Transaction</span>
+          <span style="display:flex;align-items:center;gap:6px"><span style="width:0.625rem;height:0.625rem;background:var(--accent-2);display:inline-block"></span>Payment</span>
+          <span style="display:flex;align-items:center;gap:6px"><span style="width:0.625rem;height:0.625rem;background:var(--warn);display:inline-block"></span>Ads</span>
+          <span style="display:flex;align-items:center;gap:6px"><span style="width:0.625rem;height:0.625rem;background:var(--ink-2);display:inline-block"></span>Shipping</span>
+        </div>
+      </div>
+
+      <!-- VIEW: SAVED LISTINGS -->
+      <div class="view" id="view-saved">
+        <div class="tbl-wrap">
+          <div class="tbl-head">
+            <div class="ttl"><span class="num">&#167; 02</span><span>saved listings</span><span class="ct" id="saved-count-label">0 total</span></div>
+            <div class="filters">
+              <button class="chip on" data-filter="all" onclick="filterSaved('all')">all</button>
+              <button class="chip" data-filter="profitable" onclick="filterSaved('profitable')">profitable</button>
+              <button class="chip" data-filter="loss" onclick="filterSaved('loss')">loss</button>
+              <button class="chip" onclick="document.getElementById('import-file').click()">import csv</button>
+              <button class="chip del" onclick="clearAllSaved()">clear all</button>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:28%" class="sortable" onclick="sortSaved('name')"><button>product</button></th>
+                <th class="sortable" onclick="sortSaved('country')"><button>market</button></th>
+                <th class="sortable num" onclick="sortSaved('price')"><button>price</button></th>
+                <th class="sortable num" onclick="sortSaved('netProfit')"><button>net profit</button></th>
+                <th class="sortable num" onclick="sortSaved('profitMargin')"><button>margin</button></th>
+                <th class="num" style="width:5rem"><button style="text-align:right;cursor:default" disabled>action</button></th>
+              </tr>
+            </thead>
+            <tbody id="saved-tbody">
+            </tbody>
+          </table>
+          <div class="pagination" id="saved-pagination"></div>
+        </div>
+        <input type="file" id="import-file" accept=".csv" style="display:none" onchange="handleFileImport(this.files[0])">
+      </div>
+
+      <!-- VIEW: ANALYTICS -->
+      <div class="view" id="view-analytics">
+        <div class="section-head"><h2><span class="num">&#167; 03</span>fee structure breakdown</h2></div>
+        <div class="analytics-grid">
+          <div class="chart-wrap">
+            <div class="chart-title"><span class="num">&#167; 3.1</span>where your money goes</div>
+            <div id="pie-chart-container">
+              <div class="pie-wrap" id="pie-chart"></div>
+              <div class="pie-legend" id="pie-legend"></div>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-title"><span class="num">&#167; 3.2</span>cost comparison</div>
+            <div class="bar-chart" id="bar-chart"></div>
+          </div>
+        </div>
+
+        <div class="section-head" style="margin-top:1.75rem"><h2><span class="num">&#167; 04</span>saved listings overview</h2></div>
+        <div class="chart-wrap">
+          <div class="chart-title"><span class="num">&#167; 4.1</span>profit margin comparison</div>
+          <div class="bar-chart" id="margin-chart" style="height: 12.5rem;"></div>
+        </div>
+      </div>
+
+      <!-- VIEW: SETTINGS -->
+      <div class="view" id="view-settings">
+        <div class="settings-section">
+          <h3><span class="num">&#167; 01</span>market settings</h3>
+          <div class="settings-row">
+            <div>
+              <label>default country / market</label>
+              <div class="desc">Sets currency and fee structure for new calculations</div>
+            </div>
+            <select id="set-country" onchange="setDefaultCountry(this.value)">
+              <option value="us">United States (USD)</option>
+              <option value="uk">United Kingdom (GBP)</option>
+              <option value="eu">European Union (EUR)</option>
+              <option value="ca">Canada (CAD)</option>
+              <option value="au">Australia (AUD)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3><span class="num">&#167; 02</span>default values</h3>
+          <div class="settings-row">
+            <div>
+              <label>default shipping cost</label>
+              <div class="desc">Pre-filled in calculator</div>
+            </div>
+            <input type="number" id="set-shipping" style="width:7.5rem" min="0" step="0.01" onchange="saveSetting('shipping', this.value)">
+          </div>
+          <div class="settings-row">
+            <div>
+              <label>default packaging cost</label>
+              <div class="desc">Pre-filled in calculator</div>
+            </div>
+            <input type="number" id="set-packaging" style="width:7.5rem" min="0" step="0.01" onchange="saveSetting('packaging', this.value)">
+          </div>
+          <div class="settings-row">
+            <div>
+              <label>default material cost</label>
+              <div class="desc">Pre-filled in calculator</div>
+            </div>
+            <input type="number" id="set-material" style="width:7.5rem" min="0" step="0.01" onchange="saveSetting('material', this.value)">
+          </div>
+          <div class="settings-row">
+            <div>
+              <label>default target margin</label>
+              <div class="desc">For price suggestions (10-80%)</div>
+            </div>
+            <input type="number" id="set-margin" style="width:7.5rem" min="10" max="80" value="40" onchange="saveSetting('margin', this.value)">
+          </div>
+          <div class="settings-row">
+            <div>
+              <span></span>
+              <div class="desc">Apply saved defaults to the current calculator inputs</div>
+            </div>
+            <button class="btn" onclick="applyDefaults(); calculateProfit(); showToast('Defaults applied', 'success')">Apply to Calculator</button>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3><span class="num">&#167; 03</span>data management</h3>
+          <div class="settings-row">
+            <div>
+              <label>export all data</label>
+              <div class="desc">Download all saved listings as CSV</div>
+            </div>
+            <button class="btn" onclick="exportSavedToCSV()">export csv</button>
+          </div>
+          <div class="settings-row">
+            <div>
+              <label>clear all saved listings</label>
+              <div class="desc">Permanently delete all saved data</div>
+            </div>
+            <button class="btn danger" onclick="clearAllSaved()">clear all</button>
+          </div>
+          <div class="settings-row">
+            <div>
+              <label>print report</label>
+              <div class="desc">Generate a printable summary</div>
+            </div>
+            <button class="btn" onclick="window.print()">print</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: HELP -->
+      <div class="view" id="view-help">
+        <div class="help-block">
+          <h3><span class="num">&#167; 00</span>getting started</h3>
+          <p>Welcome to <b>EtsyCalc Pro</b> — a profit calculator designed specifically for Etsy sellers.</p>
+          <p><b>To get started:</b> Enter your product name, selling price, and costs on the Calculator page. The app shows your true profit after all Etsy fees in real time. Click <b>Save listing</b> to store calculations for later comparison.</p>
+          <p><b>Supported browsers:</b> Chrome, Edge, Firefox, Safari (macOS/iOS 16+). All data is stored locally on your device.</p>
+        </div>
+
+        <div class="help-block">
+          <h3><span class="num">&#167; 01</span>how to use the calculator</h3>
+          <p>The Etsy Profit Calculator helps you determine the true profitability of your listings by accounting for all Etsy fees, material costs, shipping, and packaging expenses.</p>
+          <ul>
+            <li><b>Enter your selling price</b> &#8212; the price you list the item for</li>
+            <li><b>Add your costs</b> &#8212; shipping, materials, and packaging per item</li>
+            <li><b>Select your market</b> &#8212; country affects fee structure and currency</li>
+            <li><b>Toggle Etsy Ads</b> &#8212; if you use offsite ads, enable this fee</li>
+            <li><b>Set target margin</b> &#8212; the calculator suggests a price to hit your goal</li>
+          </ul>
+          <p>All calculations update in real-time as you type. Save listings to compare scenarios later.</p>
+        </div>
+
+        <div class="help-block">
+          <h3><span class="num">&#167; 02</span>etsy fee reference</h3>
+          <div>
+            <div class="fee-row"><b>Listing Fee</b><span>Charged when you publish or renew a listing</span></div>
+            <div class="fee-row"><b>Transaction Fee</b><span>6.5% of the sale price including shipping</span></div>
+            <div class="fee-row"><b>Payment Processing</b><span>Varies by country (typically 3-4% + fixed fee)</span></div>
+            <div class="fee-row"><b>Offsite Ads Fee</b><span>15% for most sellers; 12% if annual sales exceed $10k (optional)</span></div>
+            <div class="fee-row"><b>Currency Conversion</b><span>2.5% if listing currency differs from bank currency</span></div>
+          </div>
+          <p style="margin-top:0.75rem;font-size:0.65625rem;color:var(--mid);border-left:2px solid var(--accent);padding-left:0.625rem;"><b>Note:</b> EU listing fees are currently &#8364;0.18. Verify current rates before pricing. Fee structures change frequently &mdash; always confirm at <a href="https://www.etsy.com/fees" target="_blank">etsy.com/fees</a>.</p>
+        </div>
+
+        <div class="help-block">
+          <h3><span class="num">&#167; 03</span>fee breakdown by country</h3>
+          <div id="country-fees-help"></div>
+        </div>
+
+        <div class="help-block">
+          <h3><span class="num">&#167; 04</span>data &amp; privacy</h3>
+          <p><b>Your data stays on your device.</b> All calculations and saved listings are stored locally in your browser. Nothing is sent to any server or cloud service.</p>
+          <p><b>Back up your data:</b> Use the Export CSV feature regularly to back up your listings. You can open the CSV file in Excel or Google Sheets.</p>
+          <p><b>Clearing browser data will erase your saved listings.</b> Always export before clearing cookies or site data.</p>
+        </div>
+
+        <div class="help-block">
+          <h3><span class="num">&#167; 05</span>keyboard shortcuts</h3>
+          <div class="fee-row"><b>Cmd/Ctrl + K</b><span>Focus search box</span></div>
+          <div class="fee-row"><b>Cmd/Ctrl + P</b><span>Print report</span></div>
+          <div class="fee-row"><b>Cmd/Ctrl + S</b><span>Save current listing</span></div>
+          <div class="fee-row"><b>Cmd/Ctrl + E</b><span>Export CSV</span></div>
+          <div class="fee-row"><b>Escape</b><span>Close modal</span></div>
+        </div>
+      </div>
+
+      <div class="canvas-foot"></div>
+      <footer class="footstrip" id="app-footer">
+        <div class="l"><span>&#169; 2026 <b>EtsyCalc Pro</b> &mdash; Licensed for personal use</span><span class="sep"></span><span>support: <b>All Rights Reserved</b></span><span class="sep"></span><span>rev <b>2026&#183;05&#183;25</b></span></div>
+        <div class="r"><span>page <b id="foot-page">01 / 05</b></span><span class="sep"></span><span>fees accurate as of <b>may 2026</b> &middot; verify at etsy.com/fees</span></div>
+      </footer>
+      <div style="text-align:center;font-size:0.5625rem;letter-spacing:.06em;color:var(--mid);padding:0.25rem 0 0.75rem;">Fee structures change. Always verify current rates at <a href="https://www.etsy.com/fees" target="_blank">etsy.com/fees</a> before pricing decisions.</div>
+    </section>
+  </main>
+</div>
+
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="event.stopPropagation()">
+    <div class="modal-header"><h3 id="modal-title">Dialog</h3><button class="modal-close" onclick="closeModal()">&#215;</button></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+  /* ============================================================
+     ETSY PROFIT CALCULATOR — v2.0 (IIFE wrapped, all fixes)
+     ============================================================ */
+
+  // ── Constants ────────────────────────────────────────────
+  const COUNTRIES = {
+    us: { name: 'United States', code: 'US', currency: 'USD', symbol: '$', listingFee: 0.20, transactionPct: 6.5, paymentPct: 3.0, paymentFixed: 0.25, adsPct: 15 },
+    uk: { name: 'United Kingdom', code: 'UK', currency: 'GBP', symbol: '\u00A3', listingFee: 0.20, transactionPct: 6.5, paymentPct: 4.0, paymentFixed: 0.20, adsPct: 15 },
+    eu: { name: 'European Union', code: 'EU', currency: 'EUR', symbol: '\u20AC', listingFee: 0.18, transactionPct: 6.5, paymentPct: 4.0, paymentFixed: 0.30, adsPct: 15 },
+    ca: { name: 'Canada', code: 'CA', currency: 'CAD', symbol: 'C$', listingFee: 0.25, transactionPct: 6.5, paymentPct: 3.0, paymentFixed: 0.25, adsPct: 15 },
+    au: { name: 'Australia', code: 'AU', currency: 'AUD', symbol: 'A$', listingFee: 0.25, transactionPct: 6.5, paymentPct: 3.0, paymentFixed: 0.25, adsPct: 15 }
+  };
+  const SAVED_PAGE_SIZE = 8;
+  const DEBOUNCE_SAVE_MS = 300;
+
+  // ── Cached DOM elements ──────────────────────────────────
+  let CACHE = {};
+  function cacheDOM() {
+    const ids = [
+      'inp-name','inp-price','inp-shipping','inp-material','inp-packaging',
+      'inp-ads','inp-ads-pct','inp-margin-target','inp-country',
+      'tm-country','tm-currency','tm-fee','current-country','ads-label',
+      'res-listing','res-transaction','res-payment','res-profit',
+      'res-margin','res-total-cost','res-breakeven','res-suggested',
+      'res-total-fees','bar-listing','bar-transaction','bar-payment',
+      'bar-ads','bar-shipping','page-title','page-subtitle','crumb-view',
+      'foot-page','btn-primary-action','nav-saved-count','saved-count-label',
+      'rt-saved','rt-margin','rt-best','bar-fill-main','bar-fill-warn',
+      'saved-tbody','saved-pagination','import-file','pie-chart','pie-legend',
+      'bar-chart','margin-chart','country-fees-help','search-input',
+      'toast-container','modal-overlay','modal-title','modal-body','modal-footer',
+      'view-calculator','view-saved','view-analytics','view-settings','view-help',
+      'sidebar','ads-pct-group','op-count'
+    ];
+    ids.forEach(id => { CACHE[id] = document.getElementById(id); });
+  }
+  const $ = id => CACHE[id] || (CACHE[id] = document.getElementById(id));
+
+  // ── State ────────────────────────────────────────────────
+  let currentCountry = 'us';
+  let savedListings = [];
+  let currentSort = { column: null, dir: 'asc' };
+  let savedFilter = 'all';
+  let savedPage = 0;
+  let listingJustSaved = false;
+  let searchQuery = '';
+  let editingId = null;
+  let settings = {};
+  let pendingImport = null;
+  let saveTimeout = null;
+
+  // ── Utilities ────────────────────────────────────────────
+  const escapeHtml = (t) => { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; };
+  const debounce = (fn, ms) => { let t; return function(...args) { clearTimeout(t); t = setTimeout(() => fn.apply(this, args), ms); }; };
+  const sanitizeObject = (obj) => {
+    if (!obj || typeof obj !== 'object') return obj;
+    const clean = {};
+    for (const key of Object.keys(obj)) {
+      const val = obj[key];
+      if (key === '__proto__' || key === 'constructor' || key === 'prototype') continue;
+      if (typeof val === 'object' && val !== null) clean[key] = sanitizeObject(val);
+      else clean[key] = val;
+    }
+    return clean;
+  };
+
+  // ── LocalStorage (with debounced writes + quota toast) ──
+  const LS = {
+    get: (k, def) => {
+      try {
+        const v = localStorage.getItem('etsy_'+k);
+        if(v===null) return def;
+        return sanitizeObject(JSON.parse(v));
+      } catch(e) { return def; }
+    },
+    set: (k, v) => {
+      try { localStorage.setItem('etsy_'+k, JSON.stringify(v)); return true; }
+      catch(e) {
+        if(e.name==='QuotaExceededError') showToast('Storage full — export and clear old data.','error',6000);
+        return false;
+      }
+    },
+    del: (k) => { try { localStorage.removeItem('etsy_'+k); } catch(e) {} },
+    setDebounced: (k, v) => {
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => LS.set(k, v), DEBOUNCE_SAVE_MS);
+    }
+  };
+
+  // ── Theme ────────────────────────────────────────────────
+  function toggleTheme() {
+    const h = document.documentElement;
+    if(h.getAttribute('data-theme')==='dark'){ h.removeAttribute('data-theme'); LS.del('theme'); }
+    else { h.setAttribute('data-theme','dark'); LS.set('theme','dark'); }
+  }
+  function initTheme() { if(LS.get('theme','')==='dark') document.documentElement.setAttribute('data-theme','dark'); }
+
+  // ── Sidebar ──────────────────────────────────────────────
+  function toggleSidebar() {
+    const s = $('sidebar');
+    const isOpen = s.classList.toggle('open');
+    s.setAttribute('aria-expanded', isOpen);
+  }
+
+  // ── View Router ─────────────────────────────────────────
+  const VIEWS = {
+    calculator: { title:'Profit Calculator', subtitle:'live pricing engine', crumb:'calculator', page:'01 / 05' },
+    saved:      { title:'Saved Listings', subtitle:'your product library', crumb:'saved listings', page:'02 / 05' },
+    analytics:  { title:'Analytics', subtitle:'visual breakdown', crumb:'analytics', page:'03 / 05' },
+    settings:   { title:'Settings', subtitle:'preferences & defaults', crumb:'settings', page:'04 / 05' },
+    help:       { title:'Help', subtitle:'reference guide', crumb:'help', page:'05 / 05' }
+  };
+  function navigateTo(viewName, e) {
+    if(e) e.preventDefault();
+    if(!VIEWS[viewName]) return;
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => { n.classList.remove('active'); n.removeAttribute('aria-current'); });
+    const viewEl = $('view-'+viewName);
+    if(viewEl) viewEl.classList.add('active');
+    const navEl = document.querySelector('.nav-item[data-view="'+viewName+'"]');
+    if(navEl) { navEl.classList.add('active'); navEl.setAttribute('aria-current','page'); }
+    const v = VIEWS[viewName];
+    $('page-title').textContent = v.title;
+    $('page-subtitle').textContent = v.subtitle;
+    $('crumb-view').textContent = v.crumb;
+    $('foot-page').textContent = v.page;
+    $('sidebar').classList.remove('open');
+    if(viewName==='saved') renderSavedTable();
+    if(viewName==='analytics') renderAnalytics();
+    if(viewName==='settings') loadSettings();
+    if(viewName==='help') renderHelp();
+  }
+
+  // ── Toast ────────────────────────────────────────────────
+  function showToast(msg, type, dur) {
+    const d = dur||3000, c = $('toast-container');
+    const t = document.createElement('div');
+    t.className = 'toast '+(type||'info');
+    const icons = { success:'\u2713', error:'\u2715', info:'\u2139' };
+    t.innerHTML = '<span class="toast-icon">'+(icons[type]||'\u2139')+'</span>';
+    const span = document.createElement('span'); span.className='toast-msg'; span.textContent=msg;
+    t.appendChild(span);
+    c.appendChild(t);
+    setTimeout(() => { t.classList.add('toast-out'); setTimeout(()=>t.remove(),300); }, d);
+  }
+
+  // ── Modal ────────────────────────────────────────────────
+  let _modalTrigger = null, _focusTrap = null;
+  function trapFocus(e) {
+    const modal = document.querySelector('.modal'); if(!modal) return;
+    const f = modal.querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])');
+    const first=f[0], last=f[f.length-1];
+    if(e.key==='Tab'){
+      if(e.shiftKey){ if(document.activeElement===first){ last.focus(); e.preventDefault(); } }
+      else { if(document.activeElement===last){ first.focus(); e.preventDefault(); } }
+    }
+  }
+  function openModal(title, body, footer) {
+    _modalTrigger = document.activeElement;
+    $('modal-title').textContent = title;
+    $('modal-body').innerHTML = body;
+    $('modal-footer').innerHTML = footer||'';
+    $('modal-overlay').classList.add('open');
+    _focusTrap = trapFocus;
+    document.addEventListener('keydown', _focusTrap);
+    requestAnimationFrame(()=>{ const f=document.querySelector('.modal button,.modal input,.modal select'); if(f)f.focus(); });
+  }
+  function closeModal() {
+    $('modal-overlay').classList.remove('open');
+    if(_focusTrap){ document.removeEventListener('keydown',_focusTrap); _focusTrap=null; }
+    if(_modalTrigger&&_modalTrigger.focus) try{_modalTrigger.focus()}catch(e){}
+    _modalTrigger=null;
+    pendingImport = null;
+  }
+
+  // ── Country ─────────────────────────────────────────────
+  function changeCountry(code) {
+    currentCountry = code;
+    const c = COUNTRIES[code];
+    $('tm-country').textContent = c.code;
+    $('tm-currency').textContent = c.currency;
+    $('tm-fee').textContent = c.transactionPct+'%';
+    $('current-country').textContent = c.code;
+    $('ads-label').textContent = $('inp-ads').checked ? 'On ('+c.adsPct+'%)' : 'Off';
+    LS.set('country', code);
+  }
+  function setDefaultCountry(code) { changeCountry(code); $('inp-country').value=code; showToast('Default country: '+COUNTRIES[code].name, 'success'); }
+  function initCountry() {
+    const saved = LS.get('country','us');
+    currentCountry = saved;
+    $('inp-country').value = saved;
+    changeCountry(saved);
+  }
+
+  // ── Debounced Calc & Save ───────────────────────────────
+  var debouncedCalculate = debounce(calculateProfit, 100);
+  var debouncedSaveDraft = debounce(saveDraft, 500);
+
+  // ── Margin Slider ───────────────────────────────────────
+  function updateMarginLabel() {
+    $('margin-label').textContent = $('inp-margin-target').value+'%';
+    $('suggest-tag').textContent = $('inp-margin-target').value+'% MARGIN';
+  }
+
+  // ── Draft ───────────────────────────────────────────────
+  const DRAFT_KEYS = ['inp-name','inp-price','inp-shipping','inp-material','inp-packaging','inp-ads','inp-ads-pct','inp-margin-target','inp-country'];
+  function saveDraft() {
+    const d={}; DRAFT_KEYS.forEach(id=>{ const el=$(id); if(el) d[id]=el.type==='checkbox'?el.checked:el.value; });
+    LS.setDebounced('calculator_draft', d);
+  }
+  function loadDraft() {
+    const draft = LS.get('calculator_draft', {});
+    DRAFT_KEYS.forEach(id=>{
+      const el = $(id);
+      if(el && draft[id]!==undefined){
+        if(el.type==='checkbox') el.checked = draft[id];
+        else el.value = draft[id];
+      }
+    });
+    if(draft['inp-country'] && COUNTRIES[draft['inp-country']]) {
+      changeCountry(draft['inp-country']);
+    }
+    const adsEl = $('inp-ads');
+    if(adsEl){
+      const grp = $('ads-pct-group');
+      $('ads-label').textContent = adsEl.checked ? 'On ('+COUNTRIES[currentCountry].adsPct+'%)' : 'Off';
+      if(grp){ grp.style.opacity=adsEl.checked?'1':'0.4'; grp.style.pointerEvents=adsEl.checked?'all':'none'; }
+    }
+  }
+
+  // ── Ads Toggle ──────────────────────────────────────────
+  $('inp-ads').addEventListener('change', function(){
+    const c = COUNTRIES[currentCountry];
+    $('ads-label').textContent = this.checked ? 'On ('+c.adsPct+'%)' : 'Off';
+    const grp = $('ads-pct-group');
+    if(this.checked){ grp.style.opacity='1'; grp.style.pointerEvents='all'; }
+    else { grp.style.opacity='0.4'; grp.style.pointerEvents='none'; }
+    calculateProfit();
+    saveDraft();
+  });
+
+  // ── Calculation Engine (pure math) ──────────────────────
+  function getVal(id) { const el=$(id); const v=el?(parseFloat(el.value)||0):0; return Math.max(0,v); }
+  function fmt(n, sym) { if(isNaN(n)||!isFinite(n)) return (sym||COUNTRIES[currentCountry].symbol)+'--'; return (sym||COUNTRIES[currentCountry].symbol)+n.toFixed(2); }
+  function fmtPct(n) { if(isNaN(n)||!isFinite(n)) return '--%'; return n.toFixed(1)+'%'; }
+
+  function computeProfit() {
+    const c = COUNTRIES[currentCountry];
+    const price = getVal('inp-price');
+    const shipping = getVal('inp-shipping');
+    const material = getVal('inp-material');
+    const packaging = getVal('inp-packaging');
+    const useAds = $('inp-ads').checked;
+    let adsPctRaw = parseFloat($('inp-ads-pct').value);
+    adsPctRaw = isNaN(adsPctRaw) ? c.adsPct : Math.min(100, Math.max(0, adsPctRaw));
+    const adsPct = useAds ? adsPctRaw : 0;
+    const targetMargin = Math.min(100, Math.max(0, getVal('inp-margin-target')||40));
+
+    if (price === 0 && shipping === 0 && material === 0 && packaging === 0) {
+      return { isEmpty: true };
+    }
+
+    const listingFee = c.listingFee;
+    const transactionFee = (price+shipping)*(c.transactionPct/100);
+    const paymentFee = (price+shipping)*(c.paymentPct/100) + c.paymentFixed;
+    const adsFee = useAds ? (price+shipping)*(adsPct/100) : 0;
+    const totalEtsyFees = listingFee + transactionFee + paymentFee + adsFee;
+    const totalCosts = totalEtsyFees + shipping + material + packaging;
+    const netProfit = price - totalCosts;
+    const profitMargin = price>0 ? (netProfit/price)*100 : 0;
+
+    const variableRate = (c.transactionPct/100)+(c.paymentPct/100)+(useAds?adsPct/100:0);
+    const fixedCosts = listingFee + c.paymentFixed + shipping + material + packaging;
+    const breakEven = variableRate<1 ? (fixedCosts + shipping*variableRate)/(1-variableRate) : 0;
+    const marginRate = targetMargin/100;
+    const denom = 1 - marginRate - variableRate;
+    const suggestedPrice = denom>0 ? (fixedCosts + shipping*variableRate)/denom : 0;
+
+    return {
+      isEmpty: false,
+      listingFee, transactionFee, paymentFee, adsFee,
+      totalEtsyFees, totalCosts, netProfit, profitMargin,
+      breakEven, suggestedPrice, targetMargin, price, shipping,
+      material, packaging, useAds, adsPct   // <-- restored missing fields
+    };
+  }
+
+  function renderProfitResults(result) {
+    if (result.isEmpty) {
+      $('res-profit').textContent = '--';
+      $('res-profit').parentElement.className = 'card result-card neutral';
+      $('res-listing').textContent = '--'; $('res-transaction').textContent = '--'; $('res-payment').textContent = '--';
+      $('res-margin').textContent = '--%'; $('res-total-cost').textContent = '--';
+      $('res-breakeven').textContent = '--'; $('res-suggested').textContent = '--'; $('res-total-fees').textContent = '--';
+      return;
+    }
+    const c = COUNTRIES[currentCountry];
+    $('res-listing').textContent = fmt(result.listingFee);
+    $('res-transaction').textContent = fmt(result.transactionFee);
+    $('res-payment').textContent = fmt(result.paymentFee);
+    $('res-profit').textContent = fmt(result.netProfit);
+    $('res-profit').parentElement.className = 'card result-card '+(result.netProfit>=0?'positive':'negative');
+    $('res-margin').textContent = fmtPct(result.profitMargin);
+    $('res-total-cost').textContent = fmt(result.totalCosts);
+    $('res-breakeven').textContent = fmt(result.breakEven);
+    $('res-suggested').textContent = fmt(result.suggestedPrice);
+    $('res-total-fees').textContent = fmt(result.totalEtsyFees);
+
+    const maxVal = Math.max(result.totalCosts, result.price, 0.01);
+    $('bar-listing').style.width = (result.listingFee/maxVal*100)+'%';
+    $('bar-transaction').style.width = (result.transactionFee/maxVal*100)+'%';
+    $('bar-payment').style.width = (result.paymentFee/maxVal*100)+'%';
+    $('bar-ads').style.width = (result.adsFee/maxVal*100)+'%';
+    $('bar-shipping').style.width = (result.shipping/maxVal*100)+'%';
+  }
+
+  function calculateProfit() { renderProfitResults(computeProfit()); }
+
+  // ── Save / Load / Edit ──────────────────────────────────
+  function validateListing(obj) {
+    const defaults = {
+      name:'', price:0, shipping:0, material:0, packaging:0,
+      useAds:false, adsPct:15, targetMargin:40,
+      listingFee:0, transactionFee:0, paymentFee:0, adsFee:0,
+      totalEtsyFees:0, totalCosts:0, netProfit:0, profitMargin:0,
+      breakEven:0, suggestedPrice:0, savedAt:'', country:'us',
+      countryName:'', currency:'USD', symbol:'$'
+    };
+    const listing = {};
+    for (const key of Object.keys(defaults)) {
+      listing[key] = (obj[key] !== undefined && obj[key] !== null) ? obj[key] : defaults[key];
+    }
+    return listing;
+  }
+
+  function loadSavedListings() {
+    const raw = LS.get('listings', []);
+    savedListings = raw.map(item => validateListing(item)).filter(item => item.name && item.name.trim() !== '');
+    updateNavCount(); updateRuntimeSummary();
+  }
+
+  // persistListings: debounced for normal saves, immediate for destructive ops
+  function persistListings(immediate) {
+    if (immediate) {
+      LS.set('listings', savedListings);
+    } else {
+      LS.setDebounced('listings', savedListings);
+    }
+  }
+
+  function saveCurrentListing() {
+    const name = $('inp-name').value.trim();
+    if(!name){ showToast('Enter a product name','error'); $('inp-name').focus(); return; }
+    if(getVal('inp-price')<=0){ showToast('Enter a selling price','error'); return; }
+    const calc = computeProfit();
+    if (!calc || calc.isEmpty) return;
+    const listing = {
+      id: editingId || Date.now(),
+      name, country: currentCountry, countryName: COUNTRIES[currentCountry].name,
+      currency: COUNTRIES[currentCountry].currency, symbol: COUNTRIES[currentCountry].symbol,
+      price: calc.price, shipping: calc.shipping, material: calc.material, packaging: calc.packaging,
+      useAds: calc.useAds, adsPct: calc.adsPct, targetMargin: calc.targetMargin,
+      listingFee: calc.listingFee, transactionFee: calc.transactionFee, paymentFee: calc.paymentFee,
+      adsFee: calc.adsFee, totalEtsyFees: calc.totalEtsyFees, totalCosts: calc.totalCosts,
+      netProfit: calc.netProfit, profitMargin: calc.profitMargin, breakEven: calc.breakEven,
+      suggestedPrice: calc.suggestedPrice, savedAt: new Date().toISOString()
+    };
+    const wasEditing = !!editingId;
+    if(editingId){
+      const idx = savedListings.findIndex(l=>l.id===editingId);
+      if(idx!==-1) savedListings[idx] = listing;
+      editingId = null;
+      $('btn-primary-action').textContent = 'save listing';
+    } else {
+      savedListings = [listing, ...savedListings];
+    }
+    persistListings(false); // debounced write for save
+    LS.del('calculator_draft');
+    listingJustSaved = true;
+    updateNavCount(); updateRuntimeSummary();
+    showToast(wasEditing ? 'Listing updated: '+name : 'Listing saved: '+name, 'success');
+  }
+
+  function editListing(id) {
+    const listing = savedListings.find(l=>l.id===id);
+    if(!listing) return;
+    editingId = id;
+    $('inp-name').value = listing.name;
+    $('inp-price').value = listing.price;
+    $('inp-shipping').value = listing.shipping;
+    $('inp-material').value = listing.material;
+    $('inp-packaging').value = listing.packaging;
+    $('inp-ads').checked = listing.useAds;
+    $('inp-ads-pct').value = listing.adsPct;
+    $('inp-margin-target').value = listing.targetMargin;
+    $('inp-country').value = listing.country;
+    changeCountry(listing.country);
+    updateMarginLabel();
+    const grp = $('ads-pct-group');
+    if(listing.useAds){ grp.style.opacity='1'; grp.style.pointerEvents='all'; }
+    else { grp.style.opacity='0.4'; grp.style.pointerEvents='none'; }
+    $('btn-primary-action').textContent = 'update listing';
+    calculateProfit();
+    navigateTo('calculator');
+  }
+
+  // ── Nav Count & Runtime ─────────────────────────────────
+  function updateNavCount() {
+    const cnt = savedListings.length;
+    $('nav-saved-count').textContent = cnt;
+    $('saved-count-label').textContent = cnt+' total';
+    $('rt-saved').textContent = cnt;
+    const op = $('op-count');
+    if(op) op.textContent = cnt===1?'1 saved':cnt+' saved';
+  }
+  function updateRuntimeSummary() {
+    const cnt = savedListings.length;
+    if(cnt===0){ $('rt-margin').textContent='--'; $('rt-best').textContent='--'; $('bar-fill-main').style.width='0%'; $('bar-fill-warn').style.width='0%'; return; }
+    const margins = savedListings.map(l=>l.profitMargin);
+    const avg = margins.reduce((a,b)=>a+b,0)/margins.length;
+    const best = savedListings.reduce((a,b)=>a.netProfit>b.netProfit?a:b);
+    $('rt-margin').textContent = avg.toFixed(1)+'%';
+    $('rt-best').textContent = best.symbol+best.netProfit.toFixed(2);
+    $('bar-fill-main').style.width = Math.min(Math.max(avg/50*100,0),100)+'%';
+    const loss = savedListings.filter(l=>l.netProfit<0).length;
+    $('bar-fill-warn').style.width = (loss/cnt*100)+'%';
+  }
+
+  // ── Saved Table ─────────────────────────────────────────
+  function renderSavedTable() {
+    const tbody = $('saved-tbody');
+    let rows = [...savedListings];
+    if(searchQuery) rows = rows.filter(r => (r.name+' '+r.countryName).toLowerCase().includes(searchQuery));
+    if(savedFilter==='profitable') rows = rows.filter(r=>r.netProfit>0);
+    if(savedFilter==='loss') rows = rows.filter(r=>r.netProfit<=0);
+    if(currentSort.column){
+      rows.sort((a,b)=>{
+        let av=a[currentSort.column], bv=b[currentSort.column];
+        if(typeof av==='string'){ av=av.toLowerCase(); bv=bv.toLowerCase(); }
+        return currentSort.dir==='asc' ? (av<bv?-1:av>bv?1:0) : (av>bv?-1:av<bv?1:0);
+      });
+    }
+    const totalPages = Math.max(1, Math.ceil(rows.length/SAVED_PAGE_SIZE));
+    savedPage = Math.min(savedPage, totalPages-1);
+    const pageRows = rows.slice(savedPage*SAVED_PAGE_SIZE, (savedPage+1)*SAVED_PAGE_SIZE);
+    if(pageRows.length===0){
+      tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">\u2205</div><h3>NO SAVED LISTINGS</h3><p>Save a listing from the calculator.</p></div></td></tr>';
+    } else {
+      tbody.innerHTML = pageRows.map(r=>{
+        const dot = r.netProfit>0?'green':r.netProfit<0?'red':'amber';
+        const safeId = Number(r.id);
+        return `<tr>
+          <td><span class="id"><span class="dot ${dot}"></span><span><b>${escapeHtml(r.name)}</b><small>${escapeHtml(r.countryName)} · ${escapeHtml(r.currency)}</small></span></span></td>
+          <td>${escapeHtml(r.country.toUpperCase())}</td>
+          <td class="num">${escapeHtml(r.symbol)}${r.price.toFixed(2)}</td>
+          <td class="num" style="color:${r.netProfit>=0?'var(--signal)':'var(--danger)'}">${escapeHtml(r.symbol)}${r.netProfit.toFixed(2)}</td>
+          <td class="num">${r.profitMargin.toFixed(1)}%</td>
+          <td class="num">
+            <button class="btn" style="padding:0.25rem 0.5rem;font-size:0.625rem;margin-right:4px" onclick="editListing(${safeId})">edit</button>
+            <button class="btn danger" style="padding:0.25rem 0.5rem;font-size:0.625rem" data-action="delete" data-id="${safeId}">del</button>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+    let pgHTML = '';
+    if(totalPages>1){
+      pgHTML += `<button onclick="changePage(0)" ${savedPage===0?'disabled':''}>«</button>`;
+      pgHTML += `<button onclick="changePage(${savedPage-1})" ${savedPage===0?'disabled':''}>‹</button>`;
+      const start = Math.max(0, savedPage-2);
+      const end = Math.min(totalPages, savedPage+3);
+      for(let i=start;i<end;i++) pgHTML += `<button ${i===savedPage?'class="active"':''} onclick="changePage(${i})">${i+1}</button>`;
+      pgHTML += `<button onclick="changePage(${savedPage+1})" ${savedPage>=totalPages-1?'disabled':''}>›</button>`;
+      pgHTML += `<button onclick="changePage(${totalPages-1})" ${savedPage>=totalPages-1?'disabled':''}>»</button>`;
+      pgHTML += `<span class="page-info">Page ${savedPage+1} of ${totalPages}</span>`;
+    }
+    $('saved-pagination').innerHTML = pgHTML;
+  }
+  function changePage(p) { savedPage=p; renderSavedTable(); }
+  function sortSaved(col) {
+    if(currentSort.column===col) currentSort.dir = currentSort.dir==='asc'?'desc':'asc';
+    else { currentSort.column=col; currentSort.dir='asc'; }
+    renderSavedTable();
+  }
+  function filterSaved(f) {
+    savedFilter = f;
+    document.querySelectorAll('#view-saved .chip[data-filter]').forEach(c=>c.classList.toggle('on', c.getAttribute('data-filter')===f));
+    savedPage=0;
+    renderSavedTable();
+  }
+
+  // ── Delete & Clear (immediate persist) ─────────────────
+  function deleteListing(id) {
+    const listing = savedListings.find(l=>l.id===id);
+    if(!listing) return;
+    openModal('Delete Listing', `<p>Delete <b>${escapeHtml(listing.name)}</b>? This cannot be undone.</p>`,
+      `<button class="btn" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="doDeleteListing(${Number(id)})">Delete</button>`);
+  }
+  function doDeleteListing(id) {
+    savedListings = savedListings.filter(l=>l.id!==id);
+    persistListings(true); // immediate write
+    closeModal();
+    renderSavedTable(); updateNavCount(); updateRuntimeSummary();
+    showToast('Listing deleted','info');
+    const firstBtn = document.querySelector('#view-saved .btn');
+    if(firstBtn) firstBtn.focus();
+  }
+  function clearAllSaved() {
+    if(savedListings.length===0){ showToast('No listings','info'); return; }
+    openModal('Clear All Listings', `<p>Delete all ${savedListings.length} listings? This cannot be undone.</p>`,
+      `<button class="btn" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="doClearAll()">Delete All</button>`);
+  }
+  function doClearAll() {
+    savedListings = [];
+    persistListings(true); // immediate write
+    closeModal();
+    renderSavedTable(); updateNavCount(); updateRuntimeSummary();
+    showToast('All listings cleared','info');
+  }
+
+  // ── CSV Import ──────────────────────────────────────────
+  function handleFileImport(file) {
+    if(!file) return;
+    if(file.size > 2*1024*1024){ showToast('File too large (max 2MB)','error'); return; }
+    const reader = new FileReader();
+    reader.onload = function(e){
+      try{
+        const csv = e.target.result;
+        const lines = csv.split(/\r?\n/).filter(l=>l.trim()!=='');
+        if(lines.length<2){ showToast('CSV must have header + data','error'); return; }
+        const headers = parseCSVLine(lines[0]).map(h=>h.trim().toLowerCase());
+        const nameIdx = headers.indexOf('product name');
+        const countryIdx = headers.indexOf('country');
+        const priceIdx = headers.indexOf('price');
+        const shippingIdx = headers.indexOf('shipping');
+        const materialIdx = headers.indexOf('material');
+        const packagingIdx = headers.indexOf('packaging');
+        const adsIdx = headers.indexOf('use ads');
+        const adsPctIdx = headers.indexOf('ads %');
+        const marginIdx = headers.indexOf('target margin %');
+        if(nameIdx===-1||priceIdx===-1){ showToast('CSV must have Product Name and Price columns','error'); return; }
+
+        const toImport = [];
+        for(let i=1;i<lines.length;i++){
+          const cols = parseCSVLine(lines[i]);
+          const name = (cols[nameIdx]||'').trim();
+          const price = parseFloat(cols[priceIdx])||0;
+          if(!name||price<=0) continue;
+          const countryName = (cols[countryIdx]||'').trim();
+          const country = countryName ? (Object.keys(COUNTRIES).find(k=>COUNTRIES[k].name.toLowerCase()===countryName.toLowerCase()) || currentCountry) : currentCountry;
+          const c = COUNTRIES[country];
+          const shipping = parseFloat(cols[shippingIdx]||'0')||0;
+          const material = parseFloat(cols[materialIdx]||'0')||0;
+          const packaging = parseFloat(cols[packagingIdx]||'0')||0;
+          const useAds = (cols[adsIdx]||'').toLowerCase()==='yes';
+          const adsPct = parseFloat(cols[adsPctIdx]||'0')||15;
+          const targetMargin = parseFloat(cols[marginIdx]||'40')||40;
+
+          const transactionFee = (price+shipping)*(c.transactionPct/100);
+          const paymentFee = (price+shipping)*(c.paymentPct/100)+c.paymentFixed;
+          const adsFee = useAds ? (price+shipping)*(adsPct/100) : 0;
+          const totalEtsyFees = c.listingFee + transactionFee + paymentFee + adsFee;
+          const totalCosts = totalEtsyFees + shipping + material + packaging;
+          const netProfit = price - totalCosts;
+          const profitMargin = price>0 ? (netProfit/price)*100 : 0;
+          const variableRate = (c.transactionPct/100)+(c.paymentPct/100)+(useAds?adsPct/100:0);
+          const breakEven = variableRate<1 ? (c.listingFee+c.paymentFixed+shipping+material+packaging+shipping*variableRate)/(1-variableRate) : 0;
+          const denom = 1-(targetMargin/100)-variableRate;
+          const suggestedPrice = denom>0 ? (c.listingFee+c.paymentFixed+shipping+material+packaging+shipping*variableRate)/denom : 0;
+
+          toImport.push({
+            id: Date.now()+i,
+            name, country, countryName: c.name, currency: c.currency, symbol: c.symbol,
+            price, shipping, material, packaging, useAds, adsPct, targetMargin,
+            listingFee: c.listingFee, transactionFee, paymentFee, adsFee,
+            totalEtsyFees, totalCosts, netProfit, profitMargin, breakEven, suggestedPrice,
+            savedAt: new Date().toISOString()
+          });
+        }
+        if(toImport.length===0){ showToast('No valid listings found','error'); return; }
+        if(savedListings.length>0 && toImport.length>5){
+          pendingImport = toImport;
+          openModal('Import CSV',
+            `<p>Import ${toImport.length} listings? This will be added to your existing ${savedListings.length} listings.</p>`,
+            `<button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="doImport()">Import</button>`);
+        } else {
+          doImport(toImport);
+        }
+      } catch(err){ showToast('Error parsing CSV','error'); }
+    };
+    reader.readAsText(file);
+  }
+  function doImport(toImportArr) {
+    const arr = toImportArr || pendingImport;
+    if(!Array.isArray(arr)) return;
+    const existingKeys = new Set(savedListings.map(l=>`${l.name}::${l.price.toFixed(2)}`));
+    const newOnes = arr.filter(l=>!existingKeys.has(`${l.name}::${l.price.toFixed(2)}`));
+    if(newOnes.length === 0) {
+      closeModal();
+      showToast('No new listings — all duplicates skipped', 'info');
+      pendingImport = null;
+      const fileInput = $('import-file');
+      if(fileInput) fileInput.value = '';
+      return;
+    }
+    savedListings = [...newOnes, ...savedListings];
+    persistListings(false); // debounced write for import
+    closeModal();
+    updateNavCount(); updateRuntimeSummary(); renderSavedTable();
+    showToast(`Imported ${newOnes.length} new listings`,'success');
+    const fileInput = $('import-file');
+    if(fileInput) fileInput.value = '';
+    pendingImport = null;
+  }
+  function parseCSVLine(line) {
+    const res=[]; let cur='', inQ=false;
+    for(let i=0;i<line.length;i++){
+      const ch=line[i];
+      if(inQ){
+        if(ch==='"'){
+          if(i+1<line.length && line[i+1]==='"'){ cur+='"'; i++; }
+          else inQ=false;
+        } else cur+=ch;
+      } else {
+        if(ch==='"') inQ=true;
+        else if(ch===','){ res.push(cur); cur=''; }
+        else cur+=ch;
+      }
+    }
+    res.push(cur); return res;
+  }
+
+  // ── Analytics (aggregate data) ──────────────────────────
+  function renderAnalytics() {
+    if(savedListings.length===0){
+      $('pie-chart-container').innerHTML = '<div class="empty-state"><div class="empty-icon">\u2205</div><h3>NO DATA</h3><p>Save some listings.</p></div>';
+      $('bar-chart').innerHTML=''; $('margin-chart').innerHTML='';
+      return;
+    }
+    const agg = { listingFee:0, transactionFee:0, paymentFee:0, adsFee:0, shipping:0, materials:0, netProfit:0, price:0 };
+    savedListings.forEach(l => {
+      agg.listingFee += l.listingFee||0;
+      agg.transactionFee += l.transactionFee||0;
+      agg.paymentFee += l.paymentFee||0;
+      agg.adsFee += l.adsFee||0;
+      agg.shipping += l.shipping||0;
+      agg.materials += (l.material||0)+(l.packaging||0);
+      agg.netProfit += l.netProfit||0;
+      agg.price += l.price||0;
+    });
+    const total = agg.price || 0.01;
+    const symbol = COUNTRIES[currentCountry].symbol;
+    const escapedSymbol = escapeHtml(symbol);
+
+    const slices = [
+      { label:'Listing Fee', value:agg.listingFee, color:'var(--mid)' },
+      { label:'Transaction', value:agg.transactionFee, color:'var(--accent)' },
+      { label:'Payment', value:agg.paymentFee, color:'var(--accent-2)' },
+      { label:'Ads', value:agg.adsFee, color:'var(--warn)' },
+      { label:'Shipping', value:agg.shipping, color:'var(--ink-2)' },
+      { label:'Materials', value:agg.materials, color:'var(--rule)' },
+      { label:'Net Profit', value:agg.netProfit, color:agg.netProfit>=0?'var(--signal)':'var(--danger)' }
+    ].filter(s=>s.value!==0);
+
+    const sliceSum = slices.reduce((a,s)=>a+Math.abs(s.value),0);
+    const scale = sliceSum>total ? total/sliceSum : 1;
+    let grad=[], acc=0;
+    slices.forEach(s=>{
+      const pct = (Math.abs(s.value)*scale/total)*100;
+      grad.push(s.color+' '+acc+'% '+(acc+pct)+'%');
+      acc+=pct;
+    });
+    if(acc<100) grad.push('var(--rule-2) '+acc+'% 100%');
+    $('pie-chart').style.background = 'conic-gradient('+grad.join(',')+')';
+    $('pie-legend').innerHTML = slices.map(s=>{
+      const pct = ((Math.abs(s.value)*scale/total)*100).toFixed(1);
+      return `<div class="leg-item"><span class="leg-dot" style="background:${s.color}"></span><span>${s.label}</span><span class="leg-pct">${pct}%</span></div>`;
+    }).join('');
+
+    const barData = [
+      { label:'Fees', value:agg.listingFee+agg.transactionFee+agg.paymentFee+agg.adsFee, color:'var(--accent)' },
+      { label:'Shipping', value:agg.shipping, color:'var(--ink-2)' },
+      { label:'Materials', value:agg.materials, color:'var(--rule)' },
+      { label:'Net Profit', value:agg.netProfit, color:agg.netProfit>=0?'var(--signal)':'var(--danger)' }
+    ];
+    const maxBar = Math.max(...barData.map(d=>Math.abs(d.value)),0.01);
+    $('bar-chart').innerHTML = barData.map(d=>{
+      const h = (Math.abs(d.value)/maxBar*100);
+      return `<div class="bar-col"><div class="bar" style="height:${h}%;background:${d.color}"></div><span class="bar-val">${escapedSymbol}${d.value.toFixed(2)}</span><span class="bar-label">${d.label}</span></div>`;
+    }).join('');
+
+    const recent = savedListings.slice(0,12);
+    const maxMargin = Math.max(...recent.map(r=>Math.abs(r.profitMargin||0)),10);
+    $('margin-chart').innerHTML = recent.map(r=>{
+      const h = (Math.abs(r.profitMargin||0)/maxMargin*100);
+      const color = (r.profitMargin||0)>=0?'var(--signal)':'var(--danger)';
+      const name = (r.name||'').length>10?r.name.substring(0,10)+'...':r.name||'';
+      return `<div class="bar-col"><div class="bar" style="height:${h}%;background:${color}"></div><span class="bar-val">${(r.profitMargin||0).toFixed(1)}%</span><span class="bar-label">${escapeHtml(name)}</span></div>`;
+    }).join('');
+  }
+
+  // ── Settings ────────────────────────────────────────────
+  function loadSettings() {
+    settings = LS.get('settings',{});
+    $('set-country').value = LS.get('country','us');
+    $('set-shipping').value = settings.shipping!=null ? settings.shipping : '';
+    $('set-packaging').value = settings.packaging!=null ? settings.packaging : '';
+    $('set-material').value = settings.material!=null ? settings.material : '';
+    $('set-margin').value = settings.margin || 40;
+  }
+  function saveSetting(key, value) {
+    settings[key] = parseFloat(value)||0;
+    LS.set('settings', settings);
+    showToast('Setting saved','success');
+  }
+  function applyDefaults() {
+    settings = LS.get('settings',{});
+    if(settings.shipping!=null) $('inp-shipping').value = settings.shipping;
+    if(settings.packaging!=null) $('inp-packaging').value = settings.packaging;
+    if(settings.material!=null) $('inp-material').value = settings.material;
+    if(settings.margin) { $('inp-margin-target').value = settings.margin; updateMarginLabel(); }
+  }
+
+  // ── Help ────────────────────────────────────────────────
+  function renderHelp() {
+    let html='';
+    for(const code in COUNTRIES){
+      const c=COUNTRIES[code];
+      html+=`<div style="margin-bottom:1rem"><h4 style="font-size:0.75rem">${c.name} (${c.currency})</h4>
+        <div class="fee-row"><b>Listing Fee</b><span>${c.symbol}${c.listingFee.toFixed(2)}</span></div>
+        <div class="fee-row"><b>Transaction Fee</b><span>${c.transactionPct}%</span></div>
+        <div class="fee-row"><b>Payment Processing</b><span>${c.paymentPct}% + ${c.symbol}${c.paymentFixed.toFixed(2)}</span></div>
+        <div class="fee-row"><b>Offsite Ads</b><span>${c.adsPct}%</span></div></div>`;
+    }
+    $('country-fees-help').innerHTML = html;
+  }
+
+  // ── Export ──────────────────────────────────────────────
+  function exportSavedToCSV() {
+    if(savedListings.length===0){ showToast('No listings','info'); return; }
+    const headers = ['Product Name','Country','Currency','Price','Shipping','Material','Packaging','Use Ads','Ads %','Listing Fee','Transaction Fee','Payment Fee','Ads Fee','Total Etsy Fees','Total Costs','Net Profit','Profit Margin %','Break-Even Price','Suggested Price','Target Margin %','Saved At'];
+    const rows = savedListings.map(l=>[l.name,l.countryName,l.currency,l.price,l.shipping,l.material,l.packaging,l.useAds?'Yes':'No',l.adsPct,l.listingFee,l.transactionFee,l.paymentFee,l.adsFee,l.totalEtsyFees,l.totalCosts,l.netProfit,l.profitMargin.toFixed(2),l.breakEven,l.suggestedPrice,l.targetMargin,l.savedAt]);
+    const csv = [headers.join(','), ...rows.map(r=>r.map(c=>{ let s=String(c); if(/^[=+\-@]/.test(s)) s="'"+s; if(s.includes(',')||s.includes('"')||s.includes('\n')) return '"'+s.replace(/"/g,'""')+'"'; return s; }).join(','))].join('\n');
+    const blob = new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob);
+    const a=document.createElement('a'); a.href=url; a.download='etsy-listings-'+new Date().toISOString().split('T')[0]+'.csv';
+    a.click(); URL.revokeObjectURL(url);
+    showToast('Exported '+savedListings.length+' listings','success');
+  }
+
+  // ── Event Delegation ────────────────────────────────────
+  $('saved-tbody').addEventListener('click', function(e) {
+    const btn = e.target.closest('[data-action]');
+    if(!btn) return;
+    if(btn.getAttribute('data-action')==='delete'){
+      const id = parseInt(btn.getAttribute('data-id'),10);
+      if(!isNaN(id)) deleteListing(id);
+    }
+  });
+
+  // ── Search ──────────────────────────────────────────────
+  $('search-input').addEventListener('input', debounce(function(e){
+    searchQuery = e.target.value.toLowerCase().trim();
+    savedPage=0;
+    renderSavedTable();
+  },200));
+
+  // ── Keyboard Shortcuts ─────────────────────────────────
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape') closeModal();
+    if((e.metaKey||e.ctrlKey)&&e.key==='k'){ e.preventDefault(); $('search-input').focus(); }
+    if((e.metaKey||e.ctrlKey)&&e.key==='p'){ e.preventDefault(); window.print(); }
+    if((e.metaKey||e.ctrlKey)&&e.key==='s'){
+      e.preventDefault();
+      if($('view-calculator').classList.contains('active')) saveCurrentListing();
+    }
+    if((e.metaKey||e.ctrlKey)&&e.key==='e'){ e.preventDefault(); exportSavedToCSV(); }
+  });
+
+  // ── Boot ────────────────────────────────────────────────
+  cacheDOM();
+  initTheme();
+  initCountry();
+  loadSavedListings();
+  loadDraft();
+  applyDefaults();
+  updateMarginLabel();
+  calculateProfit();
+
+  try { localStorage.setItem('_test',''); localStorage.removeItem('_test'); } catch(e) { showToast('Private mode detected — data not saved','error',8000); }
+
+  window.addEventListener('storage', function(e){
+    if(e.key==='etsy_listings'){
+      try{
+        const incoming = JSON.parse(e.newValue||'[]');
+        if(Array.isArray(incoming)){
+          const valid = incoming.filter(item => item && typeof item === 'object' && item.name);
+          savedListings = valid.map(validateListing);
+          updateNavCount(); updateRuntimeSummary();
+          if($('view-saved').classList.contains('active')) renderSavedTable();
+        }
+      } catch(err){}
+    }
+  });
+
+  window.addEventListener('beforeunload', function(e){
+    if(listingJustSaved) return;
+    if($('inp-name').value.trim()||getVal('inp-price')>0){
+      e.preventDefault();
+      e.returnValue = 'Unsaved data.';
+    }
+  });
+  ['inp-name','inp-price','inp-shipping','inp-material','inp-packaging','inp-ads-pct','inp-margin-target','inp-country'].forEach(id=>{
+    const el=$(id); if(el) el.addEventListener('input', ()=> listingJustSaved=false);
+  });
+  $('inp-ads').addEventListener('change', ()=> listingJustSaved=false);
+
+  // ── Global exposure (for inline onclick handlers) ─────
+  window.toggleSidebar = toggleSidebar;
+  window.toggleTheme = toggleTheme;
+  window.navigateTo = navigateTo;
+  window.openModal = openModal;
+  window.closeModal = closeModal;
+  window.exportSavedToCSV = exportSavedToCSV;
+  window.saveCurrentListing = saveCurrentListing;
+  window.deleteListing = deleteListing;
+  window.doDeleteListing = doDeleteListing;
+  window.clearAllSaved = clearAllSaved;
+  window.doClearAll = doClearAll;
+  window.changeCountry = changeCountry;
+  window.setDefaultCountry = setDefaultCountry;
+  window.updateMarginLabel = updateMarginLabel;
+  window.applyDefaults = applyDefaults;
+  window.filterSaved = filterSaved;
+  window.sortSaved = sortSaved;
+  window.changePage = changePage;
+  window.editListing = editListing;
+  window.handleFileImport = handleFileImport;
+  window.doImport = doImport;
+  window.calculateProfit = calculateProfit;
+  window.showToast = showToast;
+  window.debouncedCalculate = debouncedCalculate;
+  window.debouncedSaveDraft = debouncedSaveDraft;
+  window.saveDraft = saveDraft;
+})();
+</script>
+</body>
+</html>

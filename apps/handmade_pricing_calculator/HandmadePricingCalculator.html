@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handmade Pricing Calculator</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='6' fill='none' stroke='%23111111' stroke-width='10'/%3E%3Crect x='28' y='28' width='44' height='44' rx='4' fill='%23c8852e'/%3E%3C/svg%3E">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:;">
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   MICROAPP SHELL v6 — Design System Template
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* System monospace stack */
+body { font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Consolas', 'Liberation Mono', monospace; }
+
+/* ── COLOR SYSTEM ── */
+:root {
+  --accent-h: 32;
+  --accent:    hsl(var(--accent-h), 55%, 48%);
+  --accent-2:  hsl(var(--accent-h), 55%, 38%);
+  --accent-3:  hsl(var(--accent-h), 55%, 32%);
+  --accent-soft:   hsla(var(--accent-h), 55%, 48%, 0.10);
+  --accent-soft-2: hsla(var(--accent-h), 55%, 48%, 0.06);
+  --accent-glow:   hsla(var(--accent-h), 55%, 48%, 0.15);
+  --paper:        #f7f5f0;
+  --paper-98:     rgba(247, 245, 240, 0.98);
+  --paper-2:      #ede9e2;
+  --ink:          #2b2a24;
+  --ink-2:        #4d4a3e;
+  --mid:          #757165;
+  --rule:         #d5d1c7;
+  --rule-2:       #e8e4db;
+  --signal:       #2d8a4e;
+  --warn:         #b8860b;
+  --danger:       #c53030;
+  --shadow: 0 1px 0 rgba(43,42,36,0.04), 0 14px 30px -22px rgba(43,42,36,0.35);
+  --shadow-lg: 0 4px 20px rgba(43,42,36,0.15);
+  --sidebar-w: 248px;
+}
+[data-theme="dark"] {
+  --paper:        #1c1b16;
+  --paper-98:     rgba(28, 27, 22, 0.98);
+  --paper-2:      #242319;
+  --ink:          #e8e4d8;
+  --ink-2:        #b0ac9e;
+  --mid:          #7a7567;
+  --rule:         #33312a;
+  --rule-2:       #2a2820;
+  --signal:       #4caf78;
+  --warn:         #d4a017;
+  --danger:       #e05252;
+  --shadow: 0 1px 0 rgba(0,0,0,0.12), 0 14px 30px -22px rgba(0,0,0,0.5);
+  --shadow-lg: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+/* Toggle icon explicit for cross-browser support (no CSS variable in content) */
+.theme-toggle::before { content: "☾"; }
+[data-theme="dark"] .theme-toggle::before { content: "☀"; }
+
+/* ── RESET & BASE ── */
+* { box-sizing:border-box; margin:0; padding:0 }
+html, body { height:100% }
+body {
+  font-feature-settings: "ss01","ss02","cv11","tnum","zero";
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  background: radial-gradient(1200px 700px at 80% -10%, #f0ede5 0%, transparent 60%),
+              radial-gradient(900px 500px at -10% 110%, #e8e2d7 0%, transparent 55%),
+              var(--paper);
+  background-attachment: fixed;
+  font-size:13px; line-height:1.45;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  transition: background .3s ease, color .3s ease;
+}
+[data-theme="dark"] body {
+  background: radial-gradient(1200px 700px at 80% -10%, #3e3a30 0%, transparent 60%),
+              radial-gradient(900px 500px at -10% 110%, #333028 0%, transparent 55%),
+              var(--paper);
+}
+.app { min-height:100vh; min-height:100dvh; display:grid; grid-template-columns: var(--sidebar-w) 1fr; }
+
+/* skip link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 8px 16px;
+  z-index: 300;
+  border-radius: 4px;
+  transition: top 0.2s;
+}
+.skip-link:focus { top: 10px; }
+
+/* ── SIDEBAR ── */
+aside { border-right:1px solid var(--rule); background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%); display:flex; flex-direction:column; position:sticky; top:0; height:100vh; height:100dvh; z-index:10; }
+.brand { padding: 20px 22px 18px; border-bottom:1px solid var(--rule); display:grid; grid-template-columns: auto 1fr auto; align-items:center; gap:12px; }
+.mark { width:24px; height:24px; position:relative; border:1.25px solid var(--ink); display:grid; place-items:center; background:var(--paper); flex-shrink:0; }
+.mark::before { content:""; width:8px; height:8px; background:var(--accent); box-shadow: 0 0 0 2.5px var(--paper); }
+.mark::after  { content:""; position:absolute; top:-4px; left:-4px; border-top:1px solid var(--ink); border-left:1px solid var(--ink); width:5px; height:5px; }
+.wordmark { font-weight:700; font-size:12.5px; letter-spacing:.04em; text-transform:uppercase; }
+.wordmark .slash { color:var(--accent); font-weight:500; margin:0 1px }
+.wordmark small { display:block; font-weight:400; font-size:9.5px; letter-spacing:.18em; color:var(--mid); margin-top:2px; }
+.ver { font-size:9px; letter-spacing:.12em; color:var(--mid); border:1px solid var(--rule); padding:2px 5px; flex-shrink:0; }
+.theme-toggle { width:44px; height:44px; border:1px solid var(--rule); background:var(--paper-2); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:18px; color:var(--ink-2); margin-left:4px; flex-shrink:0; transition: all .15s; }
+.theme-toggle:hover { border-color:var(--accent); color:var(--accent); }
+
+.find { margin: 14px 14px 6px; border:1px solid var(--rule); background:var(--paper); display:flex; align-items:center; gap:8px; padding:7px 10px; font-size:11.5px; }
+.find .find-icon { color:var(--mid); font-size:13px; }
+.find input { flex:1; border:none; background:transparent; outline:none; font:inherit; font-size:11.5px; color:var(--ink); min-width:0; }
+.find input::placeholder { color:var(--mid); }
+.find .kbd { margin-left:auto; display:inline-flex; gap:2px; }
+.kbd span { border:1px solid var(--rule); background:linear-gradient(180deg,var(--paper),var(--paper-2)); padding:1px 5px; border-radius:2px; font-size:9.5px; color:var(--ink-2); box-shadow: 0 1px 0 var(--rule); }
+
+.nav-title { padding: 18px 22px 8px; font-size:9.5px; letter-spacing:.22em; color:var(--mid); display:flex; justify-content:space-between; }
+nav { flex:1; display:flex; flex-direction:column; overflow-y:auto; }
+.nav-list { display:flex; flex-direction:column; }
+.nav-item { display:grid; grid-template-columns: 28px 1fr auto; align-items:center; gap:0; padding: 8px 22px; color:var(--ink-2); text-decoration:none; font-size:12px; letter-spacing:.02em; border-left:2px solid transparent; position:relative; transition: background .12s; cursor:pointer; }
+.nav-item .idx { font-size:9.5px; color:var(--mid); letter-spacing:.1em; }
+.nav-item .lbl { text-transform:lowercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.nav-item .meta { font-size:9.5px; color:var(--mid); border:1px solid var(--rule); padding:1px 5px; background:var(--paper); flex-shrink:0; margin-left:8px; }
+.nav-item:hover { background: var(--accent-soft-2) }
+.nav-item.active { background: var(--paper); color:var(--ink); border-left-color: var(--accent); font-weight:600; }
+.nav-item.active::after { content:""; position:absolute; right:18px; top:50%; transform:translateY(-50%); width:5px; height:5px; background:var(--accent); }
+.nav-item.active .idx { color:var(--accent) }
+.nav-item[aria-current="page"] { /* already .active */ }
+
+.runtime { margin: 8px 14px 14px; border:1px solid var(--rule); background:var(--paper); padding:12px 12px 10px; flex-shrink:0; }
+.runtime h4 { font-size:9.5px; letter-spacing:.2em; color:var(--mid); font-weight:500; margin-bottom:8px; display:flex; justify-content:space-between; }
+.runtime .row { display:flex; justify-content:space-between; align-items:baseline; font-size:11px; color:var(--ink-2); padding:3px 0; }
+.runtime .row b { font-weight:600; color:var(--ink) }
+.runtime .bar { height:3px; background:var(--rule-2); margin-top:8px; position:relative; overflow:hidden; }
+.runtime .bar-fill { position:absolute; top:0; left:0; right:0; bottom:0; background:var(--ink); }
+.runtime .bar-fill.warn { background:var(--accent); left:auto; right:0; width:22%; }
+
+.op { border-top:1px solid var(--rule); padding:12px 22px; display:grid; grid-template-columns:24px 1fr auto; align-items:center; gap:10px; flex-shrink:0; }
+.avatar { width:24px; height:24px; border:1px solid var(--ink); background: repeating-linear-gradient(45deg, var(--ink) 0 1px, transparent 1px 4px), var(--paper); position:relative; flex-shrink:0; }
+.avatar::after { content:""; position:absolute; right:-3px; bottom:-3px; width:7px; height:7px; background:var(--signal); border:1.5px solid var(--paper); }
+.op .who { font-size:11px; line-height:1.3; min-width:0; }
+.op .who small { display:block; color:var(--mid); font-size:9.5px; letter-spacing:.1em }
+.op .out { font-size:9.5px; color:var(--mid); letter-spacing:.1em; border:1px solid var(--rule); padding:2px 5px; flex-shrink:0; cursor:pointer; }
+
+/* ── MAIN & HEADER ── */
+main { min-width:0; display:flex; flex-direction:column; }
+header { border-bottom:1px solid var(--rule); background: linear-gradient(180deg, var(--paper) 0%, var(--paper-98) 100%); padding: 16px 28px 14px; display:grid; grid-template-columns: 1fr auto; align-items:end; gap:24px; position:sticky; top:0; z-index:5; }
+.crumbs { font-size:10px; letter-spacing:.18em; color:var(--mid); text-transform:uppercase; display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
+.crumbs .live { display:inline-flex; align-items:center; gap:5px; color:var(--ink); }
+.crumbs .live i { width:6px; height:6px; background:var(--accent); display:inline-block; box-shadow: 0 0 0 3px var(--accent-soft); }
+h1 { font-size:28px; font-weight:700; letter-spacing:-.01em; line-height:1; color:var(--ink); display:flex; flex-direction:column; align-items:flex-start; }
+h1 .of { color:var(--mid); font-weight:300; font-size:.42em; letter-spacing:.04em; margin-top:4px; }
+
+.topbar-right { display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+.telemetry { display:grid; grid-auto-flow:column; gap:0; border:1px solid var(--rule); background:var(--paper); }
+.telemetry div { padding:8px 14px; border-right:1px solid var(--rule); font-size:10px; letter-spacing:.12em; color:var(--mid); display:flex; flex-direction:column; gap:2px; line-height:1; }
+.telemetry div:last-child { border-right:none }
+.telemetry b { color:var(--ink); font-size:12px; font-weight:600; letter-spacing:.02em; }
+
+/* ── BUTTONS ── */
+.btn { font: inherit; cursor:pointer; display:inline-flex; align-items:center; gap:10px; border:1px solid var(--rule); background:var(--paper); color:var(--ink); padding:9px 14px; font-size:11.5px; letter-spacing:.04em; text-decoration:none; box-shadow: var(--shadow); position:relative; transition: background .12s; white-space:nowrap; touch-action:manipulation; }
+.btn:hover { background: var(--accent-soft-2) }
+.btn:active { transform:translateY(1px) }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn .k { font-size:9px; letter-spacing:.12em; color:var(--mid); border-left:1px solid var(--rule); padding-left:10px; margin-left:4px; }
+.btn.primary { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.btn.primary:hover { background:#4d4a3e; }
+.btn.primary .k { color:#b8b3a6; border-left-color: #4d4a3e; }
+.btn.primary::before { content:""; width:6px; height:6px; background:var(--accent); }
+.btn.danger { border-color:var(--danger); color:var(--danger); }
+.btn.danger:hover { background:rgba(197,48,48,0.10); }
+
+/* ── CANVAS ── */
+.canvas { padding: 28px 28px 40px; position:relative; background: radial-gradient(circle at 1px 1px, rgba(43,42,36,0.08) 1px, transparent 1.5px) 0 0 / 22px 22px; }
+.canvas::before, .canvas::after { content:""; position:absolute; width:18px; height:18px; border:1px solid var(--ink); pointer-events:none; }
+.canvas::before { top:14px; left:14px; border-right:none; border-bottom:none }
+.canvas::after  { top:14px; right:14px; border-left:none; border-bottom:none }
+
+/* ── SECTIONS ── */
+.section-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px; }
+.section-head h2 { font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; color:var(--ink-2); display:flex; align-items:center; gap:10px; }
+.section-head h2 .num { color:var(--accent); font-weight:500; }
+
+/* ── FORMS ── */
+.form-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px 20px; margin-bottom: 20px; }
+.form-group { display:flex; flex-direction:column; gap:6px; }
+.form-group.full-width { grid-column: 1 / -1; }
+.form-group label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--mid); font-weight: 500; display:flex; align-items:center; gap:8px; }
+.form-group label .hint { font-size: 9px; letter-spacing: .08em; color: var(--mid); border: 1px solid var(--rule); padding: 1px 5px; background: var(--paper-2); text-transform: none; }
+.form-group input, .form-group select, .form-group textarea { font: inherit; font-size: 13px; border: 1px solid var(--rule); background: var(--paper); padding: 10px 12px; color: var(--ink); outline: none; width: 100%; transition: border-color .15s, box-shadow .15s; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.form-group input::placeholder { color: var(--mid); opacity: .6; }
+.form-group input[type="number"] { font-variant-numeric: tabular-nums; }
+.form-group select { cursor: pointer; -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23555' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+[data-theme="dark"] .form-group select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23aaa' stroke-width='1.5'/%3E%3C/svg%3E"); }
+
+/* Toggle switch */
+.toggle-wrap { display:flex; align-items:center; gap: 10px; }
+.toggle-switch { position: relative; width: 36px; height: 20px; cursor: pointer; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; position:absolute; }
+.toggle-switch .track { position: absolute; top:0; left:0; right:0; bottom:0; background: var(--rule-2); border-radius: 20px; transition: background .2s; }
+.toggle-switch .track::after { content: ""; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; background: var(--paper); border-radius: 50%; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+.toggle-switch input:checked + .track { background: var(--accent); }
+.toggle-switch input:checked + .track::after { transform: translateX(16px); }
+
+.slider-wrap { display:flex; align-items:center; gap: 12px; }
+.slider-wrap input[type="range"] { flex: 1; -webkit-appearance: none; appearance: none; height: 4px; background: var(--rule-2); border-radius: 2px; outline: none; }
+.slider-wrap input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid var(--paper); cursor: pointer; box-shadow: 0 0 0 2px var(--accent-soft); }
+.slider-wrap input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid var(--paper); cursor: pointer; }
+.slider-wrap .slider-val { font-size: 12px; font-weight: 600; color: var(--accent); min-width: 40px; text-align: right; }
+
+/* ── CARDS ── */
+.stats { display:grid; grid-template-columns: repeat(3, 1fr); gap:0; border:1px solid var(--rule); background:var(--paper); box-shadow: var(--shadow); position:relative; }
+.card { padding: 22px 22px 18px; border-right:1px solid var(--rule); position:relative; display:flex; flex-direction:column; min-height: 140px; }
+.card:last-child { border-right:none }
+.card::before, .card::after { content:""; position:absolute; width:10px; height:10px; border:1px solid var(--ink-2); opacity:.7; pointer-events:none; }
+.card::before { top:8px; left:8px; border-right:none; border-bottom:none }
+.card::after  { bottom:8px; right:8px; border-left:none; border-top:none }
+.card .lbl { font-size:10px; letter-spacing:.2em; color:var(--mid); text-transform:uppercase; display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.card .lbl .tag { font-size:9px; letter-spacing:.14em; border:1px solid var(--rule); padding:2px 6px; color:var(--ink-2); background:var(--paper-2); }
+.card .val { font-size:36px; font-weight:600; letter-spacing:-.02em; line-height:1; color:var(--ink); display:flex; align-items:baseline; gap:8px; }
+.card .val .u { font-size:14px; font-weight:400; color:var(--mid); letter-spacing:.04em; }
+.card .delta { font-size:11px; letter-spacing:.03em; display:flex; align-items:center; gap:8px; margin-top:10px; color:var(--ink-2); }
+.delta .pill { display:inline-flex; align-items:center; gap:5px; border:1px solid var(--rule); background:var(--paper-2); padding:2px 7px; font-size:10.5px; font-weight:600; }
+.delta .pill.up     { color: var(--signal); border-color: var(--signal); }
+.delta .pill.down   { color: var(--danger); border-color: var(--danger); }
+.delta .pill.neutral{ color: var(--mid);    border-color: var(--rule); }
+.delta .pill.good   { color: var(--signal); border-color: var(--signal); }
+.delta .pill.warn   { color: var(--warn);   border-color: var(--warn);   }
+.delta .pill.bad    { color: var(--danger); border-color: var(--danger); }
+.delta .pill::before { content:""; width:0; height:0; border-style:solid; }
+.delta .pill.up::before,   .delta .pill.good::before { border-width:0 4px 5px 4px; border-color:transparent transparent currentColor transparent }
+.delta .pill.down::before, .delta .pill.bad::before  { border-width:5px 4px 0 4px; border-color: currentColor transparent transparent transparent }
+.delta .pill.neutral::before, .delta .pill.warn::before { border:none; width:8px; height:1px; background:currentColor; }
+.delta .since { color:var(--mid); font-size:10px; letter-spacing:.06em }
+
+/* ── TABLE ── */
+.tbl-wrap { margin-top:24px; border:1px solid var(--rule); background:var(--paper); box-shadow: var(--shadow); }
+.tbl-head { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--rule); background:linear-gradient(180deg,var(--paper),var(--paper-2)); flex-wrap:wrap; gap:10px; }
+.tbl-head .ttl { font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; display:flex; align-items:center; gap:10px; }
+.tbl-head .ttl .num { color:var(--accent) }
+.tbl-head .ttl .ct { color:var(--mid); font-weight:400; letter-spacing:.12em; border-left:1px solid var(--rule); padding-left:10px; margin-left:4px; }
+.filters { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.chip { font: inherit; font-size:10px; letter-spacing:.12em; text-transform:uppercase; border:1px solid var(--rule); padding:5px 9px; background:var(--paper); display:inline-flex; align-items:center; gap:6px; color:var(--ink-2); cursor:pointer; transition: all .12s; }
+.chip.on, .chip:hover, .chip:focus-visible { background:var(--ink); color:var(--paper); border-color:var(--ink); outline:2px solid var(--accent); outline-offset:2px; }
+.chip i { width:5px; height:5px; background:currentColor; display:inline-block; }
+.chip.del { color: var(--danger); border-color: var(--danger); }
+.chip.del:hover, .chip.del:focus-visible { background: var(--danger); color: var(--paper); }
+table { width:100%; border-collapse:collapse; font-size:12px; }
+caption { font-size:10px; text-align:left; padding:8px 18px; color:var(--mid); }
+thead th { font-weight:500; font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--mid); text-align:left; padding:10px 18px; border-bottom:1px solid var(--rule); background:var(--paper-2); position:relative; cursor: pointer; -webkit-user-select: none; -moz-user-select: none; user-select: none; white-space: nowrap; }
+thead th:hover { color: var(--ink); background: var(--accent-soft-2); }
+thead th:focus-visible { outline:2px solid var(--accent); outline-offset:-2px; }
+thead th.sortable::after { content: " \2195"; font-size: 8px; opacity: .4; }
+thead th.sort-asc::after { content: " \2191"; opacity: 1; color: var(--accent); }
+thead th.sort-desc::after { content: " \2193"; opacity: 1; color: var(--accent); }
+thead th + th::before { content:""; position:absolute; left:0; top:25%; bottom:25%; border-left:1px solid var(--rule-2); }
+thead th.num, tbody td.num { text-align:right; font-variant-numeric:tabular-nums }
+tbody td { padding:14px 18px; border-bottom:1px solid var(--rule-2); color:var(--ink-2); vertical-align:middle; }
+tbody tr:last-child td { border-bottom:none }
+tbody tr:hover td { background: var(--accent-soft-2) }
+.id { display:inline-flex; align-items:center; gap:10px; }
+.id .dot { width:8px; height:8px; background:var(--ink); display:inline-block; flex-shrink:0; }
+.id .dot.red    { background:var(--danger) }
+.id .dot.green  { background:var(--signal) }
+.id .dot.amber  { background:var(--warn) }
+.id .dot.gray   { background:var(--mid) }
+.id b { font-weight:600; color:var(--ink); letter-spacing:.01em }
+.id small { display:block; color:var(--mid); font-size:10px; letter-spacing:.08em; margin-top:2px }
+
+/* ── EMPTY STATE ── */
+.empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 60px 40px; text-align: center; gap: 16px; border: 1px dashed var(--rule); background: var(--paper); }
+.empty-state .empty-icon { width: 48px; height: 48px; border: 2px dashed var(--rule); display: grid; place-items: center; font-size: 20px; color: var(--mid); }
+.empty-state h3 { font-size: 14px; letter-spacing: .1em; color: var(--ink-2); font-weight: 600; }
+.empty-state p { font-size: 12px; color: var(--mid); max-width: 320px; line-height: 1.6; }
+
+/* ── PAGINATION ── */
+.pagination { display:flex; align-items:center; justify-content:center; gap: 4px; padding: 14px 18px; border-top: 1px solid var(--rule); }
+.pagination button { font: inherit; font-size: 11px; border: 1px solid var(--rule); background: var(--paper); color: var(--ink-2); padding: 5px 10px; cursor: pointer; min-width: 44px; min-height:44px; text-align: center; transition: all .12s; }
+.pagination button:hover:not(:disabled) { background: var(--accent-soft-2); border-color: var(--accent); color: var(--ink); }
+.pagination button:disabled { opacity: .4; cursor: not-allowed; }
+.pagination button.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.pagination .page-info { font-size: 10px; color: var(--mid); letter-spacing: .1em; margin: 0 12px; }
+
+/* ── TOASTS ── */
+.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast { pointer-events: all; display: flex; align-items: center; gap: 12px; padding: 12px 18px; min-width: 280px; max-width: 420px; border: 1px solid var(--rule); background: var(--paper); box-shadow: var(--shadow-lg); font-size: 12px; color: var(--ink); animation: toastIn .3s ease forwards; position: relative; overflow: hidden; }
+.toast.toast-out { animation: toastOut .3s ease forwards; }
+.toast.success { border-left: 3px solid var(--signal); }
+.toast.error   { border-left: 3px solid var(--danger); }
+.toast.info    { border-left: 3px solid var(--accent-2); }
+.toast .toast-icon { font-size: 14px; flex-shrink: 0; }
+.toast .toast-msg { flex: 1; line-height: 1.4; }
+.toast .toast-close { cursor: pointer; color: var(--mid); font-size: 16px; line-height: 1; padding: 4px; min-width:44px; min-height:44px; display:flex; align-items:center; justify-content:center; }
+.toast .toast-close:hover { color: var(--ink); }
+.toast .toast-bar { position: absolute; bottom: 0; left: 0; height: 2px; background: var(--accent-soft); }
+@keyframes toastIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(20px); } }
+@keyframes shrink { from { width: 100%; } to { width: 0%; } }
+
+/* ── MODAL ── */
+.modal-overlay { position: fixed; top:0; left:0; right:0; bottom:0; z-index: 200; background: rgba(43,42,36,0.55); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--paper); border: 1px solid var(--rule); box-shadow: var(--shadow-lg); width: 90%; max-width: 520px; max-height: 85vh; display: flex; flex-direction: column; transform: translateY(-20px) scale(0.97); transition: transform .25s ease; }
+.modal-overlay.open .modal { transform: translateY(0) scale(1); }
+.modal-header { padding: 18px 22px 14px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; justify-content: space-between; }
+.modal-header h3 { font-size: 13px; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; color: var(--ink); }
+.modal-close { cursor: pointer; color: var(--mid); font-size: 18px; line-height: 1; padding: 4px; min-width:44px; min-height:44px; display:flex; align-items:center; justify-content:center; border: none; background: none; }
+.modal-close:hover { color: var(--ink); }
+.modal-body { padding: 22px; overflow-y: auto; font-size: 12px; line-height: 1.6; color: var(--ink-2); }
+.modal-footer { padding: 14px 22px; border-top: 1px solid var(--rule); display: flex; justify-content: flex-end; gap: 10px; }
+
+/* ── SETTINGS ── */
+.settings-section { margin-bottom: 32px; }
+.settings-section h3 { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.settings-section h3 .num { color: var(--accent); font-weight: 500; }
+.settings-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border: 1px solid var(--rule); background: var(--paper); margin-bottom: -1px; }
+.settings-row label { font-size: 12px; color: var(--ink-2); }
+.settings-row .desc { font-size: 10px; color: var(--mid); margin-top: 4px; letter-spacing: .04em; }
+.settings-row input, .settings-row select { font: inherit; font-size: 13px; border: 1px solid var(--rule); background: var(--paper); padding: 8px 10px; color: var(--ink); outline: none; }
+.settings-row input:focus, .settings-row select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+/* ── HELP ── */
+.help-block { border: 1px solid var(--rule); background: var(--paper); padding: 22px; margin-bottom: 20px; }
+.help-block h3 { font-size: 12px; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.help-block h3 .num { color: var(--accent); font-weight: 500; }
+.help-block p { font-size: 12px; color: var(--ink-2); line-height: 1.7; margin-bottom: 8px; }
+.help-block ul { margin: 8px 0; padding-left: 20px; }
+.help-block li { font-size: 12px; color: var(--ink-2); line-height: 1.7; margin-bottom: 4px; }
+.help-block .fee-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--rule-2); font-size: 12px; }
+.help-block .fee-row:last-child { border-bottom: none; }
+.help-block .fee-row b { color: var(--ink); font-weight: 600; }
+.help-block .fee-row span { color: var(--ink-2); }
+
+/* ── FOOTER ── */
+.canvas-foot { position:relative }
+.canvas-foot::before, .canvas-foot::after { content:""; position:absolute; width:18px; height:18px; border:1px solid var(--ink); pointer-events:none; }
+.canvas-foot::before { bottom:14px; left:14px; border-right:none; border-top:none }
+.canvas-foot::after  { bottom:14px; right:14px; border-left:none; border-top:none }
+.footstrip { margin-top:22px; display:flex; justify-content:space-between; align-items:center; font-size:10px; letter-spacing:.14em; color:var(--mid); text-transform:uppercase; padding: 12px 4px 4px; flex-wrap:wrap; gap:8px; }
+.footstrip .l, .footstrip .r { display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+.footstrip .sep { width:24px; border-top:1px solid var(--rule) }
+.footstrip b { color:var(--ink); font-weight:500; letter-spacing:.06em }
+
+/* ── PRINT ── */
+@media print {
+  .sidebar-toggle, aside, .theme-toggle, .find, .op, .btn, .pagination, .nav-item, .toast-container { display: none !important; }
+  .app { grid-template-columns: 1fr !important; }
+  body { background: white !important; color: black !important; }
+  .canvas { background: none !important; padding: 20px !important; }
+  .stats, .tbl-wrap, .form-grid, .chart-wrap, .help-block, .settings-row { box-shadow: none !important; border: 1px solid #ccc !important; }
+  .card { border-right: 1px solid #ccc !important; break-inside: avoid; page-break-inside: avoid; }
+  header { position: static !important; background: white !important; border-bottom: 2px solid #333 !important; }
+  h1 { font-size: 24px !important; }
+  .footstrip { border-top: 2px solid #333; margin-top: 30px; }
+}
+
+/* ── RESPONSIVE ── */
+.sidebar-toggle { display:none; position:fixed; top:12px; left:12px; z-index:100; width:44px; height:44px; border:1px solid var(--rule); background:var(--paper); align-items:center; justify-content:center; cursor:pointer; font-size:16px; color:var(--ink); }
+@media (max-width: 1024px) {
+  .app { grid-template-columns: 1fr; }
+  aside { position:fixed; left:0; top:0; height:100vh; height:100dvh; transform: translateX(-100%); transition: transform .25s ease; }
+  aside.open { transform: translateX(0); }
+  .sidebar-toggle { display:flex; }
+  .stats { grid-template-columns: 1fr; }
+  .card { border-right:none; border-bottom:1px solid var(--rule); }
+  .card:last-child { border-bottom:none; }
+  header { padding-left: 56px; }
+  h1 { font-size:22px; }
+}
+@media (max-width: 640px) {
+  .canvas { padding: 20px 16px 32px; }
+  header { padding: 12px 16px 12px 56px; }
+  .telemetry { display:none; }
+  .topbar-right { gap:8px; }
+  .btn { padding:7px 10px; font-size:10.5px; min-height:44px; }
+  .btn .k { display:none; }
+  table { font-size:11px; }
+  tbody td, thead th { padding:10px 12px; }
+  .card .val { font-size:28px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .modal { width: 95%; max-height: 90vh; }
+  .toast-container { left: 16px; right: 16px; bottom: 16px; }
+  .toast { min-width: auto; max-width: none; }
+}
+
+/* ── VIEW SYSTEM ── */
+.view { display: none; }
+.view.active { display: block; }
+.hidden { display:none !important; }
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  .toast, .modal, .modal-overlay, * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="toggle menu" aria-expanded="false">&#9776;</button>
+<div class="app">
+  <aside id="sidebar">
+    <div class="brand">
+      <div class="mark" aria-hidden="true"></div>
+      <div class="wordmark"><span>handmade</span><span class="slash">/</span><span>pricing</span><small>calculator for makers</small></div>
+      <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
+        <div class="ver">v1.7</div>
+        <button class="theme-toggle" onclick="toggleTheme()" title="toggle dark mode" aria-label="toggle dark mode"></button>
+      </div>
+    </div>
+    <div class="find"><span class="find-icon" aria-hidden="true">&#8981;</span><input type="text" id="search-input" placeholder="search products..." autocomplete="off" aria-label="Search products"><span class="kbd"><span>&#8984;</span><span>K</span></span></div>
+    <div class="nav-title"><span>&#8212;&#8212; menu</span></div>
+    <nav>
+      <div class="nav-list" id="nav-list">
+        <a class="nav-item active" href="#" data-view="main" onclick="navigateTo('main', event)" aria-current="page"><span class="idx">01</span><span class="lbl">calculator</span></a>
+        <a class="nav-item" href="#" data-view="products" onclick="navigateTo('products', event)"><span class="idx">02</span><span class="lbl">products</span><span class="meta" id="nav-count">0</span></a>
+        <a class="nav-item" href="#" data-view="compare" onclick="navigateTo('compare', event)"><span class="idx">03</span><span class="lbl">compare</span></a>
+        <a class="nav-item" href="#" data-view="analytics" onclick="navigateTo('analytics', event)"><span class="idx">04</span><span class="lbl">analytics</span></a>
+        <a class="nav-item" href="#" data-view="settings" onclick="navigateTo('settings', event)"><span class="idx">05</span><span class="lbl">settings</span></a>
+        <a class="nav-item" href="#" data-view="help" onclick="navigateTo('help', event)"><span class="idx">06</span><span class="lbl">help</span></a>
+      </div>
+      <div class="runtime" id="runtime-block" aria-live="polite">
+        <h4><span>catalog</span><span style="color:var(--signal)">live</span></h4>
+        <div id="runtime-rows">
+          <div class="row"><span>products</span><b id="rt-count">0</b></div>
+          <div class="row"><span>health</span><b id="rt-status">--</b></div>
+        </div>
+        <div class="bar" aria-hidden="true"><div class="bar-fill" id="rt-bar-1" style="width:0%"></div></div>
+        <div class="bar" aria-hidden="true" style="margin-top:4px"><div class="bar-fill warn" id="rt-bar-2" style="width:0%"></div></div>
+      </div>
+    </nav>
+    <div class="op">
+      <div class="avatar" aria-hidden="true"></div>
+      <div class="who"><span>maker</span><small>pricing active</small></div>
+      <button class="out" id="op-btn" onclick="navigateTo('products')" style="background:none;border:1px solid var(--rule);cursor:pointer;font:inherit;">0 saved</button>
+    </div>
+  </aside>
+
+  <main id="main-content">
+    <header>
+      <div>
+        <div class="crumbs"><span>app</span><span>/</span><span id="crumb-view">calculator</span></div>
+        <h1><span id="page-title">Pricing Calculator</span> <span class="of">&#8212; <span id="page-subtitle">price your handmade goods</span></span></h1>
+      </div>
+      <div class="topbar-right">
+        <div class="telemetry" aria-hidden="true">
+          <div><span>target wage</span><b id="tel-wage">$20/hr</b></div>
+          <div><span>channel</span><b id="tel-channel">Etsy</b></div>
+        </div>
+        <div id="topbar-buttons">
+          <button class="btn" type="button" onclick="exportToCSV()">export csv<span class="k">E</span></button>
+          <button class="btn" type="button" onclick="window.print()">print<span class="k">P</span></button>
+          <button class="btn primary" id="save-button" type="button" onclick="saveProduct()">save<span class="k">S</span></button>
+        </div>
+      </div>
+    </header>
+
+    <section class="canvas" id="canvas">
+
+      <!-- VIEW 01 — CALCULATOR -->
+      <div class="view active" id="view-main">
+        <div class="section-head">
+          <h2><span class="num">§ 01</span>pricing calculator</h2>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="calc-name">PRODUCT NAME</label>
+            <input type="text" id="calc-name" placeholder="e.g., Silver Moon Pendant">
+          </div>
+          <div class="form-group">
+            <label for="calc-materialCost">MATERIAL COST ($)</label>
+            <input type="number" id="calc-materialCost" value="0" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label for="calc-batchSize">BATCH SIZE</label>
+            <input type="number" id="calc-batchSize" value="1" min="1" step="1">
+            <span class="hint" id="batch-hint">units per batch</span>
+          </div>
+          <div class="form-group">
+            <label for="calc-laborHours">LABOR HOURS</label>
+            <input type="number" id="calc-laborHours" value="0" min="0" step="0.25">
+          </div>
+          <div class="form-group">
+            <label for="calc-hourlyWage">HOURLY WAGE ($/HR)</label>
+            <input type="number" id="calc-hourlyWage" value="20" min="0" step="0.5">
+          </div>
+          <div class="form-group">
+            <label for="calc-overhead">OVERHEAD ($)</label>
+            <input type="number" id="calc-overhead" value="2" min="0" step="0.5">
+          </div>
+          <div class="form-group">
+            <label for="calc-packaging">PACKAGING ($)</label>
+            <input type="number" id="calc-packaging" value="1.5" min="0" step="0.5">
+          </div>
+          <div class="form-group">
+            <label for="calc-channel">SELLING CHANNEL</label>
+            <select id="calc-channel">
+              <option>Etsy</option>
+              <option>Shopify</option>
+              <option>Craft Fair</option>
+              <option>Wholesale</option>
+            </select>
+          </div>
+          <div class="form-group hidden" id="calc-craftfair-fields">
+            <label for="calc-boothFee">BOOTH FEE ($)</label>
+            <input type="number" id="calc-boothFee" value="100" min="0" step="1">
+          </div>
+          <div class="form-group hidden" id="calc-craftfair-fields-units">
+            <label for="calc-unitsSold">EXPECTED UNITS SOLD</label>
+            <input type="number" id="calc-unitsSold" value="1" min="1" step="1">
+          </div>
+          <div class="form-group hidden" id="calc-wholesale-fields">
+            <label for="calc-wholesaleMultiplier">WHOLESALE MULTIPLIER <span id="calc-wholesaleMultiplier-label" style="color:var(--accent);font-weight:600;">0.5x</span></label>
+            <input type="range" id="calc-wholesaleMultiplier" value="0.5" min="0.3" max="0.7" step="0.05" aria-valuemin="0.3" aria-valuemax="0.7" aria-valuenow="0.5" aria-valuetext="0.5×">
+          </div>
+          <div class="form-group">
+            <label for="calc-targetMargin">TARGET MARGIN % <span id="calc-targetMargin-label" style="color:var(--accent);font-weight:600;">50%</span></label>
+            <input type="range" id="calc-targetMargin" value="50" min="10" max="80" step="1" aria-valuemin="10" aria-valuemax="80" aria-valuenow="50" aria-valuetext="50%">
+          </div>
+          <div class="form-group">
+            <label for="calc-sellingPrice">YOUR SELLING PRICE ($)</label>
+            <input type="number" id="calc-sellingPrice" value="0" min="0" step="0.01">
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;margin:20px 0;">
+          <button class="btn primary" type="button" id="save-product-btn" onclick="saveProduct()"><span style="width:6px;height:6px;background:var(--accent);display:inline-block;border-radius:50%;margin-right:6px;"></span>Save Product<span class="k">S</span></button>
+          <button class="btn" type="button" onclick="resetCalculator()">Reset</button>
+          <button class="btn" type="button" onclick="exportToCSV()">Export CSV<span class="k">E</span></button>
+          <button class="btn" type="button" onclick="window.print()">Print<span class="k">P</span></button>
+        </div>
+
+        <div class="stats" style="margin-bottom:20px;">
+          <div class="card">
+            <div class="lbl"><span>SUGGESTED PRICE</span><span class="tag">TARGET MARGIN</span></div>
+            <div class="val" id="res-suggestedPrice">$0.00</div>
+            <div class="delta"><span class="pill neutral">formula-based</span></div>
+          </div>
+          <div class="card" id="trueWageCard">
+            <div class="lbl"><span>TRUE HOURLY WAGE</span><span class="tag">ACTUAL</span></div>
+            <div class="val" id="res-trueWage">$0.00/hr</div>
+            <div class="delta" id="res-trueWage-delta"><span class="pill neutral">vs target</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>PROFIT MARGIN</span><span class="tag">%</span></div>
+            <div class="val" id="res-margin">0.0%</div>
+            <div class="delta"><span class="pill neutral">of selling price</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>TOTAL COST / UNIT</span><span class="tag">COST</span></div>
+            <div class="val" id="res-totalCost">$0.00</div>
+            <div class="delta"><span class="pill neutral">per unit</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>MARKUP</span><span class="tag">%</span></div>
+            <div class="val" id="res-markup">0.0%</div>
+            <div class="delta"><span class="pill neutral">over cost</span></div>
+          </div>
+        </div>
+
+        <div id="wage-reveal-card" style="margin-bottom:20px;padding:20px;border:1px solid var(--rule);background:var(--paper-2);border-radius:6px;text-align:center;">
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--mid);margin-bottom:8px;">Wage Health Check</div>
+          <div id="wage-verdict-text" style="font-size:18px;font-weight:700;line-height:1.4;">Enter labor and selling price to see your true hourly wage</div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="lbl"><span>BREAK-EVEN PRICE</span><span class="tag">MINIMUM</span></div>
+          <div class="val" id="res-breakEven">$0.00</div>
+          <div class="delta"><span class="pill neutral">covers all costs, $0 profit</span></div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--mid);margin-bottom:8px;">Cost Breakdown</div>
+          <div id="cost-breakdown-bar">
+            <div style="display:flex;height:36px;border:1px solid var(--rule);overflow:hidden;">
+              <div style="width:100%;height:100%;background:var(--paper);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--mid);">Enter costs to see breakdown</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="wholesale-display" class="hidden" style="margin-bottom:20px;">
+          <div class="card">
+            <div class="lbl"><span>WHOLESALE PRICE</span><span class="tag">WHOLESALE</span></div>
+            <div class="val" id="res-wholesalePrice">$0.00</div>
+            <div class="delta" id="res-wholesale-delta"><span class="pill neutral">of suggested price</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 02 — PRODUCTS -->
+      <div class="view" id="view-products">
+        <div class="section-head">
+          <h2><span class="num">§ 02</span>saved products</h2>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-head">
+            <div class="ttl"><span class="num">§ 02</span><span>products</span><span class="ct" id="products-count-label">0 total</span></div>
+            <div class="filters" id="products-filters">
+              <button class="chip on" data-filter="all" data-type="channel" onclick="filterProducts('channel','all')">all channels</button>
+              <button class="chip" data-filter="Etsy" data-type="channel" onclick="filterProducts('channel','Etsy')">Etsy</button>
+              <button class="chip" data-filter="Shopify" data-type="channel" onclick="filterProducts('channel','Shopify')">Shopify</button>
+              <button class="chip" data-filter="Craft Fair" data-type="channel" onclick="filterProducts('channel','Craft Fair')">Craft Fair</button>
+              <button class="chip" data-filter="Wholesale" data-type="channel" onclick="filterProducts('channel','Wholesale')">Wholesale</button>
+              <span style="width:8px"></span>
+              <button class="chip on" data-filter="all" data-type="health" onclick="filterProducts('health','all')">all health</button>
+              <button class="chip" data-filter="Strong" data-type="health" onclick="filterProducts('health','Strong')">Strong</button>
+              <button class="chip" data-filter="Fair" data-type="health" onclick="filterProducts('health','Fair')">Fair</button>
+              <button class="chip" data-filter="Underpriced" data-type="health" onclick="filterProducts('health','Underpriced')">Underpriced</button>
+              <span style="width:8px"></span>
+              <button class="chip del" onclick="deleteSelectedProducts()">Delete Selected</button>
+            </div>
+          </div>
+          <table>
+            <caption class="sr-only">Saved products table — sortable by column</caption>
+            <thead>
+              <tr>
+                <th scope="col" style="width:30px"><input type="checkbox" id="select-all-products" onclick="toggleSelectAllProducts()" aria-label="Select all products"></th>
+                <th scope="col" class="sortable" tabindex="0" data-sort="name">Product</th>
+                <th scope="col" class="sortable" tabindex="0" data-sort="channel">Channel</th>
+                <th scope="col" class="sortable num" tabindex="0" data-sort="totalCost">Cost/Unit</th>
+                <th scope="col" class="sortable num" tabindex="0" data-sort="sellingPrice">Price</th>
+                <th scope="col" class="sortable num" tabindex="0" data-sort="profitMargin">Margin %</th>
+                <th scope="col" class="sortable num" tabindex="0" data-sort="trueHourlyWage">True Wage</th>
+                <th scope="col" class="sortable" tabindex="0" data-sort="priceHealth">Health</th>
+                <th scope="col" class="sortable" tabindex="0" data-sort="savedAt">Date</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="products-tbody"></tbody>
+          </table>
+          <div class="pagination" id="products-pagination"></div>
+        </div>
+      </div>
+
+      <!-- VIEW 03 — COMPARE -->
+      <div class="view" id="view-compare">
+        <div class="section-head"><h2><span class="num">§ 03</span>compare scenarios</h2></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" id="compare-columns">
+          <!-- Generated by JS -->
+        </div>
+        <div style="display:flex;gap:10px;justify-content:center;margin:20px 0;">
+          <button class="btn primary" type="button" onclick="runCompare()">Compare Scenarios</button>
+          <button class="btn" type="button" onclick="resetCompare()">Reset Both</button>
+        </div>
+        <div id="compare-winner" style="display:none;border:1px solid var(--rule);padding:20px;background:var(--paper);text-align:center;">
+          <div id="compare-winner-text" style="font-size:18px;font-weight:600;"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px;" id="compare-results">
+          <div class="stats" id="compare-stats-a" style="display:none;"></div>
+          <div class="stats" id="compare-stats-b" style="display:none;"></div>
+        </div>
+      </div>
+
+      <!-- VIEW 04 — ANALYTICS -->
+      <div class="view" id="view-analytics">
+        <div class="section-head"><h2><span class="num">§ 04</span>analytics</h2></div>
+        <div class="stats" style="margin-bottom:24px;">
+          <div class="card"><div class="lbl"><span>AVG MARGIN</span><span class="tag">CATALOG</span></div><div class="val" id="stat-avgMargin">--</div></div>
+          <div class="card"><div class="lbl"><span>AVG HOURLY WAGE</span><span class="tag">CATALOG</span></div><div class="val" id="stat-avgWage">--</div></div>
+          <div class="card"><div class="lbl"><span>TOTAL PRODUCTS</span><span class="tag">COUNT</span></div><div class="val" id="stat-totalProducts">--</div></div>
+        </div>
+        <div class="stats" style="margin-bottom:24px;">
+          <div class="card"><div class="lbl"><span>STRONG</span><span class="tag" style="color:var(--signal);border-color:var(--signal);">HEALTHY</span></div><div class="val" style="color:var(--signal);" id="stat-strong">--</div></div>
+          <div class="card"><div class="lbl"><span>FAIR</span><span class="tag" style="color:var(--warn);border-color:var(--warn);">OK</span></div><div class="val" style="color:var(--warn);" id="stat-fair">--</div></div>
+          <div class="card"><div class="lbl"><span>UNDERPRICED</span><span class="tag" style="color:var(--danger);border-color:var(--danger);">AT RISK</span></div><div class="val" style="color:var(--danger);" id="stat-underpriced">--</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:24px;">
+          <div style="border:1px solid var(--rule);padding:20px;background:var(--paper);" id="bar-chart-container">
+            <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);margin-bottom:16px;"><span style="color:var(--accent);">§ 4.1</span> True Hourly Wage by Product</div>
+            <canvas id="chart-wage-bar" style="width:100%;height:280px;" role="img" aria-label="Bar chart of true hourly wage per product"></canvas>
+            <div id="chart-wage-bar-table" class="sr-only"></div>
+          </div>
+          <div style="border:1px solid var(--rule);padding:20px;background:var(--paper);" id="pie-chart-container">
+            <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);margin-bottom:16px;"><span style="color:var(--accent);">§ 4.2</span> Avg Cost Breakdown</div>
+            <canvas id="chart-cost-pie" style="width:100%;height:280px;" role="img" aria-label="Pie chart of average cost breakdown"></canvas>
+            <div id="chart-cost-pie-table" class="sr-only"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 05 — SETTINGS -->
+      <div class="view" id="view-settings">
+        <div class="section-head"><h2><span class="num">§ 05</span>settings</h2></div>
+        <div class="settings-section">
+          <h3><span class="num">§ 01</span>Default Values</h3>
+          <div class="settings-row">
+            <div><label for="set-targetHourlyWage">Target Hourly Wage ($)</label><div class="desc">Your desired pay rate per hour of labor</div></div>
+            <input type="number" id="set-targetHourlyWage" value="20" min="0" step="0.5" onchange="updateSetting('targetHourlyWage', this.value)">
+          </div>
+          <div class="settings-row">
+            <div><label for="set-defaultOverhead">Default Overhead per Item ($)</label><div class="desc">Default overhead cost applied to new products</div></div>
+            <input type="number" id="set-defaultOverhead" value="2" min="0" step="0.5" onchange="updateSetting('defaultOverhead', this.value)">
+          </div>
+          <div class="settings-row">
+            <div><label for="set-defaultPackaging">Default Packaging Cost ($)</label><div class="desc">Default packaging cost applied to new products</div></div>
+            <input type="number" id="set-defaultPackaging" value="1.5" min="0" step="0.5" onchange="updateSetting('defaultPackaging', this.value)">
+          </div>
+          <div class="settings-row">
+            <div><label for="set-defaultChannel">Default Selling Channel</label><div class="desc">Default channel for new products</div></div>
+            <select id="set-defaultChannel" onchange="updateSetting('defaultChannel', this.value)">
+              <option>Etsy</option><option>Shopify</option><option>Craft Fair</option><option>Wholesale</option>
+            </select>
+          </div>
+          <div class="settings-row">
+            <div><label for="set-defaultBoothFee">Default Craft Fair Booth Fee ($)</label><div class="desc">Default booth fee for craft fair products</div></div>
+            <input type="number" id="set-defaultBoothFee" value="100" min="0" step="10" onchange="updateSetting('defaultBoothFee', this.value)">
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3><span class="num">§ 02</span>Appearance</h3>
+          <div class="settings-row">
+            <div><label for="set-accentHue">Accent Hue (0-360)</label><div class="desc">Color theme hue</div></div>
+            <div class="slider-wrap" style="flex:0 0 200px;">
+              <input type="range" id="set-accentHue" min="0" max="360" value="32"
+                oninput="previewAccent(this.value)"
+                onchange="updateSetting('accentHue', parseInt(this.value))"
+                aria-valuemin="0" aria-valuemax="360" aria-valuenow="32"
+                aria-valuetext="32° (warm orange)">
+              <span class="slider-val" id="accentHue-val">32</span>
+            </div>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3><span class="num">§ 03</span>Data Management</h3>
+          <div class="settings-row">
+            <div><label>Export to JSON</label><div class="desc">Download all products and settings as JSON</div></div>
+            <button class="btn" onclick="exportToJSON()">Export JSON</button>
+          </div>
+          <div class="settings-row">
+            <div><label for="import-file">Import from JSON</label><div class="desc">Restore products and settings from JSON file</div></div>
+            <div style="display:flex;gap:8px;">
+              <input type="file" id="import-file" accept=".json" style="font-size:11px;padding:6px;">
+              <button class="btn" onclick="importFromJSON()">Import</button>
+            </div>
+          </div>
+          <div class="settings-row">
+            <div><label>Clear All Data</label><div class="desc">Delete all saved products and reset settings</div></div>
+            <button class="btn danger" onclick="confirmClearAll()">Clear All</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 06 — HELP -->
+      <div class="view" id="view-help">
+        <div class="section-head"><h2><span class="num">§ 06</span>help & reference</h2></div>
+        <div class="help-block">
+          <h3><span class="num">§ 01</span>How to Use</h3>
+          <p>The Handmade Pricing Calculator helps you price your handmade goods fairly and profitably.</p>
+          <ul>
+            <li><b>Enter your costs</b> — Material cost, labor hours, overhead, and packaging for each item.</li>
+            <li><b>Set your target</b> — Your desired hourly wage and target profit margin.</li>
+            <li><b>Choose your channel</b> — Different platforms charge different fees (Etsy, Shopify, Craft Fair, Wholesale).</li>
+            <li><b>Enter your selling price</b> — See your true hourly wage and whether you're meeting your target.</li>
+            <li><b>Save products</b> — Build a catalog for tracking and analysis.</li>
+          </ul>
+          <p><b>Important:</b> All your data is stored only on your computer. Nothing is sent to the internet. Back up regularly using the Export feature.</p>
+        </div>
+        <div class="help-block">
+          <h3><span class="num">§ 02</span>Formula Reference</h3>
+          <div class="fee-row"><b>Material Cost per Unit</b><span>materialCost / batchSize</span></div>
+          <div class="fee-row"><b>Booth Cost per Unit</b><span>boothFee / unitsSold (Craft Fair only)</span></div>
+          <div class="fee-row"><b>Total Cost</b><span>materialCostPerUnit + (laborHours x hourlyWage) + overhead + packaging + boothCostPerUnit</span></div>
+          <div class="fee-row"><b>Channel Fees</b><span>(sellingPrice x transaction%) + (sellingPrice x processing%) + processingFixed + listingFee</span></div>
+          <div class="fee-row"><b>Net Profit</b><span>sellingPrice - totalCost - channelFees</span></div>
+          <div class="fee-row"><b>Profit Margin %</b><span>(netProfit / sellingPrice) x 100</span></div>
+          <div class="fee-row"><b>True Hourly Wage</b><span>netProfit / laborHours</span></div>
+          <div class="fee-row"><b>Markup %</b><span>((sellingPrice - totalCost) / totalCost) x 100</span></div>
+          <div class="fee-row"><b>Break-Even Price</b><span>(totalCost + fixedChannelFees) / (1 - variableRate)</span></div>
+          <div class="fee-row"><b>Suggested Price</b><span>(totalCost + fixedChannelFees) / (1 - variableRate - targetMargin%)</span></div>
+          <div class="fee-row"><b>Wholesale Price</b><span>suggestedPrice x wholesaleMultiplier</span></div>
+        </div>
+        <div class="help-block">
+          <h3><span class="num">§ 03</span>Channel Fee Rates</h3>
+          <div class="fee-row"><b>Etsy</b><span>6.5% transaction + 3% processing + $0.25 fixed + $0.20 listing</span></div>
+          <div class="fee-row"><b>Shopify</b><span>0% transaction + 2.9% processing + $0.30 fixed</span></div>
+          <div class="fee-row"><b>Craft Fair</b><span>No platform fees (add booth fee separately)</span></div>
+          <div class="fee-row"><b>Wholesale</b><span>No platform fees (use multiplier slider)</span></div>
+        </div>
+        <div class="help-block">
+          <h3><span class="num">§ 04</span>Keyboard Shortcuts</h3>
+          <div class="fee-row"><b>Ctrl + S</b><span>Save current product</span></div>
+          <div class="fee-row"><b>Ctrl + K</b><span>Focus search box</span></div>
+          <div class="fee-row"><b>Ctrl + E</b><span>Export products to CSV</span></div>
+          <div class="fee-row"><b>Ctrl + P</b><span>Print report</span></div>
+          <div class="fee-row"><b>Escape</b><span>Close modal dialog</span></div>
+        </div>
+        <div class="help-block">
+          <h3><span class="num">§ 05</span>Pricing Strategy Guide</h3>
+          <p><b>Know your true costs.</b> Many makers underprice because they forget overhead, packaging, and platform fees. Include everything.</p>
+          <p><b>Price for profit, not just materials.</b> Your time is valuable. Charge for every hour you spend making, sourcing, and finishing.</p>
+          <p><b>Account for channel fees.</b> Etsy takes ~9.5% + fees. Shopify is ~2.9% + $0.30. Build these into your price.</p>
+          <p><b>Use batch sizing.</b> If materials produce multiple units, enter the full material cost and set batch size to divide it properly.</p>
+          <p><b>Wholesale math:</b> Wholesale buyers typically pay 30-50% of retail. Use the multiplier slider and ensure you still cover costs.</p>
+          <p><b>Craft fair reality:</b> Divide your booth fee by realistic sales volume. A $100 booth with 20 expected sales = $5 per unit.</p>
+        </div>
+        <div class="help-block" style="margin-top:20px; text-align:center;">
+          <p>All Rights Reserved</p>
+          <p style="font-size:10px;">Compatible with Chrome, Edge, Firefox, Safari. For best experience, use only one tab at a time.</p>
+        </div>
+      </div>
+
+      <div class="canvas-foot"></div>
+      <div class="footstrip">
+        <div class="l"><span>© 2026 Handmade Pricing Calculator · All rights reserved.</span><span class="sep"></span><span>rev <b>2026·05·25</b></span></div>
+        <div class="r"><span>page <b id="foot-page">01 / 06</b></span><span class="sep"></span><span>by <b>maker</b></span></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" onclick="event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-header"><h3 id="modal-title">Dialog</h3><button class="modal-close" onclick="closeModal()" aria-label="Close">×</button></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// localStorage availability check BEFORE anything else
+var storageAvailable = false;
+try {
+  localStorage.setItem('__hpc_test__', '1');
+  localStorage.removeItem('__hpc_test__');
+  storageAvailable = true;
+} catch(e) {
+  // private browsing or storage blocked
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SHELL UTILITIES
+   ══════════════════════════════════════════════════════════════ */
+function applyAccent(hue) {
+  document.documentElement.style.setProperty('--accent-h', hue || '32');
+}
+function toggleTheme() {
+  var h = document.documentElement;
+  if (h.getAttribute('data-theme') === 'dark') {
+    h.removeAttribute('data-theme');
+    if (storageAvailable) localStorage.removeItem('hpc_theme');
+  } else {
+    h.setAttribute('data-theme', 'dark');
+    if (storageAvailable) localStorage.setItem('hpc_theme', 'dark');
+  }
+  if (document.querySelector('#view-analytics.active')) renderAnalytics();
+}
+function initTheme() {
+  if (storageAvailable && localStorage.getItem('hpc_theme') === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  } else if (!storageAvailable || !localStorage.getItem('hpc_theme')) {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  }
+}
+
+function toggleSidebar() {
+  var sb = document.getElementById('sidebar');
+  sb.classList.toggle('open');
+  var btn = document.querySelector('.sidebar-toggle');
+  btn.setAttribute('aria-expanded', sb.classList.contains('open'));
+}
+
+var VIEWS = {
+  main:       { title: 'Pricing Calculator', subtitle: 'price your handmade goods',  crumb: 'calculator', page: '01 / 06' },
+  products:   { title: 'Products',           subtitle: 'saved product catalog',       crumb: 'products',   page: '02 / 06' },
+  compare:    { title: 'Compare',            subtitle: 'side-by-side pricing scenarios', crumb: 'compare', page: '03 / 06' },
+  analytics:  { title: 'Analytics',          subtitle: 'profitability insights',      crumb: 'analytics',  page: '04 / 06' },
+  settings:   { title: 'Settings',           subtitle: 'preferences & defaults',      crumb: 'settings',   page: '05 / 06' },
+  help:       { title: 'Help',               subtitle: 'reference & guide',           crumb: 'help',       page: '06 / 06' }
+};
+
+function navigateTo(viewName, e) {
+  if (e) e.preventDefault();
+  if (!VIEWS[viewName]) return;
+  document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('active'); });
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); n.removeAttribute('aria-current'); });
+  var viewEl = document.getElementById('view-' + viewName);
+  if (viewEl) viewEl.classList.add('active');
+  var navEl = document.querySelector('.nav-item[data-view="' + viewName + '"]');
+  if (navEl) { navEl.classList.add('active'); navEl.setAttribute('aria-current', 'page'); }
+  var v = VIEWS[viewName];
+  document.getElementById('page-title').textContent = v.title;
+  document.getElementById('page-subtitle').textContent = v.subtitle;
+  document.getElementById('crumb-view').textContent = v.crumb;
+  document.getElementById('foot-page').textContent = v.page;
+  document.getElementById('sidebar').classList.remove('open');
+  document.querySelector('.sidebar-toggle').setAttribute('aria-expanded', 'false');
+  var settings = getSettings();
+  document.getElementById('tel-wage').textContent = '$' + (settings.targetHourlyWage || 20) + '/hr';
+  document.getElementById('tel-channel').textContent = settings.defaultChannel || 'Etsy';
+  if (viewName === 'products') renderProductsTable();
+  if (viewName === 'analytics') renderAnalytics();
+  if (viewName === 'settings') renderSettings();
+  if (viewName === 'compare') buildCompareColumns();
+  // Announce view change to screen readers
+  var announcer = document.getElementById('view-announcer');
+  if (!announcer) {
+    announcer = document.createElement('div');
+    announcer.id = 'view-announcer';
+    announcer.className = 'sr-only';
+    announcer.setAttribute('aria-live', 'polite');
+    document.body.appendChild(announcer);
+  }
+  announcer.textContent = v.title + ' view loaded';
+}
+
+/* ── TOASTS ── */
+function showToast(msg, type, dur) {
+  var d = dur || 3000;
+  var c = document.getElementById('toast-container');
+  var t = document.createElement('div');
+  t.className = 'toast ' + (type || 'info');
+  var icons = { success: '✓', error: '✕', info: 'ℹ' };
+  t.innerHTML = '<span class="toast-icon">' + (icons[type] || 'ℹ') + '</span><span class="toast-msg"></span><button class="toast-close" onclick="this.parentElement.remove()" aria-label="Close notification">×</button><div class="toast-bar" style="width:100%;animation:shrink ' + d + 'ms linear forwards"></div>';
+  t.querySelector('.toast-msg').textContent = msg;
+  c.appendChild(t);
+  setTimeout(function() { t.classList.add('toast-out'); setTimeout(function() { t.remove(); }, 300); }, d);
+}
+
+/* ── MODAL ── */
+var lastActiveElement = null;
+function openModal(title, body, footer) {
+  lastActiveElement = document.activeElement;
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  document.getElementById('modal-footer').innerHTML = footer || '';
+  document.getElementById('modal-overlay').classList.add('open');
+  var closeBtn = document.querySelector('.modal-close');
+  if (closeBtn) closeBtn.focus();
+  trapFocus(document.querySelector('.modal'));
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  if (lastActiveElement) lastActiveElement.focus();
+}
+var _trapFocusHandler = null;
+function trapFocus(modalEl) {
+  if (_trapFocusHandler) modalEl.removeEventListener('keydown', _trapFocusHandler);
+  var focusable = modalEl.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (focusable.length === 0) return;
+  var first = focusable[0], last = focusable[focusable.length-1];
+  _trapFocusHandler = function(e) {
+    if (e.key !== 'Tab') return;
+    if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+    else { if (document.activeElement === last) { e.preventDefault(); first.focus(); } }
+  };
+  modalEl.addEventListener('keydown', _trapFocusHandler);
+}
+
+/* ── KEYBOARD SHORTCUTS ── */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); document.getElementById('search-input').focus(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'e') { e.preventDefault(); exportToCSV(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'p') { e.preventDefault(); window.print(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); saveProduct(); }
+});
+
+/* ── STORAGE LISTENER ── */
+window.addEventListener('storage', function(e) {
+  if (e.key === 'hpc_products') {
+    showToast('Data updated in another tab — reload to sync', 'info', 5000);
+  }
+  if (e.key === 'hpc_settings') {
+    applyAccent(getSettings().accentHue);
+  }
+});
+
+/* ── SORT HEADERS KEYBOARD ── */
+document.addEventListener('click', function(e) {
+  if (!e.target.closest) return;
+  var th = e.target.closest('th.sortable');
+  if (th) sortProducts(th.getAttribute('data-sort'));
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' || e.key === ' ') {
+    var th = e.target.closest ? e.target.closest('th.sortable') : null;
+    if (th && document.activeElement === th) {
+      e.preventDefault();
+      sortProducts(th.getAttribute('data-sort'));
+    }
+  }
+});
+
+/* ══════════════════════════════════════════════════════════════
+   APP LOGIC
+   ══════════════════════════════════════════════════════════════ */
+var LS_PREFIX = 'hpc_';
+var CHANNEL_RATES = {
+  Etsy:       { transactionPct: 0.065, processingPct: 0.03, processingFixed: 0.25, listingFee: 0.20 },
+  Shopify:    { transactionPct: 0,     processingPct: 0.029, processingFixed: 0.30, listingFee: 0 },
+  'Craft Fair': { transactionPct: 0,   processingPct: 0,    processingFixed: 0,    listingFee: 0 },
+  Wholesale:  { transactionPct: 0,     processingPct: 0,    processingFixed: 0,    listingFee: 0 }
+};
+var DEFAULT_SETTINGS = {
+  targetHourlyWage: 20, defaultOverhead: 2, defaultPackaging: 1.5,
+  defaultChannel: 'Etsy', defaultBoothFee: 100, accentHue: 32
+};
+
+function lsGet(k, def) {
+  if (!storageAvailable) return def;
+  try { var v = localStorage.getItem(LS_PREFIX + k); return v === null ? def : JSON.parse(v); }
+  catch(e) { return def; }
+}
+function lsSet(k, v) {
+  if (!storageAvailable) { showToast('Storage not available — data will not be saved', 'error', 6000); return false; }
+  try {
+    localStorage.setItem(LS_PREFIX + k, JSON.stringify(v));
+    return true;
+  } catch(e) {
+    showToast('Save failed — storage may be full. Export your data to back it up.', 'error', 6000);
+    return false;
+  }
+}
+function escapeHtml(t) {
+  var d = document.createElement('div');
+  d.textContent = String(t != null ? t : '');
+  return d.innerHTML;
+}
+
+function clampNonNegative(v) {
+  return Math.max(0, parseFloat(v) || 0);
+}
+
+function getSettings() {
+  return Object.assign({}, DEFAULT_SETTINGS, lsGet('settings', {}));
+}
+function saveSettings(s) {
+  lsSet('settings', Object.assign(getSettings(), s));
+  applyAccent(getSettings().accentHue);
+}
+
+function calculateProduct(p) {
+  var rates = CHANNEL_RATES[p.channel] || CHANNEL_RATES.Etsy;
+  var materialCostPerUnit = (p.materialCost || 0) / (p.batchSize || 1);
+  var boothCostPerUnit = (p.channel === 'Craft Fair') ? ((p.boothFee || 0) / (p.unitsSold || 1)) : 0;
+  var laborCost = (p.laborHours || 0) * (p.hourlyWage || 0);
+  var totalCost = materialCostPerUnit + laborCost + (p.overhead || 0) + (p.packaging || 0) + boothCostPerUnit;
+  var fixedFees = rates.processingFixed + rates.listingFee;
+  var variableRate = rates.transactionPct + rates.processingPct;
+  var channelFees = (p.sellingPrice || 0) * rates.transactionPct + (p.sellingPrice || 0) * rates.processingPct + fixedFees;
+  var netProfit = (p.sellingPrice || 0) - totalCost - channelFees;
+  var profitMargin = (p.sellingPrice || 0) > 0 ? (netProfit / (p.sellingPrice || 0)) * 100 : 0;
+  var trueHourlyWage = (p.laborHours || 0) > 0 ? netProfit / p.laborHours : 0;
+  var markupPct = totalCost > 0 ? (((p.sellingPrice || 0) - totalCost) / totalCost) * 100 : 0;
+  var breakEvenPrice = variableRate < 1 ? (totalCost + fixedFees) / (1 - variableRate) : (totalCost + fixedFees);
+  var targetMargin = (p.targetMarginPct || 50) / 100;
+  var suggestedPrice = (variableRate + targetMargin) < 1
+    ? (totalCost + fixedFees) / (1 - variableRate - targetMargin)
+    : (totalCost + fixedFees) * 2;
+  var wholesalePrice = suggestedPrice * (p.wholesaleMultiplier || 0.5);
+  var settings = getSettings();
+  var targetWage = settings.targetHourlyWage || 20;
+  var priceHealth = 'Underpriced';
+  if (trueHourlyWage >= targetWage * 1.0) priceHealth = 'Strong';
+  else if (trueHourlyWage >= targetWage * 0.8) priceHealth = 'Fair';
+  return Object.assign({}, p, {
+    materialCostPerUnit: materialCostPerUnit,
+    boothCostPerUnit: boothCostPerUnit,
+    totalCost: totalCost,
+    channelFees: channelFees,
+    netProfit: netProfit,
+    profitMargin: profitMargin,
+    trueHourlyWage: trueHourlyWage,
+    markupPct: markupPct,
+    breakEvenPrice: breakEvenPrice,
+    suggestedPrice: suggestedPrice,
+    wholesalePrice: wholesalePrice,
+    priceHealth: priceHealth
+  });
+}
+
+var currentCalc = null;
+var calcModified = false;
+
+function getCalculatorInputs() {
+  return {
+    name: document.getElementById('calc-name').value.trim(),
+    materialCost: clampNonNegative(document.getElementById('calc-materialCost').value),
+    batchSize: Math.max(1, parseInt(document.getElementById('calc-batchSize').value) || 1),
+    laborHours: clampNonNegative(document.getElementById('calc-laborHours').value),
+    hourlyWage: clampNonNegative(document.getElementById('calc-hourlyWage').value),
+    overhead: clampNonNegative(document.getElementById('calc-overhead').value),
+    packaging: clampNonNegative(document.getElementById('calc-packaging').value),
+    channel: document.getElementById('calc-channel').value,
+    boothFee: clampNonNegative(document.getElementById('calc-boothFee') ? document.getElementById('calc-boothFee').value : 0),
+    unitsSold: Math.max(1, parseInt(document.getElementById('calc-unitsSold') ? document.getElementById('calc-unitsSold').value : 1)),
+    wholesaleMultiplier: parseFloat(document.getElementById('calc-wholesaleMultiplier') ? document.getElementById('calc-wholesaleMultiplier').value : 0.5),
+    targetMarginPct: parseInt(document.getElementById('calc-targetMargin').value) || 50,
+    sellingPrice: clampNonNegative(document.getElementById('calc-sellingPrice').value),
+    savedAt: new Date().toISOString()
+  };
+}
+
+function updateCalculatorResults() {
+  var inputs = getCalculatorInputs();
+  currentCalc = calculateProduct(inputs);
+  var settings = getSettings();
+
+  document.getElementById('res-suggestedPrice').textContent = '$' + currentCalc.suggestedPrice.toFixed(2);
+  var wageEl = document.getElementById('res-trueWage');
+  wageEl.textContent = '$' + currentCalc.trueHourlyWage.toFixed(2) + '/hr';
+  var wageCard = wageEl.closest('.card');
+  if (wageCard)
+    wageCard.style.borderTop = '3px solid ' + (currentCalc.priceHealth === 'Strong' ? 'var(--signal)' : currentCalc.priceHealth === 'Fair' ? 'var(--warn)' : 'var(--danger)');
+  document.getElementById('res-margin').textContent = currentCalc.profitMargin.toFixed(1) + '%';
+  document.getElementById('res-totalCost').textContent = '$' + currentCalc.totalCost.toFixed(2);
+  document.getElementById('res-markup').textContent = currentCalc.markupPct.toFixed(1) + '%';
+  document.getElementById('res-breakEven').textContent = '$' + currentCalc.breakEvenPrice.toFixed(2);
+
+  var verdictEl = document.getElementById('wage-verdict-text');
+  if (verdictEl) {
+    var diff = currentCalc.trueHourlyWage - settings.targetHourlyWage;
+    verdictEl.textContent = diff >= 0
+      ? "You're paying yourself $" + currentCalc.trueHourlyWage.toFixed(2) + "/hr — meeting your $" + settings.targetHourlyWage + "/hr target!"
+      : "You're paying yourself $" + currentCalc.trueHourlyWage.toFixed(2) + "/hr — below your $" + settings.targetHourlyWage + "/hr target by $" + Math.abs(diff).toFixed(2) + "/hr";
+    verdictEl.style.color = currentCalc.priceHealth === 'Strong' ? 'var(--signal)' : currentCalc.priceHealth === 'Fair' ? 'var(--warn)' : 'var(--danger)';
+  }
+
+  updateCostBreakdownBar(currentCalc);
+  var channel = inputs.channel;
+  document.getElementById('calc-craftfair-fields').classList.toggle('hidden', channel !== 'Craft Fair');
+  document.getElementById('calc-craftfair-fields-units').classList.toggle('hidden', channel !== 'Craft Fair');
+  document.getElementById('calc-wholesale-fields').classList.toggle('hidden', channel !== 'Wholesale');
+  document.getElementById('wholesale-display').classList.toggle('hidden', channel !== 'Wholesale');
+  if (channel === 'Wholesale') {
+    document.getElementById('res-wholesalePrice').textContent = '$' + currentCalc.wholesalePrice.toFixed(2);
+    var wsPct = currentCalc.suggestedPrice > 0 ? ((currentCalc.wholesalePrice / currentCalc.suggestedPrice) * 100).toFixed(0) : 0;
+    document.getElementById('res-wholesale-delta').innerHTML = '<span class="pill neutral">' + wsPct + '% of suggested</span>';
+  }
+
+  var wageDeltaEl = document.getElementById('res-trueWage-delta');
+  if (wageDeltaEl) {
+    var wageDiff = currentCalc.trueHourlyWage - settings.targetHourlyWage;
+    var cl = wageDiff >= 0 ? 'good' : wageDiff >= -settings.targetHourlyWage * 0.2 ? 'warn' : 'bad';
+    var txt = wageDiff >= 0 ? '+$' + wageDiff.toFixed(2) + ' vs target' : '-$' + Math.abs(wageDiff).toFixed(2) + ' vs target';
+    wageDeltaEl.innerHTML = '<span class="pill ' + cl + '">' + txt + '</span>';
+  }
+
+  calcModified = true;
+  document.getElementById('save-button').textContent = '● save';
+}
+
+function updateCostBreakdownBar(calc) {
+  var container = document.getElementById('cost-breakdown-bar');
+  var total = calc.materialCostPerUnit + (calc.laborHours * calc.hourlyWage) + calc.overhead + calc.packaging + calc.channelFees;
+  if (total <= 0) {
+    container.innerHTML = '<div style="text-align:center;padding:8px;color:var(--mid);font-size:11px;">Enter costs to see breakdown</div>';
+    return;
+  }
+  var segs = [
+    { label: 'Materials', value: calc.materialCostPerUnit, color: 'var(--accent)' },
+    { label: 'Labor', value: calc.laborHours * calc.hourlyWage, color: 'var(--accent-2)' },
+    { label: 'Overhead', value: calc.overhead, color: 'var(--accent-3)' },
+    { label: 'Packaging', value: calc.packaging, color: 'var(--warn)' },
+    { label: 'Fees', value: calc.channelFees, color: 'var(--danger)' }
+  ];
+  var html = '<div style="display:flex;height:36px;border:1px solid var(--rule);overflow:hidden;">';
+  segs.forEach(function(s) {
+    var pct = (s.value / total) * 100;
+    if (pct > 0.5)
+      html += '<div style="width:' + pct.toFixed(1) + '%;height:100%;background:' + s.color + ';display:flex;align-items:center;justify-content:center;font-size:9px;color:white;font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,0.3);">' + s.label + ' $' + s.value.toFixed(2) + '</div>';
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+/* ── SAVE/LOAD PRODUCTS ── */
+function loadProducts() { return lsGet('products', []); }
+
+function saveProduct() {
+  if (!currentCalc) updateCalculatorResults();
+  if (!currentCalc || !currentCalc.name) { showToast('Please enter a product name', 'error'); return; }
+  var products = loadProducts();
+  var product = Object.assign({ id: 'prod_' + Date.now() + '_' + Math.random().toString(36).slice(2,8) }, currentCalc);
+  products.unshift(product);
+  lsSet('products', products);
+  updateAllCounts();
+  showToast('"' + escapeHtml(product.name) + '" saved (' + products.length + ' total)', 'success');
+  calcModified = false;
+  document.getElementById('save-button').textContent = 'save';
+  var btn = document.getElementById('save-button');
+  btn.disabled = true;
+  setTimeout(function() { btn.disabled = false; }, 500);
+}
+
+function deleteProduct(id) {
+  var products = loadProducts().filter(function(p) { return p.id !== id; });
+  lsSet('products', products);
+  updateAllCounts();
+  renderProductsTable();
+  showToast('Product deleted', 'info');
+}
+
+function duplicateProduct(id) {
+  var products = loadProducts();
+  var original = products.find(function(p) { return p.id === id; });
+  if (!original) return;
+  var copy = Object.assign({}, original, { id: 'prod_' + Date.now() + '_' + Math.random().toString(36).slice(2,8), name: original.name + ' (Copy)', savedAt: new Date().toISOString() });
+  products.unshift(copy);
+  lsSet('products', products);
+  updateAllCounts();
+  renderProductsTable();
+  showToast('"' + escapeHtml(copy.name) + '" duplicated', 'success');
+}
+
+function loadProductToCalculator(id) {
+  var products = loadProducts();
+  var p = products.find(function(p) { return p.id === id; });
+  if (!p) return;
+  document.getElementById('calc-name').value = p.name || '';
+  document.getElementById('calc-materialCost').value = p.materialCost || 0;
+  document.getElementById('calc-batchSize').value = p.batchSize || 1;
+  document.getElementById('calc-laborHours').value = p.laborHours || 0;
+  document.getElementById('calc-hourlyWage').value = p.hourlyWage || 0;
+  document.getElementById('calc-overhead').value = p.overhead || 0;
+  document.getElementById('calc-packaging').value = p.packaging || 0;
+  document.getElementById('calc-channel').value = p.channel || 'Etsy';
+  var bf = document.getElementById('calc-boothFee'); if (bf) bf.value = p.boothFee || 0;
+  var us = document.getElementById('calc-unitsSold'); if (us) us.value = p.unitsSold || 1;
+  var wm = document.getElementById('calc-wholesaleMultiplier'); if (wm) wm.value = p.wholesaleMultiplier || 0.5;
+  document.getElementById('calc-targetMargin').value = p.targetMarginPct || 50;
+  document.getElementById('calc-sellingPrice').value = p.sellingPrice || 0;
+  updateSliderLabels();
+  updateCalculatorResults();
+  navigateTo('main');
+  showToast('"' + escapeHtml(p.name) + '" loaded into calculator', 'info');
+  calcModified = false;
+  document.getElementById('save-button').textContent = 'save';
+}
+
+function resetCalculator() {
+  var settings = getSettings();
+  document.getElementById('calc-name').value = '';
+  document.getElementById('calc-materialCost').value = '0';
+  document.getElementById('calc-batchSize').value = '1';
+  document.getElementById('calc-laborHours').value = '0';
+  document.getElementById('calc-hourlyWage').value = settings.targetHourlyWage || '20';
+  document.getElementById('calc-overhead').value = settings.defaultOverhead || '2';
+  document.getElementById('calc-packaging').value = settings.defaultPackaging || '1.5';
+  document.getElementById('calc-channel').value = settings.defaultChannel || 'Etsy';
+  var bf = document.getElementById('calc-boothFee'); if (bf) bf.value = settings.defaultBoothFee || '100';
+  var us = document.getElementById('calc-unitsSold'); if (us) us.value = '1';
+  var wm = document.getElementById('calc-wholesaleMultiplier'); if (wm) wm.value = '0.5';
+  document.getElementById('calc-targetMargin').value = '50';
+  document.getElementById('calc-sellingPrice').value = '0';
+  updateSliderLabels();
+  updateCalculatorResults();
+  calcModified = false;
+  document.getElementById('save-button').textContent = 'save';
+}
+
+/* ── CSV EXPORT ── */
+function exportToCSV() {
+  var products = loadProducts();
+  if (products.length === 0) { showToast('No products to export', 'info'); return; }
+  var fields = ['name','channel','materialCost','laborHours','hourlyWage','overhead','packaging','batchSize','sellingPrice','materialCostPerUnit','totalCost','channelFees','netProfit','profitMargin','trueHourlyWage','markupPct','breakEvenPrice','suggestedPrice','priceHealth','savedAt'];
+  var headers = ['Name','Channel','Material Cost','Labor Hours','Hourly Wage','Overhead','Packaging','Batch Size','Selling Price','Cost/Unit','Total Cost','Channel Fees','Net Profit','Margin %','True Wage','Markup %','Break-even','Suggested','Health','Saved'];
+  var csv = headers.join(',') + '\n';
+  products.forEach(function(p) {
+    csv += fields.map(function(f) {
+      var v = p[f] != null ? p[f] : '';
+      if (typeof v === 'string') {
+        if (v.match(/^[=+\-@]/)) v = "'" + v;
+        if (v.includes(',') || v.includes('"') || v.includes('\n')) v = '"' + v.replace(/"/g, '""') + '"';
+      }
+      return v;
+    }).join(',') + '\n';
+  });
+  var blob = new Blob([csv], { type: 'text/csv' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a'); a.href = url; a.download = 'handmade-pricing-' + new Date().toISOString().split('T')[0] + '.csv'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('Exported ' + products.length + ' products to CSV', 'success');
+}
+
+function updateAllCounts() {
+  var products = loadProducts();
+  document.getElementById('nav-count').textContent = products.length;
+  document.getElementById('rt-count').textContent = products.length;
+  var healthCounts = { Underpriced:0, Fair:0, Strong:0 };
+  products.forEach(function(p) { healthCounts[p.priceHealth] = (healthCounts[p.priceHealth]||0)+1; });
+  var dominant = products.length > 0
+    ? (healthCounts.Strong >= healthCounts.Fair && healthCounts.Strong >= healthCounts.Underpriced ? 'Strong'
+      : healthCounts.Fair >= healthCounts.Underpriced ? 'Fair' : 'Underpriced')
+    : '--';
+  var rtStatus = document.getElementById('rt-status');
+  rtStatus.textContent = dominant;
+  rtStatus.style.color = dominant === 'Strong' ? 'var(--signal)' : dominant === 'Fair' ? 'var(--warn)' : dominant === '--' ? '' : 'var(--danger)';
+  var bar1 = document.getElementById('rt-bar-1');
+  if (bar1 && products.length) bar1.style.width = (healthCounts.Strong / products.length * 100) + '%';
+  var bar2 = document.getElementById('rt-bar-2');
+  if (bar2 && products.length) bar2.style.width = (healthCounts.Fair / products.length * 100) + '%';
+  document.getElementById('op-btn').textContent = products.length + ' saved';
+}
+
+function updateSliderLabels() {
+  var tm = document.getElementById('calc-targetMargin');
+  var tml = document.getElementById('calc-targetMargin-label');
+  tml.textContent = tm.value + '%';
+  tm.setAttribute('aria-valuenow', tm.value);
+  tm.setAttribute('aria-valuetext', tm.value + '%');
+  var wm = document.getElementById('calc-wholesaleMultiplier');
+  var wml = document.getElementById('calc-wholesaleMultiplier-label');
+  wml.textContent = wm.value + 'x';
+  wm.setAttribute('aria-valuenow', wm.value);
+  wm.setAttribute('aria-valuetext', wm.value + '×');
+}
+
+/* ── EVENT LISTENERS ── */
+function initCalculatorListeners() {
+  var ids = ['calc-materialCost','calc-batchSize','calc-laborHours','calc-hourlyWage','calc-overhead','calc-packaging','calc-channel','calc-boothFee','calc-unitsSold','calc-wholesaleMultiplier','calc-targetMargin','calc-sellingPrice'];
+  ids.forEach(function(id) { document.getElementById(id).addEventListener('input', function() { updateCalculatorResults(); }); });
+  document.getElementById('calc-targetMargin').addEventListener('input', updateSliderLabels);
+  document.getElementById('calc-wholesaleMultiplier').addEventListener('input', updateSliderLabels);
+  document.getElementById('calc-channel').addEventListener('change', function() {
+    document.getElementById('calc-craftfair-fields').classList.toggle('hidden', this.value !== 'Craft Fair');
+    document.getElementById('calc-craftfair-fields-units').classList.toggle('hidden', this.value !== 'Craft Fair');
+    document.getElementById('calc-wholesale-fields').classList.toggle('hidden', this.value !== 'Wholesale');
+    document.getElementById('wholesale-display').classList.toggle('hidden', this.value !== 'Wholesale');
+    updateCalculatorResults();
+  });
+}
+
+/* ── PRODUCTS TABLE ── */
+var productsSort = { field: 'savedAt', dir: 'desc' };
+var productsFilter = { channel: 'all', health: 'all' };
+var selectedProductIds = new Set();
+var PRODUCTS_PER_PAGE = 10;
+var productsPage = 1;
+
+function renderProductsTable() {
+  var tbody = document.getElementById('products-tbody');
+  var allProducts = loadProducts().map(function(p) { return calculateProduct(p); });
+  var filtered = allProducts;
+  if (productsFilter.channel !== 'all') filtered = filtered.filter(function(p) { return p.channel === productsFilter.channel; });
+  if (productsFilter.health !== 'all') filtered = filtered.filter(function(p) { return p.priceHealth === productsFilter.health; });
+  var searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
+  if (searchTerm) filtered = filtered.filter(function(p) { return p.name.toLowerCase().includes(searchTerm); });
+  filtered.sort(function(a,b) {
+    var av = a[productsSort.field] != null ? a[productsSort.field] : 0;
+    var bv = b[productsSort.field] != null ? b[productsSort.field] : 0;
+    if (typeof av === 'string') return productsSort.dir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+    return productsSort.dir === 'asc' ? av - bv : bv - av;
+  });
+  var totalPages = Math.max(1, Math.ceil(filtered.length / PRODUCTS_PER_PAGE));
+  productsPage = Math.min(productsPage, totalPages);
+  var start = (productsPage-1) * PRODUCTS_PER_PAGE;
+  var pageItems = filtered.slice(start, start+PRODUCTS_PER_PAGE);
+  document.getElementById('products-count-label').textContent = filtered.length + ' of ' + allProducts.length + ' total';
+  document.getElementById('nav-count').textContent = allProducts.length;
+  if (pageItems.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">∅</div><h3>NO PRODUCTS</h3><p>Save a product from the calculator to see it here.</p></div></td></tr>';
+  } else {
+    tbody.innerHTML = pageItems.map(function(p) {
+      var healthColor = p.priceHealth === 'Strong' ? 'green' : p.priceHealth === 'Fair' ? 'amber' : 'red';
+      var dateStr = p.savedAt ? new Date(p.savedAt).toLocaleDateString() : '--';
+      var checked = selectedProductIds.has(p.id) ? 'checked' : '';
+      return '<tr>' +
+        '<td><input type="checkbox" ' + checked + ' onchange="toggleProductSelection(\'' + p.id + '\')" data-id="' + p.id + '" aria-label="Select ' + escapeHtml(p.name) + '"></td>' +
+        '<td><div class="id"><span class="dot"></span><div><b>' + escapeHtml(p.name) + '</b></div></div></td>' +
+        '<td>' + escapeHtml(p.channel) + '</td>' +
+        '<td class="num">$' + (p.totalCost||0).toFixed(2) + '</td>' +
+        '<td class="num">$' + (p.sellingPrice||0).toFixed(2) + '</td>' +
+        '<td class="num">' + (p.profitMargin||0).toFixed(1) + '%</td>' +
+        '<td class="num">$' + (p.trueHourlyWage||0).toFixed(2) + '</td>' +
+        '<td><span class="id"><span class="dot ' + healthColor + '"></span>' + p.priceHealth + '</span></td>' +
+        '<td>' + dateStr + '</td>' +
+        '<td>' +
+          '<button class="btn" style="padding:4px 8px;font-size:10px;min-height:44px;" onclick="loadProductToCalculator(\'' + p.id + '\')">Load</button> ' +
+          '<button class="btn" style="padding:4px 8px;font-size:10px;min-height:44px;" onclick="duplicateProduct(\'' + p.id + '\')">Dup</button> ' +
+          '<button class="btn danger" style="padding:4px 8px;font-size:10px;min-height:44px;" onclick="confirmDeleteProduct(\'' + p.id + '\')">Del</button>' +
+        '</td></tr>';
+    }).join('');
+  }
+  // Update sort indicators and aria-sort
+  document.querySelectorAll('#view-products thead th.sortable').forEach(function(th) {
+    th.removeAttribute('aria-sort');
+    th.classList.remove('sort-asc','sort-desc');
+  });
+  var sortedTh = document.querySelector('#view-products thead th[data-sort="' + productsSort.field + '"]');
+  if (sortedTh) {
+    sortedTh.classList.add(productsSort.dir === 'asc' ? 'sort-asc' : 'sort-desc');
+    sortedTh.setAttribute('aria-sort', productsSort.dir === 'asc' ? 'ascending' : 'descending');
+  }
+
+  var pg = document.getElementById('products-pagination');
+  pg.innerHTML = '<button ' + (productsPage<=1?'disabled':'') + ' onclick="goProductsPage('+(productsPage-1)+')">←</button>' +
+    '<span class="page-info">Page ' + productsPage + ' / ' + totalPages + '</span>' +
+    '<button ' + (productsPage>=totalPages?'disabled':'') + ' onclick="goProductsPage('+(productsPage+1)+')">→</button>';
+}
+function goProductsPage(p) { productsPage = p; renderProductsTable(); }
+function sortProducts(field) {
+  if (productsSort.field === field) productsSort.dir = productsSort.dir === 'asc' ? 'desc' : 'asc';
+  else { productsSort.field = field; productsSort.dir = 'asc'; }
+  renderProductsTable();
+}
+function filterProducts(type, value) {
+  productsFilter[type] = value;
+  document.querySelectorAll('#products-filters .chip[data-type="'+type+'"]').forEach(function(c) { c.classList.toggle('on', c.dataset.filter===value); });
+  productsPage = 1;
+  renderProductsTable();
+}
+function toggleProductSelection(id) {
+  if (selectedProductIds.has(id)) selectedProductIds.delete(id);
+  else selectedProductIds.add(id);
+}
+function toggleSelectAllProducts() {
+  var cbs = document.querySelectorAll('#products-tbody input[type="checkbox"][data-id]');
+  var allChecked = Array.from(cbs).every(function(cb) { return cb.checked; });
+  cbs.forEach(function(cb) {
+    cb.checked = !allChecked;
+    if (!allChecked) selectedProductIds.add(cb.dataset.id);
+    else selectedProductIds.delete(cb.dataset.id);
+  });
+}
+function confirmDeleteProduct(id) {
+  var products = loadProducts();
+  var p = products.find(function(p) { return p.id === id; });
+  var name = p ? escapeHtml(p.name) : 'this product';
+  openModal('Delete Product',
+    '<p>Delete <b>' + name + '</b>? This cannot be undone.</p>',
+    '<button class="btn" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="doDeleteProduct(\''+id+'\')">Delete</button>');
+}
+function doDeleteProduct(id) { closeModal(); deleteProduct(id); }
+function deleteSelectedProducts() {
+  if (selectedProductIds.size === 0) { showToast('No products selected', 'info'); return; }
+  openModal('Delete Selected', '<p>Delete ' + selectedProductIds.size + ' selected products? This cannot be undone.</p>', '<button class="btn" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="doDeleteSelected()">Delete</button>');
+}
+function doDeleteSelected() {
+  var products = loadProducts().filter(function(p) { return !selectedProductIds.has(p.id); });
+  lsSet('products', products);
+  selectedProductIds.clear();
+  closeModal();
+  updateAllCounts();
+  renderProductsTable();
+  showToast('Selected products deleted', 'info');
+}
+
+/* ── SIDEBAR SEARCH ── */
+var searchDebounce;
+document.getElementById('search-input').addEventListener('input', function() {
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(function() {
+    if (document.querySelector('#view-products.active')) { productsPage = 1; renderProductsTable(); }
+  }, 200);
+});
+
+/* ── COMPARE ── */
+function buildCompareColumns() {
+  var container = document.getElementById('compare-columns');
+  if (!container || container.children.length > 0) return;
+  var labels = ['A', 'B'];
+  var html = '';
+  labels.forEach(function(l) {
+    var prefix = 'comp' + l;
+    html += '<div style="border:1px solid var(--rule);padding:20px;background:var(--paper);">' +
+      '<h3 style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:16px;"><span style="color:var(--accent);">' + l + '</span> — Scenario ' + l + '</h3>' +
+      '<div class="form-grid" style="grid-template-columns:1fr;gap:12px;">' +
+        '<div class="form-group"><label for="'+prefix+'-name">Product Name</label><input type="text" id="'+prefix+'-name" placeholder="e.g. Hand-painted Mug"></div>' +
+        '<div class="form-group"><label for="'+prefix+'-materialCost">Material Cost ($)</label><input type="number" id="'+prefix+'-materialCost" value="0" min="0" step="0.01"></div>' +
+        '<div class="form-group"><label for="'+prefix+'-batchSize">Batch Size</label><input type="number" id="'+prefix+'-batchSize" value="1" min="1" step="1"></div>' +
+        '<div class="form-group"><label for="'+prefix+'-laborHours">Labor Hours</label><input type="number" id="'+prefix+'-laborHours" value="0" min="0" step="0.5"></div>' +
+        '<div class="form-group"><label for="'+prefix+'-hourlyWage">Hourly Wage ($)</label><input type="number" id="'+prefix+'-hourlyWage" value="20" min="0" step="1"></div>' +
+        '<div class="form-group"><label for="'+prefix+'-overhead">Overhead / Unit ($)</label><input type="number" id="'+prefix+'-overhead" value="2" min="0" step="0.01"></div>' +
+        '<div class="form-group"><label for="'+prefix+'-packaging">Packaging ($)</label><input type="number" id="'+prefix+'-packaging" value="1.5" min="0" step="0.01"></div>' +
+        '<div class="form-group"><label for="'+prefix+'-channel">Sales Channel</label><select id="'+prefix+'-channel"><option value="Etsy">Etsy</option><option value="Shopify">Shopify</option><option value="Craft Fair">Craft Fair</option><option value="Wholesale">Wholesale</option></select></div>' +
+        '<div class="form-group" id="'+prefix+'-craftfair-fields"><label for="'+prefix+'-boothFee">Booth Fee ($)</label><input type="number" id="'+prefix+'-boothFee" value="100" min="0" step="1"></div>' +
+        '<div class="form-group" id="'+prefix+'-wholesale-fields"><label for="'+prefix+'-unitsSold">Units Sold / Order</label><input type="number" id="'+prefix+'-unitsSold" value="1" min="1" step="1"></div>' +
+        '<div class="form-group"><label for="'+prefix+'-targetMargin">Target Margin (%)</label><input type="number" id="'+prefix+'-targetMargin" value="50" min="0" max="100" step="5"></div>' +
+        '<div class="form-group"><label for="'+prefix+'-sellingPrice">Selling Price ($)</label><input type="number" id="'+prefix+'-sellingPrice" value="0" min="0" step="0.01"></div>' +
+      '</div></div>';
+  });
+  container.innerHTML = html;
+  ['compA','compB'].forEach(function(prefix) {
+    var ch = document.getElementById(prefix+'-channel');
+    ch.addEventListener('change', function() {
+      document.getElementById(prefix+'-craftfair-fields').classList.toggle('hidden', this.value !== 'Craft Fair');
+      document.getElementById(prefix+'-wholesale-fields').classList.toggle('hidden', this.value !== 'Wholesale');
+    });
+  });
+}
+
+function getCompareInputs(prefix) {
+  return {
+    name: (document.getElementById(prefix+'-name') ? document.getElementById(prefix+'-name').value : '') || '',
+    materialCost: clampNonNegative(document.getElementById(prefix+'-materialCost') ? document.getElementById(prefix+'-materialCost').value : 0),
+    batchSize: Math.max(1, parseInt(document.getElementById(prefix+'-batchSize') ? document.getElementById(prefix+'-batchSize').value : 1)),
+    laborHours: clampNonNegative(document.getElementById(prefix+'-laborHours') ? document.getElementById(prefix+'-laborHours').value : 0),
+    hourlyWage: clampNonNegative(document.getElementById(prefix+'-hourlyWage') ? document.getElementById(prefix+'-hourlyWage').value : 0),
+    overhead: clampNonNegative(document.getElementById(prefix+'-overhead') ? document.getElementById(prefix+'-overhead').value : 0),
+    packaging: clampNonNegative(document.getElementById(prefix+'-packaging') ? document.getElementById(prefix+'-packaging').value : 0),
+    channel: (document.getElementById(prefix+'-channel') ? document.getElementById(prefix+'-channel').value : '') || 'Etsy',
+    boothFee: clampNonNegative(document.getElementById(prefix+'-boothFee') ? document.getElementById(prefix+'-boothFee').value : 0),
+    unitsSold: Math.max(1, parseInt(document.getElementById(prefix+'-unitsSold') ? document.getElementById(prefix+'-unitsSold').value : 1)),
+    wholesaleMultiplier: 0.5,
+    targetMarginPct: parseInt(document.getElementById(prefix+'-targetMargin') ? document.getElementById(prefix+'-targetMargin').value : 50) || 50,
+    sellingPrice: clampNonNegative(document.getElementById(prefix+'-sellingPrice') ? document.getElementById(prefix+'-sellingPrice').value : 0)
+  };
+}
+
+function runCompare() {
+  var calcA = calculateProduct(getCompareInputs('compA'));
+  var calcB = calculateProduct(getCompareInputs('compB'));
+  renderCompareResult('a', calcA);
+  renderCompareResult('b', calcB);
+  document.getElementById('compare-winner').style.display = 'block';
+  var winText = document.getElementById('compare-winner-text');
+  if (calcA.trueHourlyWage > calcB.trueHourlyWage) {
+    winText.textContent = 'Scenario A wins — $' + calcA.trueHourlyWage.toFixed(2) + '/hr vs $' + calcB.trueHourlyWage.toFixed(2) + '/hr';
+    winText.style.color = 'var(--signal)';
+  } else if (calcB.trueHourlyWage > calcA.trueHourlyWage) {
+    winText.textContent = 'Scenario B wins — $' + calcB.trueHourlyWage.toFixed(2) + '/hr vs $' + calcA.trueHourlyWage.toFixed(2) + '/hr';
+    winText.style.color = 'var(--signal)';
+  } else {
+    winText.textContent = 'Both scenarios are equal — $' + calcA.trueHourlyWage.toFixed(2) + '/hr';
+    winText.style.color = 'var(--accent)';
+  }
+}
+
+function renderCompareResult(col, calc) {
+  var statsEl = document.getElementById('compare-stats-' + col);
+  if (!statsEl) return;
+  statsEl.style.display = 'grid';
+  var color = calc.priceHealth === 'Strong' ? 'var(--signal)' : calc.priceHealth === 'Fair' ? 'var(--warn)' : 'var(--danger)';
+  statsEl.innerHTML =
+    '<div class="card"><div class="lbl"><span>SUGGESTED PRICE</span><span class="tag">TARGET</span></div><div class="val">$' + calc.suggestedPrice.toFixed(2) + '</div></div>' +
+    '<div class="card" style="border-top:3px solid ' + color + ';"><div class="lbl"><span>TRUE HOURLY WAGE</span><span class="tag">ACTUAL</span></div><div class="val">$' + calc.trueHourlyWage.toFixed(2) + '<span class="u">/hr</span></div></div>' +
+    '<div class="card"><div class="lbl"><span>PROFIT MARGIN</span><span class="tag">%</span></div><div class="val">' + calc.profitMargin.toFixed(1) + '<span class="u">%</span></div></div>' +
+    '<div class="card"><div class="lbl"><span>TOTAL COST</span><span class="tag">COST</span></div><div class="val">$' + calc.totalCost.toFixed(2) + '</div></div>' +
+    '<div class="card"><div class="lbl"><span>BREAK-EVEN</span><span class="tag">MIN</span></div><div class="val">$' + calc.breakEvenPrice.toFixed(2) + '</div></div>';
+}
+
+function resetCompare() {
+  ['compA','compB'].forEach(function(prefix) {
+    document.getElementById(prefix+'-name').value = '';
+    document.getElementById(prefix+'-materialCost').value = '0';
+    document.getElementById(prefix+'-batchSize').value = '1';
+    document.getElementById(prefix+'-laborHours').value = '0';
+    document.getElementById(prefix+'-hourlyWage').value = '20';
+    document.getElementById(prefix+'-overhead').value = '2';
+    document.getElementById(prefix+'-packaging').value = '1.5';
+    document.getElementById(prefix+'-channel').value = 'Etsy';
+    document.getElementById(prefix+'-boothFee').value = '100';
+    document.getElementById(prefix+'-unitsSold').value = '1';
+    document.getElementById(prefix+'-targetMargin').value = '50';
+    document.getElementById(prefix+'-sellingPrice').value = '0';
+  });
+  document.getElementById('compare-winner').style.display = 'none';
+  document.getElementById('compare-stats-a').style.display = 'none';
+  document.getElementById('compare-stats-b').style.display = 'none';
+}
+
+/* ── ANALYTICS ── */
+function renderAnalytics() {
+  var products = loadProducts().map(function(p) { return calculateProduct(p); });
+  if (products.length === 0) {
+    ['stat-avgMargin','stat-avgWage'].forEach(function(id) { document.getElementById(id).textContent = '--'; });
+    document.getElementById('stat-totalProducts').textContent = '0';
+    ['stat-strong','stat-fair','stat-underpriced'].forEach(function(id) { document.getElementById(id).textContent = '0'; });
+    clearCharts();
+    return;
+  }
+  var avgMargin = products.reduce(function(s,p) { return s + (p.profitMargin||0); }, 0) / products.length;
+  var avgWage = products.reduce(function(s,p) { return s + (p.trueHourlyWage||0); }, 0) / products.length;
+  document.getElementById('stat-avgMargin').textContent = avgMargin.toFixed(1) + '%';
+  document.getElementById('stat-avgWage').textContent = '$' + avgWage.toFixed(2);
+  document.getElementById('stat-totalProducts').textContent = products.length;
+  var hc = { Strong:0, Fair:0, Underpriced:0 };
+  products.forEach(function(p) { hc[p.priceHealth] = (hc[p.priceHealth]||0)+1; });
+  document.getElementById('stat-strong').textContent = hc.Strong;
+  document.getElementById('stat-fair').textContent = hc.Fair;
+  document.getElementById('stat-underpriced').textContent = hc.Underpriced;
+  renderWageBarChart(products);
+  renderCostPieChart(products);
+}
+
+function clearCharts() {
+  var c1 = document.getElementById('chart-wage-bar'), c2 = document.getElementById('chart-cost-pie');
+  if (c1) c1.getContext('2d').clearRect(0,0,c1.width,c1.height);
+  if (c2) c2.getContext('2d').clearRect(0,0,c2.width,c2.height);
+  document.getElementById('chart-wage-bar-table').innerHTML = '';
+  document.getElementById('chart-cost-pie-table').innerHTML = '';
+}
+
+function renderWageBarChart(products) {
+  var canvas = document.getElementById('chart-wage-bar');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+  var rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+  var w = rect.width, h = rect.height;
+  var topN = products.slice().sort(function(a,b) { return (b.trueHourlyWage||0)-(a.trueHourlyWage||0); }).slice(0,10).reverse();
+  if (topN.length === 0) return;
+  var maxWage = Math.max.apply(Math, topN.map(function(p) { return p.trueHourlyWage||0; })) || 1;
+  var pad = { top:10, right:50, bottom:10, left:100 };
+  var barH = Math.min(28, (h - pad.top - pad.bottom) / topN.length - 6);
+  var chartW = w - pad.left - pad.right;
+  ctx.clearRect(0,0,w,h);
+  var ink = getComputedStyle(document.body).color;
+  var settings = getSettings();
+  var target = settings.targetHourlyWage||20;
+  var tableRows = '<tr><th>Product</th><th>True Hourly Wage</th><th>vs Target</th></tr>';
+  topN.forEach(function(p,i) {
+    var y = pad.top + i * (barH+6);
+    var barW = ((p.trueHourlyWage||0) / maxWage) * chartW;
+    var color = (p.trueHourlyWage||0) >= target ? '#2d8a4e' : (p.trueHourlyWage||0) >= target*0.8 ? '#b8860b' : '#c53030';
+    ctx.font = '11px JetBrains Mono, monospace';
+    ctx.fillStyle = ink;
+    ctx.textAlign = 'right';
+    ctx.fillText((p.name||'Untitled').substring(0,18), pad.left-8, y+barH/2);
+    ctx.fillStyle = color;
+    ctx.fillRect(pad.left, y, Math.max(barW,2), barH);
+    ctx.font = '11px JetBrains Mono, monospace';
+    ctx.fillStyle = ink;
+    ctx.textAlign = 'left';
+    ctx.fillText('$'+(p.trueHourlyWage||0).toFixed(2), pad.left+barW+6, y+barH/2);
+    tableRows += '<tr><td>' + escapeHtml(p.name) + '</td><td>$' + (p.trueHourlyWage||0).toFixed(2) + '/hr</td><td>' + ((p.trueHourlyWage||0) >= target ? 'meets target' : 'below target') + '</td></tr>';
+  });
+  document.getElementById('chart-wage-bar-table').innerHTML = '<table>' + tableRows + '</table>';
+}
+
+function renderCostPieChart(products) {
+  var canvas = document.getElementById('chart-cost-pie');
+  if (!canvas || products.length===0) return;
+  var ctx = canvas.getContext('2d');
+  var dpr = window.devicePixelRatio||1;
+  var rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+  var w = rect.width, h = rect.height;
+  var cx = w/2, cy = h/2-10, radius = Math.min(cx,cy)-10;
+  var avgMat = products.reduce(function(s,p) { return s+(p.materialCostPerUnit||0); },0)/products.length;
+  var avgLabor = products.reduce(function(s,p) { return s+((p.laborHours||0)*(p.hourlyWage||0)); },0)/products.length;
+  var avgOverhead = products.reduce(function(s,p) { return s+(p.overhead||0); },0)/products.length;
+  var avgPack = products.reduce(function(s,p) { return s+(p.packaging||0); },0)/products.length;
+  var avgFees = products.reduce(function(s,p) { return s+(p.channelFees||0); },0)/products.length;
+  var total = avgMat+avgLabor+avgOverhead+avgPack+avgFees;
+  if (total<=0) return;
+  var segs = [
+    {label:'Materials',value:avgMat,color:'#c8852e'},
+    {label:'Labor',value:avgLabor,color:'#a06d25'},
+    {label:'Overhead',value:avgOverhead,color:'#8b5e21'},
+    {label:'Packaging',value:avgPack,color:'#b8860b'},
+    {label:'Fees',value:avgFees,color:'#c53030'}
+  ];
+  var startAngle = -Math.PI/2;
+  var tableRows = '<tr><th>Category</th><th>Amount</th><th>Percentage</th></tr>';
+  segs.forEach(function(s) {
+    var sliceAngle = (s.value/total)*2*Math.PI;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,radius,startAngle,startAngle+sliceAngle); ctx.closePath();
+    ctx.fillStyle = s.color; ctx.fill();
+    var mid = startAngle + sliceAngle/2;
+    var lx = cx + Math.cos(mid)*(radius*0.65), ly = cy + Math.sin(mid)*(radius*0.65);
+    if (sliceAngle>0.2) {
+      ctx.font = '10px JetBrains Mono, monospace'; ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(((s.value/total)*100).toFixed(0)+'%', lx, ly);
+    }
+    startAngle += sliceAngle;
+    tableRows += '<tr><td>' + s.label + '</td><td>$' + s.value.toFixed(2) + '</td><td>' + ((s.value/total)*100).toFixed(1) + '%</td></tr>';
+  });
+  var ink = getComputedStyle(document.body).color;
+  var ly = h-8;
+  segs.slice().reverse().forEach(function(s,i) {
+    var lx = 10 + (i%3)*(w/3);
+    var rowY = ly - Math.floor(i/3)*14;
+    ctx.fillStyle = s.color; ctx.fillRect(lx, rowY-8, 8, 8);
+    ctx.font = '9px JetBrains Mono, monospace'; ctx.fillStyle = ink; ctx.textAlign = 'left';
+    ctx.fillText(s.label, lx+12, rowY-2);
+  });
+  document.getElementById('chart-cost-pie-table').innerHTML = '<table>' + tableRows + '</table>';
+}
+
+/* ── CANVAS RESIZE ── */
+var resizeTimer;
+window.addEventListener('resize', function() {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(function() {
+    if (document.querySelector('#view-analytics.active')) renderAnalytics();
+  }, 200);
+});
+
+/* ── SETTINGS ── */
+function renderSettings() {
+  var s = getSettings();
+  document.getElementById('set-targetHourlyWage').value = s.targetHourlyWage;
+  document.getElementById('set-defaultOverhead').value = s.defaultOverhead;
+  document.getElementById('set-defaultPackaging').value = s.defaultPackaging;
+  document.getElementById('set-defaultChannel').value = s.defaultChannel;
+  document.getElementById('set-defaultBoothFee').value = s.defaultBoothFee;
+  document.getElementById('set-accentHue').value = s.accentHue;
+  document.getElementById('accentHue-val').textContent = s.accentHue;
+  var slider = document.getElementById('set-accentHue');
+  slider.setAttribute('aria-valuenow', s.accentHue);
+  slider.setAttribute('aria-valuetext', s.accentHue + '°');
+}
+
+var SETTING_LABELS = {
+  targetHourlyWage: 'Target hourly wage',
+  defaultOverhead: 'Default overhead',
+  defaultPackaging: 'Default packaging cost',
+  defaultChannel: 'Default channel',
+  defaultBoothFee: 'Default booth fee',
+  accentHue: 'Color theme'
+};
+
+function updateSetting(key, value) {
+  var settings = getSettings();
+  settings[key] = ['targetHourlyWage','defaultOverhead','defaultPackaging','defaultBoothFee','accentHue'].includes(key) ? parseFloat(value) : value;
+  lsSet('settings', settings);
+  showToast((SETTING_LABELS[key] || key) + ' saved', 'success');
+  if (key === 'accentHue') {
+    applyAccent(value);
+    document.getElementById('accentHue-val').textContent = value;
+    var slider = document.getElementById('set-accentHue');
+    slider.setAttribute('aria-valuenow', value);
+    slider.setAttribute('aria-valuetext', value + '°');
+  }
+}
+
+function previewAccent(hue) {
+  applyAccent(parseInt(hue));
+  document.getElementById('accentHue-val').textContent = hue;
+  var slider = document.getElementById('set-accentHue');
+  slider.setAttribute('aria-valuenow', hue);
+  slider.setAttribute('aria-valuetext', hue + '°');
+}
+
+function exportToJSON() {
+  var data = { products: loadProducts(), settings: getSettings(), exportedAt: new Date().toISOString() };
+  var blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a'); a.href = url; a.download = 'handmade-pricing-backup-'+new Date().toISOString().split('T')[0]+'.json'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('Data exported to JSON', 'success');
+}
+
+var pendingImportData = null;
+function importFromJSON() {
+  var fileInput = document.getElementById('import-file');
+  if (!fileInput || !fileInput.files[0]) { showToast('Please select a JSON file', 'error'); return; }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var data = JSON.parse(e.target.result);
+      if (!data.products || !Array.isArray(data.products)) {
+        showToast('No products found in file', 'error'); return;
+      }
+      var validProducts = data.products.filter(function(p) {
+        return p && typeof p.id === 'string' && typeof p.name === 'string' &&
+               isFinite(p.sellingPrice) && isFinite(p.totalCost);
+      });
+      if (validProducts.length === 0 && data.products.length > 0) {
+        showToast('No valid products found in this file — catalog unchanged', 'error', 6000);
+        return;
+      }
+      var existing = loadProducts();
+      if (existing.length > 0) {
+        pendingImportData = { validProducts: validProducts, settings: data.settings };
+        openModal('Replace Catalog?',
+          '<p>You have <b>' + existing.length + '</b> saved products. Importing will replace them with <b>' + validProducts.length + '</b> products. Export first to keep a backup.</p>',
+          '<button class="btn" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="doImport()">Replace</button>');
+        return;
+      }
+      doImportDirect(validProducts, data.settings);
+    } catch (err) { showToast('Invalid JSON file', 'error'); }
+  };
+  reader.readAsText(fileInput.files[0]);
+}
+
+function doImport() {
+  if (!pendingImportData) return;
+  var data = pendingImportData;
+  pendingImportData = null;
+  closeModal();
+  doImportDirect(data.validProducts, data.settings);
+}
+
+function doImportDirect(products, settings) {
+  if (products && products.length > 0) {
+    lsSet('products', products);
+    updateAllCounts();
+    if (document.querySelector('#view-products.active')) renderProductsTable();
+    showToast('Imported ' + products.length + ' products', 'success');
+  }
+  if (settings) {
+    saveSettings(settings);
+    renderSettings();
+  }
+  var fileInput = document.getElementById('import-file');
+  if (fileInput) fileInput.value = '';
+}
+
+function confirmClearAll() {
+  openModal('Clear All Data', '<p>This will delete ALL saved products and reset settings. This cannot be undone.</p>',
+    '<button class="btn" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="doClearAll()">Delete Everything</button>');
+}
+function doClearAll() {
+  if (storageAvailable) {
+    localStorage.removeItem('hpc_products');
+    localStorage.removeItem('hpc_settings');
+  }
+  applyAccent(32);
+  updateAllCounts();
+  renderSettings();
+  closeModal();
+  showToast('All data cleared', 'info');
+}
+
+/* ── UNSAVED CHANGES WARNING ── */
+window.addEventListener('beforeunload', function(e) {
+  if (calcModified) {
+    e.preventDefault();
+    e.returnValue = '';
+    return e.returnValue;
+  }
+});
+
+/* ── BOOT ── */
+function boot() {
+  if (!storageAvailable) {
+    showToast('Private browsing mode — data will not be saved once this tab closes', 'error', 8000);
+  }
+  initTheme();
+  var settings = getSettings();
+  applyAccent(settings.accentHue);
+  resetCalculator();
+  initCalculatorListeners();
+  updateCalculatorResults();
+  updateAllCounts();
+  document.getElementById('tel-wage').textContent = '$' + (settings.targetHourlyWage||20) + '/hr';
+  document.getElementById('tel-channel').textContent = settings.defaultChannel || 'Etsy';
+  buildCompareColumns();
+}
+boot();
+</script>
+</body>
+</html>

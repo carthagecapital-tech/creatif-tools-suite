@@ -1,0 +1,88 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  HANDMADE PRICING CALCULATOR
+  Quick Start Guide (5 minutes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This guide will walk you through pricing
+your first product.
+
+STEP 1 — OPEN THE APP
+─────────────────────
+Double‑click the HTML file. The calculator
+view opens automatically.
+
+STEP 2 — ENTER YOUR COSTS
+─────────────────────────
+Fill in these fields:
+
+• Product Name  → “Silver Ring”
+• Material Cost → how much the raw
+                   materials cost
+• Batch Size    → how many items you can
+                   make from one batch of
+                   materials (leave at 1
+                   if unsure)
+• Labor Hours   → how long it takes to
+                   make one item
+• Hourly Wage   → what you want to earn
+                   per hour (e.g., $20)
+• Overhead      → ongoing costs per item
+                   (tools, studio rent,
+                    electricity)
+• Packaging     → cost of box, wrapping,
+                   labels
+
+STEP 3 — CHOOSE YOUR CHANNEL
+────────────────────────────
+Use the “Selling Channel” dropdown to pick
+where you sell:
+
+• Etsy      → includes Etsy's fees
+• Shopify   → includes payment processing
+• Craft Fair → add your booth fee
+• Wholesale  → price for bulk buyers
+
+STEP 4 — SET YOUR SELLING PRICE
+───────────────────────────────
+Enter the price you plan to charge in the
+“Your Selling Price” field. The cards on
+screen instantly show:
+
+• Suggested Price    → what the formula
+                       recommends
+• True Hourly Wage   → what you actually
+                       earn per hour
+• Profit Margin      → your markup
+• Break‑Even Price   → the absolute
+                       minimum you can
+                       charge
+
+STEP 5 — SAVE YOUR PRODUCT
+──────────────────────────
+Click the “Save Product” button (or press
+Ctrl+S on your keyboard). The product is
+added to your catalog.
+
+STEP 6 — EXPLORE
+────────────────
+Use the sidebar to switch between views:
+• Calculator  → price new items
+• Products    → see all saved products
+• Compare     → test two scenarios
+                side‑by‑side
+• Analytics   → charts showing your
+                average wage and margins
+• Settings    → change default wage,
+                overhead, color theme
+• Help        → full formula reference
+                and keyboard shortcuts
+
+YOU'RE DONE!
+────────────────
+You've priced your first handmade item
+fairly and profitably. Repeat for every
+product in your shop.
+
+Next step: Open the User Guide for deep
+dives into batch pricing, wholesale
+strategies, and backing up your data.

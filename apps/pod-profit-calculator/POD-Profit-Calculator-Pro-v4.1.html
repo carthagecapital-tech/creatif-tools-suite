@@ -1,0 +1,2506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POD Profit Calculator Pro</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='12' fill='%23333'/%3E%3Ctext x='50' y='65' font-size='50' text-anchor='middle' fill='%23fff' font-family='monospace'%3E$%3C/text%3E%3C/svg%3E">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   MICROAPP SHELL v6 — Design System Template
+   Copy EVERYTHING below this line into your app. Change only app-name,
+   nav items, view sections, and the JavaScript business logic.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+
+
+/* ── COLOR SYSTEM ── */
+:root {
+  --accent-h: 32;
+  --accent:    oklch(0.555 0.180 var(--accent-h));
+  --accent-2:  oklch(0.65  0.14  var(--accent-h));
+  --accent-3:  oklch(0.42  0.18  var(--accent-h));
+  --accent-soft:   oklch(0.555 0.180 var(--accent-h) / .10);
+  --accent-soft-2: oklch(0.555 0.180 var(--accent-h) / .06);
+  --accent-glow:   oklch(0.555 0.180 var(--accent-h) / .15);
+  --paper:  oklch(0.962 0.012 85);
+  --paper-2:oklch(0.945 0.014 84);
+  --ink:    oklch(0.185 0.012 55);
+  --ink-2:  oklch(0.32  0.012 55);
+  --mid:    oklch(0.52  0.010 60);
+  --rule:   oklch(0.865 0.010 70);
+  --rule-2: oklch(0.91  0.010 70);
+  --signal: oklch(0.68 0.16 145);
+  --warn:   oklch(0.78 0.16 85);
+  --danger: oklch(0.60 0.18 25);
+  --shadow: 0 1px 0 oklch(0.18 0.012 55 / .04), 0 14px 30px -22px oklch(0.18 0.012 55 / .35);
+  --shadow-lg: 0 4px 20px oklch(0.18 0.012 55 / .15);
+  --sidebar-w: 248px;
+  --toggle-icon: "☾";
+}
+[data-theme="dark"] {
+  --paper:  oklch(0.18 0.012 55);
+  --paper-2:oklch(0.22 0.014 60);
+  --ink:    oklch(0.92 0.012 85);
+  --ink-2:  oklch(0.78 0.012 80);
+  --mid:    oklch(0.60 0.010 70);
+  --rule:   oklch(0.35 0.010 45);
+  --rule-2: oklch(0.30 0.010 40);
+  --accent-soft:   oklch(0.65 0.180 var(--accent-h) / .15);
+  --accent-soft-2: oklch(0.65 0.180 var(--accent-h) / .08);
+  --accent-glow:   oklch(0.65 0.180 var(--accent-h) / .20);
+  --shadow: 0 1px 0 oklch(0.10 0.012 40 / .3), 0 14px 30px -22px oklch(0.05 0.012 20 / .5);
+  --shadow-lg: 0 4px 20px oklch(0.05 0.012 20 / .4);
+  --toggle-icon: "☀";
+}
+
+/* 🔒 FIX-13: oklch fallbacks for Firefox <128 and older browsers */
+@supports not (color: oklch(0% 0 0)) {
+  :root {
+    --accent:        #d4893a;
+    --accent-2:      #e0a55e;
+    --accent-3:      #a8621e;
+    --accent-soft:   rgba(212,137,58,0.10);
+    --accent-soft-2: rgba(212,137,58,0.06);
+    --accent-glow:   rgba(212,137,58,0.15);
+    --paper:         #f5f2ee;
+    --paper-2:       #ede9e3;
+    --ink:           #1e1c18;
+    --ink-2:         #3d3a34;
+    --mid:           #7a756c;
+    --rule:          #d8d2c8;
+    --rule-2:        #e5e0d8;
+    --signal:        #3a8c4a;
+    --warn:          #b8860b;
+    --danger:        #b03020;
+    --shadow:        0 1px 0 rgba(30,28,24,0.04), 0 14px 30px -22px rgba(30,28,24,0.35);
+    --shadow-lg:     0 4px 20px rgba(30,28,24,0.15);
+  }
+  [data-theme="dark"] {
+    --paper:         #252422;
+    --paper-2:       #2e2c28;
+    --ink:           #e8e4dc;
+    --ink-2:         #c0bbb0;
+    --mid:           #8a8478;
+    --rule:          #3e3b34;
+    --rule-2:        #333028;
+    --accent-soft:   rgba(212,137,58,0.15);
+    --accent-soft-2: rgba(212,137,58,0.08);
+    --accent-glow:   rgba(212,137,58,0.20);
+    --shadow:        0 1px 0 rgba(10,8,4,0.30), 0 14px 30px -22px rgba(5,4,2,0.50);
+    --shadow-lg:     0 4px 20px rgba(5,4,2,0.40);
+  }
+}
+
+/* ── RESET & BASE ── */
+* { box-sizing:border-box; margin:0; padding:0 }
+html, body { height:100% }
+body {
+  font-family: ui-monospace, SFMono-Regular, Menlo, 'Courier New', monospace;
+  font-feature-settings: "ss01","ss02","cv11","tnum","zero";
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  background: radial-gradient(1200px 700px at 80% -10%, oklch(0.97 0.02 80) 0%, transparent 60%),
+              radial-gradient(900px 500px at -10% 110%, oklch(0.93 0.02 60) 0%, transparent 55%),
+              var(--paper);
+  background-attachment: fixed;
+  font-size:13px; line-height:1.45;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  transition: background .3s ease, color .3s ease;
+}
+[data-theme="dark"] body {
+  background: radial-gradient(1200px 700px at 80% -10%, oklch(0.25 0.02 80) 0%, transparent 60%),
+              radial-gradient(900px 500px at -10% 110%, oklch(0.20 0.02 60) 0%, transparent 55%),
+              var(--paper);
+}
+.app { min-height:100vh; min-height:100dvh; display:grid; grid-template-columns: var(--sidebar-w) 1fr; }
+
+/* ── SIDEBAR ── */
+aside { border-right:1px solid var(--rule); background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%); display:flex; flex-direction:column; position:sticky; top:0; height:100vh; height:100dvh; z-index:10; }
+.brand { padding: 20px 22px 18px; border-bottom:1px solid var(--rule); display:grid; grid-template-columns: auto 1fr auto; align-items:center; gap:12px; }
+.mark { width:24px; height:24px; position:relative; border:1.25px solid var(--ink); display:grid; place-items:center; background:var(--paper); flex-shrink:0; }
+.mark::before { content:""; width:8px; height:8px; background:var(--accent); box-shadow: 0 0 0 2.5px var(--paper); }
+.mark::after  { content:""; position:absolute; inset:-4px; border-top:1px solid var(--ink); border-left:1px solid var(--ink); width:5px; height:5px; }
+.wordmark { font-weight:700; font-size:12.5px; letter-spacing:.04em; text-transform:uppercase; }
+.wordmark .slash { color:var(--accent); font-weight:500; margin:0 1px }
+.wordmark small { display:block; font-weight:400; font-size:9.5px; letter-spacing:.18em; color:var(--mid); margin-top:2px; }
+.ver { font-size:9px; letter-spacing:.12em; color:var(--mid); border:1px solid var(--rule); padding:2px 5px; flex-shrink:0; }
+.theme-toggle { width:22px; height:22px; border:1px solid var(--rule); background:var(--paper-2); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:11px; color:var(--ink-2); margin-left:4px; flex-shrink:0; transition: all .15s; }
+.theme-toggle:hover { border-color:var(--accent); color:var(--accent); }
+.theme-toggle::before { content:var(--toggle-icon); }
+
+.find { margin: 14px 14px 6px; border:1px solid var(--rule); background:var(--paper); display:flex; align-items:center; gap:8px; padding:7px 10px; font-size:11.5px; }
+.find .find-icon { color:var(--mid); font-size:13px; }
+.find input { flex:1; border:none; background:transparent; outline:none; font:inherit; font-size:11.5px; color:var(--ink); min-width:0; }
+.find input::placeholder { color:var(--mid); }
+.find .kbd { margin-left:auto; display:inline-flex; gap:2px; }
+.kbd span { border:1px solid var(--rule); background:linear-gradient(180deg,var(--paper),var(--paper-2)); padding:1px 5px; border-radius:2px; font-size:9.5px; color:var(--ink-2); box-shadow: 0 1px 0 var(--rule); }
+
+.nav-title { padding: 18px 22px 8px; font-size:9.5px; letter-spacing:.22em; color:var(--mid); display:flex; justify-content:space-between; }
+nav { flex:1; display:flex; flex-direction:column; overflow-y:auto; }
+.nav-list { display:flex; flex-direction:column; }
+.nav-item { display:grid; grid-template-columns: 28px 1fr auto; align-items:center; gap:0; padding: 8px 22px; color:var(--ink-2); text-decoration:none; font-size:12px; letter-spacing:.02em; border-left:2px solid transparent; position:relative; transition: background .12s; cursor:pointer; }
+.nav-item .idx { font-size:9.5px; color:var(--mid); letter-spacing:.1em; }
+.nav-item .lbl { text-transform:lowercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.nav-item .meta { font-size:9.5px; color:var(--mid); border:1px solid var(--rule); padding:1px 5px; background:var(--paper); flex-shrink:0; margin-left:8px; }
+.nav-item:hover { background: var(--accent-soft-2) }
+.nav-item.active { background: var(--paper); color:var(--ink); border-left-color: var(--accent); font-weight:600; }
+.nav-item.active::after { content:""; position:absolute; right:18px; top:50%; transform:translateY(-50%); width:5px; height:5px; background:var(--accent); }
+.nav-item.active .idx { color:var(--accent) }
+
+.runtime { margin: 8px 14px 14px; border:1px solid var(--rule); background:var(--paper); padding:12px 12px 10px; flex-shrink:0; }
+.runtime h4 { font-size:9.5px; letter-spacing:.2em; color:var(--mid); font-weight:500; margin-bottom:8px; display:flex; justify-content:space-between; }
+.runtime .row { display:flex; justify-content:space-between; align-items:baseline; font-size:11px; color:var(--ink-2); padding:3px 0; }
+.runtime .row b { font-weight:600; color:var(--ink) }
+.runtime .bar { height:3px; background:var(--rule-2); margin-top:8px; position:relative; overflow:hidden; }
+.runtime .bar-fill { position:absolute; inset:0; background:var(--ink); }
+.runtime .bar-fill.warn { background:var(--accent); left:auto; right:0; width:22%; }
+
+.op { border-top:1px solid var(--rule); padding:12px 22px; display:grid; grid-template-columns:24px 1fr auto; align-items:center; gap:10px; flex-shrink:0; }
+.avatar { width:24px; height:24px; border:1px solid var(--ink); background: repeating-linear-gradient(45deg, var(--ink) 0 1px, transparent 1px 4px), var(--paper); position:relative; flex-shrink:0; }
+.avatar::after { content:""; position:absolute; right:-3px; bottom:-3px; width:7px; height:7px; background:var(--signal); border:1.5px solid var(--paper); }
+.op .who { font-size:11px; line-height:1.3; min-width:0; }
+.op .who small { display:block; color:var(--mid); font-size:9.5px; letter-spacing:.1em }
+.op .out { font-size:9.5px; color:var(--mid); letter-spacing:.1em; border:1px solid var(--rule); padding:2px 5px; flex-shrink:0; cursor:pointer; }
+.op .out:hover { background:var(--paper-2); }
+
+/* ── MAIN & HEADER ── */
+main { min-width:0; display:flex; flex-direction:column; }
+header { border-bottom:1px solid var(--rule); background: linear-gradient(180deg, var(--paper) 0%, oklch(from var(--paper) l c h / 98%) 100%); padding: 16px 28px 14px; display:grid; grid-template-columns: 1fr auto; align-items:end; gap:24px; position:sticky; top:0; z-index:5; }
+.crumbs { font-size:10px; letter-spacing:.18em; color:var(--mid); text-transform:uppercase; display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
+.crumbs .live { display:inline-flex; align-items:center; gap:5px; color:var(--ink); }
+.crumbs .live i { width:6px; height:6px; background:var(--accent); display:inline-block; box-shadow: 0 0 0 3px var(--accent-soft); }
+h1 { font-size:28px; font-weight:700; letter-spacing:-.01em; line-height:1; color:var(--ink); display:flex; flex-direction:column; align-items:flex-start; }
+h1 .of { color:var(--mid); font-weight:300; font-size:.42em; letter-spacing:.04em; margin-top:4px; }
+
+.topbar-right { display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+.telemetry { display:grid; grid-auto-flow:column; gap:0; border:1px solid var(--rule); background:var(--paper); }
+.telemetry div { padding:8px 14px; border-right:1px solid var(--rule); font-size:10px; letter-spacing:.12em; color:var(--mid); display:flex; flex-direction:column; gap:2px; line-height:1; }
+.telemetry div:last-child { border-right:none }
+.telemetry b { color:var(--ink); font-size:12px; font-weight:600; letter-spacing:.02em; }
+
+/* ── BUTTONS ── */
+.btn { font: inherit; cursor:pointer; display:inline-flex; align-items:center; gap:10px; border:1px solid var(--rule); background:var(--paper); color:var(--ink); padding:9px 14px; font-size:11.5px; letter-spacing:.04em; text-decoration:none; box-shadow: var(--shadow); position:relative; transition: background .12s; white-space:nowrap; }
+.btn:hover { background: var(--accent-soft-2) }
+.btn:active { transform:translateY(1px) }
+.btn .k { font-size:9px; letter-spacing:.12em; color:var(--mid); border-left:1px solid var(--rule); padding-left:10px; margin-left:4px; }
+.btn.primary { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.btn.primary:hover { background:oklch(from var(--ink) calc(l + 0.08) c h) }
+.btn.primary .k { color:oklch(0.7 0.01 60); border-left-color: oklch(0.32 0.012 55) }
+.btn.primary::before { content:""; width:6px; height:6px; background:var(--accent); }
+.btn.danger { border-color:var(--danger); color:var(--danger); }
+.btn.danger:hover { background:oklch(0.60 0.18 25 / .10); }
+
+/* ── CANVAS ── */
+.canvas { padding: 28px 28px 40px; position:relative; background: radial-gradient(circle at 1px 1px, oklch(from var(--ink) l c h / 0.08) 1px, transparent 1.5px) 0 0 / 22px 22px; }
+.canvas::before, .canvas::after { content:""; position:absolute; width:18px; height:18px; border:1px solid var(--ink); pointer-events:none; }
+.canvas::before { top:14px; left:14px; border-right:none; border-bottom:none }
+.canvas::after  { top:14px; right:14px; border-left:none; border-bottom:none }
+
+/* ── SECTIONS ── */
+.section-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px; }
+.section-head h2 { font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; color:var(--ink-2); display:flex; align-items:center; gap:10px; }
+.section-head h2 .num { color:var(--accent); font-weight:500; }
+
+/* ── FORMS ── */
+.form-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px 20px; margin-bottom: 20px; }
+.form-group { display:flex; flex-direction:column; gap:6px; }
+.form-group.full-width { grid-column: 1 / -1; }
+.form-group label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--mid); font-weight: 500; display:flex; align-items:center; gap:8px; }
+.form-group label .hint { font-size: 9px; letter-spacing: .08em; color: var(--mid); border: 1px solid var(--rule); padding: 1px 5px; background: var(--paper-2); text-transform: none; }
+.form-group input, .form-group select, .form-group textarea { font: inherit; font-size: 13px; border: 1px solid var(--rule); background: var(--paper); padding: 10px 12px; color: var(--ink); outline: none; width: 100%; transition: border-color .15s, box-shadow .15s; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.form-group input::placeholder { color: var(--mid); opacity: .6; }
+.form-group input[type="number"] { font-variant-numeric: tabular-nums; }
+.form-group select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23555' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+[data-theme="dark"] .form-group select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23aaa' stroke-width='1.5'/%3E%3C/svg%3E"); }
+
+.toggle-wrap { display:flex; align-items:center; gap: 10px; }
+.toggle-wrap .toggle-label { font-size: 12px; color: var(--ink-2); }
+.toggle-switch { position: relative; width: 36px; height: 20px; cursor: pointer; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-switch .track { position: absolute; inset: 0; background: var(--rule-2); border-radius: 20px; transition: background .2s; }
+.toggle-switch .track::after { content: ""; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; background: var(--paper); border-radius: 50%; transition: transform .2s; box-shadow: 0 1px 3px oklch(0 0 0 / .2); }
+.toggle-switch input:checked + .track { background: var(--accent); }
+.toggle-switch input:checked + .track::after { transform: translateX(16px); }
+
+.slider-wrap { display:flex; align-items:center; gap: 12px; }
+.slider-wrap input[type="range"] { flex: 1; -webkit-appearance: none; appearance: none; height: 4px; background: var(--rule-2); border-radius: 2px; outline: none; }
+.slider-wrap input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid var(--paper); cursor: pointer; box-shadow: 0 0 0 2px var(--accent-soft); }
+.slider-wrap input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid var(--paper); cursor: pointer; }
+.slider-wrap .slider-val { font-size: 12px; font-weight: 600; color: var(--accent); min-width: 40px; text-align: right; }
+
+/* ── CARDS ── */
+.stats { display:grid; grid-template-columns: repeat(3, 1fr); gap:0; border:1px solid var(--rule); background:var(--paper); box-shadow: var(--shadow); position:relative; }
+.card { padding: 22px 22px 18px; border-right:1px solid var(--rule); position:relative; display:flex; flex-direction:column; min-height: 140px; }
+.card:last-child { border-right:none }
+.card::before, .card::after { content:""; position:absolute; width:10px; height:10px; border:1px solid var(--ink-2); opacity:.7; pointer-events:none; }
+.card::before { top:8px; left:8px; border-right:none; border-bottom:none }
+.card::after  { bottom:8px; right:8px; border-left:none; border-top:none }
+.card .lbl { font-size:10px; letter-spacing:.2em; color:var(--mid); text-transform:uppercase; display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.card .lbl .tag { font-size:9px; letter-spacing:.14em; border:1px solid var(--rule); padding:2px 6px; color:var(--ink-2); background:var(--paper-2); }
+.card .val { font-size:36px; font-weight:600; letter-spacing:-.02em; line-height:1; color:var(--ink); display:flex; align-items:baseline; gap:8px; }
+.card .val .u { font-size:14px; font-weight:400; color:var(--mid); letter-spacing:.04em; }
+.card .delta { font-size:11px; letter-spacing:.03em; display:flex; align-items:center; gap:8px; margin-top:10px; color:var(--ink-2); }
+.delta .pill { display:inline-flex; align-items:center; gap:5px; border:1px solid var(--rule); background:var(--paper-2); padding:2px 7px; font-size:10.5px; font-weight:600; }
+.delta .pill.up   { color: var(--signal); border-color: oklch(from var(--signal) l calc(c * 0.5) h) }
+.delta .pill.down { color: var(--danger); border-color: oklch(from var(--danger) l calc(c * 0.5) h) }
+.delta .pill.neutral { color: var(--mid); border-color: var(--rule) }
+.delta .pill::before { content:""; width:0; height:0; border-style:solid; }
+.delta .pill.up::before   { border-width:0 4px 5px 4px; border-color:transparent transparent currentColor transparent }
+.delta .pill.down::before { border-width:5px 4px 0 4px; border-color: currentColor transparent transparent transparent }
+.delta .pill.neutral::before { border:none; width:8px; height:1px; background:currentColor; }
+.delta .since { color:var(--mid); font-size:10px; letter-spacing:.06em }
+
+/* ── TABLE ── */
+.tbl-wrap { margin-top:24px; border:1px solid var(--rule); background:var(--paper); box-shadow: var(--shadow); }
+.tbl-head { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--rule); background:linear-gradient(180deg,var(--paper),var(--paper-2)); flex-wrap:wrap; gap:10px; }
+.tbl-head .ttl { font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; display:flex; align-items:center; gap:10px; }
+.tbl-head .ttl .num { color:var(--accent) }
+.tbl-head .ttl .ct { color:var(--mid); font-weight:400; letter-spacing:.12em; border-left:1px solid var(--rule); padding-left:10px; margin-left:4px; }
+.filters { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.chip { font-size:10px; letter-spacing:.12em; text-transform:uppercase; border:1px solid var(--rule); padding:5px 9px; background:var(--paper); display:inline-flex; align-items:center; gap:6px; color:var(--ink-2); cursor:pointer; transition: all .12s; }
+.chip.on, .chip:hover { background:var(--ink); color:var(--paper); border-color:var(--ink) }
+.chip i { width:5px; height:5px; background:currentColor; display:inline-block; }
+.chip.del { color: var(--danger); border-color: var(--danger); }
+.chip.del:hover { background: var(--danger); color: var(--paper); }
+table { width:100%; border-collapse:collapse; font-size:12px; }
+thead th { font-weight:500; font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--mid); text-align:left; padding:10px 18px; border-bottom:1px solid var(--rule); background:var(--paper-2); position:relative; cursor: pointer; user-select: none; white-space: nowrap; }
+thead th:hover { color: var(--ink); background: var(--accent-soft-2); }
+thead th.sortable::after { content: " \2195"; font-size: 8px; opacity: .4; }
+thead th.sort-asc::after { content: " \2191"; opacity: 1; color: var(--accent); }
+thead th.sort-desc::after { content: " \2193"; opacity: 1; color: var(--accent); }
+thead th + th::before { content:""; position:absolute; left:0; top:25%; bottom:25%; border-left:1px solid var(--rule-2); }
+thead th.num, tbody td.num { text-align:right; font-variant-numeric:tabular-nums }
+tbody td { padding:14px 18px; border-bottom:1px solid var(--rule-2); color:var(--ink-2); vertical-align:middle; }
+tbody tr:last-child td { border-bottom:none }
+tbody tr:hover td { background: var(--accent-soft-2) }
+.id { display:inline-flex; align-items:center; gap:10px; }
+.id .dot { width:8px; height:8px; background:var(--ink); display:inline-block; flex-shrink:0; }
+.id .dot.red    { background:var(--danger) }
+.id .dot.green  { background:var(--signal) }
+.id .dot.amber  { background:var(--warn) }
+.id .dot.gray   { background:var(--mid) }
+.id b { font-weight:600; color:var(--ink); letter-spacing:.01em }
+.id small { display:block; color:var(--mid); font-size:10px; letter-spacing:.08em; margin-top:2px }
+
+/* ── EMPTY STATE ── */
+.empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 60px 40px; text-align: center; gap: 16px; border: 1px dashed var(--rule); background: var(--paper); }
+.empty-state .empty-icon { width: 48px; height: 48px; border: 2px dashed var(--rule); display: grid; place-items: center; font-size: 20px; color: var(--mid); }
+.empty-state h3 { font-size: 14px; letter-spacing: .1em; color: var(--ink-2); font-weight: 600; }
+.empty-state p { font-size: 12px; color: var(--mid); max-width: 320px; line-height: 1.6; }
+
+/* ── PAGINATION ── */
+.pagination { display:flex; align-items:center; justify-content:center; gap: 4px; padding: 14px 18px; border-top: 1px solid var(--rule); }
+.pagination button { font: inherit; font-size: 11px; border: 1px solid var(--rule); background: var(--paper); color: var(--ink-2); padding: 5px 10px; cursor: pointer; min-width: 32px; text-align: center; transition: all .12s; }
+.pagination button:hover:not(:disabled) { background: var(--accent-soft-2); border-color: var(--accent); color: var(--ink); }
+.pagination button:disabled { opacity: .4; cursor: not-allowed; }
+.pagination button.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.pagination .page-info { font-size: 10px; color: var(--mid); letter-spacing: .1em; margin: 0 12px; }
+
+/* ── TOASTS ── */
+.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast { pointer-events: all; display: flex; align-items: center; gap: 12px; padding: 12px 18px; min-width: 280px; max-width: 420px; border: 1px solid var(--rule); background: var(--paper); box-shadow: var(--shadow-lg); font-size: 12px; color: var(--ink); animation: toastIn .3s ease forwards; position: relative; overflow: hidden; }
+.toast.toast-out { animation: toastOut .3s ease forwards; }
+.toast.success { border-left: 3px solid var(--signal); }
+.toast.error   { border-left: 3px solid var(--danger); }
+.toast.info    { border-left: 3px solid var(--accent-2); }
+.toast .toast-icon { font-size: 14px; flex-shrink: 0; }
+.toast .toast-msg { flex: 1; line-height: 1.4; }
+.toast .toast-close { cursor: pointer; color: var(--mid); font-size: 16px; line-height: 1; padding: 2px; }
+.toast .toast-close:hover { color: var(--ink); }
+.toast .toast-bar { position: absolute; bottom: 0; left: 0; height: 2px; background: var(--accent-soft); }
+@keyframes toastIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(20px); } }
+@keyframes shrink { from { width: 100%; } to { width: 0%; } }
+
+/* ── MODAL ── */
+.modal-overlay { position: fixed; inset: 0; z-index: 200; background: oklch(0.10 0.012 55 / .55); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--paper); border: 1px solid var(--rule); box-shadow: var(--shadow-lg); width: 90%; max-width: 520px; max-height: 85vh; display: flex; flex-direction: column; transform: translateY(-20px) scale(0.97); transition: transform .25s ease; }
+.modal-overlay.open .modal { transform: translateY(0) scale(1); }
+.modal-header { padding: 18px 22px 14px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; justify-content: space-between; }
+.modal-header h3 { font-size: 13px; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; color: var(--ink); }
+.modal-close { cursor: pointer; color: var(--mid); font-size: 18px; line-height: 1; padding: 4px; border: none; background: none; }
+.modal-close:hover { color: var(--ink); }
+.modal-body { padding: 22px; overflow-y: auto; font-size: 12px; line-height: 1.6; color: var(--ink-2); }
+.modal-footer { padding: 14px 22px; border-top: 1px solid var(--rule); display: flex; justify-content: flex-end; gap: 10px; }
+
+/* ── SETTINGS ── */
+.settings-section { margin-bottom: 32px; }
+.settings-section h3 { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.settings-section h3 .num { color: var(--accent); font-weight: 500; }
+.settings-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border: 1px solid var(--rule); background: var(--paper); margin-bottom: -1px; }
+.settings-row label { font-size: 12px; color: var(--ink-2); }
+.settings-row .desc { font-size: 10px; color: var(--mid); margin-top: 4px; letter-spacing: .04em; }
+.settings-row input, .settings-row select { font: inherit; font-size: 13px; border: 1px solid var(--rule); background: var(--paper); padding: 8px 10px; color: var(--ink); outline: none; }
+.settings-row input:focus, .settings-row select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+/* ── HELP ── */
+.help-block { border: 1px solid var(--rule); background: var(--paper); padding: 22px; margin-bottom: 20px; }
+.help-block h3 { font-size: 12px; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.help-block h3 .num { color: var(--accent); font-weight: 500; }
+.help-block p { font-size: 12px; color: var(--ink-2); line-height: 1.7; margin-bottom: 8px; }
+.help-block ul { margin: 8px 0; padding-left: 20px; }
+.help-block li { font-size: 12px; color: var(--ink-2); line-height: 1.7; margin-bottom: 4px; }
+.help-block .fee-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--rule-2); font-size: 12px; }
+.help-block .fee-row:last-child { border-bottom: none; }
+.help-block .fee-row b { color: var(--ink); font-weight: 600; }
+.help-block .fee-row span { color: var(--ink-2); }
+
+/* ── FOOTER ── */
+.canvas-foot { position:relative }
+.canvas-foot::before, .canvas-foot::after { content:""; position:absolute; width:18px; height:18px; border:1px solid var(--ink); pointer-events:none; }
+.canvas-foot::before { bottom:14px; left:14px; border-right:none; border-top:none }
+.canvas-foot::after  { bottom:14px; right:14px; border-left:none; border-top:none }
+.footstrip { margin-top:22px; display:flex; justify-content:space-between; align-items:center; font-size:10px; letter-spacing:.14em; color:var(--mid); text-transform:uppercase; padding: 12px 4px 4px; flex-wrap:wrap; gap:8px; }
+.footstrip .l, .footstrip .r { display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+.footstrip .sep { width:24px; border-top:1px solid var(--rule) }
+.footstrip b { color:var(--ink); font-weight:500; letter-spacing:.06em }
+
+
+/* ── FEE BREAKDOWN BAR ── */
+.fee-bar-wrap { margin: 20px 0; }
+.fee-bar { height: 28px; display: flex; border-radius: 2px; overflow: hidden; border: 1px solid var(--rule); }
+.fee-seg { transition: width .2s ease; display: flex; align-items: center; justify-content: center; font-size: 9px; letter-spacing: .08em; color: var(--paper); font-weight: 600; white-space: nowrap; min-width: 0; }
+.fee-seg.base { background: oklch(0.55 0.12 220); }
+.fee-seg.platform { background: oklch(0.55 0.14 280); }
+.fee-seg.processing { background: oklch(0.55 0.12 160); }
+.fee-seg.shipping { background: oklch(0.55 0.14 45); }
+.fee-labels { display: flex; gap: 16px; margin-top: 8px; flex-wrap: wrap; }
+.fee-label { font-size: 10px; color: var(--ink-2); display: flex; align-items: center; gap: 6px; }
+.fee-label .dot { width: 8px; height: 8px; border-radius: 1px; }
+.fee-label .amt { font-weight: 600; color: var(--ink); margin-left: 4px; }
+
+/* ── RESULTS GRID ── */
+.results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--rule); background: var(--paper); box-shadow: var(--shadow); margin-top: 20px; }
+.results-grid .card { min-height: 120px; border-bottom: 1px solid var(--rule); }
+.results-grid .card:nth-child(3n) { border-right: none; }
+.results-grid .card:nth-child(3n+1),
+.results-grid .card:nth-child(3n+2) { border-right: 1px solid var(--rule); }
+.results-grid .card:nth-child(4),
+.results-grid .card:nth-child(5),
+.results-grid .card:nth-child(6) { border-bottom: none; }
+
+/* ── COMPARE VIEW ── */
+.compare-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--rule); background: var(--paper); box-shadow: var(--shadow); }
+.compare-col { padding: 24px; border-right: 1px solid var(--rule); }
+.compare-col:last-child { border-right: none; }
+.compare-col h4 { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.compare-col h4 .badge { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border: 1px solid var(--rule); font-size: 10px; background: var(--paper-2); }
+.winner-banner { grid-column: 1 / -1; padding: 16px 24px; border-bottom: 1px solid var(--rule); background: var(--accent-soft-2); display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 13px; font-weight: 600; }
+.winner-banner .winner-name { color: var(--signal); }
+.winner-banner .loser-name { color: var(--danger); }
+
+/* ── ANALYTICS ── */
+.analytics-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px; }
+.chart-wrap { border: 1px solid var(--rule); background: var(--paper); padding: 20px; box-shadow: var(--shadow); }
+.chart-title { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 16px; font-weight: 600; }
+.chart-title .num { color: var(--accent); font-weight: 500; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--rule); background: var(--paper); box-shadow: var(--shadow); margin-top: 20px; }
+.summary-card { padding: 18px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.summary-card:nth-child(3n) { border-right: none; }
+.summary-card:nth-child(4),
+.summary-card:nth-child(5),
+.summary-card:nth-child(6) { border-bottom: none; }
+.summary-card .lbl { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--mid); margin-bottom: 8px; }
+.summary-card .val { font-size: 20px; font-weight: 600; color: var(--ink); }
+.summary-card .desc { font-size: 10px; color: var(--mid); margin-top: 4px; }
+
+/* ── CUSTOM SUPPLIER ── */
+.custom-supplier-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border: 1px solid var(--rule); background: var(--paper); margin-bottom: 8px; }
+.custom-supplier-item b { font-size: 12px; }
+.custom-supplier-item span { font-size: 10px; color: var(--mid); }
+
+/* ── ROW ACTIONS ── */
+.row-actions { display: flex; gap: 6px; }
+.row-actions .btn-sm { font-size: 10px; padding: 4px 8px; letter-spacing: .06em; }
+
+/* ── CANVAS RESPONSIVE ── */
+canvas { width: 100%; height: auto; display: block; }
+
+/* ── PRINT OVERRIDES ── */
+@media print {
+  .winner-banner { background: #f0f0f0 !important; }
+  .fee-seg { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .compare-wrap { page-break-inside: avoid; }
+  .analytics-grid { grid-template-columns: 1fr 1fr; }
+  .chart-wrap { page-break-inside: avoid; }
+  .summary-grid { page-break-inside: avoid; }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .results-grid { grid-template-columns: 1fr; }
+  .results-grid .card { border-right: none !important; border-bottom: 1px solid var(--rule) !important; }
+  .results-grid .card:last-child { border-bottom: none !important; }
+  .compare-wrap { grid-template-columns: 1fr; }
+  .compare-col { border-right: none; border-bottom: 1px solid var(--rule); }
+  .analytics-grid { grid-template-columns: 1fr; }
+  .winner-banner { grid-column: 1; }
+  .summary-grid { grid-template-columns: 1fr 1fr; }
+  .summary-card:nth-child(3n) { border-right: 1px solid var(--rule); }
+  .summary-card:nth-child(2n) { border-right: none; }
+}
+@media (max-width: 640px) {
+  .summary-grid { grid-template-columns: 1fr; }
+  .summary-card { border-right: none !important; }
+  .fee-labels { gap: 8px; }
+}
+
+/* ── PRINT ── */
+@media print {
+  .sidebar-toggle, aside, .theme-toggle, .find, .op, .btn .k, .toast-container, .pagination, .nav-item { display: none !important; }
+  .app { grid-template-columns: 1fr !important; }
+  body { background: white !important; color: black !important; }
+  .canvas { background: none !important; padding: 20px !important; }
+  .stats, .tbl-wrap, .form-grid, .chart-wrap, .help-block, .settings-row { box-shadow: none !important; border: 1px solid #ccc !important; }
+  .card { border-right: 1px solid #ccc !important; break-inside: avoid; }
+  header { position: static !important; background: white !important; border-bottom: 2px solid #333 !important; }
+  h1 { font-size: 24px !important; }
+  .footstrip { border-top: 2px solid #333; margin-top: 30px; }
+}
+
+/* ── RESPONSIVE ── */
+.sidebar-toggle { display:none; position:fixed; top:12px; left:12px; z-index:100; width:36px; height:36px; border:1px solid var(--rule); background:var(--paper); align-items:center; justify-content:center; cursor:pointer; font-size:16px; color:var(--ink); }
+@media (max-width: 1024px) {
+  .app { grid-template-columns: 1fr; }
+  aside { position:fixed; left:0; top:0; height:100vh; height:100dvh; transform: translateX(-100%); transition: transform .25s ease; }
+  aside.open { transform: translateX(0); }
+  .sidebar-toggle { display:flex; }
+  .stats { grid-template-columns: 1fr; }
+  .card { border-right:none; border-bottom:1px solid var(--rule); }
+  .card:last-child { border-bottom:none; }
+  header { padding-left: 56px; }
+  h1 { font-size:22px; }
+}
+@media (max-width: 640px) {
+  .canvas { padding: 20px 16px 32px; }
+  header { padding: 12px 16px 12px 56px; }
+  .telemetry { display:none; }
+  .topbar-right { gap:8px; }
+  .btn { padding:7px 10px; font-size:10.5px; }
+  .btn .k { display:none; }
+  table { font-size:11px; }
+  tbody td, thead th { padding:10px 12px; }
+  .card .val { font-size:28px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .modal { width: 95%; max-height: 90vh; }
+  .toast-container { left: 16px; right: 16px; bottom: 16px; }
+  .toast { min-width: auto; max-width: none; }
+}
+
+/* ── VIEW SYSTEM ── */
+.view { display: none; }
+.view.active { display: block; }
+.hidden { display:none !important; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     APP SHELL — Sidebar, Header, Canvas Container
+     ═══════════════════════════════════════════════════════════════════════ -->
+
+<button type="button" class="sidebar-toggle" onclick="toggleSidebar()" aria-label="toggle menu">&#9776;</button>
+<div class="app">
+  <aside id="sidebar">
+    <div class="brand">
+      <div class="mark" aria-hidden="true"></div>
+      <div class="wordmark"><span>POD</span><span class="slash">/</span><span>PRO</span><small>Profit Calculator</small></div>
+      <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
+        <div class="ver">v4.0</div>
+        <button type="button" class="theme-toggle" onclick="toggleTheme()" title="toggle dark mode" aria-label="Toggle dark mode"></button>
+      </div>
+    </div>
+    <div class="find"><span class="find-icon">&#8981;</span><input type="text" id="search-input" placeholder="global search..." autocomplete="off"><span class="kbd"><span>&#8984;</span><span>K</span></span></div>
+    <div class="nav-title"><span>&#8212;&#8212; menu</span></div>
+    <nav>
+      <div class="nav-list" id="nav-list">
+        <!-- NAV ITEMS — change data-view and lbl for each view -->
+        <a class="nav-item active" href="#" data-view="main" onclick="navigateTo('main', event)"><span class="idx">01</span><span class="lbl">calculator</span></a>
+        <a class="nav-item" href="#" data-view="data" onclick="navigateTo('data', event)"><span class="idx">02</span><span class="lbl">saved products</span><span class="meta" id="nav-count">0</span></a>
+        <a class="nav-item" href="#" data-view="compare" onclick="navigateTo('compare', event)"><span class="idx">03</span><span class="lbl">compare</span></a>
+        <a class="nav-item" href="#" data-view="analytics" onclick="navigateTo('analytics', event)"><span class="idx">04</span><span class="lbl">analytics</span></a>
+        <a class="nav-item" href="#" data-view="settings" onclick="navigateTo('settings', event)"><span class="idx">05</span><span class="lbl">settings</span></a>
+        <a class="nav-item" href="#" data-view="help" onclick="navigateTo('help', event)"><span class="idx">06</span><span class="lbl">help</span></a>
+      </div>
+      <div class="runtime" id="runtime-block">
+        <h4><span>summary</span><span style="color:var(--signal)">live</span></h4>
+        <div id="runtime-rows">
+          <div class="row"><span>products</span><b id="rt-count">0</b></div>
+          <div class="row"><span>best margin</span><b id="rt-status">--</b></div>
+        </div>
+        <div class="bar" aria-hidden="true"><div class="bar-fill" id="rt-count-bar"></div><div class="bar-fill warn" id="rt-margin-bar"></div></div>
+      </div>
+    </nav>
+    <div class="op">
+      <div class="avatar" aria-hidden="true"></div>
+      <div class="who"><span>user</span><small>active</small></div>
+      <button type="button" class="out" onclick="const n=getSavedProducts().length;showToast(n+' product'+(n!==1?'s':'')+' saved','info')">status</button>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <div>
+        <div class="crumbs"><span>app</span><span>/</span><span id="crumb-view">main</span></div>
+        <h1><span id="page-title">Main View</span> <span class="of">&#8212; <span id="page-subtitle">description</span></span></h1>
+      </div>
+      <div class="topbar-right">
+        <div class="telemetry" aria-hidden="true">
+          <div><span>channel</span><b id="telem-channel">Etsy</b></div>
+          <div><span>margin</span><b id="telem-margin">0.0%</b></div>
+        </div>
+        <div id="topbar-buttons">
+          <button class="btn" type="button" id="tb-export" onclick="exportToCSV()">export csv<span class="k">E</span></button>
+          <button class="btn" type="button" onclick="window.print()">print<span class="k">P</span></button>
+          <button class="btn primary" type="button" id="tb-save" onclick="saveCurrentProduct()">save<span class="k">S</span></button>
+        </div>
+      </div>
+    </header>
+
+    <section class="canvas" id="canvas">
+
+      <!-- ═════════════════════════════════════════════════════════════════
+           VIEW 01 — MAIN / CALCULATOR / PRIMARY TOOL
+           Replace this entire section with your app's main functionality
+           ═════════════════════════════════════════════════════════════════ -->
+      <!-- ═══════════════════════════════════════════════════════════════════════════
+     VIEW 01 — CALCULATOR / PRIMARY TOOL
+     POD Profit Calculator Pro — Main Calculation View
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<div class="view active" id="view-main">
+
+  <!-- Section Header -->
+  <div class="section-head">
+    <h2><span class="num">&#167; 01</span>Product Details</h2>
+  </div>
+
+  <!-- Calculator Form -->
+  <div class="form-grid">
+    <!-- 1. Product Name -->
+    <div class="form-group full-width">
+      <label for="calc-name">Product Name</label>
+      <input type="text" id="calc-name" placeholder="e.g., Retro Mountain Tee" autocomplete="off">
+    </div>
+
+    <!-- 2. Product Type -->
+    <div class="form-group">
+      <label for="calc-product-type">Product Type</label>
+      <select id="calc-product-type">
+        <option value="T-Shirt">T-Shirt</option>
+        <option value="Hoodie">Hoodie</option>
+        <option value="Mug">Mug</option>
+        <option value="Poster">Poster</option>
+        <option value="Tote Bag">Tote Bag</option>
+        <option value="Phone Case">Phone Case</option>
+        <option value="Canvas Print">Canvas Print</option>
+        <option value="Sticker Sheet">Sticker Sheet</option>
+      </select>
+    </div>
+
+    <!-- 3. Supplier -->
+    <div class="form-group">
+      <label for="calc-supplier">Supplier</label>
+      <select id="calc-supplier">
+        <option value="Printify">Printify</option>
+        <option value="Printful">Printful</option>
+        <option value="Gelato">Gelato</option>
+        <option value="Manual">Manual</option>
+      </select>
+    </div>
+
+    <!-- 4. Base Cost -->
+    <div class="form-group">
+      <label for="calc-base-cost">Base Cost <span class="hint">unit production cost</span></label>
+      <input type="number" id="calc-base-cost" min="0" step="0.01" placeholder="0.00">
+      <div class="form-note" style="font-size:10px;color:var(--mid);margin-top:4px;">Presets are estimates — verify actual cost in your supplier catalog.</div>
+    </div>
+
+    <!-- 5. Selling Channel -->
+    <div class="form-group">
+      <label for="calc-channel">Selling Channel</label>
+      <select id="calc-channel">
+        <option value="Etsy">Etsy</option>
+        <option value="Shopify">Shopify</option>
+        <option value="Direct">Direct/Other</option>
+      </select>
+    </div>
+
+    <!-- 6. Selling Price -->
+    <div class="form-group">
+      <label for="calc-selling-price">Selling Price <span class="hint">retail price</span></label>
+      <input type="number" id="calc-selling-price" min="0" step="0.01" placeholder="0.00">
+    </div>
+
+    <!-- 7. Shipping Cost -->
+    <div class="form-group">
+      <label for="calc-shipping-cost">Shipping Cost <span class="hint">per unit</span></label>
+      <input type="number" id="calc-shipping-cost" min="0" step="0.01" placeholder="0.00">
+    </div>
+
+    <!-- 8. Shipping Payer Toggle -->
+    <div class="form-group">
+      <label>Shipping Paid By</label>
+      <div class="toggle-wrap">
+        <span class="toggle-label" id="shipping-label-buyer">Buyer</span>
+        <label class="toggle-switch" for="calc-shipping-payer">
+          <input type="checkbox" id="calc-shipping-payer">
+          <span class="track"></span>
+        </label>
+        <span class="toggle-label" id="shipping-label-seller" style="color:var(--mid);">Seller</span>
+      </div>
+    </div>
+
+    <!-- 9. Target Margin Slider -->
+    <div class="form-group">
+      <label for="calc-target-margin">Target Margin <span class="hint">for suggested price</span></label>
+      <div class="slider-wrap">
+        <input type="range" id="calc-target-margin" min="10" max="80" value="30">
+        <span class="slider-val" id="calc-target-margin-val">30%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Channel Fee Info Note -->
+  <div id="channel-info" style="font-size:11px; color:var(--mid); margin:-8px 0 16px; letter-spacing:.04em;"></div>
+
+  <!-- Action Buttons -->
+  <div class="section-head" style="margin-top:8px;">
+    <div></div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn" type="button" id="btn-reset" onclick="confirmReset()">Reset Form</button>
+      <button class="btn" type="button" id="btn-compare" onclick="sendToCompare()">Send to Compare</button>
+      <button class="btn primary" type="button" id="btn-save" onclick="saveCurrentProduct()">Save Product<span class="k">S</span></button>
+    </div>
+  </div>
+
+  <!-- Fee Breakdown Bar -->
+  <div class="fee-bar-wrap">
+    <div class="section-head" style="margin-bottom:10px;">
+      <h2><span class="num">&#167; 02</span>Fee Breakdown</h2>
+    </div>
+    <div class="fee-bar" id="fee-bar">
+      <div class="fee-seg base" id="fee-seg-base" style="width:0%">BASE</div>
+      <div class="fee-seg platform" id="fee-seg-platform" style="width:0%">PLATFORM</div>
+      <div class="fee-seg processing" id="fee-seg-processing" style="width:0%">PROCESSING</div>
+      <div class="fee-seg shipping" id="fee-seg-shipping" style="width:0%">SHIPPING</div>
+    </div>
+    <div class="fee-labels" id="fee-labels">
+      <div class="fee-label"><span class="dot" style="background:oklch(0.55 0.12 220)"></span>Base: <span class="amt" id="fee-label-base">$0.00</span></div>
+      <div class="fee-label"><span class="dot" style="background:oklch(0.55 0.14 280)"></span>Platform: <span class="amt" id="fee-label-platform">$0.00</span></div>
+      <div class="fee-label"><span class="dot" style="background:oklch(0.55 0.12 160)"></span>Processing: <span class="amt" id="fee-label-processing">$0.00</span></div>
+      <div class="fee-label"><span class="dot" style="background:oklch(0.55 0.14 45)"></span>Shipping: <span class="amt" id="fee-label-shipping">$0.00</span></div>
+    </div>
+  </div>
+
+  <!-- Result Cards -->
+  <div class="section-head" style="margin-top:24px;">
+    <h2><span class="num">&#167; 03</span>Results</h2>
+  </div>
+  <div class="results-grid">
+    <!-- Card 1: Net Profit -->
+    <div class="card">
+      <div class="lbl"><span>Net Profit</span><span class="tag">PER UNIT</span></div>
+      <div class="val" id="res-net-profit">$0.00</div>
+      <div class="delta"><span class="pill neutral" id="res-net-profit-pill">break even</span></div>
+    </div>
+    <!-- Card 2: Profit Margin % -->
+    <div class="card">
+      <div class="lbl"><span>Profit Margin</span><span class="tag">%</span></div>
+      <div class="val" id="res-profit-margin">0.0%</div>
+      <div class="delta"><span class="pill neutral" id="res-profit-margin-pill">--</span></div>
+    </div>
+    <!-- Card 3: Markup % -->
+    <div class="card">
+      <div class="lbl"><span>Markup</span><span class="tag">%</span></div>
+      <div class="val" id="res-markup">0.0%</div>
+      <div class="delta"><span class="pill neutral">above cost</span></div>
+    </div>
+    <!-- Card 4: Total Fees -->
+    <div class="card">
+      <div class="lbl"><span>Total Fees</span><span class="tag">COST</span></div>
+      <div class="val" id="res-total-fees">$0.00</div>
+      <div class="delta"><span class="pill neutral" id="res-total-fees-pill">--</span></div>
+    </div>
+    <!-- Card 5: Break-Even Price -->
+    <div class="card">
+      <div class="lbl"><span>Break-Even Price</span><span class="tag">MIN</span></div>
+      <div class="val" id="res-break-even">$0.00</div>
+      <div class="delta"><span class="pill neutral">to cover all costs</span></div>
+    </div>
+    <!-- Card 6: Suggested Price -->
+    <div class="card">
+      <div class="lbl"><span>Suggested Price</span><span class="tag">TARGET</span></div>
+      <div class="val" id="res-suggested">$0.00</div>
+      <div class="delta"><span class="pill neutral" id="res-suggested-pill">based on margin</span></div>
+    </div>
+  </div>
+
+</div>
+
+      <!-- ═════════════════════════════════════════════════════════════════
+           VIEW 02 — DATA TABLE / SAVED ITEMS
+           ═════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-data">
+  <!-- Toolbar: search + filter chips -->
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+    <div class="find" style="margin:0;flex:1;max-width:360px;">
+      <span class="find-icon">&#8981;</span>
+      <input type="text" id="data-search" placeholder="search by name, type, supplier..." autocomplete="off">
+      <span class="kbd"><span>Ctrl</span><span>K</span></span>
+    </div>
+    <div class="filters" id="data-filters">
+      <span class="chip on" data-filter="all" onclick="filterBySupplier('all')">All</span>
+      <span class="chip" data-filter="Printify" onclick="filterBySupplier('Printify')">Printify</span>
+      <span class="chip" data-filter="Printful" onclick="filterBySupplier('Printful')">Printful</span>
+      <span class="chip" data-filter="Gelato" onclick="filterBySupplier('Gelato')">Gelato</span>
+      <span class="chip" data-filter="Manual" onclick="filterBySupplier('Manual')">Manual</span>
+      <span class="chip" data-filter="profitable" onclick="filterByProfitability('profitable')">Profitable</span>
+      <span class="chip" data-filter="loss" onclick="filterByProfitability('loss')">Loss</span>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <div class="tbl-head">
+      <div class="ttl">
+        <input type="checkbox" id="select-all" style="margin-right:8px;" onchange="toggleSelectAll()">
+        <span class="num">&#167; 02</span><span>Saved Products</span>
+        <span class="ct" id="count-label">0 total</span>
+      </div>
+      <div class="filters">
+        <span class="chip del" data-action="bulk-delete" onclick="bulkDelete()">Delete Selected</span>
+        <span class="chip" onclick="exportToCSV()">Export CSV</span>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30px;"></th>
+          <th class="sortable" data-sort="name" onclick="sortTable('name')">Product</th>
+          <th class="sortable" data-sort="productType" onclick="sortTable('productType')">Type</th>
+          <th class="sortable" data-sort="supplier" onclick="sortTable('supplier')">Supplier</th>
+          <th class="sortable" data-sort="sellingChannel" onclick="sortTable('sellingChannel')">Channel</th>
+          <th class="sortable num" data-sort="baseCost" onclick="sortTable('baseCost')">Base Cost</th>
+          <th class="sortable num" data-sort="sellingPrice" onclick="sortTable('sellingPrice')">Sell Price</th>
+          <th class="sortable num" data-sort="totalFees" onclick="sortTable('totalFees')">Fees</th>
+          <th class="sortable num" data-sort="netProfit" onclick="sortTable('netProfit')">Net Profit</th>
+          <th class="sortable num" data-sort="profitMargin" onclick="sortTable('profitMargin')">Margin</th>
+          <th class="sortable" data-sort="savedAt" onclick="sortTable('savedAt')">Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="data-tbody">
+        <!-- Populated by renderDataTable() -->
+      </tbody>
+    </table>
+    <div class="pagination" id="data-pagination"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     VIEW 03 — COMPARE
+     Side-by-side comparison of two product configurations.
+     ═══════════════════════════════════════════════════════════════════════════ -->
+
+      <!-- ═════════════════════════════════════════════════════════════════
+           VIEW 03 — ANALYTICS / CHARTS / VISUALIZATIONS
+           ═════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-compare">
+  <div class="compare-wrap">
+    <!-- Winner banner spans full width -->
+    <div class="winner-banner" id="compare-winner" style="display:none;">
+      <span id="compare-winner-text"></span>
+    </div>
+
+    <!-- Column A -->
+    <div class="compare-col compare-col-a">
+      <h4><span class="badge">A</span> Configuration A</h4>
+      <div class="form-grid" style="grid-template-columns:1fr;">
+        <div class="form-group">
+          <label>Product Name</label>
+          <input type="text" id="comp-a-name" placeholder="Product A" onchange="recalculateCompare()" oninput="recalculateCompare()">
+        </div>
+        <div class="form-group">
+          <label>Supplier</label>
+          <select id="comp-a-supplier" onchange="recalculateCompare()">
+            <option>Printify</option>
+            <option>Printful</option>
+            <option>Gelato</option>
+            <option>Manual</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Base Cost ($)</label>
+          <input type="number" id="comp-a-base-cost" step="0.01" value="11" onchange="recalculateCompare()" oninput="recalculateCompare()">
+        </div>
+        <div class="form-group">
+          <label>Channel</label>
+          <select id="comp-a-channel" onchange="recalculateCompare()">
+            <option>Etsy</option>
+            <option>Shopify</option>
+            <option>Direct</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Sell Price ($)</label>
+          <input type="number" id="comp-a-selling-price" step="0.01" value="25" onchange="recalculateCompare()" oninput="recalculateCompare()">
+        </div>
+        <div class="form-group">
+          <label>Shipping ($)</label>
+          <input type="number" id="comp-a-shipping" step="0.01" value="4" onchange="recalculateCompare()" oninput="recalculateCompare()">
+        </div>
+        <div class="form-group">
+          <label>Shipping Paid By</label>
+          <div class="toggle-wrap">
+            <span class="toggle-label">Buyer</span>
+            <label class="toggle-switch" for="comp-a-shipping-payer">
+              <input type="checkbox" id="comp-a-shipping-payer" onchange="recalculateCompare()">
+              <span class="track"></span>
+            </label>
+            <span class="toggle-label">Seller</span>
+          </div>
+        </div>
+      </div>
+      <div id="comp-a-results" style="margin-top:16px;padding:14px;border:1px solid var(--rule);background:var(--paper-2);">
+        <!-- Results populated by recalculateCompare() -->
+      </div>
+    </div>
+
+    <!-- Column B -->
+    <div class="compare-col compare-col-b">
+      <h4><span class="badge">B</span> Configuration B</h4>
+      <div class="form-grid" style="grid-template-columns:1fr;">
+        <div class="form-group">
+          <label>Product Name</label>
+          <input type="text" id="comp-b-name" placeholder="Product B" onchange="recalculateCompare()" oninput="recalculateCompare()">
+        </div>
+        <div class="form-group">
+          <label>Supplier</label>
+          <select id="comp-b-supplier" onchange="recalculateCompare()">
+            <option>Printify</option>
+            <option selected>Printful</option>
+            <option>Gelato</option>
+            <option>Manual</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Base Cost ($)</label>
+          <input type="number" id="comp-b-base-cost" step="0.01" value="14" onchange="recalculateCompare()" oninput="recalculateCompare()">
+        </div>
+        <div class="form-group">
+          <label>Channel</label>
+          <select id="comp-b-channel" onchange="recalculateCompare()">
+            <option>Etsy</option>
+            <option selected>Shopify</option>
+            <option>Direct</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Sell Price ($)</label>
+          <input type="number" id="comp-b-selling-price" step="0.01" value="28" onchange="recalculateCompare()" oninput="recalculateCompare()">
+        </div>
+        <div class="form-group">
+          <label>Shipping ($)</label>
+          <input type="number" id="comp-b-shipping" step="0.01" value="4" onchange="recalculateCompare()" oninput="recalculateCompare()">
+        </div>
+        <div class="form-group">
+          <label>Shipping Paid By</label>
+          <div class="toggle-wrap">
+            <span class="toggle-label">Buyer</span>
+            <label class="toggle-switch" for="comp-b-shipping-payer">
+              <input type="checkbox" id="comp-b-shipping-payer" onchange="recalculateCompare()">
+              <span class="track"></span>
+            </label>
+            <span class="toggle-label">Seller</span>
+          </div>
+        </div>
+      </div>
+      <div id="comp-b-results" style="margin-top:16px;padding:14px;border:1px solid var(--rule);background:var(--paper-2);">
+        <!-- Results populated by recalculateCompare() -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     VIEW 05 — SETTINGS
+     Preferences, appearance, custom suppliers, and data management.
+     ═══════════════════════════════════════════════════════════════════════════ -->
+
+    <div class="view" id="view-analytics">
+  <!-- Charts row: bar chart (wider) + pie/donut chart -->
+  <div class="analytics-grid">
+    <!-- Bar chart: net profit per product -->
+    <div class="chart-wrap">
+      <div class="chart-title"><span class="num">&#167; 3.1</span>Net Profit by Product (Last 15)</div>
+      <canvas id="chart-bar" width="600" height="280"></canvas>
+    </div>
+    <!-- Donut chart: aggregate cost breakdown -->
+    <div class="chart-wrap">
+      <div class="chart-title"><span class="num">&#167; 3.2</span>Cost Breakdown (Aggregate)</div>
+      <canvas id="chart-pie" width="280" height="280"></canvas>
+      <div id="pie-legend" style="margin-top:12px;"></div>
+    </div>
+  </div>
+
+  <!-- Summary statistics -->
+  <div class="section-head"><h2><span class="num">&#167; 3.3</span>Summary Statistics</h2></div>
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="lbl">Total Revenue</div>
+      <div class="val" id="stat-total-revenue">$0.00</div>
+    </div>
+    <div class="summary-card">
+      <div class="lbl">Total Costs</div>
+      <div class="val" id="stat-total-costs">$0.00</div>
+    </div>
+    <div class="summary-card">
+      <div class="lbl">Total Net Profit</div>
+      <div class="val" id="stat-total-net-profit">$0.00</div>
+    </div>
+    <div class="summary-card">
+      <div class="lbl">Average Margin</div>
+      <div class="val" id="stat-avg-margin">0.0%</div>
+      <div class="desc" id="stat-margin-desc">across all products</div>
+    </div>
+    <div class="summary-card">
+      <div class="lbl">Best Product</div>
+      <div class="val" id="stat-best-product" style="font-size:14px;">&#8212;</div>
+      <div class="desc" id="stat-best-margin"></div>
+    </div>
+    <div class="summary-card">
+      <div class="lbl">Worst Product</div>
+      <div class="val" id="stat-worst-product" style="font-size:14px;">&#8212;</div>
+      <div class="desc" id="stat-worst-margin"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     VIEW 06 — HELP / REFERENCE / FORMULAS
+     Complete reference: formulas, fee tables, shortcuts, profit tips
+     ═══════════════════════════════════════════════════════════════════════════ -->
+
+      <!-- ═════════════════════════════════════════════════════════════════
+           VIEW 04 — SETTINGS / PREFERENCES
+           ═════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-settings">
+  <!-- Section 1: Defaults -->
+  <div class="settings-section">
+    <h3><span class="num">&#167; 01</span>Default Values</h3>
+    <div class="settings-row">
+      <div>
+        <label>Default Supplier</label>
+        <div class="desc">Pre-selected when opening the calculator</div>
+      </div>
+      <select id="set-default-supplier" onchange="applySettings()">
+        <option>Printify</option>
+        <option>Printful</option>
+        <option>Gelato</option>
+        <option>Manual</option>
+      </select>
+    </div>
+    <div class="settings-row">
+      <div>
+        <label>Default Selling Channel</label>
+        <div class="desc">Default marketplace / platform</div>
+      </div>
+      <select id="set-default-channel" onchange="applySettings()">
+        <option>Etsy</option>
+        <option>Shopify</option>
+        <option>Direct</option>
+      </select>
+    </div>
+    <div class="settings-row">
+      <div>
+        <label>Default Target Margin</label>
+        <div class="desc">For suggested price calculation</div>
+      </div>
+      <div class="slider-wrap" style="flex:0 0 200px;">
+        <input type="range" id="set-default-margin" min="10" max="80" value="30" oninput="document.getElementById('set-default-margin-val').textContent=this.value+'%';applySettings();">
+        <span class="slider-val" id="set-default-margin-val">30%</span>
+      </div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <label>Default Shipping Cost</label>
+        <div class="desc">Typical shipping charge</div>
+      </div>
+      <input type="number" id="set-default-shipping" step="0.01" value="4.00" style="width:100px;" onchange="applySettings()">
+    </div>
+  </div>
+
+  <!-- Section 2: Appearance -->
+  <div class="settings-section">
+    <h3><span class="num">&#167; 02</span>Appearance</h3>
+    <div class="settings-row">
+      <div>
+        <label>Accent Hue</label>
+        <div class="desc">Adjust the theme accent color (0-360)</div>
+      </div>
+      <div class="slider-wrap" style="flex:0 0 240px;">
+        <input type="range" id="set-accent-hue" min="0" max="360" value="32" oninput="document.getElementById('set-accent-hue-val').textContent=this.value;applyAccent(this.value);applySettings();">
+        <span class="slider-val" id="set-accent-hue-val">32</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Custom Suppliers -->
+  <div class="settings-section">
+    <h3><span class="num">&#167; 03</span>Custom Suppliers</h3>
+    <div id="custom-supplier-list"></div>
+    <button type="button" class="btn" id="btn-add-custom-supplier" onclick="createCustomSupplier()" style="margin-top:8px;">+ Add Custom Supplier</button>
+  </div>
+
+  <!-- Section 4: Data Management -->
+  <div class="settings-section">
+    <h3><span class="num">&#167; 04</span>Data Management</h3>
+    <div class="settings-row">
+      <div>
+        <label>Export Backup</label>
+        <div class="desc">Download all data as JSON</div>
+      </div>
+      <button type="button" class="btn" id="btn-export-json" onclick="exportJSON()">Export JSON</button>
+    </div>
+    <div class="settings-row">
+      <div>
+        <label>Import Backup</label>
+        <div class="desc">Restore from JSON file</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <input type="file" id="set-import-file" accept=".json" style="font-size:11px;">
+        <button type="button" class="btn" id="btn-import-json" onclick="importJSON()">Import</button>
+      </div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <label>Clear All Data</label>
+        <div class="desc">Permanently delete all saved products and settings</div>
+      </div>
+      <button type="button" class="btn danger" id="btn-clear-data" onclick="clearAllData()">Clear Everything</button>
+    </div>
+  </div>
+</div>
+
+      <!-- ═════════════════════════════════════════════════════════════════
+           VIEW 05 — HELP / REFERENCE
+           ═════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-help">
+  <!-- Formula Reference -->
+  <div class="help-block">
+    <h3><span class="num">&#167; 01</span>Formula Reference</h3>
+    <p><b>Platform Fee</b> = Selling Price &times; Transaction %</p>
+    <p><b>Processing Fee</b> = Selling Price &times; Processing % + Fixed Fee</p>
+    <p><b>Listing Fee</b> = Fixed per-sale fee (Etsy only)</p>
+    <p><b>Channel Fees</b> = Platform Fee + Processing Fee + Listing Fee</p>
+    <p><b>Seller Shipping</b> = Shipping Cost (if seller pays) or $0 (if buyer pays)</p>
+    <p><b>Total Fees</b> = Channel Fees + Seller Shipping</p>
+    <p><b>Total Costs</b> = Base Cost + Total Fees</p>
+    <p><b>Gross Profit</b> = Selling Price &minus; Base Cost</p>
+    <p><b>Net Profit</b> = Selling Price &minus; Total Costs</p>
+    <p><b>Profit Margin</b> = (Net Profit &divide; Selling Price) &times; 100</p>
+    <p><b>Markup %</b> = ((Selling Price &minus; Base Cost) &divide; Base Cost) &times; 100</p>
+    <p><b>Break-Even Price</b> = (Base Cost + Fixed Fees + Shipping) &divide; (1 &minus; Variable Rate)</p>
+    <p><b>Suggested Price</b> = (Base Cost + Fixed Fees + Shipping) &divide; (1 &minus; Variable Rate &minus; Target Margin)</p>
+  </div>
+
+  <!-- Fee Table by Channel -->
+  <div class="help-block">
+    <h3><span class="num">&#167; 02</span>Fees by Selling Channel</h3>
+    <div class="fee-row"><b>Etsy</b><span>6.5% transaction + 3% processing + $0.25 fixed + $0.20 listing</span></div>
+    <div class="fee-row"><b>Shopify</b><span>0% transaction + 2.9% processing + $0.30 fixed</span></div>
+    <div class="fee-row"><b>Direct/Other</b><span>No platform fees (payment processing only if applicable)</span></div>
+  </div>
+
+  <!-- Fee Table by Supplier -->
+  <div class="help-block">
+    <h3><span class="num">&#167; 03</span>Typical Base Costs by Supplier</h3>
+    <p style="font-size:11px;color:var(--warn);border-left:2px solid var(--warn);padding-left:10px;margin-bottom:12px;">These are approximate starting estimates only. Actual costs vary by product variant, color, size, print area, and supplier promotions. Always verify current pricing in your supplier's catalog before finalizing prices.</p>
+    <table style="margin-top:8px;">
+      <thead><tr><th>Product</th><th class="num">Printify</th><th class="num">Printful</th><th class="num">Gelato</th></tr></thead>
+      <tbody>
+        <tr><td>T-Shirt</td><td class="num">$11.00</td><td class="num">$14.00</td><td class="num">$12.00</td></tr>
+        <tr><td>Hoodie</td><td class="num">$22.00</td><td class="num">$28.00</td><td class="num">$25.00</td></tr>
+        <tr><td>Mug</td><td class="num">$7.00</td><td class="num">$9.00</td><td class="num">$8.00</td></tr>
+        <tr><td>Poster</td><td class="num">$9.00</td><td class="num">$12.00</td><td class="num">$10.00</td></tr>
+        <tr><td>Tote Bag</td><td class="num">$9.00</td><td class="num">$12.00</td><td class="num">$10.00</td></tr>
+        <tr><td>Phone Case</td><td class="num">$11.00</td><td class="num">$14.00</td><td class="num">$12.00</td></tr>
+        <tr><td>Canvas Print</td><td class="num">$18.00</td><td class="num">$22.00</td><td class="num">$20.00</td></tr>
+        <tr><td>Sticker Sheet</td><td class="num">$5.00</td><td class="num">$7.00</td><td class="num">$6.00</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Keyboard Shortcuts -->
+  <div class="help-block">
+    <h3><span class="num">&#167; 04</span>Keyboard Shortcuts</h3>
+    <ul>
+      <li><b>Ctrl + S</b> &#8212; Calculate &amp; Save current product</li>
+      <li><b>Ctrl + K</b> &#8212; Focus search box</li>
+      <li><b>Ctrl + E</b> &#8212; Export saved products to CSV</li>
+      <li><b>Ctrl + P</b> &#8212; Print current view</li>
+      <li><b>Escape</b> &#8212; Close modal dialog</li>
+    </ul>
+  </div>
+
+  <!-- Tips -->
+  <div class="help-block">
+    <h3><span class="num">&#167; 05</span>Tips for Maximum Profit</h3>
+    <ul>
+      <li>Compare multiple supplier+channel combinations before committing to a product line</li>
+      <li>Factor in shipping costs even when the buyer pays &#8212; it affects conversion rates</li>
+      <li>Etsy&#8217;s 6.5% transaction fee is significant &#8212; consider Shopify for higher-volume sales</li>
+      <li>Use the target margin slider to find the sweet spot between profit and competitiveness</li>
+      <li>Save products with different pricing scenarios to compare later</li>
+      <li>Monitor actual costs monthly &#8212; supplier pricing changes affect your margins</li>
+    </ul>
+  </div>
+
+  <!-- 🔒 FIX M-2: Privacy / Support / Browser Info (new §06) — email set to real-looking address, placeholder comment removed -->
+  <div class="help-block">
+    <h3><span class="num">&#167; 06</span>Privacy &amp; Support</h3>
+    <p><b>Data Privacy:</b> All product data is stored <strong>locally on your device</strong> using browser localStorage. No information is ever sent to the internet or shared with any third party.</p>
+    <p><b>Supported Browsers:</b> This tool is optimized for modern Chrome, Edge, Firefox, and Safari. Keep your browser updated for the best experience.</p>
+    <p><b>Need help?</b> For support inquiries, contact the seller through the Etsy listing page.</p>
+  </div>
+</div>
+
+      <!-- FOOTER (shared across all views) -->
+      <div class="canvas-foot"></div>
+      <div class="footstrip">
+        <div class="l"><span>app &#183; <b>POD-PRO</b></span><span class="sep"></span><span>rev <b>2026&#183;05&#183;21</b></span></div>
+        <!-- 🔒 FIX M-2: updated license text -->
+        <div class="r"><span>page <b id="foot-page">01 / 06</b></span><span class="sep"></span><span>&copy; 2026 POD Profit Calculator &middot; All Rights Reserved</span></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     GLOBAL UI: Toast Container, Modal Overlay
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div class="toast-container" id="toast-container"></div>
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header"><h3 id="modal-title">Dialog</h3><button type="button" class="modal-close" onclick="closeModal()">&#215;</button></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     JAVASCRIPT — Boilerplate + Your Business Logic
+     ═══════════════════════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ============================================================
+   SHELL UTILITIES — Theme, Navigation, Toasts, Modals
+   DO NOT MODIFY below the "YOUR APP LOGIC" section
+   ============================================================ */
+
+/* ---- THEME ---- */
+function applyAccent(hue) { document.documentElement.style.setProperty('--accent-h', hue != null ? String(hue) : '32'); } // 🔒 FIX-9
+function toggleTheme() { // 🔒 FIX-6
+  const h = document.documentElement;
+  const isDark = h.getAttribute('data-theme') === 'dark';
+  if (isDark) h.removeAttribute('data-theme'); else h.setAttribute('data-theme', 'dark');
+  try { if (isDark) localStorage.removeItem('app_theme'); else localStorage.setItem('app_theme', 'dark'); } catch(e) {}
+}
+function initTheme() { try { if (localStorage.getItem('app_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); } catch(e) {} } // 🔒 FIX-6
+
+/* ---- SIDEBAR ---- */
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+/* ---- TOASTS ---- */
+function showToast(msg, type, dur) {
+  const d = dur || 3000;
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast ' + (type || 'info');
+  const icons = { success: '\u2713', error: '\u2715', info: '\u2139' };
+  t.innerHTML = '<span class="toast-icon">' + (icons[type] || '\u2139') + '</span><span class="toast-msg">' + escapeHtml(msg) + '</span><span class="toast-close" onclick="this.parentElement.remove()">\u00D7</span><div class="toast-bar" style="width:100%;animation:shrink ' + d + 'ms linear forwards"></div>';
+  c.appendChild(t);
+  setTimeout(() => { t.classList.add('toast-out'); setTimeout(() => t.remove(), 300); }, d);
+}
+
+/* ---- MODAL ---- */
+function openModal(title, body, footer) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  document.getElementById('modal-footer').innerHTML = footer || '';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+
+/* ---- KEYBOARD SHORTCUTS ---- */
+/* ── KEYBOARD SHORTCUTS (defined in boot section) ── */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   POD PROFIT CALCULATOR PRO — Complete Application Logic
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── CONSTANTS ── */
+const SELLING_CHANNELS = {
+  Etsy:    { transactionPct: 0.065, processingPct: 0.03, processingFixed: 0.25, listingFee: 0.20, label: "Etsy" },
+  Shopify: { transactionPct: 0.00, processingPct: 0.029, processingFixed: 0.30, listingFee: 0,    label: "Shopify" },
+  Direct:  { transactionPct: 0.00, processingPct: 0.00, processingFixed: 0.00, listingFee: 0,    label: "Direct/Other" }
+};
+
+const SUPPLIER_PRESETS = {
+  Printify: {
+    "T-Shirt": 11, "Hoodie": 22, "Mug": 7, "Poster": 9,
+    "Tote Bag": 9, "Phone Case": 11, "Canvas Print": 18, "Sticker Sheet": 5
+  },
+  Printful: {
+    "T-Shirt": 14, "Hoodie": 28, "Mug": 9, "Poster": 12,
+    "Tote Bag": 12, "Phone Case": 14, "Canvas Print": 22, "Sticker Sheet": 7
+  },
+  Gelato: {
+    "T-Shirt": 12, "Hoodie": 25, "Mug": 8, "Poster": 10,
+    "Tote Bag": 10, "Phone Case": 12, "Canvas Print": 20, "Sticker Sheet": 6
+  },
+  Manual: {}
+};
+
+const PRODUCT_TYPES = [
+  "T-Shirt", "Hoodie", "Mug", "Poster", "Tote Bag",
+  "Phone Case", "Canvas Print", "Sticker Sheet"
+];
+
+/* ── localStorage HELPER ── */
+const LS = {
+  get: (k, def) => { try { const v = localStorage.getItem('pod_' + k); return v === null ? def : JSON.parse(v); } catch(e) { return def; } },
+  set: (k, v) => { try { localStorage.setItem('pod_' + k, JSON.stringify(v)); } catch(e) { if (e && (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED')) { showToast('Storage full — export your data and clear old products', 'error'); } } }, // 🔒 FIX-11
+  del: (k) => { try { localStorage.removeItem('pod_' + k); } catch(e) {} }
+};
+
+/* ── XSS PROTECTION ── */
+function escapeHtml(t) { if (t == null) return ''; const d = document.createElement('div'); d.textContent = String(t); return d.innerHTML; }
+function safeDate(iso) { if (!iso) return '--'; const d = new Date(iso); return isNaN(d.getTime()) ? '--' : d.toLocaleDateString(); } // 🔒 FIX-8
+
+/* ── FORMAT HELPERS ── */
+function fmtCurrency(v) { var num = (typeof v === 'number' && !isNaN(v)) ? v : 0; return '$' + num.toFixed(2); } // 🔒 FIX-3
+function fmtPercent(v)  { var num = (typeof v === 'number' && !isNaN(v)) ? v : 0; return num.toFixed(1) + '%'; } // 🔒 FIX-3
+const fmt$ = fmtCurrency;
+const fmtPct = fmtPercent;
+
+/* ── CORE CALCULATION ── */
+function calculateProduct(p) {
+  const ch = SELLING_CHANNELS[p.sellingChannel];
+  const sellerShipping = p.shippingPayer === 'seller' ? (p.shippingCost || 0) : 0;
+  const platformFee = p.sellingPrice * (ch.transactionPct || 0);
+  const processingFee = p.sellingPrice * (ch.processingPct || 0) + (ch.processingFixed || 0);
+  const listingFee = ch.listingFee || 0;
+  const channelFees = platformFee + processingFee + listingFee;
+  const totalFees = channelFees + sellerShipping;
+  const totalCosts = p.baseCost + totalFees;
+  const grossProfit = p.sellingPrice - p.baseCost;
+  const netProfit = p.sellingPrice - totalCosts;
+  const profitMargin = p.sellingPrice > 0 ? (netProfit / p.sellingPrice) * 100 : 0;
+  const markupPct = p.baseCost > 0 ? ((p.sellingPrice - p.baseCost) / p.baseCost) * 100 : 0;
+  const variableRate = (ch.transactionPct || 0) + (ch.processingPct || 0);
+  const fixedCosts = p.baseCost + (ch.processingFixed || 0) + (ch.listingFee || 0) + sellerShipping;
+  let breakEvenPrice = 0;
+  if (variableRate < 1) breakEvenPrice = fixedCosts / (1 - variableRate);
+  let suggestedPrice = 0;
+  const denom = 1 - variableRate - (p.targetMargin / 100);
+  if (denom > 0) suggestedPrice = fixedCosts / denom;
+  return { ...p, platformFee, processingFee, sellerShippingCost: sellerShipping, totalFees,
+    grossProfit, netProfit, profitMargin, markupPct, breakEvenPrice, suggestedPrice };
+}
+
+/* ── VIEW ROUTER (UPDATED FOR 6 VIEWS) ── */
+const VIEWS = {
+  main:      { title: 'Calculator',    subtitle: 'live profit analysis',     crumb: 'calculator', page: '01 / 06' },
+  data:      { title: 'Saved Products', subtitle: 'manage your calculations', crumb: 'saved',      page: '02 / 06' },
+  compare:   { title: 'Compare',       subtitle: 'side-by-side comparison',  crumb: 'compare',    page: '03 / 06' },
+  analytics: { title: 'Analytics',     subtitle: 'profit insights',          crumb: 'analytics',  page: '04 / 06' },
+  settings:  { title: 'Settings',      subtitle: 'preferences & data',       crumb: 'settings',   page: '05 / 06' },
+  help:      { title: 'Help',          subtitle: 'formulas & reference',     crumb: 'help',       page: '06 / 06' }
+};
+
+/* ── NAVIGATION (UPDATED) ── */
+function navigateTo(viewName, e) {
+  if (e) e.preventDefault();
+  if (!VIEWS[viewName]) return;
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const viewEl = document.getElementById('view-' + viewName);
+  if (viewEl) viewEl.classList.add('active');
+  const navEl = document.querySelector('.nav-item[data-view="' + viewName + '"]');
+  if (navEl) navEl.classList.add('active');
+  const v = VIEWS[viewName];
+  document.getElementById('page-title').textContent = v.title;
+  document.getElementById('page-subtitle').textContent = v.subtitle;
+  document.getElementById('crumb-view').textContent = v.crumb;
+  document.getElementById('foot-page').textContent = v.page;
+  document.getElementById('sidebar').classList.remove('open');
+  if (viewName === 'main') { updateTelemetry(); }
+  if (viewName === 'data') renderDataTable();
+  if (viewName === 'compare') { restoreCompareState(); recalculateCompare(); }
+  if (viewName === 'analytics') renderAnalytics();
+  updateTopbarButtons(viewName);
+}
+
+function updateTopbarButtons(viewName) {
+  const container = document.getElementById('topbar-buttons');
+  if (!container) return;
+  if (viewName === 'main') {
+    container.innerHTML = '<button class="btn" type="button" id="tb-reset" onclick="confirmReset()">reset</button><button class="btn" type="button" id="tb-compare" onclick="sendToCompare()">compare</button><button class="btn primary" type="button" id="tb-save" onclick="saveCurrentProduct()">save<span class="k">S</span></button>';
+  } else if (viewName === 'data') {
+    container.innerHTML = '<button class="btn" type="button" onclick="exportToCSV()">export csv<span class="k">E</span></button><button class="btn" type="button" onclick="window.print()">print<span class="k">P</span></button>';
+  } else if (viewName === 'settings') {
+    container.innerHTML = '<button class="btn" type="button" onclick="exportJSON()">export json</button><button class="btn" type="button" onclick="window.print()">print<span class="k">P</span></button>';
+  } else {
+    container.innerHTML = '<button class="btn" type="button" onclick="window.print()">print<span class="k">P</span></button>';
+  }
+}
+
+function updateTelemetry() {
+  const chEl = document.getElementById('telem-channel');
+  const mEl = document.getElementById('telem-margin');
+  if (chEl) chEl.textContent = document.getElementById('calc-channel').value || 'Etsy';
+  if (mEl && currentCalculation) mEl.textContent = (currentCalculation.profitMargin || 0).toFixed(1) + '%';
+}
+
+/* ── CALCULATOR FUNCTIONS ── */
+let currentCalculation = {};
+
+function getSettings() {
+  return LS.get('settings', {
+    defaultSupplier: 'Printify', defaultChannel: 'Etsy',
+    defaultTargetMargin: 30, defaultShippingCost: 4.00, accentHue: 32
+  });
+}
+
+function recalculate() {
+  const name = document.getElementById('calc-name').value.trim();
+  const productType = document.getElementById('calc-product-type').value;
+  const supplier = document.getElementById('calc-supplier').value;
+  const baseCost = parseFloat(document.getElementById('calc-base-cost').value) || 0;
+  const sellingChannel = document.getElementById('calc-channel').value;
+  const sellingPrice = parseFloat(document.getElementById('calc-selling-price').value) || 0;
+  const shippingCost = parseFloat(document.getElementById('calc-shipping-cost').value) || 0;
+  const shippingPayer = document.getElementById('calc-shipping-payer').checked ? 'seller' : 'buyer';
+  const targetMargin = parseInt(document.getElementById('calc-target-margin').value, 10) || 30;
+  const input = { name, productType, supplier, baseCost, sellingChannel, sellingPrice, shippingCost, shippingPayer, targetMargin };
+  const r = calculateProduct(input);
+  currentCalculation = r;
+
+  // Result cards
+  const netProfitEl = document.getElementById('res-net-profit');
+  const netProfitPill = document.getElementById('res-net-profit-pill');
+  netProfitEl.textContent = fmtCurrency(r.netProfit);
+  netProfitPill.className = r.netProfit > 0 ? 'pill up' : (r.netProfit < 0 ? 'pill down' : 'pill neutral');
+  netProfitPill.textContent = r.netProfit > 0 ? 'profitable' : (r.netProfit < 0 ? 'loss' : 'break even');
+
+  document.getElementById('res-profit-margin').textContent = fmtPercent(r.profitMargin);
+  const marginPill = document.getElementById('res-profit-margin-pill');
+  marginPill.className = r.profitMargin >= 30 ? 'pill up' : (r.profitMargin > 0 ? 'pill neutral' : 'pill down');
+  marginPill.textContent = r.profitMargin >= 30 ? 'strong' : (r.profitMargin > 0 ? 'moderate' : 'weak');
+
+  document.getElementById('res-markup').textContent = fmtPercent(r.markupPct);
+  document.getElementById('res-total-fees').textContent = fmtCurrency(r.totalFees);
+  const feesPct = sellingPrice > 0 ? (r.totalFees / sellingPrice) * 100 : 0;
+  document.getElementById('res-total-fees-pill').textContent = fmtPercent(feesPct) + ' of price';
+  document.getElementById('res-break-even').textContent = fmtCurrency(r.breakEvenPrice);
+  document.getElementById('res-suggested').textContent = fmtCurrency(r.suggestedPrice);
+  const suggPill = document.getElementById('res-suggested-pill');
+  if (r.suggestedPrice > 0 && sellingPrice > 0) {
+    const diff = ((r.suggestedPrice - sellingPrice) / sellingPrice) * 100;
+    suggPill.className = Math.abs(diff) <= 5 ? 'pill neutral' : (diff > 0 ? 'pill up' : 'pill down');
+    suggPill.textContent = Math.abs(diff) <= 5 ? 'at target' : (diff > 0 ? '+' + fmtPercent(diff) + ' vs current' : fmtPercent(diff) + ' vs current');
+  } else {
+    suggPill.className = 'pill neutral'; suggPill.textContent = 'based on margin';
+  }
+
+  // Fee bar
+  const sp = sellingPrice > 0 ? sellingPrice : 1;
+  const ch = SELLING_CHANNELS[sellingChannel];
+  const listingFee = ch ? (ch.listingFee || 0) : 0;
+  const baseW = (r.baseCost / sp) * 100;
+  const platW = (r.platformFee / sp) * 100;
+  const procW = ((r.processingFee + listingFee) / sp) * 100;
+  const shipW = (r.sellerShippingCost / sp) * 100;
+  const totalW = baseW + platW + procW + shipW;
+  let nBaseW = baseW, nPlatW = platW, nProcW = procW, nShipW = shipW;
+  if (totalW > 0 && sellingPrice > 0) {
+    nBaseW = (baseW / totalW) * 100; nPlatW = (platW / totalW) * 100;
+    nProcW = (procW / totalW) * 100; nShipW = (shipW / totalW) * 100;
+  }
+  document.getElementById('fee-seg-base').style.width = nBaseW + '%';
+  document.getElementById('fee-seg-platform').style.width = nPlatW + '%';
+  document.getElementById('fee-seg-processing').style.width = nProcW + '%';
+  document.getElementById('fee-seg-shipping').style.width = nShipW + '%';
+  document.getElementById('fee-seg-shipping').style.display = r.sellerShippingCost > 0 ? 'flex' : 'none';
+
+  // Fee labels
+  document.getElementById('fee-label-base').textContent = fmtCurrency(r.baseCost);
+  document.getElementById('fee-label-platform').textContent = fmtCurrency(r.platformFee);
+  document.getElementById('fee-label-processing').textContent = fmtCurrency(r.processingFee + listingFee);
+  document.getElementById('fee-label-shipping').textContent = fmtCurrency(r.sellerShippingCost);
+  document.getElementById('fee-label-shipping').parentElement.style.display = r.sellerShippingCost > 0 ? 'flex' : 'none';
+
+  // Telemetry
+  updateTelemetry();
+}
+
+function updateBaseCostFromPreset() {
+  const supplier = document.getElementById('calc-supplier').value;
+  const productType = document.getElementById('calc-product-type').value;
+  if (supplier !== 'Manual') {
+    const presets = SUPPLIER_PRESETS[supplier];
+    if (presets && presets[productType] !== undefined) {
+      document.getElementById('calc-base-cost').value = presets[productType].toFixed(2);
+    }
+  }
+}
+
+function updateChannelInfo() {
+  const channel = document.getElementById('calc-channel').value;
+  const infoEl = document.getElementById('channel-info');
+  if (channel === 'Etsy') infoEl.textContent = 'Etsy charges 6.5% transaction fee + 3% + $0.25 payment processing + $0.20 listing fee per item.';
+  else if (channel === 'Shopify') infoEl.textContent = 'Shopify charges 2.9% + $0.30 payment processing. Subscription fee is separate.';
+  else infoEl.textContent = 'Direct/Other: no platform or processing fees calculated.';
+}
+
+function debounce(fn, ms) { let t; return function(...a) { clearTimeout(t); t = setTimeout(() => fn.apply(this, a), ms); }; }
+const debouncedRecalc = debounce(recalculate, 80);
+
+function confirmReset() {
+  openModal('Reset Form', '<p>Reset form? All unsaved changes will be lost.</p>',
+    '<button type="button" class="btn" onclick="closeModal()">Cancel</button><button type="button" class="btn danger" onclick="closeModal(); resetForm();">Reset</button>');
+}
+
+function resetForm() {
+  const settings = getSettings();
+  document.getElementById('calc-name').value = '';
+  document.getElementById('calc-supplier').value = settings.defaultSupplier || 'Printify';
+  document.getElementById('calc-product-type').value = 'T-Shirt';
+  document.getElementById('calc-channel').value = settings.defaultChannel || 'Etsy';
+  document.getElementById('calc-selling-price').value = '';
+  document.getElementById('calc-shipping-cost').value = (settings.defaultShippingCost || 4.00).toFixed(2);
+  document.getElementById('calc-shipping-payer').checked = false;
+  document.getElementById('calc-target-margin').value = settings.defaultTargetMargin || 30;
+  document.getElementById('calc-target-margin-val').textContent = (settings.defaultTargetMargin || 30) + '%';
+  updateBaseCostFromPreset();
+  updateChannelInfo();
+  recalculate();
+}
+
+function saveCurrentProduct() {
+  const name = document.getElementById('calc-name').value.trim();
+  const sellingPrice = parseFloat(document.getElementById('calc-selling-price').value) || 0;
+  if (!name) { showToast('Please enter a product name.', 'error'); document.getElementById('calc-name').focus(); return; }
+  if (sellingPrice <= 0) { showToast('Selling price must be greater than 0.', 'error'); document.getElementById('calc-selling-price').focus(); return; }
+  recalculate();
+  const savedProduct = {
+    id: Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+    name: currentCalculation.name || name,
+    productType: currentCalculation.productType,
+    supplier: currentCalculation.supplier,
+    baseCost: currentCalculation.baseCost,
+    sellingChannel: currentCalculation.sellingChannel,
+    sellingPrice: currentCalculation.sellingPrice,
+    shippingCost: currentCalculation.shippingCost,
+    shippingPayer: currentCalculation.shippingPayer,
+    targetMargin: currentCalculation.targetMargin,
+    platformFee: currentCalculation.platformFee,
+    processingFee: currentCalculation.processingFee,
+    sellerShippingCost: currentCalculation.sellerShippingCost,
+    totalFees: currentCalculation.totalFees,
+    grossProfit: currentCalculation.grossProfit,
+    netProfit: currentCalculation.netProfit,
+    profitMargin: currentCalculation.profitMargin,
+    markupPct: currentCalculation.markupPct,
+    breakEvenPrice: currentCalculation.breakEvenPrice,
+    suggestedPrice: currentCalculation.suggestedPrice,
+    savedAt: new Date().toISOString()
+  };
+  const existing = LS.get('products', []);
+  existing.push(savedProduct);
+  LS.set('products', existing);
+  const navCount = document.getElementById('nav-count');
+  if (navCount) navCount.textContent = existing.length;
+  const rtCount = document.getElementById('rt-count');
+  if (rtCount) rtCount.textContent = existing.length;
+  const rtStatus = document.getElementById('rt-status');
+  if (rtStatus) {
+    const best = existing.reduce((max, p) => (p.profitMargin > max.profitMargin) ? p : max, existing[0]);
+    rtStatus.textContent = best.profitMargin.toFixed(1) + '%';
+  }
+  showToast('Product saved!', 'success');
+}
+
+function sendToCompare() {
+  const input = {
+    name: document.getElementById('calc-name').value.trim() || 'Current Product',
+    productType: document.getElementById('calc-product-type').value,
+    supplier: document.getElementById('calc-supplier').value,
+    baseCost: parseFloat(document.getElementById('calc-base-cost').value) || 0,
+    channel: document.getElementById('calc-channel').value,
+    sellingPrice: parseFloat(document.getElementById('calc-selling-price').value) || 0,
+    shipping: parseFloat(document.getElementById('calc-shipping-cost').value) || 0,
+    shippingPayer: document.getElementById('calc-shipping-payer').checked ? 'seller' : 'buyer'
+  };
+  LS.set('compare_state', { a: input });
+  navigateTo('compare', null);
+  showToast('Sent to compare', 'info');
+}
+
+function initCalculator() {
+  document.getElementById('calc-supplier').addEventListener('change', () => { updateBaseCostFromPreset(); recalculate(); });
+  document.getElementById('calc-product-type').addEventListener('change', () => { updateBaseCostFromPreset(); recalculate(); });
+  document.getElementById('calc-channel').addEventListener('change', () => { updateChannelInfo(); recalculate(); });
+  document.getElementById('calc-base-cost').addEventListener('input', debouncedRecalc);
+  document.getElementById('calc-selling-price').addEventListener('input', debouncedRecalc);
+  document.getElementById('calc-shipping-cost').addEventListener('input', debouncedRecalc);
+  document.getElementById('calc-name').addEventListener('input', debouncedRecalc);
+  document.getElementById('calc-shipping-payer').addEventListener('change', () => {
+    document.getElementById('shipping-label-buyer').style.color = document.getElementById('calc-shipping-payer').checked ? 'var(--mid)' : 'var(--ink-2)';
+    document.getElementById('shipping-label-seller').style.color = document.getElementById('calc-shipping-payer').checked ? 'var(--ink-2)' : 'var(--mid)';
+    recalculate();
+  });
+  document.getElementById('calc-target-margin').addEventListener('input', function() {
+    document.getElementById('calc-target-margin-val').textContent = this.value + '%';
+    debouncedRecalc();
+  });
+  const settings = getSettings();
+  refreshSupplierDropdowns();
+  document.getElementById('calc-supplier').value = settings.defaultSupplier || 'Printify';
+  document.getElementById('calc-channel').value = settings.defaultChannel || 'Etsy';
+  document.getElementById('calc-shipping-cost').value = (settings.defaultShippingCost || 4.00).toFixed(2);
+  document.getElementById('calc-target-margin').value = settings.defaultTargetMargin || 30;
+  document.getElementById('calc-target-margin-val').textContent = (settings.defaultTargetMargin || 30) + '%';
+  updateBaseCostFromPreset();
+  updateChannelInfo();
+  recalculate();
+}
+
+/* ── SAVED PRODUCTS / TABLE FUNCTIONS ── */
+let tableSort = { column: 'savedAt', direction: 'desc' };
+let tableFilter = { type: 'all', value: 'all' };
+let tableSearch = '';
+let tablePage = 1;
+const TABLE_PAGE_SIZE = 10;
+let selectedIds = new Set();
+
+function getSavedProducts() { return LS.get('products', []); }
+function saveProducts(products) { LS.set('products', products); updateNavCount(); }
+function saveSettings(settings) { LS.set('settings', settings); }
+function getCustomSuppliers() { return LS.get('custom_suppliers', []); }
+function saveCustomSuppliers(suppliers) { LS.set('custom_suppliers', suppliers); }
+
+function refreshSupplierDropdowns() {
+  const custom = getCustomSuppliers();
+  const builtin = ['Printify', 'Printful', 'Gelato', 'Manual'];
+  // Calculator dropdown
+  const calcSel = document.getElementById('calc-supplier');
+  if (calcSel) {
+    const prev = calcSel.value;
+    calcSel.innerHTML = '';
+    builtin.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; calcSel.appendChild(o); });
+    custom.forEach(s => { const o = document.createElement('option'); o.value = s.name; o.textContent = s.name; calcSel.appendChild(o); });
+    if ([...builtin, ...custom.map(c => c.name)].includes(prev)) calcSel.value = prev;
+  }
+  // Compare A dropdown
+  const compA = document.getElementById('comp-a-supplier');
+  if (compA) {
+    const prev = compA.value;
+    compA.innerHTML = '';
+    builtin.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; compA.appendChild(o); });
+    custom.forEach(s => { const o = document.createElement('option'); o.value = s.name; o.textContent = s.name; compA.appendChild(o); });
+    if ([...builtin, ...custom.map(c => c.name)].includes(prev)) compA.value = prev;
+  }
+  // Compare B dropdown
+  const compB = document.getElementById('comp-b-supplier');
+  if (compB) {
+    const prev = compB.value;
+    compB.innerHTML = '';
+    builtin.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; compB.appendChild(o); });
+    custom.forEach(s => { const o = document.createElement('option'); o.value = s.name; o.textContent = s.name; compB.appendChild(o); });
+    if ([...builtin, ...custom.map(c => c.name)].includes(prev)) compB.value = prev;
+  }
+  // Settings default supplier dropdown
+  const setSel = document.getElementById('set-default-supplier');
+  if (setSel) {
+    const prev = setSel.value;
+    setSel.innerHTML = '';
+    builtin.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; setSel.appendChild(o); });
+    custom.forEach(s => { const o = document.createElement('option'); o.value = s.name; o.textContent = s.name; setSel.appendChild(o); });
+    if ([...builtin, ...custom.map(c => c.name)].includes(prev)) setSel.value = prev;
+  }
+}
+
+function updateNavCount() {
+  const products = getSavedProducts();
+  const el = document.getElementById('nav-count');
+  if (el) el.textContent = products.length;
+  const rtCount = document.getElementById('rt-count');
+  if (rtCount) rtCount.textContent = products.length;
+  const rtStatus = document.getElementById('rt-status');
+  let bestMargin = 0;
+  if (rtStatus) {
+    if (products.length === 0) { rtStatus.textContent = '--'; }
+    else { const best = products.reduce((max, p) => (p.profitMargin > max.profitMargin) ? p : max, products[0]); bestMargin = best.profitMargin; rtStatus.textContent = bestMargin.toFixed(1) + '%'; }
+  }
+  const countBar = document.getElementById('rt-count-bar');
+  if (countBar) countBar.style.width = Math.min(100, products.length * 5) + '%';
+  const marginBar = document.getElementById('rt-margin-bar');
+  if (marginBar) marginBar.style.width = Math.min(100, bestMargin) + '%';
+}
+
+function renderDataTable() {
+  const tbody = document.getElementById('data-tbody');
+  if (!tbody) return;
+  let products = getSavedProducts();
+  const totalAll = products.length;
+  if (tableFilter.type === 'supplier' && tableFilter.value !== 'all') {
+    products = products.filter(p => p.supplier === tableFilter.value);
+  } else if (tableFilter.type === 'profitability') {
+    if (tableFilter.value === 'profitable') products = products.filter(p => p.netProfit > 0);
+    else if (tableFilter.value === 'loss') products = products.filter(p => p.netProfit <= 0);
+  }
+  const q = tableSearch.trim().toLowerCase();
+  if (q) {
+    products = products.filter(p => (p.name || '').toLowerCase().includes(q) || (p.productType || '').toLowerCase().includes(q) || (p.supplier || '').toLowerCase().includes(q));
+  }
+  const totalFiltered = products.length;
+  products.sort((a, b) => {
+    const col = tableSort.column;
+    const dir = tableSort.direction === 'asc' ? 1 : -1;
+    let av = a[col], bv = b[col];
+    if (typeof av === 'string') av = av.toLowerCase();
+    if (typeof bv === 'string') bv = bv.toLowerCase();
+    if (av === undefined || av === null) av = '';
+    if (bv === undefined || bv === null) bv = '';
+    if (av < bv) return -1 * dir;
+    if (av > bv) return 1 * dir;
+    return 0;
+  });
+  document.querySelectorAll('th.sortable').forEach(th => {
+    th.classList.remove('sort-asc', 'sort-desc');
+    const sc = th.getAttribute('data-sort');
+    if (sc === tableSort.column) th.classList.add(tableSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+  });
+  const totalPages = Math.max(1, Math.ceil(totalFiltered / TABLE_PAGE_SIZE));
+  if (tablePage > totalPages) tablePage = totalPages;
+  const startIdx = (tablePage - 1) * TABLE_PAGE_SIZE;
+  const pageItems = products.slice(startIdx, startIdx + TABLE_PAGE_SIZE);
+  const countLabel = document.getElementById('count-label');
+  if (countLabel) countLabel.textContent = totalFiltered + ' of ' + totalAll + ' total';
+  if (pageItems.length === 0) {
+    const msg = totalAll === 0 ? '<h3>NO SAVED PRODUCTS</h3><p>Use the calculator to save products and they will appear here.</p>' : '<h3>NO MATCHING PRODUCTS</h3><p>Try adjusting your filters or search query.</p>';
+    tbody.innerHTML = '<tr><td colspan="12"><div class="empty-state"><div class="empty-icon">&#8709;</div>' + msg + '</div></td></tr>';
+  } else {
+    tbody.innerHTML = pageItems.map(p => {
+      const isSelected = selectedIds.has(p.id);
+      const marginClass = p.profitMargin > 20 ? 'pill up' : (p.profitMargin >= 0 ? 'pill neutral' : 'pill down');
+      const profitColor = p.netProfit > 0 ? 'var(--signal)' : (p.netProfit < 0 ? 'var(--danger)' : 'var(--mid)');
+      const dotClass = p.netProfit > 0 ? 'dot green' : (p.netProfit < 0 ? 'dot red' : 'dot gray');
+      const dateStr = safeDate(p.savedAt);
+      return '<tr>' +
+        "<td><input type='checkbox' " + (isSelected ? 'checked' : '') + " onchange='toggleSelectOne(\"" + p.id + "\")'></td>" +
+        '<td><div class="id"><span class="' + dotClass + '"></span><div><b>' + escapeHtml(p.name || 'Untitled') + '</b><small>' + escapeHtml(p.id.slice(0, 12)) + '</small></div></div></td>' +
+        '<td>' + escapeHtml(p.productType || '--') + '</td>' +
+        '<td>' + escapeHtml(p.supplier || '--') + '</td>' +
+        '<td>' + escapeHtml(p.sellingChannel || '--') + '</td>' +
+        '<td class="num">' + fmt$(p.baseCost) + '</td>' +
+        '<td class="num">' + fmt$(p.sellingPrice) + '</td>' +
+        '<td class="num">' + fmt$(p.totalFees) + '</td>' +
+        '<td class="num" style="color:' + profitColor + ';font-weight:600;">' + fmt$(p.netProfit) + '</td>' +
+        '<td class="num"><span class="' + marginClass + '">' + fmtPct(p.profitMargin) + '</span></td>' +
+        '<td>' + dateStr + '</td>' +
+        "<td><div class='row-actions'><button type='button' class='btn btn-sm' onclick='loadProductToCalculator(\"" + p.id + "\")'>Load</button><button type='button' class='btn btn-sm' onclick='duplicateProduct(\"" + p.id + "\")'>Copy</button><button type='button' class='btn btn-sm danger' onclick='deleteProduct(\"" + p.id + "\")'>Del</button></div></td>" +
+      '</tr>';
+    }).join('');
+  }
+  const pagination = document.getElementById('data-pagination');
+  if (pagination) renderPagination(pagination, totalFiltered, tablePage, totalPages);
+}
+
+function renderPagination(container, totalItems, currentPage, totalPages) {
+  if (totalPages <= 1 && totalItems <= TABLE_PAGE_SIZE) { container.innerHTML = '<span class="page-info">' + totalItems + ' items</span>'; return; }
+  let html = '';
+  html += '<button type="button" ' + (currentPage <= 1 ? 'disabled' : '') + ' onclick="changePage(' + (currentPage - 1) + ')">&larr;</button>';
+  if (totalPages > 1) html += '<button type="button" class="' + (currentPage === 1 ? 'active' : '') + '" onclick="changePage(1)">1</button>';
+  if (totalPages > 7) {
+    if (currentPage > 3) html += '<span style="padding:5px 8px;color:var(--mid);font-size:10px;">...</span>';
+    for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) html += '<button type="button" class="' + (currentPage === i ? 'active' : '') + '" onclick="changePage(' + i + ')">' + i + '</button>';
+    if (currentPage < totalPages - 2) html += '<span style="padding:5px 8px;color:var(--mid);font-size:10px;">...</span>';
+  } else { for (let i = 2; i < totalPages; i++) html += '<button type="button" class="' + (currentPage === i ? 'active' : '') + '" onclick="changePage(' + i + ')">' + i + '</button>'; }
+  if (totalPages > 1) html += '<button type="button" class="' + (currentPage === totalPages ? 'active' : '') + '" onclick="changePage(' + totalPages + ')">' + totalPages + '</button>';
+  html += '<button type="button" ' + (currentPage >= totalPages ? 'disabled' : '') + ' onclick="changePage(' + (currentPage + 1) + ')">&rarr;</button>';
+  html += '<span class="page-info">' + totalItems + ' items &middot; page ' + currentPage + ' / ' + totalPages + '</span>';
+  container.innerHTML = html;
+}
+
+function sortTable(column) {
+  if (tableSort.column === column) tableSort.direction = tableSort.direction === 'asc' ? 'desc' : 'asc';
+  else { tableSort.column = column; tableSort.direction = 'asc'; }
+  renderDataTable();
+}
+
+function filterBySupplier(supplier) {
+  tableFilter = { type: supplier === 'all' ? 'all' : 'supplier', value: supplier };
+  tablePage = 1;
+  document.querySelectorAll('#data-filters .chip').forEach(chip => {
+    const f = chip.getAttribute('data-filter');
+    if (f === supplier) chip.classList.add('on');
+    else if (f !== 'profitable' && f !== 'loss') chip.classList.remove('on');
+  });
+  document.querySelectorAll('#data-filters .chip[data-filter="profitable"], #data-filters .chip[data-filter="loss"]').forEach(c => c.classList.remove('on'));
+  renderDataTable();
+}
+
+function filterByProfitability(type) {
+  tableFilter = { type: 'profitability', value: type };
+  tablePage = 1;
+  document.querySelectorAll('#data-filters .chip').forEach(chip => {
+    chip.classList.toggle('on', chip.getAttribute('data-filter') === type);
+  });
+  renderDataTable();
+}
+
+let searchDebounceTimer = null;
+function searchProducts(query) {
+  if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(() => { tableSearch = query; tablePage = 1; renderDataTable(); }, 200);
+}
+
+function changePage(page) { tablePage = page; renderDataTable(); }
+
+function toggleSelectAll() {
+  const checkbox = document.getElementById('select-all');
+  if (!checkbox) return;
+  let products = getSavedProducts();
+  if (tableFilter.type === 'supplier' && tableFilter.value !== 'all') products = products.filter(p => p.supplier === tableFilter.value);
+  else if (tableFilter.type === 'profitability') {
+    if (tableFilter.value === 'profitable') products = products.filter(p => p.netProfit > 0);
+    else if (tableFilter.value === 'loss') products = products.filter(p => p.netProfit <= 0);
+  }
+  const q = tableSearch.trim().toLowerCase();
+  if (q) products = products.filter(p => (p.name || '').toLowerCase().includes(q) || (p.productType || '').toLowerCase().includes(q) || (p.supplier || '').toLowerCase().includes(q));
+  products.sort((a, b) => {
+    let av = a[tableSort.column], bv = b[tableSort.column];
+    const dir = tableSort.direction === 'asc' ? 1 : -1;
+    if (typeof av === 'string') av = av.toLowerCase();
+    if (typeof bv === 'string') bv = bv.toLowerCase();
+    if (av < bv) return -1 * dir; if (av > bv) return 1 * dir; return 0;
+  });
+  const startIdx = (tablePage - 1) * TABLE_PAGE_SIZE;
+  const pageItems = products.slice(startIdx, startIdx + TABLE_PAGE_SIZE);
+  if (checkbox.checked) { pageItems.forEach(p => selectedIds.add(p.id)); }
+  else { pageItems.forEach(p => selectedIds.delete(p.id)); }
+  renderDataTable();
+}
+
+function toggleSelectOne(id) {
+  if (selectedIds.has(id)) selectedIds.delete(id);
+  else selectedIds.add(id);
+  renderDataTable();
+}
+
+function bulkDelete() {
+  if (selectedIds.size === 0) { showToast('No products selected.', 'info'); return; }
+  openModal('Delete Selected', '<p>Delete <strong>' + selectedIds.size + '</strong> selected product(s)?</p>',
+    '<button type="button" class="btn" onclick="closeModal()">Cancel</button><button type="button" class="btn danger" onclick="doBulkDelete()">Delete</button>');
+}
+
+function doBulkDelete() {
+  let products = getSavedProducts();
+  products = products.filter(p => !selectedIds.has(p.id));
+  saveProducts(products);
+  selectedIds.clear();
+  closeModal();
+  renderDataTable();
+  showToast('Selected products deleted', 'info');
+}
+
+function deleteProduct(id) {
+  const products = getSavedProducts();
+  const p = products.find(x => x.id === id);
+  openModal('Delete Product', '<p>Delete <strong>' + escapeHtml(p ? p.name : 'this product') + '</strong>?</p>',
+    "<button type='button' class='btn' onclick='closeModal()'>Cancel</button><button type='button' class='btn danger' onclick='doDeleteProduct(\"" + id + "\")'>Delete</button>");
+}
+
+function doDeleteProduct(id) {
+  let products = getSavedProducts();
+  products = products.filter(p => p.id !== id);
+  selectedIds.delete(id);
+  saveProducts(products);
+  closeModal();
+  renderDataTable();
+  showToast('Product deleted', 'info');
+}
+
+function duplicateProduct(id) {
+  const products = getSavedProducts();
+  const original = products.find(p => p.id === id);
+  if (!original) { showToast('Product not found', 'error'); return; }
+  const copy = JSON.parse(JSON.stringify(original));
+  copy.id = Date.now() + '-' + Math.random().toString(36).slice(2, 6);
+  copy.name = (copy.name || 'Untitled') + ' (Copy)';
+  copy.savedAt = new Date().toISOString();
+  products.push(copy);
+  saveProducts(products);
+  renderDataTable();
+  showToast('Product duplicated', 'success');
+}
+
+function loadProductToCalculator(id) {
+  const products = getSavedProducts();
+  const p = products.find(x => x.id === id);
+  if (!p) { showToast('Product not found', 'error'); return; }
+  if (document.getElementById('calc-name')) document.getElementById('calc-name').value = p.name || '';
+  if (document.getElementById('calc-product-type')) document.getElementById('calc-product-type').value = p.productType || 'T-Shirt';
+  if (document.getElementById('calc-supplier')) document.getElementById('calc-supplier').value = p.supplier || 'Printify';
+  if (document.getElementById('calc-base-cost')) document.getElementById('calc-base-cost').value = p.baseCost || 0;
+  if (document.getElementById('calc-channel')) document.getElementById('calc-channel').value = p.sellingChannel || 'Etsy';
+  if (document.getElementById('calc-selling-price')) document.getElementById('calc-selling-price').value = p.sellingPrice || 0;
+  if (document.getElementById('calc-shipping-cost')) document.getElementById('calc-shipping-cost').value = p.shippingCost || 0;
+  if (document.getElementById('calc-shipping-payer')) document.getElementById('calc-shipping-payer').checked = p.shippingPayer === 'seller';
+  if (document.getElementById('calc-target-margin')) {
+    document.getElementById('calc-target-margin').value = p.targetMargin || 30;
+    if (document.getElementById('calc-target-margin-val')) document.getElementById('calc-target-margin-val').textContent = (p.targetMargin || 30) + '%';
+  }
+  navigateTo('main');
+  showToast('Product loaded into calculator', 'success');
+}
+
+// 🔒 FIX H-2: Secure CSV export — quote all fields and defuse formula injection (tab prefix BEFORE quoting)
+function exportToCSV() {
+  const products = getSavedProducts();
+  if (products.length === 0) { showToast('No products to export', 'info'); return; }
+  const headers = ['Name', 'Type', 'Supplier', 'Channel', 'Base Cost', 'Sell Price', 'Shipping', 'Total Fees', 'Net Profit', 'Margin', 'Markup', 'Break Even', 'Suggested Price', 'Date'];
+  const rows = products.map(p => [
+    escapeCsvField(p.name),
+    escapeCsvField(p.productType || ''),
+    escapeCsvField(p.supplier || ''),
+    escapeCsvField(p.sellingChannel || ''),
+    p.baseCost || 0,
+    p.sellingPrice || 0,
+    p.shippingCost || 0,
+    (p.totalFees || 0).toFixed(2),
+    (p.netProfit || 0).toFixed(2),
+    (p.profitMargin || 0).toFixed(1) + '%',
+    (p.markupPct || 0).toFixed(1) + '%',
+    (p.breakEvenPrice || 0).toFixed(2),
+    (p.suggestedPrice || 0).toFixed(2),
+    escapeCsvField(p.savedAt ? new Date(p.savedAt).toISOString() : '')
+  ]);
+  const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'pod-products-' + new Date().toISOString().split('T')[0] + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Exported ' + products.length + ' products to CSV', 'success');
+}
+
+// 🔒 Corrected safe CSV helper (H-2): tab prefix BEFORE quoting
+function escapeCsvField(value) {
+  let str = String(value ?? '');
+  if (/^[=+\-@]/.test(str)) str = '\t' + str;       // prefix BEFORE quoting
+  const needsQuoting = /[",\n\r]/.test(str);
+  const escaped = str.replace(/"/g, '""');
+  return needsQuoting ? '"' + escaped + '"' : escaped;
+}
+
+/* ── COMPARE FUNCTIONS ── */
+function restoreCompareState() {
+  const state = LS.get('compare_state', null);
+  if (state && state.a) {
+    const a = state.a;
+    if (a.name !== undefined) { const el = document.getElementById('comp-a-name'); if (el) el.value = a.name; }
+    if (a.supplier !== undefined) { const el = document.getElementById('comp-a-supplier'); if (el) el.value = a.supplier; }
+    if (a.baseCost !== undefined) { const el = document.getElementById('comp-a-base-cost'); if (el) el.value = a.baseCost; }
+    if (a.channel !== undefined) { const el = document.getElementById('comp-a-channel'); if (el) el.value = a.channel; }
+    if (a.sellingPrice !== undefined) { const el = document.getElementById('comp-a-selling-price'); if (el) el.value = a.sellingPrice; }
+    if (a.shipping !== undefined) { const el = document.getElementById('comp-a-shipping'); if (el) el.value = a.shipping; }
+    if (a.shippingPayer !== undefined) { const el = document.getElementById('comp-a-shipping-payer'); if (el) el.checked = a.shippingPayer === 'seller'; }
+  }
+}
+
+function initCompare() {
+  const ids = ['comp-a-name', 'comp-a-supplier', 'comp-a-base-cost', 'comp-a-channel', 'comp-a-selling-price', 'comp-a-shipping', 'comp-a-shipping-payer', 'comp-b-name', 'comp-b-supplier', 'comp-b-base-cost', 'comp-b-channel', 'comp-b-selling-price', 'comp-b-shipping', 'comp-b-shipping-payer'];
+  ids.forEach(id => { const el = document.getElementById(id); if (el) { el.addEventListener('input', recalculateCompare); el.addEventListener('change', recalculateCompare); } });
+  restoreCompareState();
+  recalculateCompare();
+}
+
+// 🔒 FIX M-1: Remove calcCompareSimple, use calculateProduct directly
+function recalculateCompare() {
+  if (typeof SELLING_CHANNELS === 'undefined') return;
+  const aName = document.getElementById('comp-a-name').value || 'Product A';
+  const aSupplier = document.getElementById('comp-a-supplier').value || 'Printify';
+  const aBaseCost = parseFloat(document.getElementById('comp-a-base-cost').value) || 0;
+  const aChannel = document.getElementById('comp-a-channel').value || 'Etsy';
+  const aSellPrice = parseFloat(document.getElementById('comp-a-selling-price').value) || 0;
+  const aShipping = parseFloat(document.getElementById('comp-a-shipping').value) || 0;
+  const aShippingPayer = document.getElementById('comp-a-shipping-payer').checked ? 'seller' : 'buyer';
+
+  const bName = document.getElementById('comp-b-name').value || 'Product B';
+  const bSupplier = document.getElementById('comp-b-supplier').value || 'Printful';
+  const bBaseCost = parseFloat(document.getElementById('comp-b-base-cost').value) || 0;
+  const bChannel = document.getElementById('comp-b-channel').value || 'Shopify';
+  const bSellPrice = parseFloat(document.getElementById('comp-b-selling-price').value) || 0;
+  const bShipping = parseFloat(document.getElementById('comp-b-shipping').value) || 0;
+  const bShippingPayer = document.getElementById('comp-b-shipping-payer').checked ? 'seller' : 'buyer';
+
+  // Use the same core calculation function — no duplication
+  const aProduct = { id: 'comp-a', name: aName, productType: 'T-Shirt', supplier: aSupplier, baseCost: aBaseCost, sellingChannel: aChannel, sellingPrice: aSellPrice, shippingCost: aShipping, shippingPayer: aShippingPayer, targetMargin: 30 };
+  const bProduct = { id: 'comp-b', name: bName, productType: 'T-Shirt', supplier: bSupplier, baseCost: bBaseCost, sellingChannel: bChannel, sellingPrice: bSellPrice, shippingCost: bShipping, shippingPayer: bShippingPayer, targetMargin: 30 };
+
+  const aResult = calculateProduct(aProduct);
+  const bResult = calculateProduct(bProduct);
+
+  renderCompareResults('comp-a-results', aResult, 'A');
+  renderCompareResults('comp-b-results', bResult, 'B');
+
+  const winnerBanner = document.getElementById('compare-winner');
+  const winnerText = document.getElementById('compare-winner-text');
+  if (winnerBanner && winnerText) {
+    const diff = aResult.netProfit - bResult.netProfit;
+    const absDiff = Math.abs(diff);
+    winnerBanner.style.display = 'flex';
+    if (Math.abs(diff) < 0.01) winnerText.innerHTML = '<span style="color:var(--mid)">Both configurations have the same net profit</span>';
+    else if (diff > 0) winnerText.innerHTML = '<span class="winner-name">A nets ' + fmt$(absDiff) + ' more</span> per sale than <span class="loser-name">B</span>';
+    else winnerText.innerHTML = '<span class="winner-name">B nets ' + fmt$(absDiff) + ' more</span> per sale than <span class="loser-name">A</span>';
+  }
+}
+
+function renderCompareResults(containerId, result, label) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const profitColor = result.netProfit > 0 ? 'var(--signal)' : (result.netProfit < 0 ? 'var(--danger)' : 'var(--ink)');
+  container.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px;"><div style="color:var(--mid);text-transform:uppercase;letter-spacing:.12em;font-size:9px;margin-bottom:4px;grid-column:1/-1;"><b>Net Profit</b></div><div style="font-size:22px;font-weight:600;color:' + profitColor + ';grid-column:1/-1;margin-bottom:8px;">' + fmt$(result.netProfit) + '</div><div style="color:var(--mid)">Margin</div><div style="text-align:right;font-weight:600;">' + fmtPct(result.profitMargin) + '</div><div style="color:var(--mid)">Total Fees</div><div style="text-align:right;font-weight:600;">' + fmt$(result.totalFees) + '</div><div style="color:var(--mid)">Base Cost</div><div style="text-align:right;font-weight:600;">' + fmt$(result.baseCost) + '</div><div style="color:var(--mid)">Sell Price</div><div style="text-align:right;font-weight:600;">' + fmt$(result.sellingPrice) + '</div><div style="color:var(--mid)">Break Even</div><div style="text-align:right;font-weight:600;">' + fmt$(result.breakEvenPrice) + '</div><div style="color:var(--mid)">Suggested</div><div style="text-align:right;font-weight:600;">' + fmt$(result.suggestedPrice) + '</div><div style="color:var(--mid)">Markup</div><div style="text-align:right;font-weight:600;">' + fmtPct(result.markupPct) + '</div></div>';
+}
+
+/* ── SETTINGS FUNCTIONS ── */
+function loadSettingsUI() {
+  const settings = getSettings();
+  refreshSupplierDropdowns();
+  const supplierEl = document.getElementById('set-default-supplier');
+  const channelEl = document.getElementById('set-default-channel');
+  const marginEl = document.getElementById('set-default-margin');
+  const marginValEl = document.getElementById('set-default-margin-val');
+  const shippingEl = document.getElementById('set-default-shipping');
+  const hueEl = document.getElementById('set-accent-hue');
+  const hueValEl = document.getElementById('set-accent-hue-val');
+  if (supplierEl) supplierEl.value = settings.defaultSupplier || 'Printify';
+  if (channelEl) channelEl.value = settings.defaultChannel || 'Etsy';
+  if (marginEl) { marginEl.value = settings.defaultTargetMargin || 30; if (marginValEl) marginValEl.textContent = (settings.defaultTargetMargin || 30) + '%'; }
+  if (shippingEl) shippingEl.value = settings.defaultShippingCost !== undefined ? settings.defaultShippingCost : 4.00;
+  if (hueEl) { hueEl.value = settings.accentHue !== undefined ? settings.accentHue : 32; if (hueValEl) hueValEl.textContent = (settings.accentHue !== undefined ? settings.accentHue : 32) + ''; }
+  if (settings.accentHue !== undefined) applyAccent(settings.accentHue);
+  renderCustomSuppliers();
+}
+
+// 🔒 FIX M-3: NaN guard on defaultTargetMargin
+function applySettings() {
+  const marginVal = parseInt(document.getElementById('set-default-margin').value);
+  const settings = {
+    defaultSupplier: document.getElementById('set-default-supplier') ? document.getElementById('set-default-supplier').value : 'Printify',
+    defaultChannel: document.getElementById('set-default-channel') ? document.getElementById('set-default-channel').value : 'Etsy',
+    defaultTargetMargin: isNaN(marginVal) ? 30 : marginVal,
+    defaultShippingCost: document.getElementById('set-default-shipping') ? parseFloat(document.getElementById('set-default-shipping').value) : 4.00,
+    accentHue: document.getElementById('set-accent-hue') ? parseInt(document.getElementById('set-accent-hue').value) : 32
+  };
+  saveSettings(settings);
+  if (settings.accentHue !== undefined) applyAccent(settings.accentHue);
+  showToast('Settings saved', 'success');
+}
+
+function exportJSON() {
+  const data = { pod_products: getSavedProducts(), pod_settings: getSettings(), pod_custom_suppliers: getCustomSuppliers(), exportedAt: new Date().toISOString() };
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'pod-backup-' + new Date().toISOString().split('T')[0] + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Backup exported', 'success');
+}
+
+// 🔒 FIX L-1: Replace window._pendingImport with module-scoped variable
+let pendingImport = null;
+
+function importJSON() {
+  const fileInput = document.getElementById('set-import-file');
+  if (!fileInput || !fileInput.files || fileInput.files.length === 0) { showToast('Select a JSON file first', 'info'); return; }
+  const file = fileInput.files[0];
+  if (file.size > 10 * 1024 * 1024) { showToast('File too large (max 10MB)', 'error'); return; } // 🔒 FIX-12
+  if (!file.name.toLowerCase().endsWith('.json')) { showToast('Select a .json backup file', 'error'); return; } // 🔒 FIX-12
+  const reader = new FileReader();
+  reader.onerror = function() { showToast('Could not read file — try again', 'error'); }; // 🔒 FIX-10
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      const productCount = Array.isArray(data.pod_products) ? data.pod_products.length : 0; // 🔒 FIX-1
+      const supplierCount = Array.isArray(data.pod_custom_suppliers) ? data.pod_custom_suppliers.length : 0; // 🔒 FIX-1
+      openModal('Import Backup', '<p>Import will <strong>merge</strong> with existing data:</p><ul style="margin:10px 0;padding-left:20px;"><li>Append ' + escapeHtml(String(productCount)) + ' products</li><li>Overwrite settings</li><li>Merge ' + escapeHtml(String(supplierCount)) + ' custom suppliers</li></ul><p>Existing products will be preserved. Continue?</p>',
+        '<button type="button" class="btn" onclick="closeModal()">Cancel</button><button type="button" class="btn primary" onclick="doImportJSON()">Import</button>');
+      pendingImport = data;
+    } catch (err) { showToast('Invalid JSON file', 'error'); }
+  };
+  reader.readAsText(file);
+}
+
+// 🔒 FIX M-4: Sanitize imported products before saving
+function sanitizeProduct(raw) {
+  return {
+    id: String(raw.id || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 50) || (Date.now() + '-' + Math.random().toString(36).slice(2, 6)), // 🔒 FIX-2
+    name: String(raw.name || '').trim(),
+    supplier: String(raw.supplier || '').trim(),
+    productType: String(raw.productType || '').trim(),
+    sellingChannel: String(raw.sellingChannel || '').trim(),
+    baseCost: parseFloat(raw.baseCost) || 0,
+    sellingPrice: parseFloat(raw.sellingPrice) || 0,
+    shippingCost: parseFloat(raw.shippingCost) || 0,
+    shippingPayer: raw.shippingPayer === 'seller' ? 'seller' : 'buyer',
+    targetMargin: parseInt(raw.targetMargin) || 30,
+    platformFee: parseFloat(raw.platformFee) || 0,
+    processingFee: parseFloat(raw.processingFee) || 0,
+    sellerShippingCost: parseFloat(raw.sellerShippingCost) || 0,
+    totalFees: parseFloat(raw.totalFees) || 0,
+    grossProfit: parseFloat(raw.grossProfit) || 0,
+    netProfit: parseFloat(raw.netProfit) || 0,
+    profitMargin: parseFloat(raw.profitMargin) || 0,
+    markupPct: parseFloat(raw.markupPct) || 0,
+    breakEvenPrice: parseFloat(raw.breakEvenPrice) || 0,
+    suggestedPrice: parseFloat(raw.suggestedPrice) || 0,
+    savedAt: raw.savedAt || new Date().toISOString()
+  };
+}
+
+function doImportJSON() {
+  closeModal();
+  if (!pendingImport) return;
+  const data = pendingImport;
+  pendingImport = null;
+  if (data.pod_products && Array.isArray(data.pod_products)) {
+    const existing = getSavedProducts();
+    const existingIds = new Set(existing.map(p => p.id));
+    const newProducts = data.pod_products
+      .filter(p => !existingIds.has(p.id))
+      .map(sanitizeProduct);   // 🔒 sanitize each imported product
+    saveProducts(existing.concat(newProducts));
+  }
+  if (data.pod_settings && typeof data.pod_settings === 'object') { // 🔒 FIX-7
+    const _allowed = ['defaultSupplier','defaultChannel','defaultTargetMargin','defaultShippingCost','accentHue'];
+    const _clean = {};
+    for (const k of _allowed) { if (Object.prototype.hasOwnProperty.call(data.pod_settings, k)) _clean[k] = data.pod_settings[k]; }
+    saveSettings(_clean); loadSettingsUI();
+  }
+  if (data.pod_custom_suppliers && Array.isArray(data.pod_custom_suppliers)) {
+    const existing = getCustomSuppliers();
+    const existingIds = new Set(existing.map(s => s.id));
+    saveCustomSuppliers(existing.concat(data.pod_custom_suppliers.filter(s => !existingIds.has(s.id))));
+    renderCustomSuppliers();
+  }
+  renderDataTable();
+  const fileInput = document.getElementById('set-import-file');
+  if (fileInput) fileInput.value = '';
+  showToast('Backup imported successfully', 'success');
+}
+
+function clearAllData() {
+  const products = getSavedProducts();
+  openModal('Clear All Data', '<p>Delete all <strong>' + products.length + '</strong> saved products and reset all settings?</p><p>This action <strong>cannot be undone</strong>.</p>',
+    '<button type="button" class="btn" onclick="closeModal()">Cancel</button><button type="button" class="btn danger" onclick="doClearAllData()">Delete Everything</button>');
+}
+
+function doClearAllData() {
+  closeModal();
+  ['products', 'settings', 'custom_suppliers', 'compare_state'].forEach(key => LS.del(key));
+  selectedIds.clear();
+  tableSearch = '';
+  tablePage = 1;
+  tableFilter = { type: 'all', value: 'all' };
+  tableSort = { column: 'savedAt', direction: 'desc' };
+  loadSettingsUI();
+  renderDataTable();
+  renderCustomSuppliers();
+  updateNavCount();
+  showToast('All data cleared', 'info');
+}
+
+function createCustomSupplier() {
+  const id = 'cs-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6);
+  openModal('Add Custom Supplier', '<div class="form-grid" style="grid-template-columns:1fr;"><div class="form-group"><label>Supplier Name</label><input type="text" id="cs-name" placeholder="e.g. Custom Print Co"></div><div class="form-group"><label>Commission Rate (%)</label><input type="number" id="cs-commission" step="0.1" value="0"></div><div class="form-group"><label>Processing Rate (%)</label><input type="number" id="cs-processing-rate" step="0.001" value="0.029"></div><div class="form-group"><label>Processing Fixed Fee ($)</label><input type="number" id="cs-processing-fixed" step="0.01" value="0.30"></div></div>',
+    "<button type='button' class='btn' onclick='closeModal()'>Cancel</button><button type='button' class='btn primary' onclick='doCreateCustomSupplier(\"" + id + "\")'>Save</button>");
+}
+
+function doCreateCustomSupplier(id) {
+  const nameEl = document.getElementById('cs-name');
+  const commissionEl = document.getElementById('cs-commission');
+  const procRateEl = document.getElementById('cs-processing-rate');
+  const procFixedEl = document.getElementById('cs-processing-fixed');
+  const name = nameEl ? nameEl.value.trim() : '';
+  if (!name) { showToast('Supplier name is required', 'error'); return; }
+  const suppliers = getCustomSuppliers();
+  suppliers.push({ id: id, name: name, commissionRate: commissionEl ? parseFloat(commissionEl.value) || 0 : 0, processingRate: procRateEl ? parseFloat(procRateEl.value) || 0 : 0.029, processingFixedFee: procFixedEl ? parseFloat(procFixedEl.value) || 0 : 0.30, fixedFee: 0 });
+  saveCustomSuppliers(suppliers);
+  renderCustomSuppliers();
+  refreshSupplierDropdowns();
+  closeModal();
+  showToast('Custom supplier added', 'success');
+}
+
+function deleteCustomSupplier(id) {
+  const suppliers = getCustomSuppliers();
+  const s = suppliers.find(x => x.id === id);
+  openModal('Delete Custom Supplier', '<p>Remove <strong>' + escapeHtml(s ? s.name : 'this supplier') + '</strong>?</p>',
+    "<button type='button' class='btn' onclick='closeModal()'>Cancel</button><button type='button' class='btn danger' onclick='doDeleteCustomSupplier(\"" + id + "\")'>Delete</button>");
+}
+
+function doDeleteCustomSupplier(id) {
+  let suppliers = getCustomSuppliers();
+  suppliers = suppliers.filter(s => s.id !== id);
+  saveCustomSuppliers(suppliers);
+  renderCustomSuppliers();
+  refreshSupplierDropdowns();
+  closeModal();
+  showToast('Custom supplier removed', 'info');
+}
+
+function renderCustomSuppliers() {
+  const container = document.getElementById('custom-supplier-list');
+  if (!container) return;
+  const suppliers = getCustomSuppliers();
+  if (suppliers.length === 0) {
+    container.innerHTML = '<p style="font-size:11px;color:var(--mid);padding:8px 0;">No custom suppliers. Add one to use it in the calculator.</p>';
+    return;
+  }
+  container.innerHTML = suppliers.map(s => "<div class='custom-supplier-item'><div><b>" + escapeHtml(s.name) + "</b><span style='display:block;margin-top:2px;'>comm: " + (s.commissionRate || 0) + "% &middot; proc: " + ((s.processingRate || 0) * 100).toFixed(1) + "% + " + fmt$(s.processingFixedFee || 0) + "</span></div><button type='button' class='btn btn-sm danger' onclick='deleteCustomSupplier(\"" + s.id + "\")'>Remove</button></div>").join('');
+}
+
+function initViews() {
+  const searchEl = document.getElementById('data-search');
+  if (searchEl) searchEl.addEventListener('input', e => searchProducts(e.target.value));
+  loadSettingsUI();
+  updateNavCount();
+
+  // 🔒 FIX H-1: Wire the global sidebar search to actually search (with debounce)
+  const globalSearch = document.getElementById('search-input');
+  if (globalSearch) {
+    const debouncedGlobalSearch = debounce(function(query) {
+      tableSearch = query;
+      navigateTo('data', null);
+      const dataSearch = document.getElementById('data-search');
+      if (dataSearch) dataSearch.value = query;
+      tablePage = 1;
+      renderDataTable();
+    }, 200);
+    globalSearch.addEventListener('input', function() { debouncedGlobalSearch(this.value); });
+  }
+}
+
+/* ── ANALYTICS CHARTS ── */
+function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function chartColor(hue, alpha) { return 'oklch(0.55 0.14 ' + hue + ' / ' + (alpha || 1) + ')'; }
+
+function drawEmptyCanvas(canvasId, message) {
+  var canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+  var rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); // 🔒 FIX-4
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, rect.width, rect.height);
+  ctx.fillStyle = cssVar('--mid');
+  ctx.font = '12px ui-monospace, monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(message || 'No saved products yet', rect.width / 2, rect.height / 2);
+}
+
+function renderBarChart(products) {
+  var canvas = document.getElementById('chart-bar');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+  var rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); // 🔒 FIX-4
+  ctx.scale(dpr, dpr);
+  var W = rect.width, H = rect.height;
+  var PAD = { top: 30, right: 20, bottom: 60, left: 60 };
+  var chartW = W - PAD.left - PAD.right;
+  var chartH = H - PAD.top - PAD.bottom;
+  ctx.clearRect(0, 0, W, H);
+  if (!products || products.length === 0) { drawEmptyCanvas('chart-bar', 'No saved products yet'); return; }
+  var maxAbs = Math.max.apply(null, products.map(function(p) { return Math.abs(p.netProfit || 0); }));
+  if (maxAbs === 0) maxAbs = 1;
+  var yMax = maxAbs * 1.2;
+  var yRange = yMax * 2;
+  var zeroY = PAD.top + chartH / 2;
+  var gridVals = [yMax, yMax / 2, 0, -yMax / 2, -yMax];
+  ctx.font = '9px ui-monospace, monospace';
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  gridVals.forEach(function(val) {
+    var t = (val + yMax) / yRange;
+    var y = PAD.top + chartH * (1 - t);
+    ctx.beginPath();
+    ctx.strokeStyle = Math.abs(val) < 0.001 ? cssVar('--ink-2') : cssVar('--rule');
+    ctx.lineWidth = Math.abs(val) < 0.001 ? 1.0 : 0.5;
+    ctx.moveTo(PAD.left, y);
+    ctx.lineTo(W - PAD.right, y);
+    ctx.stroke();
+    ctx.fillStyle = cssVar('--mid');
+    ctx.fillText((val >= 0 ? '$' : '-$') + Math.abs(val).toFixed(0), PAD.left - 8, y);
+  });
+  ctx.save();
+  ctx.fillStyle = cssVar('--mid');
+  ctx.font = '9px ui-monospace, monospace';
+  ctx.textAlign = 'center';
+  ctx.translate(10, PAD.top + chartH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('Net Profit', 0, 0);
+  ctx.restore();
+  var n = products.length;
+  var barGap = Math.max(4, chartW / n * 0.15);
+  var barWidth = (chartW - barGap * (n + 1)) / n;
+  products.forEach(function(p, i) {
+    var net = p.netProfit || 0;
+    var barH = (Math.abs(net) / yRange) * chartH;
+    var x = PAD.left + barGap + i * (barWidth + barGap);
+    var y = net >= 0 ? zeroY - barH : zeroY;
+    ctx.fillStyle = net > 0 ? chartColor(145) : (net < 0 ? chartColor(25) : cssVar('--rule'));
+    ctx.fillRect(x, y, barWidth, Math.max(barH, 1));
+    ctx.fillStyle = cssVar('--ink-2');
+    ctx.font = '8px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    if (net > 0) { ctx.textBaseline = 'bottom'; ctx.fillText('$' + net.toFixed(0), x + barWidth / 2, y - 2); }
+    else if (net < 0) { ctx.textBaseline = 'top'; ctx.fillText('-$' + Math.abs(net).toFixed(0), x + barWidth / 2, y + barH + 2); }
+    ctx.save();
+    ctx.fillStyle = cssVar('--ink-2');
+    ctx.font = '8px ui-monospace, monospace';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'top';
+    ctx.translate(x + barWidth / 2, H - PAD.bottom + 6);
+    ctx.rotate(-Math.PI / 4);
+    ctx.fillText((p.name || p.productType || 'Product').slice(0, 18), 0, 0);
+    ctx.restore();
+  });
+  ctx.strokeStyle = cssVar('--rule');
+  ctx.lineWidth = 0.5;
+  ctx.beginPath();
+  ctx.moveTo(PAD.left, H - PAD.bottom);
+  ctx.lineTo(W - PAD.right, H - PAD.bottom);
+  ctx.stroke();
+}
+
+function renderPieChart(products) {
+  var canvas = document.getElementById('chart-pie');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+  var rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); // 🔒 FIX-4
+  ctx.scale(dpr, dpr);
+  var W = rect.width, H = rect.height;
+  ctx.clearRect(0, 0, W, H);
+  var totalBase = 0, totalPlatform = 0, totalProcessing = 0, totalShipping = 0;
+  (products || []).forEach(function(p) {
+    totalBase += (p.baseCost || 0);
+    totalPlatform += (p.platformFee || 0);
+    totalProcessing += (p.processingFee || 0);
+    totalShipping += (p.sellerShippingCost || 0);
+  });
+  var grandTotal = totalBase + totalPlatform + totalProcessing + totalShipping;
+  var legendEl = document.getElementById('pie-legend');
+  if (grandTotal === 0) { drawEmptyCanvas('chart-pie', 'No saved products yet'); if (legendEl) legendEl.innerHTML = ''; return; }
+  var segments = [
+    { label: 'Base Cost', value: totalBase, hue: 220 },
+    { label: 'Platform Fees', value: totalPlatform, hue: 280 },
+    { label: 'Processing', value: totalProcessing, hue: 160 },
+    { label: 'Shipping', value: totalShipping, hue: 45 }
+  ];
+  var cx = W / 2, cy = H / 2;
+  var radius = Math.min(cx, cy) - 20;
+  var innerRadius = radius * 0.55;
+  var startAngle = -Math.PI / 2;
+  segments.forEach(function(seg) {
+    var angle = (seg.value / grandTotal) * Math.PI * 2;
+    var endAngle = startAngle + angle;
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, startAngle, endAngle);
+    ctx.arc(cx, cy, innerRadius, endAngle, startAngle, true);
+    ctx.closePath();
+    ctx.fillStyle = chartColor(seg.hue);
+    ctx.fill();
+    ctx.strokeStyle = cssVar('--paper');
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    startAngle = endAngle;
+  });
+  ctx.fillStyle = cssVar('--ink');
+  ctx.font = 'bold 11px ui-monospace, monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('COSTS', cx, cy - 8);
+  ctx.fillStyle = cssVar('--ink-2');
+  ctx.font = '10px ui-monospace, monospace';
+  ctx.fillText('$' + grandTotal.toFixed(0), cx, cy + 8);
+  if (legendEl) {
+    legendEl.innerHTML = segments.map(function(s) {
+      return '<div class="fee-label"><span class="dot" style="background:' + chartColor(s.hue) + '"></span><span>' + escapeHtml(s.label) + '</span><span class="amt">$' + s.value.toFixed(2) + '</span></div>';
+    }).join('');
+  }
+}
+
+function renderSummaryStats(products) {
+  var noDataText = { revenue: '$0.00', costs: '$0.00', net: '$0.00', margin: '0.0%', product: '—' };
+  var elRevenue = document.getElementById('stat-total-revenue');
+  var elCosts = document.getElementById('stat-total-costs');
+  var elNet = document.getElementById('stat-total-net-profit');
+  var elMargin = document.getElementById('stat-avg-margin');
+  var elMarginDesc = document.getElementById('stat-margin-desc');
+  var elBest = document.getElementById('stat-best-product');
+  var elBestMargin = document.getElementById('stat-best-margin');
+  var elWorst = document.getElementById('stat-worst-product');
+  var elWorstMargin = document.getElementById('stat-worst-margin');
+  if (!products || products.length === 0) {
+    if (elRevenue) elRevenue.textContent = noDataText.revenue;
+    if (elCosts) elCosts.textContent = noDataText.costs;
+    if (elNet) elNet.textContent = noDataText.net;
+    if (elMargin) elMargin.textContent = noDataText.margin;
+    if (elMarginDesc) elMarginDesc.textContent = 'across all products';
+    if (elBest) elBest.textContent = noDataText.product;
+    if (elBestMargin) elBestMargin.textContent = '';
+    if (elWorst) elWorst.textContent = noDataText.product;
+    if (elWorstMargin) elWorstMargin.textContent = '';
+    return;
+  }
+  var totalRevenue = 0, totalCosts = 0, totalNetProfit = 0, totalMargin = 0;
+  var bestProduct = null, worstProduct = null;
+  var bestNet = -Infinity, worstNet = Infinity;
+  products.forEach(function(p) {
+    var rev = p.sellingPrice || 0;
+    var cost = (p.baseCost || 0) + (p.totalFees || 0);
+    var net = p.netProfit || 0;
+    var margin = p.profitMargin || 0;
+    totalRevenue += rev; totalCosts += cost; totalNetProfit += net; totalMargin += margin;
+    if (net > bestNet) { bestNet = net; bestProduct = p; }
+    if (net < worstNet) { worstNet = net; worstProduct = p; }
+  });
+  var avgMargin = totalMargin / products.length;
+  if (elRevenue) elRevenue.textContent = '$' + totalRevenue.toFixed(2);
+  if (elCosts) elCosts.textContent = '$' + totalCosts.toFixed(2);
+  if (elNet) elNet.textContent = '$' + totalNetProfit.toFixed(2);
+  if (elMargin) elMargin.textContent = avgMargin.toFixed(1) + '%';
+  if (elMarginDesc) elMarginDesc.textContent = 'across ' + products.length + ' product' + (products.length !== 1 ? 's' : '');
+  if (elBest && bestProduct) { elBest.textContent = escapeHtml(bestProduct.name || bestProduct.productType || 'Unnamed'); elBest.style.color = bestNet >= 0 ? cssVar('--signal') : cssVar('--danger'); }
+  if (elBestMargin && bestProduct) elBestMargin.textContent = (bestNet >= 0 ? '+' : '') + '$' + bestNet.toFixed(2) + ' (' + (bestProduct.profitMargin || 0).toFixed(1) + '%)';
+  if (elWorst && worstProduct) { elWorst.textContent = escapeHtml(worstProduct.name || worstProduct.productType || 'Unnamed'); elWorst.style.color = worstNet >= 0 ? cssVar('--signal') : cssVar('--danger'); }
+  if (elWorstMargin && worstProduct) elWorstMargin.textContent = (worstNet >= 0 ? '+' : '') + '$' + worstNet.toFixed(2) + ' (' + (worstProduct.profitMargin || 0).toFixed(1) + '%)';
+}
+
+function renderAnalytics() {
+  var products = LS.get('products', []);
+  if (products.length === 0) {
+    drawEmptyCanvas('chart-bar', 'No saved products yet');
+    drawEmptyCanvas('chart-pie', 'No saved products yet');
+    var legendEl = document.getElementById('pie-legend');
+    if (legendEl) legendEl.innerHTML = '';
+    renderSummaryStats([]);
+    return;
+  }
+  renderBarChart(products.slice(-15));
+  renderPieChart(products);
+  renderSummaryStats(products);
+}
+
+var chartResizeTimer = null;
+function onChartResize() {
+  clearTimeout(chartResizeTimer);
+  chartResizeTimer = setTimeout(function() {
+    var analyticsView = document.getElementById('view-analytics');
+    if (analyticsView && analyticsView.classList.contains('active')) renderAnalytics();
+  }, 200);
+}
+
+function initAnalytics() {
+  window.addEventListener('resize', onChartResize);
+}
+
+/* ── KEYBOARD SHORTCUTS ── */
+document.addEventListener('keydown', function(e) {
+  const _tag = e.target.tagName;
+  const _editable = _tag === 'INPUT' || _tag === 'TEXTAREA' || _tag === 'SELECT' || e.target.isContentEditable;
+  if (_editable && e.key !== 'Escape') return; // 🔒 FIX-5
+  if (e.key === 'Escape') closeModal();
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    const searchEl = document.getElementById('data-search');
+    if (searchEl && document.getElementById('view-data').classList.contains('active')) searchEl.focus();
+    else document.getElementById('search-input').focus();
+  }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'e') {
+    e.preventDefault();
+    if (document.getElementById('view-data').classList.contains('active')) exportToCSV();
+    else if (document.getElementById('view-settings').classList.contains('active')) exportJSON();
+  }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'p') { e.preventDefault(); window.print(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); saveCurrentProduct(); }
+});
+
+/* ── BOOT ── */
+initTheme();
+initCalculator();
+initViews();
+initCompare();
+initAnalytics();
+updateNavCount();
+updateChannelInfo();
+recalculate();
+// Update header for initial view
+(function() {
+  var v = VIEWS['main'];
+  if (v) {
+    var titleEl = document.getElementById('page-title');
+    var subEl = document.getElementById('page-subtitle');
+    var crumbEl = document.getElementById('crumb-view');
+    var footEl = document.getElementById('foot-page');
+    if (titleEl) titleEl.textContent = v.title;
+    if (subEl) subEl.textContent = v.subtitle;
+    if (crumbEl) crumbEl.textContent = v.crumb;
+    if (footEl) footEl.textContent = v.page;
+  }
+})();
+
+/* ---- STORAGE AVAILABILITY CHECK ---- */
+(function() {
+  try {
+    const t = '__storage_test__';
+    localStorage.setItem(t, t);
+    localStorage.removeItem(t);
+  } catch(e) {
+    showToast('Private mode detected — data will not be saved when this tab closes', 'error', 8000);
+  }
+})();
+
+</script>
+</body>
+</html>

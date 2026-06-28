@@ -1,0 +1,179 @@
+═══════════════════════════════════════════════════
+  CLEANPRO PRICER — USER GUIDE
+  Full Feature Reference | CleanPro-v1
+═══════════════════════════════════════════════════
+
+─────────────────────────────────────────
+NAVIGATION
+─────────────────────────────────────────
+The app has 6 sections accessible from the left sidebar:
+
+  01 Calculator  →  Quote builder & cost estimator
+  02 Jobs        →  Saved quotes & bookings
+  03 Clients     →  Client roster & history
+  04 Analytics   →  Business performance metrics
+  05 Settings    →  Defaults & data management
+  06 Help        →  Formulas & reference
+
+─────────────────────────────────────────
+01 — CALCULATOR
+─────────────────────────────────────────
+The main quoting tool. All results update in real time.
+
+INPUTS:
+  Client Name       Required to save the job
+  Job Address       Physical address of the job
+  Cleaning Type     Standard / Deep / Move-In / Move-Out / Post-Construction
+  Frequency         One-time / Weekly / Bi-weekly / Monthly
+  Square Footage    Property size in sq ft
+  Bedrooms          Number of bedrooms
+  Bathrooms         Number of bathrooms
+  Extra Rooms       Office, basement, sunroom, etc.
+  Cleaners          Number of cleaners on the job
+  Est. Hours        Auto-calculated from room count, or set manually
+  Labor Rate        Your hourly rate per cleaner ($/hr)
+  Supplies Cost     Cost of cleaning supplies for this job ($)
+  Drive Distance    One-way miles from your location to the job
+  Drive Time        One-way drive time in minutes
+  Discount          Optional discount amount ($)
+  Job Status        Quote / Confirmed / Completed / Cancelled
+  Notes             Internal notes for this job
+
+HOURS MODE:
+  Auto  → Hours calculated automatically based on cleaning type,
+           square footage, bedrooms, bathrooms, and extra rooms
+  Manual → Override with your own estimated hours
+
+OUTPUTS — QUOTE RESULTS:
+  Quoted Price      What to charge the client
+  Total Cost        Labor + supplies + mileage + drive time cost
+  Net Profit        Quoted price minus total cost
+  Profit Margin     Net profit as a % of quoted price
+  Suggested Price   Minimum price to hit your target margin (set in Settings)
+
+COST BREAKDOWN BAR:
+  Visual bar showing: Labor | Supplies | Mileage | Drive Time
+
+ACTIONS:
+  Save Job          Saves to your jobs list (client name required)
+  Reset Form        Clears all inputs back to defaults
+  Print Quote       Prints a clean client-facing quote
+
+─────────────────────────────────────────
+02 — JOBS
+─────────────────────────────────────────
+All saved quotes and bookings in one place.
+
+FEATURES:
+  - Search by client name or address
+  - Filter by job status (All / Quote / Confirmed / Completed / Cancelled)
+  - Sort by any column
+  - Click any row to load the job back into the Calculator
+  - Delete individual or multiple jobs
+  - Export all jobs to CSV (Ctrl + E)
+
+─────────────────────────────────────────
+03 — CLIENTS
+─────────────────────────────────────────
+Auto-built from your saved jobs. Every unique client name
+gets a client profile showing:
+
+  - Total jobs for that client
+  - Total revenue generated
+  - Average job value
+  - Full job history
+
+No manual data entry required — clients are created
+automatically when you save jobs.
+
+─────────────────────────────────────────
+04 — ANALYTICS
+─────────────────────────────────────────
+Visual overview of your business performance.
+
+METRICS INCLUDE:
+  - Total revenue across all completed jobs
+  - Average profit margin across all jobs
+  - Job count by status
+  - Revenue over time
+  - Top clients by revenue
+  - Most profitable job types
+
+─────────────────────────────────────────
+05 — SETTINGS
+─────────────────────────────────────────
+Set your defaults so the calculator pre-fills correctly
+every time you open it.
+
+DEFAULTS:
+  Default Labor Rate ($/hr)     Your standard hourly rate per cleaner
+  Mileage Rate ($/mile)         IRS standard or your own rate (default $0.67)
+  Target Margin (%)             Your minimum acceptable profit margin
+  Default Supplies Cost ($)     Your typical per-job supply cost
+  Default Drive Distance (mi)   Your typical one-way drive distance
+
+APPEARANCE:
+  Accent Hue    Customize the app's accent color
+
+DATA MANAGEMENT:
+  JSON Export   Back up all jobs and settings to a .json file
+  JSON Import   Restore from a previous backup
+  Clear All     Permanently delete all jobs and reset settings
+                (cannot be undone — export first)
+
+─────────────────────────────────────────
+06 — HELP (IN-APP)
+─────────────────────────────────────────
+The Help section inside the app contains:
+  - Full formula reference
+  - Keyboard shortcuts
+  - Tips for accurate quoting
+
+─────────────────────────────────────────
+FORMULAS REFERENCE
+─────────────────────────────────────────
+  Labor Cost        cleaners × labor rate × hours
+  Mileage Cost      drive distance × 2 × mileage rate
+  Drive Time Cost   cleaners × labor rate × (drive minutes × 2 ÷ 60)
+  Total Cost        labor + supplies + mileage + drive time
+  Quoted Price      total cost ÷ (1 − target margin ÷ 100)
+  Net Profit        quoted price − total cost − discount
+  Profit Margin     (net profit ÷ quoted price) × 100
+  Suggested Price   minimum price to hit your target margin
+
+─────────────────────────────────────────
+DATA & PRIVACY
+─────────────────────────────────────────
+  - All data stored in your browser's localStorage
+  - No data sent to any server
+  - Works 100% offline
+  - Back up regularly: Settings → JSON Export
+  - Clearing browser cache will erase saved jobs
+
+─────────────────────────────────────────
+COMPATIBILITY
+─────────────────────────────────────────
+  Chrome    ✓ Recommended
+  Firefox   ✓
+  Safari    ✓
+  Edge      ✓
+  Mobile    ✓ Works but optimized for desktop
+
+─────────────────────────────────────────
+KEYBOARD SHORTCUTS
+─────────────────────────────────────────
+  Ctrl + S    Save job
+  Ctrl + E    Export to CSV
+  Ctrl + K    Focus search bar
+  Ctrl + P    Print current view
+
+─────────────────────────────────────────
+SUPPORT
+─────────────────────────────────────────
+Contact us through your Etsy order page.
+We respond within 24 hours.
+
+═══════════════════════════════════════════════════
+  CleanPro-v1 | © 2026 CleanPro Pricer
+  Licensed for personal use only.
+═══════════════════════════════════════════════════

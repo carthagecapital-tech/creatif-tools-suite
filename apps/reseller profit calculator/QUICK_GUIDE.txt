@@ -1,0 +1,57 @@
+====================================================
+ QUICK GUIDE — Resell Profit Calculator Pro v2.2
+====================================================
+
+GET STARTED IN 3 MINUTES
+
+1. CALCULATOR TAB
+   • Enter the item name (required).
+   • Fill in:
+        Cost of Goods      – what you paid
+        Sold Price         – what the buyer paid
+        Platform           – Poshmark / Mercari / Depop / Custom
+        Shipping Cost      – what shipping actually costs you
+        Shipping Paid By   – toggle if the buyer or you pay
+        Tax Rate           – sales tax percentage you collect
+        Discount           – any promo or discount you gave
+        Category           – optional, for reporting
+   • The results update live as you type.
+   • Click "Calculate & Save" to store the listing.
+
+2. SAVED LISTINGS TAB
+   • View every listing you've saved.
+   • Search, filter by platform or category, sort columns.
+   • Select multiple rows for batch delete / duplicate.
+   • Export all saved listings to a CSV spreadsheet.
+
+3. COMPARE TAB
+   • Enter the same item and cost once.
+   • Choose two different platforms.
+   • See side‑by‑side which one gives you more profit.
+
+4. ANALYTICS TAB
+   • Summary cards for total profit, best platform, etc.
+   • Bar charts and trend line (monthly profit).
+
+5. SETTINGS TAB
+   • Change default platform, shipping payer, tax rate.
+   • Build custom fee profiles for your own website.
+   • Export full backup (JSON) or import one.
+   • Clear all data (with confirmation).
+
+6. HELP TAB
+   • Full fee reference, formulas, keyboard shortcuts.
+
+TIPS:
+   • Use the Compare tool before listing an item on a new platform.
+   • Export a CSV file for your accounting or tax records.
+   • Regularly backup your data (Settings → Export All Data).
+
+Keyboard shortcuts:
+   Ctrl/Cmd + K      → Focus search box
+   Ctrl/Cmd + P      → Print current view
+   Ctrl/Cmd + S      → Calculate & Save
+   Escape            → Close modal dialog
+
+Questions? Message me on Etsy.
+====================================================

@@ -1,0 +1,270 @@
+====================================================
+ FULL USER GUIDE — Resell Profit Calculator Pro v2.2
+====================================================
+
+TABLE OF CONTENTS
+  1.  What This App Does
+  2.  How to Open and Keep Your Data Safe
+  3.  Calculator View in Detail
+  4.  Platform Fee Reference
+  5.  Saved Listings View
+  6.  Compare View
+  7.  Analytics View
+  8.  Settings View
+  9.  Custom Fee Profiles
+  10. Backup, Import, and Clear Data
+  11. Keyboard Shortcuts
+  12. Printing and Exporting
+  13. Troubleshooting
+  14. Legal & Support
+
+====================================================
+1. WHAT THIS APP DOES
+
+This app helps resellers quickly calculate profit after all
+platform fees, processing fees, shipping costs, taxes, and
+discounts. It supports Poshmark, Mercari, Depop, and a
+Custom option where you define your own fee structure.
+
+You can save unlimited listings, compare two platforms
+side‑by‑side, and see charts of your performance over time.
+
+====================================================
+2. HOW TO OPEN AND KEEP YOUR DATA SAFE
+
+ • Double‑click the HTML file. It opens in your browser.
+ • There is no installer, no account, no internet needed.
+ • All your data is stored in your browser's local storage.
+ • Clearing your browser's cookies/history WILL DELETE all
+   your saved listings and settings.
+ • Protect your work:
+     1. Go to Settings → Export All Data.
+     2. Save the .json file somewhere safe (Desktop, cloud).
+     3. To restore, go to Settings → Import Data and choose
+        that file.
+
+====================================================
+3. CALCULATOR VIEW IN DETAIL
+
+Fields:
+  Item Name          – required; name of the item sold.
+  Cost of Goods (COG) – what you paid to acquire the item.
+  Sold Price          – final price the buyer paid.
+  Platform            – choose Poshmark, Mercari, Depop, or Custom.
+  Shipping Cost       – actual shipping label cost (for seller).
+  Shipping Paid By    – toggle: Buyer (they pay shipping) or Seller.
+  Tax Rate            – sales tax percentage (e.g., 8.25 for 8.25%).
+  Discount / Promo    – any discount amount you gave.
+  Category Tag        – optional label (Clothing, Electronics, etc.).
+  Notes               – any extra notes.
+
+When you select "Custom" as the platform, four extra fields
+appear: Commission Rate (%), Fixed Platform Fee ($),
+Processing Rate (%), and Processing Fixed Fee ($).
+Fill these in with your own platform's fee structure.
+
+The app updates results LIVE as you type.
+The fee breakdown bar shows the split visually.
+
+SAVE BUTTON:
+  "Calculate & Save" stores the listing. If you are editing
+  an existing listing, the button changes to "Update Listing".
+
+RESET FORM:
+  Clears all fields and returns to defaults from Settings.
+
+COMPARE BUTTON:
+  Sends the current item's cost and name to the Compare view
+  so you can quickly compare platforms.
+
+====================================================
+4. PLATFORM FEE REFERENCE
+
+(The built‑in presets are accurate as of early 2025. Always
+double‑check the platform's website for the latest rates.)
+
+Poshmark:
+  • Under $15 sale: flat $2.95 fee.
+  • $15 and above: 20% of the sold price.
+  • Shipping typically paid by buyer (label ≈ $7.97).
+  • No separate payment processing fee.
+
+Mercari:
+  • 10% flat selling fee.
+  • No separate payment processing fee for sellers.
+  • Shipping can be paid by buyer or seller.
+
+Depop:
+  • 0% seller commission (US/UK).
+  • Payment processing: ~3.3% + $0.45 per transaction.
+  • Shipping can be paid by buyer or seller.
+
+Custom:
+  • You set your own commission %, fixed fee, processing %,
+    and processing fixed fee.
+  • Great for your own website, Facebook Marketplace, etc.
+
+====================================================
+5. SAVED LISTINGS VIEW
+
+• Table shows all saved listings.
+• Search bar filters by name, category, notes, or platform.
+• Category chips and platform chips filter the list.
+• Click any column header (Item, Platform, COG, Sold, etc.)
+  to sort the table.
+• Each row has three buttons:
+    Edit – loads the listing into the Calculator for editing.
+    Dup  – creates a copy with "(copy)" added to the name.
+    Del  – deletes the listing (asks for confirmation).
+
+BATCH ACTIONS:
+  • Check one or more rows.
+  • Use "Select All", "Delete Selected", or "Duplicate Selected".
+  • The batch bar appears when items are selected.
+
+EXPORT CSV:
+  • Downloads all currently visible (filtered) listings as a
+    CSV file. You can open it in Excel, Google Sheets, etc.
+
+PAGINATION:
+  • Shows 10 listings per page.
+  • Use the arrows at the bottom to navigate pages.
+
+====================================================
+6. COMPARE VIEW
+
+ • Enter the Cost of Goods once at the top.
+ • Optionally, set an Item Name (filled automatically if you
+   used the "Compare" button from the Calculator).
+ • Choose two different platforms (Platform A and Platform B).
+ • Enter the selling price, shipping cost, shipping payer,
+   tax rate, and discount for each side independently.
+ • The net profit, margin, ROI, total fees, and break‑even
+   price are shown below each platform.
+ • A "winner" banner tells you which platform gives more profit
+   (or if it's a tie).
+
+Tip: Use this view before listing a high‑value item.
+
+====================================================
+7. ANALYTICS VIEW
+
+Top row – six summary cards:
+  • Total Listings
+  • Total Net Profit
+  • Average Margin
+  • Best Platform (by total net profit)
+  • Best Category (by average profit margin)
+  • Total Fees Paid
+
+Four charts:
+  1. Profit by Platform – bar chart, total net profit per platform.
+  2. Fee Breakdown by Platform – grouped bars showing average
+     platform fee, processing, shipping, and tax per platform.
+  3. Category Performance – horizontal bar chart of average
+     margin per category.
+  4. Monthly Profit Trend – line chart over time.
+
+Charts only appear after you have saved at least one listing.
+
+====================================================
+8. SETTINGS VIEW
+
+Preferences:
+  • Default Platform – pre‑selected in the Calculator.
+  • Default Shipping Paid By – Buyer or Seller.
+  • Default Tax Rate – automatically filled in for new calculations.
+  • Default Shipping Cost – automatically filled in.
+
+Calculator Defaults:
+  • Default Discount Amount – pre‑filled discount.
+  • Default Category – automatically selected category tag.
+
+Appearance:
+  • Accent Hue – change the theme color (slide to any hue 0‑360).
+  • Reset – returns to the default teal color.
+
+====================================================
+9. CUSTOM FEE PROFILES
+
+In Settings → Custom Fee Builder you can create named profiles
+with your own fee structure (e.g., "My Boutique", "Facebook 5%").
+
+Each profile has a name, commission rate %, fixed fee, processing
+rate %, and processing fixed fee.
+
+You can edit or delete profiles at any time.
+These profiles are not automatically applied; you select
+"Custom" as the platform in the Calculator, then fill in the
+numbers manually. (Profiles serve as a template reference.)
+
+====================================================
+10. BACKUP, IMPORT, AND CLEAR DATA
+
+Export All Data:
+  Creates a .json file containing all your listings, settings,
+  and custom profiles. Save this file somewhere safe.
+
+Import Data:
+  Replaces all current data with the data from a backup file.
+  You'll see a warning with the file name before import.
+  Always export a current backup before importing.
+
+Clear All Data:
+  Deletes everything (listings, settings, profiles) permanently.
+  Use with caution. Export a backup first.
+
+====================================================
+11. KEYBOARD SHORTCUTS
+
+  Ctrl/Cmd + K       → Focus search box
+  Ctrl/Cmd + P       → Print the current page
+  Ctrl/Cmd + S       → Calculate & Save
+  Escape             → Close modal / cancel
+
+====================================================
+12. PRINTING AND EXPORTING
+
+  • Click "Print" or press Ctrl/Cmd + P to print the current
+    view. The print layout hides the sidebar, buttons, and
+    navigation, leaving only the data.
+  • Use "Export CSV" on the Saved Listings page to get a
+    spreadsheet of your listings.
+
+====================================================
+13. TROUBLESHOOTING
+
+"I don't see my saved listings after restarting my computer."
+  → You may have cleared your browser data, or you're using
+    private/incognito mode. Always export a backup.
+
+"The app looks broken or colors are wrong."
+  → Update your browser to the latest version. If you're on
+    an older Mac (Safari 15), some colors won't work.
+    Use Chrome or Firefox instead.
+
+"I got a 'Storage full' message."
+  → Export your data, then delete old listings. The app can
+    store thousands of listings, but your browser has a limit.
+
+"Changes I made didn't save."
+  → If you are editing a listing, you must click "Update
+    Listing" (or "Calculate & Save" for a new one) to save.
+    Navigating away without saving will warn you.
+
+====================================================
+14. LEGAL & SUPPORT
+
+This software is provided "as is" without warranty.
+You may use it for personal reselling purposes only.
+Do not redistribute, resell, or modify for commercial sale
+without permission.
+
+Support:
+  Contact me through Etsy Messages.
+  Describe the problem and tell me which browser you're using.
+  I'll respond within one business day.
+
+====================================================
+            Thank you for your purchase!
+====================================================

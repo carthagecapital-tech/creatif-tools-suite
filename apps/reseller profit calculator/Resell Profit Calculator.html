@@ -1,0 +1,2428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy"
+  content="default-src 'self' blob: data:; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data: blob:;">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resell Profit Calculator Pro — Multi-Platform Fee Engine</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%232eb0f0' rx='18' width='100' height='100'/%3E%3Ctext x='50' y='68' font-size='52' font-family='Georgia' font-weight='bold' fill='white' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E" />
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   MICROAPP SHELL v6 — Design System Template
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+
+:root {
+  --accent-h: 175;
+  --accent:    oklch(0.555 0.180 var(--accent-h));
+  --accent-2:  oklch(0.65  0.14  var(--accent-h));
+  --accent-3:  oklch(0.42  0.18  var(--accent-h));
+  --accent-soft:   oklch(0.555 0.180 var(--accent-h) / .10);
+  --accent-soft-2: oklch(0.555 0.180 var(--accent-h) / .06);
+  --accent-glow:   oklch(0.555 0.180 var(--accent-h) / .15);
+  --paper:  oklch(0.962 0.012 85);
+  --paper-2:oklch(0.945 0.014 84);
+  --ink:    oklch(0.185 0.012 55);
+  --ink-2:  oklch(0.32  0.012 55);
+  --mid:    oklch(0.52  0.010 60);
+  --rule:   oklch(0.865 0.010 70);
+  --rule-2: oklch(0.91  0.010 70);
+  --signal: oklch(0.68 0.16 145);
+  --warn:   oklch(0.78 0.16 85);
+  --danger: oklch(0.60 0.18 25);
+  --shadow: 0 1px 0 oklch(0.18 0.012 55 / .04), 0 14px 30px -22px oklch(0.18 0.012 55 / .35);
+  --shadow-lg: 0 4px 20px oklch(0.18 0.012 55 / .15);
+  --sidebar-w: 248px;
+  --toggle-icon: "☾";
+}
+[data-theme="dark"] {
+  --paper:  oklch(0.18 0.012 55);
+  --paper-2:oklch(0.22 0.014 60);
+  --ink:    oklch(0.92 0.012 85);
+  --ink-2:  oklch(0.78 0.012 80);
+  --mid:    oklch(0.60 0.010 70);
+  --rule:   oklch(0.35 0.010 45);
+  --rule-2: oklch(0.30 0.010 40);
+  --accent-soft:   oklch(0.65 0.180 var(--accent-h) / .15);
+  --accent-soft-2: oklch(0.65 0.180 var(--accent-h) / .08);
+  --accent-glow:   oklch(0.65 0.180 var(--accent-h) / .20);
+  --shadow: 0 1px 0 oklch(0.10 0.012 40 / .3), 0 14px 30px -22px oklch(0.05 0.012 20 / .5);
+  --shadow-lg: 0 4px 20px oklch(0.05 0.012 20 / .4);
+  --toggle-icon: "☀";
+}
+* { box-sizing:border-box; margin:0; padding:0 }
+html, body { height:100% }
+body {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-feature-settings: "ss01","ss02","cv11","tnum","zero";
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  background: radial-gradient(1200px 700px at 80% -10%, oklch(0.97 0.02 80) 0%, transparent 60%),
+              radial-gradient(900px 500px at -10% 110%, oklch(0.93 0.02 60) 0%, transparent 55%),
+              var(--paper);
+  background-attachment: fixed;
+  font-size:13px; line-height:1.45;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  transition: background .3s ease, color .3s ease;
+}
+[data-theme="dark"] body {
+  background: radial-gradient(1200px 700px at 80% -10%, oklch(0.25 0.02 80) 0%, transparent 60%),
+              radial-gradient(900px 500px at -10% 110%, oklch(0.20 0.02 60) 0%, transparent 55%),
+              var(--paper);
+}
+.app { min-height:100vh; min-height:100dvh; display:grid; grid-template-columns: var(--sidebar-w) 1fr; }
+
+aside { border-right:1px solid var(--rule); background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%); display:flex; flex-direction:column; position:sticky; top:0; height:100vh; height:100dvh; z-index:10; }
+.brand { padding: 20px 22px 18px; border-bottom:1px solid var(--rule); display:grid; grid-template-columns: auto 1fr auto; align-items:center; gap:12px; }
+.mark { width:24px; height:24px; position:relative; border:1.25px solid var(--ink); display:grid; place-items:center; background:var(--paper); flex-shrink:0; }
+.mark::before { content:""; width:8px; height:8px; background:var(--accent); box-shadow: 0 0 0 2.5px var(--paper); }
+.mark::after  { content:""; position:absolute; inset:-4px; border-top:1px solid var(--ink); border-left:1px solid var(--ink); width:5px; height:5px; }
+.wordmark { font-weight:700; font-size:12.5px; letter-spacing:.04em; text-transform:uppercase; }
+.wordmark .slash { color:var(--accent); font-weight:500; margin:0 1px }
+.wordmark small { display:block; font-weight:400; font-size:9.5px; letter-spacing:.18em; color:var(--mid); margin-top:2px; }
+.ver { font-size:9px; letter-spacing:.12em; color:var(--mid); border:1px solid var(--rule); padding:2px 5px; flex-shrink:0; }
+.theme-toggle { width:22px; height:22px; border:1px solid var(--rule); background:var(--paper-2); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:11px; color:var(--ink-2); margin-left:4px; flex-shrink:0; transition: all .15s; }
+.theme-toggle:hover { border-color:var(--accent); color:var(--accent); }
+.theme-toggle::before { content:var(--toggle-icon); }
+
+.find { margin: 14px 14px 6px; border:1px solid var(--rule); background:var(--paper); display:flex; align-items:center; gap:8px; padding:7px 10px; font-size:11.5px; }
+.find .find-icon { color:var(--mid); font-size:13px; }
+.find input { flex:1; border:none; background:transparent; outline:none; font:inherit; font-size:11.5px; color:var(--ink); min-width:0; }
+.find input::placeholder { color:var(--mid); }
+.find .kbd { margin-left:auto; display:inline-flex; gap:2px; }
+.kbd span { border:1px solid var(--rule); background:linear-gradient(180deg,var(--paper),var(--paper-2)); padding:1px 5px; border-radius:2px; font-size:9.5px; color:var(--ink-2); box-shadow: 0 1px 0 var(--rule); }
+
+.nav-title { padding: 18px 22px 8px; font-size:9.5px; letter-spacing:.22em; color:var(--mid); display:flex; justify-content:space-between; }
+nav { flex:1; display:flex; flex-direction:column; overflow-y:auto; }
+.nav-list { display:flex; flex-direction:column; }
+.nav-item { display:grid; grid-template-columns: 28px 1fr auto; align-items:center; gap:0; padding: 8px 22px; color:var(--ink-2); text-decoration:none; font-size:12px; letter-spacing:.02em; border-left:2px solid transparent; position:relative; transition: background .12s; cursor:pointer; }
+.nav-item .idx { font-size:9.5px; color:var(--mid); letter-spacing:.1em; }
+.nav-item .lbl { text-transform:lowercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.nav-item .meta { font-size:9.5px; color:var(--mid); border:1px solid var(--rule); padding:1px 5px; background:var(--paper); flex-shrink:0; margin-left:8px; }
+.nav-item:hover { background: var(--accent-soft-2) }
+.nav-item.active { background: var(--paper); color:var(--ink); border-left-color: var(--accent); font-weight:600; }
+.nav-item.active::after { content:""; position:absolute; right:18px; top:50%; transform:translateY(-50%); width:5px; height:5px; background:var(--accent); }
+.nav-item.active .idx { color:var(--accent) }
+
+.runtime { margin: 8px 14px 14px; border:1px solid var(--rule); background:var(--paper); padding:12px 12px 10px; flex-shrink:0; }
+.runtime h4 { font-size:9.5px; letter-spacing:.2em; color:var(--mid); font-weight:500; margin-bottom:8px; display:flex; justify-content:space-between; }
+.runtime .row { display:flex; justify-content:space-between; align-items:baseline; font-size:11px; color:var(--ink-2); padding:3px 0; }
+.runtime .row b { font-weight:600; color:var(--ink) }
+.runtime .bar { height:3px; background:var(--rule-2); margin-top:8px; position:relative; overflow:hidden; }
+.runtime .bar-fill { position:absolute; inset:0; background:var(--ink); }
+.runtime .bar-fill.warn { background:var(--accent); left:auto; right:0; width:0%; }
+
+.op { border-top:1px solid var(--rule); padding:12px 22px; display:grid; grid-template-columns:24px 1fr auto; align-items:center; gap:10px; flex-shrink:0; }
+.avatar { width:24px; height:24px; border:1px solid var(--ink); background: repeating-linear-gradient(45deg, var(--ink) 0 1px, transparent 1px 4px), var(--paper); position:relative; flex-shrink:0; }
+.avatar::after { content:""; position:absolute; right:-3px; bottom:-3px; width:7px; height:7px; background:var(--signal); border:1.5px solid var(--paper); }
+.op .who { font-size:11px; line-height:1.3; min-width:0; }
+.op .who small { display:block; color:var(--mid); font-size:9.5px; letter-spacing:.1em }
+.op .out { font-size:9.5px; color:var(--mid); letter-spacing:.1em; border:1px solid var(--rule); padding:2px 5px; flex-shrink:0; cursor:pointer; }
+.op .out:hover { background:var(--paper-2); }
+
+main { min-width:0; display:flex; flex-direction:column; }
+header { border-bottom:1px solid var(--rule); background: linear-gradient(180deg, var(--paper) 0%, oklch(from var(--paper) l c h / 98%) 100%); padding: 16px 28px 14px; display:grid; grid-template-columns: 1fr auto; align-items:end; gap:24px; position:sticky; top:0; z-index:5; }
+.crumbs { font-size:10px; letter-spacing:.18em; color:var(--mid); text-transform:uppercase; display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
+.crumbs .live { display:inline-flex; align-items:center; gap:5px; color:var(--ink); }
+.crumbs .live i { width:6px; height:6px; background:var(--accent); display:inline-block; box-shadow: 0 0 0 3px var(--accent-soft); }
+h1 { font-size:28px; font-weight:700; letter-spacing:-.01em; line-height:1; color:var(--ink); display:flex; flex-direction:column; align-items:flex-start; }
+h1 .of { color:var(--mid); font-weight:300; font-size:.42em; letter-spacing:.04em; margin-top:4px; }
+
+.topbar-right { display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+.telemetry { display:grid; grid-auto-flow:column; gap:0; border:1px solid var(--rule); background:var(--paper); }
+.telemetry div { padding:8px 14px; border-right:1px solid var(--rule); font-size:10px; letter-spacing:.12em; color:var(--mid); display:flex; flex-direction:column; gap:2px; line-height:1; }
+.telemetry div:last-child { border-right:none }
+.telemetry b { color:var(--ink); font-size:12px; font-weight:600; letter-spacing:.02em; }
+
+.btn { font: inherit; cursor:pointer; display:inline-flex; align-items:center; gap:10px; border:1px solid var(--rule); background:var(--paper); color:var(--ink); padding:9px 14px; font-size:11.5px; letter-spacing:.04em; text-decoration:none; box-shadow: var(--shadow); position:relative; transition: background .12s; white-space:nowrap; }
+.btn:hover { background: var(--accent-soft-2) }
+.btn:active { transform:translateY(1px) }
+.btn .k { font-size:9px; letter-spacing:.12em; color:var(--mid); border-left:1px solid var(--rule); padding-left:10px; margin-left:4px; }
+.btn.primary { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.btn.primary:hover { background:oklch(from var(--ink) calc(l + 0.08) c h) }
+.btn.primary .k { color:oklch(0.7 0.01 60); border-left-color: oklch(0.32 0.012 55) }
+.btn.primary::before { content:""; width:6px; height:6px; background:var(--accent); }
+.btn.danger { border-color:var(--danger); color:var(--danger); }
+.btn.danger:hover { background:oklch(0.60 0.18 25 / .10); }
+
+.canvas { padding: 28px 28px 40px; position:relative; background: radial-gradient(circle at 1px 1px, oklch(from var(--ink) l c h / 0.08) 1px, transparent 1.5px) 0 0 / 22px 22px; }
+.canvas::before, .canvas::after { content:""; position:absolute; width:18px; height:18px; border:1px solid var(--ink); pointer-events:none; }
+.canvas::before { top:14px; left:14px; border-right:none; border-bottom:none }
+.canvas::after  { top:14px; right:14px; border-left:none; border-bottom:none }
+
+.section-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px; }
+.section-head h2 { font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; color:var(--ink-2); display:flex; align-items:center; gap:10px; }
+.section-head h2 .num { color:var(--accent); font-weight:500; }
+
+.form-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px 20px; margin-bottom: 20px; }
+.form-group { display:flex; flex-direction:column; gap:6px; }
+.form-group.full-width { grid-column: 1 / -1; }
+.form-group label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--mid); font-weight: 500; display:flex; align-items:center; gap:8px; }
+.form-group label .hint { font-size: 9px; letter-spacing: .08em; color: var(--mid); border: 1px solid var(--rule); padding: 1px 5px; background: var(--paper-2); text-transform: none; }
+.form-group input, .form-group select, .form-group textarea { font: inherit; font-size: 13px; border: 1px solid var(--rule); background: var(--paper); padding: 10px 12px; color: var(--ink); outline: none; width: 100%; transition: border-color .15s, box-shadow .15s; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.form-group input::placeholder { color: var(--mid); opacity: .6; }
+.form-group input[type="number"] { font-variant-numeric: tabular-nums; }
+.form-group select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23555' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+[data-theme="dark"] .form-group select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23aaa' stroke-width='1.5'/%3E%3C/svg%3E"); }
+
+.toggle-wrap { display:flex; align-items:center; gap: 10px; }
+.toggle-wrap .toggle-label { font-size: 12px; color: var(--ink-2); }
+.toggle-switch { position: relative; width: 36px; height: 20px; cursor: pointer; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-switch .track { position: absolute; inset: 0; background: var(--rule-2); border-radius: 20px; transition: background .2s; }
+.toggle-switch .track::after { content: ""; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; background: var(--paper); border-radius: 50%; transition: transform .2s; box-shadow: 0 1px 3px oklch(0 0 0 / .2); }
+.toggle-switch input:checked + .track { background: var(--accent); }
+.toggle-switch input:checked + .track::after { transform: translateX(16px); }
+
+.slider-wrap { display:flex; align-items:center; gap: 12px; }
+.slider-wrap input[type="range"] { flex: 1; -webkit-appearance: none; appearance: none; height: 4px; background: var(--rule-2); border-radius: 2px; outline: none; }
+.slider-wrap input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid var(--paper); cursor: pointer; box-shadow: 0 0 0 2px var(--accent-soft); }
+.slider-wrap input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid var(--paper); cursor: pointer; }
+.slider-wrap .slider-val { font-size: 12px; font-weight: 600; color: var(--accent); min-width: 40px; text-align: right; }
+
+.stats { display:grid; grid-template-columns: repeat(3, 1fr); gap:0; border:1px solid var(--rule); background:var(--paper); box-shadow: var(--shadow); position:relative; }
+.card { padding: 22px 22px 18px; border-right:1px solid var(--rule); position:relative; display:flex; flex-direction:column; min-height: 140px; }
+.card:last-child { border-right:none }
+.card::before, .card::after { content:""; position:absolute; width:10px; height:10px; border:1px solid var(--ink-2); opacity:.7; pointer-events:none; }
+.card::before { top:8px; left:8px; border-right:none; border-bottom:none }
+.card::after  { bottom:8px; right:8px; border-left:none; border-top:none }
+.card .lbl { font-size:10px; letter-spacing:.2em; color:var(--mid); text-transform:uppercase; display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.card .lbl .tag { font-size:9px; letter-spacing:.14em; border:1px solid var(--rule); padding:2px 6px; color:var(--ink-2); background:var(--paper-2); }
+.card .val { font-size:36px; font-weight:600; letter-spacing:-.02em; line-height:1; color:var(--ink); display:flex; align-items:baseline; gap:8px; }
+.card .val .u { font-size:14px; font-weight:400; color:var(--mid); letter-spacing:.04em; }
+.card .delta { font-size:11px; letter-spacing:.03em; display:flex; align-items:center; gap:8px; margin-top:10px; color:var(--ink-2); }
+.delta .pill { display:inline-flex; align-items:center; gap:5px; border:1px solid var(--rule); background:var(--paper-2); padding:2px 7px; font-size:10.5px; font-weight:600; }
+.delta .pill.up   { color: var(--signal); border-color: oklch(from var(--signal) l calc(c * 0.5) h) }
+.delta .pill.down { color: var(--danger); border-color: oklch(from var(--danger) l calc(c * 0.5) h) }
+.delta .pill.neutral { color: var(--mid); border-color: var(--rule) }
+.delta .pill::before { content:""; width:0; height:0; border-style:solid; }
+.delta .pill.up::before   { border-width:0 4px 5px 4px; border-color:transparent transparent currentColor transparent }
+.delta .pill.down::before { border-width:5px 4px 0 4px; border-color: currentColor transparent transparent transparent }
+.delta .pill.neutral::before { border:none; width:8px; height:1px; background:currentColor; }
+.delta .since { color:var(--mid); font-size:10px; letter-spacing:.06em }
+
+.tbl-wrap { margin-top:24px; border:1px solid var(--rule); background:var(--paper); box-shadow: var(--shadow); }
+.tbl-head { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--rule); background:linear-gradient(180deg,var(--paper),var(--paper-2)); flex-wrap:wrap; gap:10px; }
+.tbl-head .ttl { font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; display:flex; align-items:center; gap:10px; }
+.tbl-head .ttl .num { color:var(--accent) }
+.tbl-head .ttl .ct { color:var(--mid); font-weight:400; letter-spacing:.12em; border-left:1px solid var(--rule); padding-left:10px; margin-left:4px; }
+.filters { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.chip { font-size:10px; letter-spacing:.12em; text-transform:uppercase; border:1px solid var(--rule); padding:5px 9px; background:var(--paper); display:inline-flex; align-items:center; gap:6px; color:var(--ink-2); cursor:pointer; transition: all .12s; }
+.chip.on, .chip:hover { background:var(--ink); color:var(--paper); border-color:var(--ink) }
+.chip i { width:5px; height:5px; background:currentColor; display:inline-block; }
+.chip.del { color: var(--danger); border-color: var(--danger); }
+.chip.del:hover { background: var(--danger); color: var(--paper); }
+table { width:100%; border-collapse:collapse; font-size:12px; }
+thead th { font-weight:500; font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--mid); text-align:left; padding:10px 18px; border-bottom:1px solid var(--rule); background:var(--paper-2); position:relative; cursor: pointer; user-select: none; white-space: nowrap; }
+thead th:hover { color: var(--ink); background: var(--accent-soft-2); }
+thead th.sortable::after { content: " \2195"; font-size: 8px; opacity: .4; }
+thead th.sort-asc::after { content: " \2191"; opacity: 1; color: var(--accent); }
+thead th.sort-desc::after { content: " \2193"; opacity: 1; color: var(--accent); }
+thead th + th::before { content:""; position:absolute; left:0; top:25%; bottom:25%; border-left:1px solid var(--rule-2); }
+thead th.num, tbody td.num { text-align:right; font-variant-numeric:tabular-nums }
+tbody td { padding:14px 18px; border-bottom:1px solid var(--rule-2); color:var(--ink-2); vertical-align:middle; }
+tbody tr:last-child td { border-bottom:none }
+tbody tr:hover td { background: var(--accent-soft-2) }
+.id { display:inline-flex; align-items:center; gap:10px; }
+.id .dot { width:8px; height:8px; background:var(--ink); display:inline-block; flex-shrink:0; }
+.id .dot.red    { background:var(--danger) }
+.id .dot.green  { background:var(--signal) }
+.id .dot.amber  { background:var(--warn) }
+.id .dot.gray   { background:var(--mid) }
+.id b { font-weight:600; color:var(--ink); letter-spacing:.01em }
+.id small { display:block; color:var(--mid); font-size:10px; letter-spacing:.08em; margin-top:2px }
+
+.empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 60px 40px; text-align: center; gap: 16px; border: 1px dashed var(--rule); background: var(--paper); }
+.empty-state .empty-icon { width: 48px; height: 48px; border: 2px dashed var(--rule); display: grid; place-items: center; font-size: 20px; color: var(--mid); }
+.empty-state h3 { font-size: 14px; letter-spacing: .1em; color: var(--ink-2); font-weight: 600; }
+.empty-state p { font-size: 12px; color: var(--mid); max-width: 320px; line-height: 1.6; }
+
+.pagination { display:flex; align-items:center; justify-content:center; gap: 4px; padding: 14px 18px; border-top: 1px solid var(--rule); }
+.pagination button { font: inherit; font-size: 11px; border: 1px solid var(--rule); background: var(--paper); color: var(--ink-2); padding: 5px 10px; cursor: pointer; min-width: 32px; text-align: center; transition: all .12s; }
+.pagination button:hover:not(:disabled) { background: var(--accent-soft-2); border-color: var(--accent); color: var(--ink); }
+.pagination button:disabled { opacity: .4; cursor: not-allowed; }
+.pagination button.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.pagination .page-info { font-size: 10px; color: var(--mid); letter-spacing: .1em; margin: 0 12px; }
+
+.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast { pointer-events: all; display: flex; align-items: center; gap: 12px; padding: 12px 18px; min-width: 280px; max-width: 420px; border: 1px solid var(--rule); background: var(--paper); box-shadow: var(--shadow-lg); font-size: 12px; color: var(--ink); animation: toastIn .3s ease forwards; position: relative; overflow: hidden; }
+.toast.toast-out { animation: toastOut .3s ease forwards; }
+.toast.success { border-left: 3px solid var(--signal); }
+.toast.error   { border-left: 3px solid var(--danger); }
+.toast.info    { border-left: 3px solid var(--accent-2); }
+.toast .toast-icon { font-size: 14px; flex-shrink: 0; }
+.toast .toast-msg { flex: 1; line-height: 1.4; }
+.toast .toast-close { cursor: pointer; color: var(--mid); font-size: 16px; line-height: 1; padding: 2px; }
+.toast .toast-close:hover { color: var(--ink); }
+.toast .toast-bar { position: absolute; bottom: 0; left: 0; height: 2px; background: var(--accent-soft); }
+@keyframes toastIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(20px); } }
+@keyframes shrink { from { width: 100%; } to { width: 0%; } }
+
+.modal-overlay { position: fixed; inset: 0; z-index: 200; background: oklch(0.10 0.012 55 / .55); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--paper); border: 1px solid var(--rule); box-shadow: var(--shadow-lg); width: 90%; max-width: 520px; max-height: 85vh; display: flex; flex-direction: column; transform: translateY(-20px) scale(0.97); transition: transform .25s ease; }
+.modal-overlay.open .modal { transform: translateY(0) scale(1); }
+.modal-header { padding: 18px 22px 14px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; justify-content: space-between; }
+.modal-header h3 { font-size: 13px; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; color: var(--ink); }
+.modal-close { cursor: pointer; color: var(--mid); font-size: 18px; line-height: 1; padding: 4px; border: none; background: none; }
+.modal-close:hover { color: var(--ink); }
+.modal-body { padding: 22px; overflow-y: auto; font-size: 12px; line-height: 1.6; color: var(--ink-2); }
+.modal-footer { padding: 14px 22px; border-top: 1px solid var(--rule); display: flex; justify-content: flex-end; gap: 10px; }
+
+.settings-section { margin-bottom: 32px; }
+.settings-section h3 { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.settings-section h3 .num { color: var(--accent); font-weight: 500; }
+.settings-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border: 1px solid var(--rule); background: var(--paper); margin-bottom: -1px; }
+.settings-row label { font-size: 12px; color: var(--ink-2); }
+.settings-row .desc { font-size: 10px; color: var(--mid); margin-top: 4px; letter-spacing: .04em; }
+.settings-row input, .settings-row select { font: inherit; font-size: 13px; border: 1px solid var(--rule); background: var(--paper); padding: 8px 10px; color: var(--ink); outline: none; }
+.settings-row input:focus, .settings-row select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+.help-block { border: 1px solid var(--rule); background: var(--paper); padding: 22px; margin-bottom: 20px; }
+.help-block h3 { font-size: 12px; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.help-block h3 .num { color: var(--accent); font-weight: 500; }
+.help-block p { font-size: 12px; color: var(--ink-2); line-height: 1.7; margin-bottom: 8px; }
+.help-block ul { margin: 8px 0; padding-left: 20px; }
+.help-block li { font-size: 12px; color: var(--ink-2); line-height: 1.7; margin-bottom: 4px; }
+.help-block .fee-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--rule-2); font-size: 12px; }
+.help-block .fee-row:last-child { border-bottom: none; }
+.help-block .fee-row b { color: var(--ink); font-weight: 600; }
+.help-block .fee-row span { color: var(--ink-2); }
+
+.canvas-foot { position:relative }
+.canvas-foot::before, .canvas-foot::after { content:""; position:absolute; width:18px; height:18px; border:1px solid var(--ink); pointer-events:none; }
+.canvas-foot::before { bottom:14px; left:14px; border-right:none; border-top:none }
+.canvas-foot::after  { bottom:14px; right:14px; border-left:none; border-top:none }
+.footstrip { margin-top:22px; display:flex; justify-content:space-between; align-items:center; font-size:10px; letter-spacing:.14em; color:var(--mid); text-transform:uppercase; padding: 12px 4px 4px; flex-wrap:wrap; gap:8px; }
+.footstrip .l, .footstrip .r { display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+.footstrip .sep { width:24px; border-top:1px solid var(--rule) }
+.footstrip b { color:var(--ink); font-weight:500; letter-spacing:.06em }
+
+/* ── APP-SPECIFIC STYLES ── */
+.fee-bar { display:flex; height:28px; border:1px solid var(--rule); background:var(--paper-2); overflow:hidden; position:relative; margin: 12px 0 20px; }
+.fee-bar-seg { height:100%; transition: width .3s ease; min-width:0; position:relative; }
+.fee-bar-seg:hover { filter: brightness(1.15); }
+.fee-bar-labels { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:20px; }
+.fee-bar-label { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--ink-2); }
+.fee-bar-label i { width:10px; height:10px; display:inline-block; flex-shrink:0; }
+
+.custom-fields { overflow:hidden; max-height:0; transition: max-height .35s ease, opacity .25s ease, margin .25s ease; opacity:0; margin:0; }
+.custom-fields.open { max-height:400px; opacity:1; margin:0 0 16px; }
+.custom-fields .form-grid { grid-template-columns: repeat(2, 1fr); }
+
+.result-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0; border:1px solid var(--rule); background:var(--paper); box-shadow: var(--shadow); position:relative; margin-top:20px; }
+.result-grid .card { min-height:120px; }
+.result-grid .card:nth-child(3n) { border-right:none; }
+.result-grid .card:nth-child(n+4) { border-top:1px solid var(--rule); }
+.break-even-row { border:1px solid var(--accent); background:var(--accent-soft-2); padding:14px 18px; margin-top:12px; display:flex; justify-content:space-between; align-items:center; font-size:12px; }
+.break-even-row b { color:var(--ink); }
+.break-even-row span { color:var(--accent); font-weight:600; font-size:14px; }
+
+.chart-wrap { margin-bottom:32px; }
+.chart-title { font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; color:var(--ink-2); margin-bottom:12px; display:flex; align-items:center; gap:10px; }
+.chart-title .num { color:var(--accent); font-weight:500; }
+.chart-canvas { width:100%; height:280px; border:1px solid var(--rule); background:var(--paper); }
+
+.summary-row { display:grid; grid-template-columns: repeat(6, 1fr); gap:0; border:1px solid var(--rule); background:var(--paper); box-shadow:var(--shadow); margin-bottom:28px; }
+.summary-cell { padding:18px 16px; border-right:1px solid var(--rule); text-align:center; }
+.summary-cell:last-child { border-right:none; }
+.summary-cell .s-label { font-size:9.5px; letter-spacing:.2em; color:var(--mid); text-transform:uppercase; margin-bottom:6px; }
+.summary-cell .s-value { font-size:20px; font-weight:600; color:var(--ink); }
+
+.batch-bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; padding:10px 14px; border:1px solid var(--rule); background:var(--paper); align-items:center; }
+.batch-bar span { font-size:11px; color:var(--ink-2); }
+
+.compare-grid { display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:20px; }
+.compare-col { border:1px solid var(--rule); background:var(--paper); }
+.compare-col-header { padding:14px 18px; border-bottom:1px solid var(--rule); background:var(--paper-2); font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; }
+.compare-col-body { padding:20px; }
+.winner-banner { border:2px solid var(--signal); background:oklch(from var(--signal) l c h / .1); padding:18px; text-align:center; margin-top:20px; font-size:14px; font-weight:600; color:var(--ink); }
+.winner-banner.tie { border-color:var(--accent); background:var(--accent-soft); }
+
+.profile-list { margin-top:12px; }
+.profile-item { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border:1px solid var(--rule); background:var(--paper); margin-bottom:-1px; font-size:12px; }
+.profile-item b { color:var(--ink); }
+.profile-item .profile-actions { display:flex; gap:8px; }
+.profile-actions button { font:inherit; font-size:10px; border:1px solid var(--rule); background:var(--paper-2); padding:3px 8px; cursor:pointer; color:var(--ink-2); }
+.profile-actions button:hover { background:var(--accent-soft-2); }
+
+.formula-block { background:var(--paper-2); border:1px solid var(--rule); padding:14px 18px; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:11px; color:var(--ink-2); line-height:1.8; margin-bottom:10px; }
+.formula-block code { color:var(--accent); font-weight:600; }
+
+@media print {
+  .sidebar-toggle, aside, .theme-toggle, .find, .op, .btn .k, .toast-container, .pagination, .nav-item { display: none !important; }
+  .app { grid-template-columns: 1fr !important; }
+  body { background: white !important; color: black !important; }
+  .canvas { background: none !important; padding: 20px !important; }
+  .stats, .tbl-wrap, .form-grid, .chart-wrap, .help-block, .settings-row, .result-grid, .compare-grid, .summary-row { box-shadow: none !important; border: 1px solid #ccc !important; }
+  .card { border-right: 1px solid #ccc !important; break-inside: avoid; }
+  header { position: static !important; background: white !important; border-bottom: 2px solid #333 !important; }
+  h1 { font-size: 24px !important; }
+  .footstrip { border-top: 2px solid #333; margin-top: 30px; }
+}
+.sidebar-toggle { display:none; position:fixed; top:12px; left:12px; z-index:100; width:36px; height:36px; border:1px solid var(--rule); background:var(--paper); align-items:center; justify-content:center; cursor:pointer; font-size:16px; color:var(--ink); }
+@media (max-width: 1024px) {
+  .app { grid-template-columns: 1fr; }
+  aside { position:fixed; left:0; top:0; height:100vh; height:100dvh; transform: translateX(-100%); transition: transform .25s ease; }
+  aside.open { transform: translateX(0); }
+  .sidebar-toggle { display:flex; }
+  .stats { grid-template-columns: 1fr; }
+  .card { border-right:none; border-bottom:1px solid var(--rule); }
+  .card:last-child { border-bottom:none; }
+  .result-grid { grid-template-columns: 1fr; }
+  .result-grid .card:nth-child(3n) { border-right:none; border-bottom:1px solid var(--rule); }
+  .result-grid .card:nth-child(n+4) { border-top:none; }
+  .summary-row { grid-template-columns: repeat(3, 1fr); }
+  .compare-grid { grid-template-columns: 1fr; }
+  .custom-fields .form-grid { grid-template-columns: 1fr; }
+  header { padding-left: 56px; }
+  h1 { font-size:22px; }
+}
+@media (max-width: 640px) {
+  .canvas { padding: 20px 16px 32px; }
+  header { padding: 12px 16px 12px 56px; }
+  .telemetry { display:none; }
+  .topbar-right { gap:8px; }
+  .btn { padding:7px 10px; font-size:10.5px; }
+  .btn .k { display:none; }
+  table { font-size:11px; }
+  tbody td, thead th { padding:10px 12px; }
+  .card .val { font-size:28px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .modal { width: 95%; max-height: 90vh; }
+  .toast-container { left: 16px; right: 16px; bottom: 16px; }
+  .toast { min-width: auto; max-width: none; }
+  .summary-row { grid-template-columns: repeat(2, 1fr); }
+  .chart-canvas { height:200px; }
+}
+
+.view { display: none; }
+.view.active { display: block; }
+.hidden { display:none !important; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<a href="#canvas" style="position:absolute;top:-100px;left:0;z-index:9999;padding:8px 16px;background:var(--ink);color:var(--paper);font-size:0.75rem;text-decoration:none;" onfocus="this.style.top='0'" onblur="this.style.top='-100px'">Skip to main content</a>
+<button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="toggle menu">&#9776;</button>
+<div class="app">
+  <aside id="sidebar">
+    <div class="brand">
+      <div class="mark" aria-hidden="true"></div>
+      <div class="wordmark"><span>resell</span><span class="slash">/</span><span>calc</span><small>PROFIT ENGINE</small></div>
+      <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
+        <div class="ver">v2.2</div>
+        <button class="theme-toggle" onclick="toggleTheme()" title="toggle dark mode" aria-label="toggle dark mode"></button>
+      </div>
+    </div>
+    <div class="find"><span class="find-icon">&#8981;</span><input type="text" id="search-input" placeholder="search listings..." autocomplete="off"><span class="kbd"><span>&#8984;</span><span>K</span></span></div>
+    <div class="nav-title"><span>&#8212;&#8212; menu</span></div>
+    <nav>
+      <div class="nav-list" id="nav-list">
+        <a class="nav-item active" href="#" data-view="calculator" onclick="navigateTo('calculator', event)"><span class="idx">01</span><span class="lbl">calculator</span></a>
+        <a class="nav-item" href="#" data-view="listings" onclick="navigateTo('listings', event)"><span class="idx">02</span><span class="lbl">saved listings</span><span class="meta" id="nav-count">0</span></a>
+        <a class="nav-item" href="#" data-view="compare" onclick="navigateTo('compare', event)"><span class="idx">03</span><span class="lbl">compare</span></a>
+        <a class="nav-item" href="#" data-view="analytics" onclick="navigateTo('analytics', event)"><span class="idx">04</span><span class="lbl">analytics</span></a>
+        <a class="nav-item" href="#" data-view="settings" onclick="navigateTo('settings', event)"><span class="idx">05</span><span class="lbl">settings</span></a>
+        <a class="nav-item" href="#" data-view="help" onclick="navigateTo('help', event)"><span class="idx">06</span><span class="lbl">help</span></a>
+      </div>
+      <div class="runtime" id="runtime-block">
+        <h4><span>summary</span><span style="color:var(--signal)">live</span></h4>
+        <div id="runtime-rows">
+          <div class="row"><span>Listings</span><b id="rt-count">0</b></div>
+          <div class="row"><span>Net Profit</span><b id="rt-profit">$0.00</b></div>
+        </div>
+        <div class="bar" aria-hidden="true"><div class="bar-fill" id="bar-fill-main" style="width:0%"></div><div class="bar-fill warn" id="bar-fill-warn" style="width:0%"></div></div>
+      </div>
+    </nav>
+    <div class="op">
+      <div class="avatar" aria-hidden="true"></div>
+      <div class="who"><span>reseller</span><small>active</small></div>
+      <div class="out" id="op-count" onclick="navigateTo('listings', event)" title="view saved listings">0 saved</div>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <div>
+        <div class="crumbs"><span class="live"><i></i>live</span><span>/</span><span id="crumb-view">calculator</span></div>
+        <h1><span id="page-title">Calculator</span> <span class="of">&#8212; <span id="page-subtitle">profit engine</span></span></h1>
+      </div>
+      <div class="topbar-right">
+        <div class="telemetry" aria-hidden="true">
+          <div><span>Listings</span><b id="tel-count">0</b></div>
+          <div><span>Net Profit</span><b id="tel-profit">$0.00</b></div>
+        </div>
+        <div id="topbar-buttons">
+          <button class="btn" type="button" onclick="exportListingsCSV()">export csv<span class="k">E</span></button>
+          <button class="btn" type="button" onclick="window.print()">print<span class="k">P</span></button>
+          <button class="btn primary" type="button" onclick="calculateAndSave()">calc & save<span class="k">S</span></button>
+        </div>
+      </div>
+    </header>
+
+    <section class="canvas" id="canvas">
+
+      <!-- ═════════════════════════════════════════════════════════════════
+           VIEW 01 — CALCULATOR
+           ═════════════════════════════════════════════════════════════════ -->
+      <div class="view active" id="view-calculator">
+        <div class="section-head"><h2><span class="num">&#167; 01</span>listing inputs</h2></div>
+        <div class="form-grid" id="calc-form">
+          <div class="form-group full-width">
+            <label>Item Name</label>
+            <input type="text" id="calc-name" placeholder="e.g. Vintage Levi's 501 Jeans" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label>Cost of Goods ($)</label>
+            <input type="number" id="calc-cog" placeholder="0.00" step="0.01" min="0">
+          </div>
+          <div class="form-group">
+            <label>Sold Price ($)</label>
+            <input type="number" id="calc-sold" placeholder="0.00" step="0.01" min="0">
+          </div>
+          <div class="form-group">
+            <label>Platform</label>
+            <select id="calc-platform" onchange="onPlatformChange()">
+              <option value="Poshmark">Poshmark</option>
+              <option value="Mercari">Mercari</option>
+              <option value="Depop">Depop</option>
+              <option value="Custom">Custom</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Shipping Cost ($)</label>
+            <input type="number" id="calc-shipping" placeholder="0.00" step="0.01" min="0">
+          </div>
+          <div class="form-group">
+            <label>Shipping Paid By</label>
+            <div class="toggle-wrap">
+              <span class="toggle-label">Buyer</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="calc-shipping-payer">
+                <span class="track"></span>
+              </label>
+              <span class="toggle-label">Seller</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Tax Rate (%)</label>
+            <input type="number" id="calc-tax" placeholder="0" step="0.1" min="0" max="100">
+          </div>
+          <div class="form-group">
+            <label>Discount / Promo ($)</label>
+            <input type="number" id="calc-discount" placeholder="0.00" step="0.01" min="0">
+          </div>
+          <div class="form-group">
+            <label>Category Tag</label>
+            <input type="text" id="calc-category" list="category-list" placeholder="Select or type..." autocomplete="off">
+            <datalist id="category-list">
+              <option value="Clothing">
+              <option value="Shoes">
+              <option value="Accessories">
+              <option value="Electronics">
+              <option value="Home">
+              <option value="Vintage">
+              <option value="Jewelry">
+              <option value="Beauty">
+              <option value="Books">
+              <option value="Other">
+            </datalist>
+          </div>
+          <div class="form-group full-width">
+            <label>Notes</label>
+            <textarea id="calc-notes" rows="2" placeholder="Add notes about this listing..."></textarea>
+          </div>
+        </div>
+
+        <div class="custom-fields" id="custom-fee-fields">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Commission Rate (%)</label>
+              <input type="number" id="calc-comm-rate" placeholder="0" step="0.1" min="0" max="100">
+            </div>
+            <div class="form-group">
+              <label>Fixed Platform Fee ($)</label>
+              <input type="number" id="calc-fixed-fee" placeholder="0.00" step="0.01" min="0">
+            </div>
+            <div class="form-group">
+              <label>Processing Rate (%)</label>
+              <input type="number" id="calc-proc-rate" placeholder="0" step="0.1" min="0" max="100">
+            </div>
+            <div class="form-group">
+              <label>Processing Fixed Fee ($)</label>
+              <input type="number" id="calc-proc-fixed" placeholder="0.00" step="0.01" min="0">
+            </div>
+          </div>
+        </div>
+
+        <div class="section-head"><h2><span class="num">&#167; 02</span>fee breakdown</h2></div>
+        <div class="fee-bar" id="fee-bar">
+          <div class="fee-bar-seg" id="seg-platform" style="width:0%;background:var(--accent)"></div>
+          <div class="fee-bar-seg" id="seg-processing" style="width:0%;background:var(--accent-2)"></div>
+          <div class="fee-bar-seg" id="seg-shipping" style="width:0%;background:var(--warn)"></div>
+          <div class="fee-bar-seg" id="seg-tax" style="width:0%;background:var(--danger)"></div>
+          <div class="fee-bar-seg" id="seg-discount" style="width:0%;background:var(--mid)"></div>
+        </div>
+        <div class="fee-bar-labels" id="fee-bar-labels">
+          <span class="fee-bar-label"><i style="background:var(--accent)"></i>Platform: <b id="lbl-platform">$0.00</b></span>
+          <span class="fee-bar-label"><i style="background:var(--accent-2)"></i>Processing: <b id="lbl-processing">$0.00</b></span>
+          <span class="fee-bar-label"><i style="background:var(--warn)"></i>Shipping: <b id="lbl-shipping">$0.00</b></span>
+          <span class="fee-bar-label"><i style="background:var(--danger)"></i>Tax: <b id="lbl-tax">$0.00</b></span>
+          <span class="fee-bar-label"><i style="background:var(--mid)"></i>Discount: <b id="lbl-discount">$0.00</b></span>
+        </div>
+
+        <div class="section-head"><h2><span class="num">&#167; 03</span>results</h2></div>
+        <div class="result-grid" id="result-grid">
+          <div class="card">
+            <div class="lbl"><span>Net Profit</span><span class="tag" id="tag-net">--</span></div>
+            <div class="val" id="res-net">$0.00</div>
+            <div class="delta"><span class="pill neutral" id="pill-net">enter values</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>Gross Profit</span><span class="tag">COG</span></div>
+            <div class="val" id="res-gross">$0.00</div>
+            <div class="delta"><span class="since">sold - cost</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>Total Fees</span><span class="tag">ALL</span></div>
+            <div class="val" id="res-fees">$0.00</div>
+            <div class="delta"><span class="since">sum of all</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>Platform Fees</span><span class="tag" id="tag-platform">--</span></div>
+            <div class="val" id="res-platform">$0.00</div>
+            <div class="delta"><span class="since">commission</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>Profit Margin</span><span class="tag">%</span></div>
+            <div class="val" id="res-margin">0.0<span class="u">%</span></div>
+            <div class="delta"><span class="since">net / sold</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>ROI</span><span class="tag">%</span></div>
+            <div class="val" id="res-roi">0.0<span class="u">%</span></div>
+            <div class="delta"><span class="since">net / COG</span></div>
+          </div>
+        </div>
+        <div class="break-even-row">
+          <b>Break-Even Price:</b>
+          <span id="res-breakeven">--</span>
+        </div>
+
+        <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn primary" type="button" onclick="calculateAndSave()">Calculate & Save<span class="k">S</span></button>
+          <button class="btn" type="button" onclick="resetCalcForm()">Reset Form</button>
+          <button class="btn" type="button" onclick="sendToCompare()">Compare<span class="k">C</span></button>
+        </div>
+      </div>
+
+      <!-- ═════════════════════════════════════════════════════════════════
+           VIEW 02 — SAVED LISTINGS
+           ═════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-listings">
+        <div class="tbl-wrap">
+          <div class="tbl-head">
+            <div class="ttl"><span class="num">&#167; 02</span><span>saved listings</span><span class="ct" id="count-label">0 total</span></div>
+            <div class="filters">
+              <input type="text" id="list-search" placeholder="Search..." oninput="clearTimeout(searchDebounceTimer); searchDebounceTimer = setTimeout(renderListingsTable, 200);" style="font:inherit;font-size:11px;border:1px solid var(--rule);background:var(--paper);padding:5px 8px;color:var(--ink);outline:none;width:140px;">
+            </div>
+          </div>
+          <div class="filters" style="padding:8px 18px;border-bottom:1px solid var(--rule);" id="category-filters">
+            <span class="chip on" data-cat="all" onclick="filterListingsCat('all')">all</span>
+          </div>
+          <div class="filters" style="padding:8px 18px;border-bottom:1px solid var(--rule);">
+            <span class="chip on" data-plat="all" onclick="filterListingsPlat('all')">all platforms</span>
+            <span class="chip" data-plat="Poshmark" onclick="filterListingsPlat('Poshmark')">Poshmark</span>
+            <span class="chip" data-plat="Mercari" onclick="filterListingsPlat('Mercari')">Mercari</span>
+            <span class="chip" data-plat="Depop" onclick="filterListingsPlat('Depop')">Depop</span>
+            <span class="chip" data-plat="Custom" onclick="filterListingsPlat('Custom')">Custom</span>
+            <span class="chip del" onclick="clearAllListings()">clear all</span>
+            <button class="btn" style="margin-left:auto;padding:5px 10px;font-size:10px;" onclick="exportListingsCSV()">Export CSV</button>
+          </div>
+          <div class="batch-bar hidden" id="batch-bar">
+            <span id="batch-count">0 selected</span>
+            <button class="btn" style="padding:5px 10px;font-size:10px;" onclick="selectAllListings()">Select All</button>
+            <button class="btn danger" style="padding:5px 10px;font-size:10px;" onclick="deleteSelectedListings()">Delete Selected</button>
+            <button class="btn" style="padding:5px 10px;font-size:10px;" onclick="duplicateSelectedListings()">Duplicate Selected</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:28px;"><input type="checkbox" id="select-all-top" onclick="toggleSelectAll()"></th>
+                  <th onclick="sortListings('name')">Item</th>
+                  <th onclick="sortListings('platform')">Platform</th>
+                  <th class="num" onclick="sortListings('costOfGoods')">COG</th>
+                  <th class="num" onclick="sortListings('soldPrice')">Sold</th>
+                  <th class="num" onclick="sortListings('shippingCost')">Ship</th>
+                  <th class="num" onclick="sortListings('totalFees')">Fees</th>
+                  <th class="num" onclick="sortListings('netProfit')">Net</th>
+                  <th class="num" onclick="sortListings('profitMargin')">Margin</th>
+                  <th class="num" onclick="sortListings('roiPercent')">ROI</th>
+                  <th onclick="sortListings('savedAt')">Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="listings-tbody">
+                <tr><td colspan="12"><div class="empty-state"><div class="empty-icon">&#8709;</div><h3>NO LISTINGS</h3><p>Save a calculation to see it here.</p></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" id="listings-pagination"></div>
+        </div>
+      </div>
+
+      <!-- ═════════════════════════════════════════════════════════════════
+           VIEW 03 — PLATFORM COMPARISON
+           ═════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-compare">
+        <div class="section-head"><h2><span class="num">&#167; 03</span>platform comparison</h2></div>
+
+        <div class="form-grid" style="max-width:600px;">
+          <div class="form-group">
+            <label>Cost of Goods ($)</label>
+            <input type="number" id="comp-cog" placeholder="0.00" step="0.01" min="0" oninput="recalcCompare()">
+          </div>
+          <div class="form-group">
+            <label>Item Name</label>
+            <input type="text" id="comp-name" readonly style="background:var(--paper-2);color:var(--mid);">
+          </div>
+        </div>
+
+        <div class="compare-grid">
+          <div class="compare-col">
+            <div class="compare-col-header">Platform A</div>
+            <div class="compare-col-body">
+              <div class="form-grid" style="grid-template-columns:1fr;">
+                <div class="form-group">
+                  <label>Platform</label>
+                  <select id="comp-plat-a" onchange="onComparePlatChange('a')">
+                    <option value="Poshmark">Poshmark</option>
+                    <option value="Mercari">Mercari</option>
+                    <option value="Depop">Depop</option>
+                    <option value="Custom">Custom</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Sold Price ($)</label>
+                  <input type="number" id="comp-sold-a" placeholder="0.00" step="0.01" min="0" oninput="recalcCompare()">
+                </div>
+                <div class="form-group">
+                  <label>Shipping Cost ($)</label>
+                  <input type="number" id="comp-ship-a" placeholder="0.00" step="0.01" min="0" oninput="recalcCompare()">
+                </div>
+                <div class="form-group">
+                  <label>Shipping Paid By</label>
+                  <div class="toggle-wrap">
+                    <span class="toggle-label">Buyer</span>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="comp-ship-payer-a" onchange="recalcCompare()">
+                      <span class="track"></span>
+                    </label>
+                    <span class="toggle-label">Seller</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Tax Rate (%)</label>
+                  <input type="number" id="comp-tax-a" placeholder="0" step="0.1" min="0" max="100" oninput="recalcCompare()">
+                </div>
+                <div class="form-group">
+                  <label>Discount ($)</label>
+                  <input type="number" id="comp-disc-a" placeholder="0.00" step="0.01" min="0" oninput="recalcCompare()">
+                </div>
+                <div id="comp-custom-a" class="custom-fields">
+                  <div class="form-grid" style="grid-template-columns:1fr 1fr;">
+                    <div class="form-group">
+                      <label>Comm %</label>
+                      <input type="number" id="comp-comm-a" placeholder="0" step="0.1" min="0" oninput="recalcCompare()">
+                    </div>
+                    <div class="form-group">
+                      <label>Fixed Fee $</label>
+                      <input type="number" id="comp-fixed-a" placeholder="0.00" step="0.01" min="0" oninput="recalcCompare()">
+                    </div>
+                    <div class="form-group">
+                      <label>Proc %</label>
+                      <input type="number" id="comp-proc-a" placeholder="0" step="0.1" min="0" oninput="recalcCompare()">
+                    </div>
+                    <div class="form-group">
+                      <label>Proc Fixed $</label>
+                      <input type="number" id="comp-procfixed-a" placeholder="0.00" step="0.01" min="0" oninput="recalcCompare()">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="border-top:1px solid var(--rule);margin-top:16px;padding-top:16px;">
+                <div class="card" style="border:none;min-height:auto;padding:12px 0;">
+                  <div class="lbl"><span>Net Profit</span></div>
+                  <div class="val" id="comp-net-a">$0.00</div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px;color:var(--ink-2);margin-top:8px;">
+                  <div>Margin: <b id="comp-margin-a">0%</b></div>
+                  <div>ROI: <b id="comp-roi-a">0%</b></div>
+                  <div>Fees: <b id="comp-fees-a">$0</b></div>
+                  <div>Break-even: <b id="comp-be-a">--</b></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="compare-col">
+            <div class="compare-col-header">Platform B</div>
+            <div class="compare-col-body">
+              <div class="form-grid" style="grid-template-columns:1fr;">
+                <div class="form-group">
+                  <label>Platform</label>
+                  <select id="comp-plat-b" onchange="onComparePlatChange('b')">
+                    <option value="Poshmark">Poshmark</option>
+                    <option value="Mercari" selected>Mercari</option>
+                    <option value="Depop">Depop</option>
+                    <option value="Custom">Custom</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Sold Price ($)</label>
+                  <input type="number" id="comp-sold-b" placeholder="0.00" step="0.01" min="0" oninput="recalcCompare()">
+                </div>
+                <div class="form-group">
+                  <label>Shipping Cost ($)</label>
+                  <input type="number" id="comp-ship-b" placeholder="0.00" step="0.01" min="0" oninput="recalcCompare()">
+                </div>
+                <div class="form-group">
+                  <label>Shipping Paid By</label>
+                  <div class="toggle-wrap">
+                    <span class="toggle-label">Buyer</span>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="comp-ship-payer-b" onchange="recalcCompare()">
+                      <span class="track"></span>
+                    </label>
+                    <span class="toggle-label">Seller</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Tax Rate (%)</label>
+                  <input type="number" id="comp-tax-b" placeholder="0" step="0.1" min="0" max="100" oninput="recalcCompare()">
+                </div>
+                <div class="form-group">
+                  <label>Discount ($)</label>
+                  <input type="number" id="comp-disc-b" placeholder="0.00" step="0.01" min="0" oninput="recalcCompare()">
+                </div>
+                <div id="comp-custom-b" class="custom-fields">
+                  <div class="form-grid" style="grid-template-columns:1fr 1fr;">
+                    <div class="form-group">
+                      <label>Comm %</label>
+                      <input type="number" id="comp-comm-b" placeholder="0" step="0.1" min="0" oninput="recalcCompare()">
+                    </div>
+                    <div class="form-group">
+                      <label>Fixed Fee $</label>
+                      <input type="number" id="comp-fixed-b" placeholder="0.00" step="0.01" min="0" oninput="recalcCompare()">
+                    </div>
+                    <div class="form-group">
+                      <label>Proc %</label>
+                      <input type="number" id="comp-proc-b" placeholder="0" step="0.1" min="0" oninput="recalcCompare()">
+                    </div>
+                    <div class="form-group">
+                      <label>Proc Fixed $</label>
+                      <input type="number" id="comp-procfixed-b" placeholder="0.00" step="0.01" min="0" oninput="recalcCompare()">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="border-top:1px solid var(--rule);margin-top:16px;padding-top:16px;">
+                <div class="card" style="border:none;min-height:auto;padding:12px 0;">
+                  <div class="lbl"><span>Net Profit</span></div>
+                  <div class="val" id="comp-net-b">$0.00</div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px;color:var(--ink-2);margin-top:8px;">
+                  <div>Margin: <b id="comp-margin-b">0%</b></div>
+                  <div>ROI: <b id="comp-roi-b">0%</b></div>
+                  <div>Fees: <b id="comp-fees-b">$0</b></div>
+                  <div>Break-even: <b id="comp-be-b">--</b></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="winner-banner" id="winner-banner" style="display:none;"></div>
+      </div>
+
+      <!-- ═════════════════════════════════════════════════════════════════
+           VIEW 04 — ANALYTICS
+           ═════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-analytics">
+        <div class="section-head"><h2><span class="num">&#167; 04</span>analytics dashboard</h2></div>
+
+        <div class="summary-row" id="analytics-summary">
+          <div class="summary-cell"><div class="s-label">Total Listings</div><div class="s-value" id="sum-listings">0</div></div>
+          <div class="summary-cell"><div class="s-label">Total Net Profit</div><div class="s-value" id="sum-profit">$0</div></div>
+          <div class="summary-cell"><div class="s-label">Avg Margin</div><div class="s-value" id="sum-margin">0%</div></div>
+          <div class="summary-cell"><div class="s-label">Best Platform</div><div class="s-value" id="sum-best-plat">--</div></div>
+          <div class="summary-cell"><div class="s-label">Best Category</div><div class="s-value" id="sum-best-cat">--</div></div>
+          <div class="summary-cell"><div class="s-label">Total Fees Paid</div><div class="s-value" id="sum-fees">$0</div></div>
+        </div>
+
+        <div class="chart-wrap">
+          <div class="chart-title"><span class="num">&#167; 4.1</span>profit by platform</div>
+          <canvas class="chart-canvas" id="chart-platform-profit"></canvas>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-title"><span class="num">&#167; 4.2</span>fee breakdown by platform</div>
+          <canvas class="chart-canvas" id="chart-platform-fees"></canvas>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-title"><span class="num">&#167; 4.3</span>category performance</div>
+          <canvas class="chart-canvas" id="chart-category"></canvas>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-title"><span class="num">&#167; 4.4</span>monthly profit trend</div>
+          <canvas class="chart-canvas" id="chart-monthly"></canvas>
+        </div>
+      </div>
+
+      <!-- ═════════════════════════════════════════════════════════════════
+           VIEW 05 — SETTINGS
+           ═════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-settings">
+        <div class="settings-section">
+          <h3><span class="num">&#167; 01</span>Preferences</h3>
+          <div class="settings-row">
+            <div><label>Default Platform</label><div class="desc">Pre-selected in calculator</div></div>
+            <select id="set-default-platform" onchange="saveSetting('defaultPlatform', this.value)">
+              <option value="Poshmark">Poshmark</option>
+              <option value="Mercari">Mercari</option>
+              <option value="Depop">Depop</option>
+              <option value="Custom">Custom</option>
+            </select>
+          </div>
+          <div class="settings-row">
+            <div><label>Default Shipping Paid By</label><div class="desc">Buyer or Seller</div></div>
+            <div class="toggle-wrap">
+              <span class="toggle-label">Buyer</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="set-default-ship-payer" onchange="saveSetting('defaultShippingPayer', this.checked ? 'seller' : 'buyer')">
+                <span class="track"></span>
+              </label>
+              <span class="toggle-label">Seller</span>
+            </div>
+          </div>
+          <div class="settings-row">
+            <div><label>Default Tax Rate (%)</label></div>
+            <input type="number" id="set-default-tax" placeholder="0" step="0.1" min="0" max="100" onchange="saveSetting('defaultTaxRate', parseFloat(this.value)||0)">
+          </div>
+          <div class="settings-row">
+            <div><label>Default Shipping Cost ($)</label></div>
+            <input type="number" id="set-default-shipping" placeholder="0.00" step="0.01" min="0" onchange="saveSetting('defaultShippingCost', parseFloat(this.value)||0)">
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3><span class="num">&#167; 02</span>Calculator Defaults</h3>
+          <div class="settings-row">
+            <div><label>Default Discount Amount ($)</label></div>
+            <input type="number" id="set-default-discount" placeholder="0.00" step="0.01" min="0" onchange="saveSetting('defaultDiscount', parseFloat(this.value)||0)">
+          </div>
+          <div class="settings-row">
+            <div><label>Default Category</label></div>
+            <select id="set-default-cat" onchange="saveSetting('defaultCategory', this.value)">
+              <option value="">-- None --</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Shoes">Shoes</option>
+              <option value="Accessories">Accessories</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Home">Home</option>
+              <option value="Vintage">Vintage</option>
+              <option value="Jewelry">Jewelry</option>
+              <option value="Beauty">Beauty</option>
+              <option value="Books">Books</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3><span class="num">&#167; 03</span>Custom Fee Builder</h3>
+          <div class="form-grid" style="margin-bottom:12px;">
+            <div class="form-group">
+              <label>Profile Name</label>
+              <input type="text" id="prof-name" placeholder="e.g. My Boutique">
+            </div>
+            <div class="form-group">
+              <label>Commission Rate (%)</label>
+              <input type="number" id="prof-comm" placeholder="0" step="0.1" min="0">
+            </div>
+            <div class="form-group">
+              <label>Fixed Fee ($)</label>
+              <input type="number" id="prof-fixed" placeholder="0.00" step="0.01" min="0">
+            </div>
+            <div class="form-group">
+              <label>Processing Rate (%)</label>
+              <input type="number" id="prof-proc" placeholder="0" step="0.1" min="0">
+            </div>
+            <div class="form-group">
+              <label>Processing Fixed Fee ($)</label>
+              <input type="number" id="prof-procfixed" placeholder="0.00" step="0.01" min="0">
+            </div>
+          </div>
+          <button class="btn primary" type="button" onclick="saveCustomProfile()">Save Profile</button>
+          <div class="profile-list" id="profile-list"></div>
+        </div>
+
+        <div class="settings-section">
+          <h3><span class="num">&#167; 04</span>Appearance</h3>
+          <div class="settings-row">
+            <div><label>Accent Hue</label><div class="desc">Theme color (0-360)</div></div>
+            <div class="slider-wrap" style="flex:1;max-width:280px;">
+              <input type="range" id="set-hue" min="0" max="360" value="175" oninput="onHueSlider(this.value)">
+              <span class="slider-val" id="hue-val">175</span>
+            </div>
+          </div>
+          <div class="settings-row">
+            <div><label>Reset to Default</label></div>
+            <button class="btn" type="button" onclick="resetHue()">Reset</button>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3><span class="num">&#167; 05</span>Data Management</h3>
+          <div class="settings-row">
+            <div><label>Export All Data</label><div class="desc">Download full JSON backup</div></div>
+            <button class="btn" type="button" onclick="exportAllData()">Export JSON</button>
+          </div>
+          <div class="settings-row">
+            <div><label>Import Data</label><div class="desc">Restore from JSON backup</div></div>
+            <input type="file" id="import-file" accept=".json" onchange="importData(this)" style="font-size:11px;max-width:200px;">
+          </div>
+          <div class="settings-row">
+            <div><label>Clear All Data</label><div class="desc">Delete all listings and settings</div></div>
+            <button class="btn danger" type="button" onclick="confirmClearAll()">Clear All</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═════════════════════════════════════════════════════════════════
+           VIEW 06 — HELP
+           ═════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-help">
+        <div class="help-block">
+          <h3><span class="num">&#167; 01</span>How to Use</h3>
+          <p><b>Calculator:</b> Enter your item details, choose a platform, and see real-time profit calculations. Click "Calculate & Save" to store the listing. Toggle shipping payer and adjust tax rates to match your situation.</p>
+          <p><b>Saved Listings:</b> Browse all your saved calculations. Search, filter by category or platform, sort columns, and use batch actions. Export to CSV anytime.</p>
+          <p><b>Compare:</b> Side-by-side platform comparison using the same item. See which platform maximizes your profit before you list.</p>
+          <p><b>Analytics:</b> Visual breakdowns of your reselling performance across platforms and categories.</p>
+          <p><b>Settings:</b> Customize defaults, build custom fee profiles, and manage your data.</p>
+        </div>
+
+        <div class="help-block">
+          <h3><span class="num">&#167; 02</span>Platform Fee Reference</h3>
+          <div class="fee-row"><b>Poshmark</b><span>$2.95 flat fee under $15; 20% for $15+</span></div>
+          <div class="fee-row"><span>Buyer pays shipping (~$7.97 under 5lb)</span><span>No separate processing fee</span></div>
+          <div class="fee-row" style="margin-top:10px;"><b>Mercari</b><span>10% flat selling fee (current as of Jan 2025)</span></div>
+          <div class="fee-row"><span>Payment processing eliminated for sellers</span><span>Buyer or seller pays shipping</span></div>
+          <div class="fee-row" style="margin-top:10px;"><b>Depop</b><span>0% seller commission (US/UK)</span></div>
+          <div class="fee-row"><span>Processing: ~3.3% + $0.45</span><span>Buyer or seller pays shipping</span></div>
+          <div class="fee-row" style="margin-top:10px;"><b>Custom</b><span>Define your own fee structure</span></div>
+          <div class="fee-row"><span>Set commission%, fixed fee, processing%, processing fixed fee</span></div>
+        </div>
+
+        <div class="help-block">
+          <h3><span class="num">&#167; 03</span>Formula Reference</h3>
+          <div class="formula-block">
+<code>Gross Profit</code> = Sold Price - Cost of Goods<br>
+<code>Platform Fees</code> = (Sold Price * Commission Rate) + Fixed Fee<br>
+<em style="color:var(--mid);">Exception: Poshmark uses $2.95 flat for sales under $15, 20% for $15+</em><br>
+<code>Taxable Amount</code> = Sold Price + (Shipping if buyer pays)<br>
+<code>Processing Fees</code> = (Taxable Amount * Processing Rate) + Processing Fixed Fee<br>
+<code>Shipping Cost</code> = Shipping if seller pays, else $0<br>
+<code>Tax Amount</code> = Sold Price * (Tax Rate / 100)<br>
+<code>Total Fees</code> = Platform + Processing + Shipping + Tax + Discount<br>
+<code>Net Profit</code> = Gross Profit - Total Fees<br>
+<code>Profit Margin</code> = (Net Profit / Sold Price) * 100<br>
+<code>ROI</code> = (Net Profit / Cost of Goods) * 100<br>
+<code>Break-Even</code> = Cost of Goods / (1 - Total Fee Rate)
+          </div>
+        </div>
+
+        <div class="help-block">
+          <h3><span class="num">&#167; 04</span>Tips for Resellers</h3>
+          <ul>
+            <li>Factor in all fees before pricing — a $30 sale on Poshmark nets $24, but on Mercari it's $27 (10% flat).</li>
+            <li>Use the Compare tool before listing to find the most profitable platform for each item.</li>
+            <li>Shipping paid by buyer increases your net but may deter buyers; test both strategies.</li>
+            <li>Track categories to discover your most profitable niches over time.</li>
+            <li>Factor in your time — sourcing, photographing, listing, and shipping all have costs.</li>
+            <li>Use custom fee profiles for your own website or boutique with different fee structures.</li>
+          </ul>
+        </div>
+
+        <div class="help-block">
+          <h3><span class="num">&#167; 05</span>Supported Browsers</h3>
+          <p>Works in <b>Chrome, Edge, Firefox</b> (desktop), and <b>Safari 16+</b> (macOS Ventura or newer). Safari 15 and older will display incorrectly due to missing CSS color support. All data stays on your device — nothing is sent to the internet. Your listings are stored in your browser's local storage, so clearing browser data will erase them. <b>Export a backup regularly.</b></p>
+        </div>
+
+        <div class="help-block">
+          <h3><span class="num">&#167; 06</span>Keyboard Shortcuts</h3>
+          <ul>
+            <li><b>Cmd/Ctrl + K</b> — Focus search box</li>
+            <li><b>Cmd/Ctrl + P</b> — Print page</li>
+            <li><b>Cmd/Ctrl + S</b> — Calculate &amp; save listing</li>
+            <li><b>Escape</b> — Close modal</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="canvas-foot"></div>
+      <div class="footstrip">
+        <div class="l"><span>&#169; 2026 <b>ResellCalc Pro</b> &mdash; All Rights Reserved</span><span class="sep"></span><span>rev <b id="foot-date">2026&#183;05&#183;21</b></span></div>
+        <div class="r"><span>page <b id="foot-page">01 / 06</b></span><span class="sep"></span><span>fees accurate as of <b>may 2026</b> &middot; verify at platform sites</span></div>
+      </div>
+      <div style="text-align:center;font-size:9px;letter-spacing:.06em;color:var(--mid);padding:4px 0 12px;">Platform fee structures change. Verify current rates at Poshmark, Mercari, and Depop before pricing decisions.</div>
+    </section>
+  </main>
+</div>
+
+<!-- Toast & Modal -->
+<div class="toast-container" id="toast-container"></div>
+<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="if(event.target===this)closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header"><h3 id="modal-title">Dialog</h3><button class="modal-close" onclick="closeModal()">&#215;</button></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* ============================================================
+   SHELL UTILITIES — Theme, Navigation, Toasts, Modals
+   ============================================================ */
+function applyAccent(hue) { document.documentElement.style.setProperty('--accent-h', hue || '175'); }
+function toggleTheme() {
+  const h = document.documentElement;
+  if (h.getAttribute('data-theme') === 'dark') { h.removeAttribute('data-theme'); localStorage.removeItem('rpcalc_theme'); }
+  else { h.setAttribute('data-theme', 'dark'); localStorage.setItem('rpcalc_theme', 'dark'); }
+}
+function initTheme() {
+  const t = localStorage.getItem('rpcalc_theme');
+  if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+}
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+const VIEWS = {
+  calculator: { title: 'Calculator', subtitle: 'profit engine', crumb: 'calculator', page: '01 / 06' },
+  listings:   { title: 'Saved Listings', subtitle: 'your inventory', crumb: 'listings', page: '02 / 06' },
+  compare:    { title: 'Compare', subtitle: 'platform vs platform', crumb: 'compare', page: '03 / 06' },
+  analytics:  { title: 'Analytics', subtitle: 'visual breakdown', crumb: 'analytics', page: '04 / 06' },
+  settings:   { title: 'Settings', subtitle: 'preferences', crumb: 'settings', page: '05 / 06' },
+  help:       { title: 'Help', subtitle: 'reference guide', crumb: 'help', page: '06 / 06' }
+};
+function navigateTo(viewName, e) {
+  if (e) e.preventDefault();
+  if (!VIEWS[viewName]) return;
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const viewEl = document.getElementById('view-' + viewName);
+  if (viewEl) viewEl.classList.add('active');
+  const navEl = document.querySelector('.nav-item[data-view="' + viewName + '"]');
+  if (navEl) navEl.classList.add('active');
+  const v = VIEWS[viewName];
+  document.getElementById('page-title').textContent = v.title;
+  document.getElementById('page-subtitle').textContent = v.subtitle;
+  document.getElementById('crumb-view').textContent = v.crumb;
+  document.getElementById('foot-page').textContent = v.page;
+  document.getElementById('sidebar').classList.remove('open');
+  if (viewName === 'listings') renderListingsTable();
+  if (viewName === 'analytics') renderAnalytics();
+  if (viewName === 'settings') loadSettingsUI();
+}
+
+function showToast(msg, type, dur) {
+  const d = dur || 3000;
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast ' + (type || 'info');
+  const icons = { success: '\u2713', error: '\u2715', info: '\u2139' };
+  t.innerHTML = '<span class="toast-icon">' + (icons[type] || '\u2139') + '</span><span class="toast-msg">' + escapeHtml(msg) + '</span><span class="toast-close" onclick="this.parentElement.remove()">\u00D7</span><div class="toast-bar" style="width:100%;animation:shrink ' + d + 'ms linear forwards"></div>';
+  c.appendChild(t);
+  setTimeout(() => { t.classList.add('toast-out'); setTimeout(() => t.remove(), 300); }, d);
+}
+
+let previouslyFocusedElement = null;
+
+function openModal(title, body, footer) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  document.getElementById('modal-footer').innerHTML = footer || '';
+  document.getElementById('modal-overlay').style.display = 'flex';
+  previouslyFocusedElement = document.activeElement;
+  const modalClose = document.querySelector('#modal-overlay .modal-close');
+  setTimeout(() => { if (modalClose) modalClose.focus(); }, 100);
+
+  const overlay = document.getElementById('modal-overlay');
+  overlay._trapHandler = function(e) {
+    if (e.key !== 'Tab') return;
+    const focusable = Array.from(overlay.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )).filter(el => !el.disabled && el.offsetParent !== null);
+    if (focusable.length === 0) return;
+    const first = focusable[0], last = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  };
+  overlay.addEventListener('keydown', overlay._trapHandler);
+}
+
+function closeModal() {
+  const overlay = document.getElementById('modal-overlay');
+  overlay.style.display = 'none';
+  if (overlay._trapHandler) {
+    overlay.removeEventListener('keydown', overlay._trapHandler);
+    overlay._trapHandler = null;
+  }
+  if (previouslyFocusedElement && typeof previouslyFocusedElement.focus === 'function') {
+    setTimeout(() => { previouslyFocusedElement.focus(); }, 100);
+  }
+}
+
+function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); document.getElementById('search-input').focus(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'p') { e.preventDefault(); window.print(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); calculateAndSave(); }
+});
+
+/* ============================================================
+   DATA & LOCAL STORAGE
+   ============================================================ */
+const LS = {
+  get: (k, def) => { try { const v = localStorage.getItem(k); return v === null ? def : JSON.parse(v); } catch(e) { console.error('Storage read error:', e); return def; } },
+  set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) { 
+    if (e.name === 'QuotaExceededError') {
+      showToast('Storage full — export data and clear some listings', 'error', 5000);
+    } else {
+      console.error('Storage write error:', e);
+      showToast('Save failed — private browsing mode?', 'error', 4000);
+    }
+  } },
+  del: (k) => { try { localStorage.removeItem(k); } catch(e) { console.error('Storage delete error:', e); } }
+};
+
+let listings = [];
+let customProfiles = [];
+let settings = {};
+let listingSort = { col: 'savedAt', asc: false };
+let listingFilters = { cat: 'all', plat: 'all', search: '' };
+let listingPage = 1;
+let selectedListingIds = new Set();
+let editingId = null;
+let searchDebounceTimer = null;
+let pendingImportFile = null;
+
+const PLATFORM_PRESETS = {
+  Poshmark: { commissionRate: 0.20, fixedFee: 0, processingRate: 0, processingFixedFee: 0, shippingPaidBy: 'buyer', name: 'Poshmark', color: '#CF0024', commissionFn: (price) => price < 15 ? 2.95 : price * 0.20 },
+  Mercari:  { commissionRate: 0.10, fixedFee: 0, processingRate: 0, processingFixedFee: 0, shippingPaidBy: 'buyer', name: 'Mercari', color: '#2eb0f0' },
+  Depop:    { commissionRate: 0, fixedFee: 0, processingRate: 0.033, processingFixedFee: 0.45, shippingPaidBy: 'buyer', name: 'Depop', color: '#ff0000' },
+  Custom:   { commissionRate: 0, fixedFee: 0, processingRate: 0, processingFixedFee: 0, shippingPaidBy: 'buyer', name: 'Custom', color: '#999999' }
+};
+
+const PLATFORM_COLORS = { Poshmark: '#CF0024', Mercari: '#2eb0f0', Depop: '#ff0000', Custom: '#999999' };
+
+const DEFAULT_SETTINGS = {
+  defaultPlatform: 'Poshmark',
+  defaultShippingPayer: 'buyer',
+  defaultTaxRate: 0,
+  defaultShippingCost: 7.97,
+  defaultDiscount: 0,
+  defaultCategory: '',
+  accentHue: 175
+};
+
+function validateListing(obj) {
+  if (!obj || typeof obj !== 'object') return false;
+  const required = ['id', 'name', 'platform', 'costOfGoods', 'soldPrice', 'netProfit'];
+  for (const key of required) {
+    if (!(key in obj)) return false;
+  }
+  if (typeof obj.id !== 'string' || !/^[a-zA-Z0-9_-]+$/.test(obj.id)) return false;
+  return true;
+}
+
+function validateProfile(p) {
+  if (!p || typeof p !== 'object') return false;
+  if (typeof p.id !== 'string' || !/^[a-zA-Z0-9_-]+$/.test(p.id)) return false;
+  if (typeof p.name !== 'string' || p.name.trim() === '') return false;
+  const numFields = ['commissionRate', 'fixedFee', 'processingRate', 'processingFixedFee'];
+  for (const f of numFields) {
+    if (typeof p[f] !== 'number' || !isFinite(p[f]) || p[f] < 0) return false;
+  }
+  return true;
+}
+
+function loadAllData() {
+  const rawListings = LS.get('rpcalc_listings', []);
+  if (Array.isArray(rawListings)) {
+    listings = rawListings.filter(validateListing);
+  } else {
+    listings = [];
+  }
+  customProfiles = LS.get('rpcalc_customProfiles', []);
+  settings = { ...DEFAULT_SETTINGS, ...LS.get('rpcalc_settings', {}) };
+  applyAccent(settings.accentHue);
+  updateTelemetry();
+  updateNavCount();
+}
+
+function saveListings() { LS.set('rpcalc_listings', listings); updateTelemetry(); updateNavCount(); }
+function saveSettings() { LS.set('rpcalc_settings', settings); }
+function saveProfiles() { LS.set('rpcalc_customProfiles', customProfiles); }
+
+function updateTelemetry() {
+  const count = listings.length;
+  const totalNet = listings.reduce((s, l) => s + (l.netProfit || 0), 0);
+  const fmt = '$' + totalNet.toFixed(2);
+  document.getElementById('rt-count').textContent = count;
+  document.getElementById('rt-profit').textContent = fmt;
+  document.getElementById('tel-count').textContent = count;
+  document.getElementById('tel-profit').textContent = fmt;
+  if (count === 0) {
+    document.getElementById('bar-fill-main').style.width = '0%';
+    document.getElementById('bar-fill-warn').style.width = '0%';
+  } else {
+    const avgMargin = listings.reduce((s, l) => s + (l.profitMargin || 0), 0) / count;
+    const mainPct = Math.min(Math.max(avgMargin / 50 * 100, 0), 100);
+    const lossCount = listings.filter(l => (l.netProfit || 0) < 0).length;
+    const warnPct = (lossCount / count) * 100;
+    document.getElementById('bar-fill-main').style.width = mainPct + '%';
+    document.getElementById('bar-fill-warn').style.width = warnPct + '%';
+  }
+}
+
+function updateNavCount() {
+  const count = listings.length;
+  document.getElementById('nav-count').textContent = count;
+  const opBtn = document.getElementById('op-count');
+  if (opBtn) opBtn.textContent = count === 1 ? '1 saved' : count + ' saved';
+}
+
+/* ============================================================
+   CALCULATION ENGINE
+   ============================================================ */
+function calculateListing(data) {
+  const grossProfit = data.soldPrice - data.costOfGoods;
+  const platformFees = (data.commissionFn
+    ? data.commissionFn(data.soldPrice)
+    : (PLATFORM_PRESETS[data.platform]?.commissionFn
+        ? PLATFORM_PRESETS[data.platform].commissionFn(data.soldPrice)
+        : data.soldPrice * data.commissionRate)
+  ) + data.fixedFee;
+  const taxableAmount = data.soldPrice + (data.shippingPayer === 'buyer' ? data.shippingCost : 0);
+  const paymentProcessingFees = (taxableAmount * data.processingRate) + data.processingFixedFee;
+  const sellerShippingCost = data.shippingPayer === 'seller' ? data.shippingCost : 0;
+  const taxAmount = data.soldPrice * (data.taxRate / 100);
+  const totalFees = platformFees + paymentProcessingFees + sellerShippingCost + taxAmount + data.discountAmount;
+  const netProfit = grossProfit - totalFees;
+  const profitMargin = data.soldPrice > 0 ? (netProfit / data.soldPrice) * 100 : 0;
+  const totalFeeRate = data.soldPrice > 0 ? totalFees / data.soldPrice : 0;
+  const breakEvenPrice = totalFeeRate < 1 && totalFeeRate >= 0 ? data.costOfGoods / (1 - totalFeeRate) : 0;
+  const roiPercent = data.costOfGoods > 0 ? (netProfit / data.costOfGoods) * 100 : (netProfit > 0 ? Infinity : 0);
+  return { grossProfit, platformFees, paymentProcessingFees, sellerShippingCost, taxAmount, totalFees, netProfit, profitMargin, breakEvenPrice, roiPercent, totalFeeRate };
+}
+
+function getCalcInputs() {
+  const platform = document.getElementById('calc-platform').value;
+  let commissionRate = 0, fixedFee = 0, processingRate = 0, processingFixedFee = 0, commissionFn = null;
+  if (platform === 'Custom') {
+    commissionRate = (parseFloat(document.getElementById('calc-comm-rate').value) || 0) / 100;
+    fixedFee = parseFloat(document.getElementById('calc-fixed-fee').value) || 0;
+    processingRate = (parseFloat(document.getElementById('calc-proc-rate').value) || 0) / 100;
+    processingFixedFee = parseFloat(document.getElementById('calc-proc-fixed').value) || 0;
+  } else {
+    const preset = PLATFORM_PRESETS[platform];
+    commissionRate = preset.commissionRate;
+    fixedFee = preset.fixedFee;
+    processingRate = preset.processingRate;
+    processingFixedFee = preset.processingFixedFee;
+    commissionFn = preset.commissionFn || null;
+  }
+  return {
+    name: document.getElementById('calc-name').value.trim(),
+    costOfGoods: parseFloat(document.getElementById('calc-cog').value) || 0,
+    soldPrice: parseFloat(document.getElementById('calc-sold').value) || 0,
+    platform: platform,
+    shippingCost: parseFloat(document.getElementById('calc-shipping').value) || 0,
+    shippingPayer: document.getElementById('calc-shipping-payer').checked ? 'seller' : 'buyer',
+    taxRate: parseFloat(document.getElementById('calc-tax').value) || 0,
+    discountAmount: parseFloat(document.getElementById('calc-discount').value) || 0,
+    commissionRate, fixedFee, processingRate, processingFixedFee, commissionFn,
+    category: document.getElementById('calc-category').value.trim(),
+    notes: document.getElementById('calc-notes').value.trim()
+  };
+}
+
+function formatMoney(n) { return '$' + n.toFixed(2); }
+function formatPct(n) { return n === Infinity || n === -Infinity ? '\u221e' : n.toFixed(1) + '%'; }
+
+function updateCalcResults() {
+  const inputs = getCalcInputs();
+  const r = calculateListing(inputs);
+  const hasSold = inputs.soldPrice > 0;
+
+  document.getElementById('res-gross').textContent = formatMoney(r.grossProfit);
+  document.getElementById('res-fees').textContent = formatMoney(r.totalFees);
+  document.getElementById('res-platform').textContent = formatMoney(r.platformFees);
+  document.getElementById('tag-platform').textContent = inputs.platform;
+
+  if (hasSold) {
+    document.getElementById('res-net').textContent = formatMoney(r.netProfit);
+    const pill = document.getElementById('pill-net');
+    pill.textContent = r.netProfit >= 0 ? 'PROFIT' : 'LOSS';
+    pill.className = 'pill ' + (r.netProfit >= 0 ? 'up' : 'down');
+    document.getElementById('tag-net').textContent = r.netProfit >= 0 ? '+' : '-';
+    document.getElementById('res-margin').innerHTML = formatPct(r.profitMargin).replace(/%$/, '') + '<span class="u">%</span>';
+    document.getElementById('res-roi').innerHTML = formatPct(r.roiPercent).replace(/%$/, '') + '<span class="u">%</span>';
+    document.getElementById('res-breakeven').textContent = r.breakEvenPrice > 0 ? formatMoney(r.breakEvenPrice) : '--';
+  } else {
+    document.getElementById('res-net').textContent = '$0.00';
+    document.getElementById('pill-net').className = 'pill neutral';
+    document.getElementById('pill-net').textContent = 'enter values';
+    document.getElementById('tag-net').textContent = '--';
+    document.getElementById('res-margin').innerHTML = '0.0<span class="u">%</span>';
+    document.getElementById('res-roi').innerHTML = '0.0<span class="u">%</span>';
+    document.getElementById('res-breakeven').textContent = '--';
+  }
+
+  const totalBar = r.totalFees + inputs.discountAmount;
+  if (totalBar > 0 && hasSold) {
+    const pf = Math.max(0, (r.platformFees / totalBar) * 100);
+    const pr = Math.max(0, (r.paymentProcessingFees / totalBar) * 100);
+    const sh = Math.max(0, (r.sellerShippingCost / totalBar) * 100);
+    const tx = Math.max(0, (r.taxAmount / totalBar) * 100);
+    const dc = Math.max(0, (inputs.discountAmount / totalBar) * 100);
+    document.getElementById('seg-platform').style.width = pf + '%';
+    document.getElementById('seg-processing').style.width = pr + '%';
+    document.getElementById('seg-shipping').style.width = sh + '%';
+    document.getElementById('seg-tax').style.width = tx + '%';
+    document.getElementById('seg-discount').style.width = dc + '%';
+  } else {
+    ['seg-platform','seg-processing','seg-shipping','seg-tax','seg-discount'].forEach(id => {
+      document.getElementById(id).style.width = '0%';
+    });
+  }
+  document.getElementById('lbl-platform').textContent = formatMoney(r.platformFees);
+  document.getElementById('lbl-processing').textContent = formatMoney(r.paymentProcessingFees);
+  document.getElementById('lbl-shipping').textContent = formatMoney(r.sellerShippingCost);
+  document.getElementById('lbl-tax').textContent = formatMoney(r.taxAmount);
+  document.getElementById('lbl-discount').textContent = formatMoney(inputs.discountAmount);
+}
+
+// Attach live listeners
+['calc-name','calc-cog','calc-sold','calc-platform','calc-shipping','calc-shipping-payer',
+ 'calc-tax','calc-discount','calc-category','calc-notes','calc-comm-rate','calc-fixed-fee',
+ 'calc-proc-rate','calc-proc-fixed'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', updateCalcResults);
+});
+
+document.getElementById('calc-shipping-payer').addEventListener('change', updateCalcResults);
+
+function onPlatformChange() {
+  const platform = document.getElementById('calc-platform').value;
+  const customFields = document.getElementById('custom-fee-fields');
+  if (platform === 'Custom') {
+    customFields.classList.add('open');
+  } else {
+    customFields.classList.remove('open');
+    const preset = PLATFORM_PRESETS[platform];
+    if (preset) {
+      document.getElementById('calc-comm-rate').value = (preset.commissionRate * 100).toFixed(1);
+      document.getElementById('calc-fixed-fee').value = preset.fixedFee.toFixed(2);
+      document.getElementById('calc-proc-rate').value = (preset.processingRate * 100).toFixed(1);
+      document.getElementById('calc-proc-fixed').value = preset.processingFixedFee.toFixed(2);
+    }
+  }
+  updateCalcResults();
+}
+
+function calculateAndSave() {
+  const inputs = getCalcInputs();
+  if (!inputs.name) { showToast('Enter an item name', 'error'); return; }
+  const r = calculateListing(inputs);
+
+  if (editingId) {
+    const idx = listings.findIndex(l => l.id === editingId);
+    if (idx >= 0) {
+      listings[idx] = {
+        ...listings[idx],
+        name: inputs.name,
+        category: inputs.category,
+        platform: inputs.platform,
+        costOfGoods: inputs.costOfGoods,
+        soldPrice: inputs.soldPrice,
+        shippingCost: inputs.shippingCost,
+        shippingPayer: inputs.shippingPayer,
+        taxRate: inputs.taxRate,
+        discountAmount: inputs.discountAmount,
+        commissionRate: inputs.commissionRate,
+        fixedFee: inputs.fixedFee,
+        processingRate: inputs.processingRate,
+        processingFixedFee: inputs.processingFixedFee,
+        usesCustomCommission: inputs.commissionFn !== null,
+        notes: inputs.notes,
+        tags: inputs.category ? [inputs.category] : [],
+        grossProfit: r.grossProfit,
+        netProfit: r.netProfit,
+        platformFees: r.platformFees,
+        paymentProcessingFees: r.paymentProcessingFees,
+        totalFees: r.totalFees,
+        profitMargin: r.profitMargin,
+        breakEvenPrice: r.breakEvenPrice,
+        roiPercent: r.roiPercent,
+        taxAmount: r.taxAmount,
+        sellerShippingCost: r.sellerShippingCost,
+        savedAt: new Date().toISOString()
+      };
+      saveListings();
+      editingId = null;
+      updateCalcResults();
+      showToast('Listing updated: ' + escapeHtml(inputs.name), 'success');
+      const btn = document.querySelector('#view-calculator .btn.primary');
+      if (btn) btn.innerHTML = 'Calculate & Save<span class="k">S</span>';
+      return;
+    }
+  }
+
+  const listing = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    name: inputs.name,
+    category: inputs.category,
+    platform: inputs.platform,
+    costOfGoods: inputs.costOfGoods,
+    soldPrice: inputs.soldPrice,
+    shippingCost: inputs.shippingCost,
+    shippingPayer: inputs.shippingPayer,
+    taxRate: inputs.taxRate,
+    discountAmount: inputs.discountAmount,
+    commissionRate: inputs.commissionRate,
+    fixedFee: inputs.fixedFee,
+    processingRate: inputs.processingRate,
+    processingFixedFee: inputs.processingFixedFee,
+    usesCustomCommission: inputs.commissionFn !== null,
+    notes: inputs.notes,
+    tags: inputs.category ? [inputs.category] : [],
+    grossProfit: r.grossProfit,
+    netProfit: r.netProfit,
+    platformFees: r.platformFees,
+    paymentProcessingFees: r.paymentProcessingFees,
+    totalFees: r.totalFees,
+    profitMargin: r.profitMargin,
+    breakEvenPrice: r.breakEvenPrice,
+    roiPercent: r.roiPercent,
+    taxAmount: r.taxAmount,
+    sellerShippingCost: r.sellerShippingCost,
+    savedAt: new Date().toISOString()
+  };
+  listings.unshift(listing);
+  saveListings();
+  updateCalcResults();
+  showToast('Listing saved: ' + escapeHtml(inputs.name), 'success');
+}
+
+function resetCalcForm() {
+  document.getElementById('calc-name').value = '';
+  document.getElementById('calc-cog').value = '';
+  document.getElementById('calc-sold').value = '';
+  document.getElementById('calc-shipping').value = '';
+  document.getElementById('calc-tax').value = '';
+  document.getElementById('calc-discount').value = '';
+  document.getElementById('calc-category').value = '';
+  document.getElementById('calc-notes').value = '';
+  document.getElementById('calc-shipping-payer').checked = false;
+  editingId = null;
+  applyCalcDefaults();
+  onPlatformChange();
+  updateCalcResults();
+  const btn = document.querySelector('#view-calculator .btn.primary');
+  if (btn) btn.innerHTML = 'Calculate & Save<span class="k">S</span>';
+  showToast('Form reset', 'info');
+}
+
+function sendToCompare() {
+  const inputs = getCalcInputs();
+  document.getElementById('comp-cog').value = inputs.costOfGoods || '';
+  document.getElementById('comp-name').value = inputs.name || '';
+  document.getElementById('comp-sold-a').value = inputs.soldPrice || '';
+  document.getElementById('comp-ship-a').value = inputs.shippingCost || '';
+  document.getElementById('comp-ship-payer-a').checked = inputs.shippingPayer === 'seller';
+  document.getElementById('comp-tax-a').value = inputs.taxRate || '';
+  document.getElementById('comp-disc-a').value = inputs.discountAmount || '';
+  document.getElementById('comp-plat-a').value = inputs.platform;
+  onComparePlatChange('a');
+  if (inputs.platform === 'Custom') {
+    document.getElementById('comp-comm-a').value = (inputs.commissionRate * 100).toFixed(1);
+    document.getElementById('comp-fixed-a').value = inputs.fixedFee.toFixed(2);
+    document.getElementById('comp-proc-a').value = (inputs.processingRate * 100).toFixed(1);
+    document.getElementById('comp-procfixed-a').value = inputs.processingFixedFee.toFixed(2);
+  }
+  document.getElementById('comp-sold-b').value = inputs.soldPrice || '';
+  document.getElementById('comp-ship-b').value = inputs.shippingCost || '';
+  document.getElementById('comp-ship-payer-b').checked = inputs.shippingPayer === 'seller';
+  document.getElementById('comp-tax-b').value = inputs.taxRate || '';
+  document.getElementById('comp-disc-b').value = inputs.discountAmount || '';
+  navigateTo('compare');
+  recalcCompare();
+}
+
+/* ============================================================
+   COMPARISON VIEW
+   ============================================================ */
+function onComparePlatChange(side) {
+  const platform = document.getElementById('comp-plat-' + side).value;
+  const customDiv = document.getElementById('comp-custom-' + side);
+  if (platform === 'Custom') {
+    customDiv.classList.add('open');
+  } else {
+    customDiv.classList.remove('open');
+    const preset = PLATFORM_PRESETS[platform];
+    if (preset) {
+      document.getElementById('comp-comm-' + side).value = (preset.commissionRate * 100).toFixed(1);
+      document.getElementById('comp-fixed-' + side).value = preset.fixedFee.toFixed(2);
+      document.getElementById('comp-proc-' + side).value = (preset.processingRate * 100).toFixed(1);
+      document.getElementById('comp-procfixed-' + side).value = preset.processingFixedFee.toFixed(2);
+    }
+  }
+  recalcCompare();
+}
+
+function getCompareInputs(side) {
+  const platform = document.getElementById('comp-plat-' + side).value;
+  let commissionRate = 0, fixedFee = 0, processingRate = 0, processingFixedFee = 0, commissionFn = null;
+  if (platform === 'Custom') {
+    commissionRate = (parseFloat(document.getElementById('comp-comm-' + side).value) || 0) / 100;
+    fixedFee = parseFloat(document.getElementById('comp-fixed-' + side).value) || 0;
+    processingRate = (parseFloat(document.getElementById('comp-proc-' + side).value) || 0) / 100;
+    processingFixedFee = parseFloat(document.getElementById('comp-procfixed-' + side).value) || 0;
+  } else {
+    const preset = PLATFORM_PRESETS[platform];
+    commissionRate = preset.commissionRate;
+    fixedFee = preset.fixedFee;
+    processingRate = preset.processingRate;
+    processingFixedFee = preset.processingFixedFee;
+    if (preset.commissionFn) commissionFn = preset.commissionFn;
+  }
+  return {
+    costOfGoods: parseFloat(document.getElementById('comp-cog').value) || 0,
+    soldPrice: parseFloat(document.getElementById('comp-sold-' + side).value) || 0,
+    platform, commissionRate, fixedFee, processingRate, processingFixedFee, commissionFn,
+    shippingCost: parseFloat(document.getElementById('comp-ship-' + side).value) || 0,
+    shippingPayer: document.getElementById('comp-ship-payer-' + side).checked ? 'seller' : 'buyer',
+    taxRate: parseFloat(document.getElementById('comp-tax-' + side).value) || 0,
+    discountAmount: parseFloat(document.getElementById('comp-disc-' + side).value) || 0
+  };
+}
+
+function recalcCompare() {
+  const rA = calculateListing(getCompareInputs('a'));
+  const rB = calculateListing(getCompareInputs('b'));
+  document.getElementById('comp-net-a').textContent = formatMoney(rA.netProfit);
+  document.getElementById('comp-margin-a').textContent = formatPct(rA.profitMargin);
+  document.getElementById('comp-roi-a').textContent = formatPct(rA.roiPercent);
+  document.getElementById('comp-fees-a').textContent = formatMoney(rA.totalFees);
+  document.getElementById('comp-be-a').textContent = rA.breakEvenPrice > 0 ? formatMoney(rA.breakEvenPrice) : '--';
+  document.getElementById('comp-net-b').textContent = formatMoney(rB.netProfit);
+  document.getElementById('comp-margin-b').textContent = formatPct(rB.profitMargin);
+  document.getElementById('comp-roi-b').textContent = formatPct(rB.roiPercent);
+  document.getElementById('comp-fees-b').textContent = formatMoney(rB.totalFees);
+  document.getElementById('comp-be-b').textContent = rB.breakEvenPrice > 0 ? formatMoney(rB.breakEvenPrice) : '--';
+
+  const banner = document.getElementById('winner-banner');
+  banner.style.display = 'block';
+  const platA = document.getElementById('comp-plat-a').value;
+  const platB = document.getElementById('comp-plat-b').value;
+  const diff = rA.netProfit - rB.netProfit;
+  if (Math.abs(diff) < 0.01) {
+    banner.textContent = "It's a tie!";
+    banner.className = 'winner-banner tie';
+  } else if (diff > 0) {
+    banner.textContent = platA + ' wins by ' + formatMoney(Math.abs(diff));
+    banner.className = 'winner-banner';
+  } else {
+    banner.textContent = platB + ' wins by ' + formatMoney(Math.abs(diff));
+    banner.className = 'winner-banner';
+  }
+}
+
+/* ============================================================
+   LISTINGS TABLE
+   ============================================================ */
+function getFilteredListings() {
+  let rows = [...listings];
+  if (listingFilters.cat !== 'all') {
+    rows = rows.filter(l => l.category === listingFilters.cat);
+  }
+  if (listingFilters.plat !== 'all') {
+    rows = rows.filter(l => l.platform === listingFilters.plat);
+  }
+  const q = (document.getElementById('list-search')?.value || '').toLowerCase().trim();
+  if (q) {
+    rows = rows.filter(l =>
+      (l.name || '').toLowerCase().includes(q) ||
+      (l.category || '').toLowerCase().includes(q) ||
+      (l.notes || '').toLowerCase().includes(q) ||
+      (l.platform || '').toLowerCase().includes(q)
+    );
+  }
+  rows.sort((a, b) => {
+    const col = listingSort.col;
+    let va = a[col], vb = b[col];
+    if (typeof va === 'string') va = va.toLowerCase();
+    if (typeof vb === 'string') vb = vb.toLowerCase();
+    if (va < vb) return listingSort.asc ? -1 : 1;
+    if (va > vb) return listingSort.asc ? 1 : -1;
+    return 0;
+  });
+  return rows;
+}
+
+function renderCategoryFilters() {
+  const container = document.getElementById('category-filters');
+  if (!container) return;
+  const cats = [...new Set(listings.filter(l => l.category).map(l => l.category))].sort();
+  let html = '<span class="chip ' + (listingFilters.cat === 'all' ? 'on' : '') + '" data-cat="all" role="button" tabindex="0" aria-pressed="' + (listingFilters.cat === 'all' ? 'true' : 'false') + '">all</span>';
+  cats.forEach(c => {
+    html += '<span class="chip ' + (listingFilters.cat === c ? 'on' : '') + '" data-cat="' + escapeHtml(c) + '" role="button" tabindex="0" aria-pressed="' + (listingFilters.cat === c ? 'true' : 'false') + '">' + escapeHtml(c) + '</span>';
+  });
+  container.innerHTML = html;
+}
+
+function filterListingsCat(cat) {
+  listingFilters.cat = cat;
+  listingPage = 1;
+  renderCategoryFilters();
+  renderListingsTable();
+}
+
+function filterListingsPlat(plat) {
+  listingFilters.plat = plat;
+  listingPage = 1;
+  document.querySelectorAll('[data-plat]').forEach(el => {
+    el.classList.toggle('on', el.getAttribute('data-plat') === plat);
+  });
+  renderListingsTable();
+}
+
+function sortListings(col) {
+  if (listingSort.col === col) listingSort.asc = !listingSort.asc;
+  else { listingSort.col = col; listingSort.asc = true; }
+  renderListingsTable();
+}
+
+function renderListingsTable() {
+  const rows = getFilteredListings();
+  const tbody = document.getElementById('listings-tbody');
+  document.querySelectorAll('#view-listings thead th').forEach(th => { th.classList.remove('sort-asc', 'sort-desc'); });
+  if (listingSort.col) {
+    const th = document.querySelector('#view-listings thead th[onclick="sortListings(\'' + listingSort.col + '\')"]');
+    if (th) th.classList.add(listingSort.asc ? 'sort-asc' : 'sort-desc');
+  }
+  const perPage = 10;
+  const totalPages = Math.max(1, Math.ceil(rows.length / perPage));
+  if (listingPage > totalPages) listingPage = totalPages;
+  const start = (listingPage - 1) * perPage;
+  const pageRows = rows.slice(start, start + perPage);
+
+  document.getElementById('count-label').textContent = rows.length + ' total';
+
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="12"><div class="empty-state"><div class="empty-icon">\u2205</div><h3>NO LISTINGS</h3><p>Save a calculation to see it here.</p></div></td></tr>';
+  } else {
+    let html = '';
+    pageRows.forEach(l => {
+      const platColor = PLATFORM_COLORS[l.platform] || '#999';
+      const isSelected = selectedListingIds.has(l.id);
+      const escapedId = escapeHtml(l.id);
+      html += '<tr>' +
+        '<td><input type="checkbox" ' + (isSelected ? 'checked' : '') + ' onchange="toggleListingSelect(\'' + escapedId + '\')" aria-label="Select ' + escapeHtml(l.name || 'listing') + '"></td>' +
+        '<td><div class="id"><b>' + escapeHtml(l.name || 'Untitled') + '</b>' + (l.category ? '<small>' + escapeHtml(l.category) + '</small>' : '') + '</div></td>' +
+        '<td><div class="id"><span class="dot" style="background:' + platColor + '"></span><span>' + escapeHtml(l.platform) + '</span></div></td>' +
+        '<td class="num">' + formatMoney(l.costOfGoods) + '</td>' +
+        '<td class="num">' + formatMoney(l.soldPrice) + '</td>' +
+        '<td class="num">' + formatMoney(l.shippingCost) + '</td>' +
+        '<td class="num">' + formatMoney(l.totalFees) + '</td>' +
+        '<td class="num" style="color:' + (l.netProfit >= 0 ? 'var(--signal)' : 'var(--danger)') + ';font-weight:600;">' + formatMoney(l.netProfit) + '</td>' +
+        '<td class="num">' + formatPct(l.profitMargin) + '</td>' +
+        '<td class="num">' + formatPct(l.roiPercent) + '</td>' +
+        '<td>' + new Date(l.savedAt).toLocaleDateString() + '</td>' +
+        '<td><div style="display:flex;gap:6px;">' +
+          '<button class="btn" style="padding:3px 8px;font-size:10px;" onclick="editListing(\'' + escapedId + '\')">Edit</button>' +
+          '<button class="btn" style="padding:3px 8px;font-size:10px;" onclick="duplicateListing(\'' + escapedId + '\')">Dup</button>' +
+          '<button class="btn danger" style="padding:3px 8px;font-size:10px;" onclick="deleteListing(\'' + escapedId + '\')">Del</button>' +
+        '</div></td>' +
+        '</tr>';
+    });
+    tbody.innerHTML = html;
+  }
+
+  let pgHtml = '<button ' + (listingPage <= 1 ? 'disabled' : '') + ' onclick="listingPage--;renderListingsTable();">&lt;</button>';
+  pgHtml += '<span class="page-info">Page ' + listingPage + ' / ' + totalPages + '</span>';
+  pgHtml += '<button ' + (listingPage >= totalPages ? 'disabled' : '') + ' onclick="listingPage++;renderListingsTable();">&gt;</button>';
+  document.getElementById('listings-pagination').innerHTML = pgHtml;
+
+  renderCategoryFilters();
+  updateBatchBar();
+}
+
+function toggleListingSelect(id) {
+  if (selectedListingIds.has(id)) selectedListingIds.delete(id);
+  else selectedListingIds.add(id);
+  updateBatchBar();
+}
+
+function toggleSelectAll() {
+  const rows = getFilteredListings();
+  const allSelected = rows.length > 0 && rows.every(r => selectedListingIds.has(r.id));
+  if (allSelected) {
+    rows.forEach(r => selectedListingIds.delete(r.id));
+  } else {
+    rows.forEach(r => selectedListingIds.add(r.id));
+  }
+  renderListingsTable();
+}
+
+function selectAllListings() {
+  getFilteredListings().forEach(r => selectedListingIds.add(r.id));
+  renderListingsTable();
+}
+
+function updateBatchBar() {
+  const bar = document.getElementById('batch-bar');
+  const count = selectedListingIds.size;
+  if (count > 0) {
+    bar.classList.remove('hidden');
+    document.getElementById('batch-count').textContent = count + ' selected';
+  } else {
+    bar.classList.add('hidden');
+  }
+}
+
+function deleteListing(id) {
+  const l = listings.find(x => x.id === id);
+  openModal('Delete Listing', '<p>Delete "' + escapeHtml(l ? l.name : '') + '"?</p>',
+    '<button class="btn" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="doDeleteListing(\'' + escapeHtml(id) + '\')">Delete</button>');
+}
+function doDeleteListing(id) {
+  listings = listings.filter(l => l.id !== id);
+  selectedListingIds.delete(id);
+  saveListings();
+  closeModal();
+  renderListingsTable();
+  showToast('Listing deleted', 'info');
+}
+
+function deleteSelectedListings() {
+  if (selectedListingIds.size === 0) return;
+  openModal('Delete Selected', '<p>Delete ' + selectedListingIds.size + ' selected listings?</p>',
+    '<button class="btn" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="doDeleteSelected()">Delete</button>');
+}
+function doDeleteSelected() {
+  listings = listings.filter(l => !selectedListingIds.has(l.id));
+  selectedListingIds.clear();
+  saveListings();
+  closeModal();
+  renderListingsTable();
+  showToast('Selected listings deleted', 'info');
+}
+
+function duplicateListing(id) {
+  const l = listings.find(x => x.id === id);
+  if (!l) return;
+  const copy = { ...l, id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), savedAt: new Date().toISOString(), name: l.name + ' (copy)' };
+  listings.unshift(copy);
+  saveListings();
+  renderListingsTable();
+  showToast('Listing duplicated', 'success');
+}
+
+function editListing(id) {
+  const l = listings.find(x => x.id === id);
+  if (!l) return;
+  editingId = id;
+
+  document.getElementById('calc-name').value = l.name || '';
+  document.getElementById('calc-cog').value = l.costOfGoods || '';
+  document.getElementById('calc-sold').value = l.soldPrice || '';
+  document.getElementById('calc-platform').value = l.platform || 'Poshmark';
+  document.getElementById('calc-shipping').value = l.shippingCost || '';
+  document.getElementById('calc-shipping-payer').checked = l.shippingPayer === 'seller';
+  document.getElementById('calc-tax').value = l.taxRate || '';
+  document.getElementById('calc-discount').value = l.discountAmount || '';
+  document.getElementById('calc-category').value = l.category || '';
+  document.getElementById('calc-notes').value = l.notes || '';
+
+  if (l.platform === 'Custom') {
+    document.getElementById('calc-comm-rate').value = ((l.commissionRate || 0) * 100).toFixed(1);
+    document.getElementById('calc-fixed-fee').value = (l.fixedFee || 0).toFixed(2);
+    document.getElementById('calc-proc-rate').value = ((l.processingRate || 0) * 100).toFixed(1);
+    document.getElementById('calc-proc-fixed').value = (l.processingFixedFee || 0).toFixed(2);
+  }
+
+  onPlatformChange();
+  updateCalcResults();
+  navigateTo('calculator');
+  showToast('Editing: ' + escapeHtml(l.name), 'info');
+
+  const btn = document.querySelector('#view-calculator .btn.primary');
+  if (btn) btn.innerHTML = 'Update Listing<span class="k">S</span>';
+}
+
+function duplicateSelectedListings() {
+  const toDup = listings.filter(l => selectedListingIds.has(l.id));
+  toDup.forEach(l => {
+    const copy = { ...l, id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), savedAt: new Date().toISOString(), name: l.name + ' (copy)' };
+    listings.unshift(copy);
+  });
+  selectedListingIds.clear();
+  saveListings();
+  renderListingsTable();
+  showToast(toDup.length + ' listings duplicated', 'success');
+}
+
+function clearAllListings() {
+  if (listings.length === 0) { showToast('No listings to clear', 'info'); return; }
+  openModal('Clear All Listings', '<p>Delete all ' + listings.length + ' listings? This cannot be undone.</p>',
+    '<button class="btn" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="doClearAllListings()">Delete All</button>');
+}
+function doClearAllListings() {
+  listings = [];
+  selectedListingIds.clear();
+  saveListings();
+  closeModal();
+  renderListingsTable();
+  showToast('All listings cleared', 'info');
+}
+
+function exportListingsCSV() {
+  if (listings.length === 0) { showToast('No listings to export', 'info'); return; }
+  const headers = ['ID','Name','Category','Platform','CostOfGoods','SoldPrice','ShippingCost','ShippingPayer','TaxRate','DiscountAmount',
+    'CommissionRate','FixedFee','ProcessingRate','ProcessingFixedFee','Notes','GrossProfit','NetProfit','PlatformFees',
+    'PaymentProcessingFees','TotalFees','ProfitMargin','BreakEvenPrice','ROI','TaxAmount','SellerShippingCost','SavedAt'];
+  function esc(v) {
+    const s = String(v == null ? '' : v);
+    let out = s;
+    if (/^[+=\-@]/.test(out)) out = "'" + out;
+    if (out.includes(',') || out.includes('"') || out.includes('\n')) return '"' + out.replace(/"/g, '""') + '"';
+    return out;
+  }
+  const rows = listings.map(l => [
+    l.id, l.name, l.category, l.platform, l.costOfGoods, l.soldPrice, l.shippingCost, l.shippingPayer,
+    l.taxRate, l.discountAmount, l.commissionRate, l.fixedFee, l.processingRate, l.processingFixedFee,
+    l.notes, l.grossProfit, l.netProfit, l.platformFees, l.paymentProcessingFees, l.totalFees,
+    l.profitMargin, l.breakEvenPrice, l.roiPercent, l.taxAmount, l.sellerShippingCost, l.savedAt
+  ].map(esc).join(','));
+  const csv = headers.map(esc).join(',') + '\n' + rows.join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'resellcalc-listings-' + new Date().toISOString().split('T')[0] + '.csv'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('Exported ' + listings.length + ' listings', 'success');
+}
+
+/* ============================================================
+   ANALYTICS — CANVAS CHARTS
+   ============================================================ */
+function renderAnalytics() {
+  const data = listings;
+  if (data.length === 0) {
+    ['chart-platform-profit','chart-platform-fees','chart-category','chart-monthly'].forEach(id => {
+      const canvas = document.getElementById(id);
+      if (!canvas) return;
+      const parent = canvas.parentElement;
+      const dpr = window.devicePixelRatio || 1;
+      const w = parent ? parent.getBoundingClientRect().width : 600;
+      const h = 280;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.scale(dpr, dpr);
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--mid').trim() || '#666';
+      ctx.font = '12px ui-monospace, SFMono-Regular, Menlo, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('No data yet. Save some listings to see analytics.', w / 2, h / 2);
+    });
+    document.getElementById('sum-listings').textContent = '0';
+    document.getElementById('sum-profit').textContent = '$0';
+    document.getElementById('sum-margin').textContent = '0%';
+    document.getElementById('sum-best-plat').textContent = '--';
+    document.getElementById('sum-best-cat').textContent = '--';
+    document.getElementById('sum-fees').textContent = '$0';
+    return;
+  }
+
+  const totalNet = data.reduce((s, l) => s + l.netProfit, 0);
+  const avgMargin = data.reduce((s, l) => s + l.profitMargin, 0) / data.length;
+  const totalFees = data.reduce((s, l) => s + l.totalFees, 0);
+  document.getElementById('sum-listings').textContent = data.length;
+  document.getElementById('sum-profit').textContent = formatMoney(totalNet);
+  document.getElementById('sum-margin').textContent = avgMargin.toFixed(1) + '%';
+  document.getElementById('sum-fees').textContent = formatMoney(totalFees);
+
+  const platProfits = {};
+  data.forEach(l => { platProfits[l.platform] = (platProfits[l.platform] || 0) + l.netProfit; });
+  const bestPlat = Object.entries(platProfits).sort((a, b) => b[1] - a[1])[0];
+  document.getElementById('sum-best-plat').textContent = bestPlat ? bestPlat[0] : '--';
+
+  const catMargins = {};
+  const catCounts = {};
+  data.forEach(l => { if (l.category) { catMargins[l.category] = (catMargins[l.category] || 0) + l.profitMargin; catCounts[l.category] = (catCounts[l.category] || 0) + 1; } });
+  Object.keys(catMargins).forEach(k => catMargins[k] /= catCounts[k]);
+  const bestCat = Object.entries(catMargins).sort((a, b) => b[1] - a[1])[0];
+  document.getElementById('sum-best-cat').textContent = bestCat ? bestCat[0] : '--';
+
+  renderBarChart('chart-platform-profit', Object.keys(platProfits), Object.values(platProfits), Object.keys(platProfits).map(p => PLATFORM_COLORS[p] || '#999'), formatMoney);
+
+  const platNames = ['Poshmark','Mercari','Depop','Custom'].filter(p => platProfits[p] !== undefined || data.some(d => d.platform === p));
+  const avgPlatFees = platNames.map(p => {
+    const items = data.filter(d => d.platform === p);
+    if (items.length === 0) return [0,0,0,0];
+    return [
+      items.reduce((s, d) => s + d.platformFees, 0) / items.length,
+      items.reduce((s, d) => s + d.paymentProcessingFees, 0) / items.length,
+      items.reduce((s, d) => s + d.sellerShippingCost, 0) / items.length,
+      items.reduce((s, d) => s + d.taxAmount, 0) / items.length
+    ];
+  });
+  renderGroupedBarChart('chart-platform-fees', platNames, avgPlatFees);
+
+  const catNames = Object.keys(catMargins).sort();
+  const catVals = catNames.map(c => catMargins[c]);
+  renderBarChart('chart-category', catNames, catVals, null, v => v.toFixed(1) + '%', true);
+
+  const monthMap = {};
+  data.forEach(l => {
+    const d = new Date(l.savedAt);
+    const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+    monthMap[key] = (monthMap[key] || 0) + l.netProfit;
+  });
+  const months = Object.keys(monthMap).sort();
+  const monthVals = months.map(m => monthMap[m]);
+  renderLineChart('chart-monthly', months, monthVals);
+}
+
+function setupCanvas(id) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return { ctx: null, w: 0, h: 0 };
+  const dpr = window.devicePixelRatio || 1;
+  const parent = canvas.parentElement;
+  const w = parent ? parent.getBoundingClientRect().width : 600;
+  const h = parseInt(getComputedStyle(canvas).height) || 280;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  return { ctx, w, h };
+}
+
+function getChartColors() {
+  const st = getComputedStyle(document.body);
+  return {
+    ink: st.getPropertyValue('--ink').trim() || '#333',
+    mid: st.getPropertyValue('--mid').trim() || '#666',
+    rule: st.getPropertyValue('--rule').trim() || '#ccc',
+    paper: st.getPropertyValue('--paper').trim() || '#fff',
+    accent: st.getPropertyValue('--accent').trim() || '#d67b22',
+    accent2: st.getPropertyValue('--accent-2').trim() || '#e8a54d',
+    signal: st.getPropertyValue('--signal').trim() || '#4caf50',
+    warn: st.getPropertyValue('--warn').trim() || '#ff9800',
+    danger: st.getPropertyValue('--danger').trim() || '#f44336'
+  };
+}
+
+function renderBarChart(canvasId, labels, values, colors, formatLabel, horizontal) {
+  const { ctx, w, h } = setupCanvas(canvasId);
+  if (!ctx || !w) return;
+  const C = getChartColors();
+  const pad = { top: 30, right: 20, bottom: 50, left: 60 };
+  const chartW = w - pad.left - pad.right;
+  const chartH = h - pad.top - pad.bottom;
+  ctx.clearRect(0, 0, w, h);
+
+  if (!colors) colors = labels.map(() => C.accent);
+  const maxVal = Math.max(...values.map(Math.abs), 0.01);
+  const barGap = horizontal ? 8 : 4;
+  const barSize = horizontal ?
+    (chartH - (labels.length - 1) * barGap) / labels.length :
+    (chartW - (labels.length - 1) * barGap) / labels.length;
+
+  labels.forEach((label, i) => {
+    const val = values[i];
+    const ratio = Math.abs(val) / maxVal;
+    ctx.fillStyle = colors[i] || C.accent;
+    if (horizontal) {
+      const bw = ratio * chartW;
+      const by = pad.top + i * (barSize + barGap);
+      ctx.fillRect(pad.left, by, bw, barSize);
+      ctx.fillStyle = C.ink;
+      ctx.font = '11px ui-monospace, SFMono-Regular, Menlo, monospace';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, pad.left - 8, by + barSize / 2);
+      ctx.textAlign = 'left';
+      ctx.fillText(formatLabel ? formatLabel(val) : val, pad.left + bw + 6, by + barSize / 2);
+    } else {
+      const bh = ratio * chartH;
+      const bx = pad.left + i * (barSize + barGap);
+      ctx.fillRect(bx, pad.top + chartH - bh, barSize, bh);
+      ctx.fillStyle = C.ink;
+      ctx.font = '10px ui-monospace, SFMono-Regular, Menlo, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(label, bx + barSize / 2, h - 10);
+      if (formatLabel) {
+        ctx.fillText(formatLabel(val), bx + barSize / 2, pad.top + chartH - bh - 6);
+      }
+    }
+  });
+}
+
+function renderGroupedBarChart(canvasId, labels, groupValues) {
+  const { ctx, w, h } = setupCanvas(canvasId);
+  if (!ctx || !w) return;
+  const C = getChartColors();
+  const pad = { top: 30, right: 100, bottom: 40, left: 60 };
+  const chartW = w - pad.left - pad.right;
+  const chartH = h - pad.top - pad.bottom;
+  ctx.clearRect(0, 0, w, h);
+
+  const allVals = groupValues.flat();
+  const maxVal = Math.max(...allVals.map(Math.abs), 0.01);
+  const groupGap = 20;
+  const barGap = 3;
+  const groupW = (chartW - (labels.length - 1) * groupGap) / labels.length;
+  const barW = (groupW - 3 * barGap) / 4;
+  const barColors = [C.accent, C.accent2, C.warn, C.danger];
+  const barNames = ['Platform', 'Processing', 'Shipping', 'Tax'];
+
+  labels.forEach((label, gi) => {
+    const gx = pad.left + gi * (groupW + groupGap);
+    groupValues[gi].forEach((val, bi) => {
+      const bh = (Math.abs(val) / maxVal) * chartH;
+      const bx = gx + bi * (barW + barGap);
+      ctx.fillStyle = barColors[bi];
+      ctx.fillRect(bx, pad.top + chartH - bh, barW, bh);
+    });
+    ctx.fillStyle = C.ink;
+    ctx.font = '10px ui-monospace, SFMono-Regular, Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, gx + groupW / 2, h - 12);
+  });
+
+  barNames.forEach((name, i) => {
+    const lx = w - pad.right + 10;
+    const ly = pad.top + i * 18;
+    ctx.fillStyle = barColors[i];
+    ctx.fillRect(lx, ly, 10, 10);
+    ctx.fillStyle = C.ink;
+    ctx.font = '10px ui-monospace, SFMono-Regular, Menlo, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText(name, lx + 14, ly + 9);
+  });
+}
+
+function renderLineChart(canvasId, labels, values) {
+  const { ctx, w, h } = setupCanvas(canvasId);
+  if (!ctx || !w) return;
+  const C = getChartColors();
+  const pad = { top: 30, right: 30, bottom: 50, left: 60 };
+  const chartW = w - pad.left - pad.right;
+  const chartH = h - pad.top - pad.bottom;
+  ctx.clearRect(0, 0, w, h);
+
+  const maxVal = Math.max(...values.map(Math.abs), 0.01);
+  const minVal = Math.min(...values, 0);
+  const range = maxVal - minVal || 1;
+
+  ctx.strokeStyle = C.rule;
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + (chartH / 4) * i;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(pad.left + chartW, y);
+    ctx.stroke();
+    const gv = maxVal - (range / 4) * i;
+    ctx.fillStyle = C.mid;
+    ctx.font = '10px ui-monospace, SFMono-Regular, Menlo, monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText('$' + gv.toFixed(0), pad.left - 6, y + 3);
+  }
+
+  ctx.strokeStyle = C.accent;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  const stepX = labels.length > 1 ? chartW / (labels.length - 1) : chartW / 2;
+  values.forEach((val, i) => {
+    const x = pad.left + i * stepX;
+    const y = pad.top + chartH - ((val - minVal) / range) * chartH;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  ctx.fillStyle = C.accent;
+  values.forEach((val, i) => {
+    const x = pad.left + i * stepX;
+    const y = pad.top + chartH - ((val - minVal) / range) * chartH;
+    ctx.beginPath();
+    ctx.arc(x, y, 3, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  ctx.fillStyle = C.ink;
+  ctx.font = '10px ui-monospace, SFMono-Regular, Menlo, monospace';
+  ctx.textAlign = 'center';
+  labels.forEach((label, i) => {
+    const x = pad.left + i * stepX;
+    ctx.fillText(label, x, h - 14);
+  });
+}
+
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+function saveSetting(key, value) {
+  settings[key] = value;
+  saveSettings();
+  if (key === 'accentHue') applyAccent(value);
+  if (key === 'defaultPlatform') document.getElementById('calc-platform').value = value;
+}
+
+function onHueSlider(val) {
+  document.getElementById('hue-val').textContent = val;
+  saveSetting('accentHue', parseInt(val));
+}
+
+function resetHue() {
+  document.getElementById('set-hue').value = 175;
+  document.getElementById('hue-val').textContent = '175';
+  saveSetting('accentHue', 175);
+}
+
+function loadSettingsUI() {
+  document.getElementById('set-default-platform').value = settings.defaultPlatform || 'Poshmark';
+  document.getElementById('set-default-ship-payer').checked = (settings.defaultShippingPayer || 'buyer') === 'seller';
+  document.getElementById('set-default-tax').value = settings.defaultTaxRate || 0;
+  document.getElementById('set-default-shipping').value = settings.defaultShippingCost || 7.97;
+  document.getElementById('set-default-discount').value = settings.defaultDiscount || 0;
+  document.getElementById('set-default-cat').value = settings.defaultCategory || '';
+  document.getElementById('set-hue').value = settings.accentHue || 175;
+  document.getElementById('hue-val').textContent = settings.accentHue || 175;
+  renderProfileList();
+}
+
+function applyCalcDefaults() {
+  document.getElementById('calc-platform').value = settings.defaultPlatform || 'Poshmark';
+  document.getElementById('calc-shipping-payer').checked = (settings.defaultShippingPayer || 'buyer') === 'seller';
+  document.getElementById('calc-tax').value = settings.defaultTaxRate || '';
+  document.getElementById('calc-shipping').value = settings.defaultShippingCost || '';
+  document.getElementById('calc-discount').value = settings.defaultDiscount || '';
+  document.getElementById('calc-category').value = settings.defaultCategory || '';
+  onPlatformChange();
+}
+
+/* Custom Profiles */
+function saveCustomProfile() {
+  const name = document.getElementById('prof-name').value.trim();
+  if (!name) { showToast('Enter a profile name', 'error'); return; }
+  const profile = {
+    id: Date.now().toString(36),
+    name,
+    commissionRate: (parseFloat(document.getElementById('prof-comm').value) || 0) / 100,
+    fixedFee: parseFloat(document.getElementById('prof-fixed').value) || 0,
+    processingRate: (parseFloat(document.getElementById('prof-proc').value) || 0) / 100,
+    processingFixedFee: parseFloat(document.getElementById('prof-procfixed').value) || 0
+  };
+  const existing = customProfiles.findIndex(p => p.name === name);
+  if (existing >= 0) customProfiles[existing] = profile;
+  else customProfiles.push(profile);
+  saveProfiles();
+  renderProfileList();
+  document.getElementById('prof-name').value = '';
+  document.getElementById('prof-comm').value = '';
+  document.getElementById('prof-fixed').value = '';
+  document.getElementById('prof-proc').value = '';
+  document.getElementById('prof-procfixed').value = '';
+  showToast('Profile saved', 'success');
+}
+
+function renderProfileList() {
+  const container = document.getElementById('profile-list');
+  if (customProfiles.length === 0) {
+    container.innerHTML = '<p style="font-size:11px;color:var(--mid);margin-top:8px;">No custom profiles yet.</p>';
+    return;
+  }
+  container.innerHTML = customProfiles.map(p =>
+    '<div class="profile-item"><div><b>' + escapeHtml(p.name) + '</b><br><span style="font-size:10px;color:var(--mid);">' +
+    'Comm: ' + (p.commissionRate * 100).toFixed(1) + '%, Fixed: $' + p.fixedFee.toFixed(2) +
+    ', Proc: ' + (p.processingRate * 100).toFixed(1) + '%, ProcFixed: $' + p.processingFixedFee.toFixed(2) +
+    '</span></div><div class="profile-actions"><button onclick="editProfile(\'' + escapeHtml(p.id) + '\')">Edit</button><button onclick="deleteProfile(\'' + escapeHtml(p.id) + '\')">Delete</button></div></div>'
+  ).join('');
+}
+
+function editProfile(id) {
+  const p = customProfiles.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('prof-name').value = p.name;
+  document.getElementById('prof-comm').value = (p.commissionRate * 100).toFixed(1);
+  document.getElementById('prof-fixed').value = p.fixedFee.toFixed(2);
+  document.getElementById('prof-proc').value = (p.processingRate * 100).toFixed(1);
+  document.getElementById('prof-procfixed').value = p.processingFixedFee.toFixed(2);
+}
+
+function deleteProfile(id) {
+  customProfiles = customProfiles.filter(p => p.id !== id);
+  saveProfiles();
+  renderProfileList();
+  showToast('Profile deleted', 'info');
+}
+
+/* Data Management */
+function exportAllData() {
+  const payload = { listings, settings, customProfiles, exportedAt: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'resellcalc-backup-' + new Date().toISOString().split('T')[0] + '.json'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('Backup exported', 'success');
+}
+
+function importData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  pendingImportFile = file;
+  openModal('Import Data',
+    '<p>This will <b>replace</b> all current listings with data from the file:</p><p style="font-weight:600;">' + escapeHtml(file.name) + '</p><p>Current listings (' + listings.length + ' total) will be overwritten. This cannot be undone.</p>',
+    '<button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="doImport()">Replace Data</button>');
+}
+
+function doImport() {
+  const file = pendingImportFile;
+  if (!file) { closeModal(); return; }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.listings && Array.isArray(data.listings)) {
+        listings = data.listings.filter(validateListing);
+        saveListings();
+      }
+      if (data.settings) {
+        settings = { ...DEFAULT_SETTINGS, ...data.settings };
+        saveSettings();
+        applyAccent(settings.accentHue);
+      }
+      if (data.customProfiles && Array.isArray(data.customProfiles)) {
+        customProfiles = data.customProfiles.filter(validateProfile);
+        saveProfiles();
+      }
+      renderListingsTable();
+      updateTelemetry();
+      showToast('Data imported successfully', 'success');
+    } catch (err) {
+      showToast('Import failed: invalid file', 'error');
+    }
+    pendingImportFile = null;
+    document.getElementById('import-file').value = '';
+  };
+  reader.onerror = function() {
+    showToast('Could not read the file', 'error');
+    pendingImportFile = null;
+    document.getElementById('import-file').value = '';
+  };
+  reader.readAsText(file);
+  closeModal();
+}
+
+function confirmClearAll() {
+  openModal('Clear All Data', '<p>This will delete ALL listings, settings, and custom profiles. This cannot be undone.</p>',
+    '<button class="btn" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="doClearAll()">Delete Everything</button>');
+}
+function doClearAll() {
+  listings = [];
+  customProfiles = [];
+  settings = { ...DEFAULT_SETTINGS };
+  saveListings();
+  saveSettings();
+  saveProfiles();
+  applyAccent(175);
+  closeModal();
+  renderListingsTable();
+  updateTelemetry();
+  showToast('All data cleared', 'info');
+}
+
+/* ============================================================
+   DELEGATED EVENT HANDLERS
+   ============================================================ */
+document.getElementById('category-filters').addEventListener('click', function(e) {
+  const chip = e.target.closest('[data-cat]');
+  if (chip) filterListingsCat(chip.getAttribute('data-cat'));
+});
+document.getElementById('category-filters').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' || e.key === ' ') {
+    const chip = e.target.closest('[data-cat]');
+    if (chip) { e.preventDefault(); filterListingsCat(chip.getAttribute('data-cat')); }
+  }
+});
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+window.addEventListener('resize', () => {
+  if (document.getElementById('view-analytics').classList.contains('active')) {
+    renderAnalytics();
+  }
+});
+
+document.getElementById('foot-date').textContent = new Date().toISOString().split('T')[0].replace(/-/g, '\u00b7');
+
+loadAllData();
+applyCalcDefaults();
+updateCalcResults();
+initTheme();
+
+/* ---- STORAGE AVAILABILITY CHECK ---- */
+(function() {
+  try {
+    const t = '__storage_test__';
+    localStorage.setItem(t, t);
+    localStorage.removeItem(t);
+  } catch(e) {
+    showToast('Private mode detected — data will not be saved when this tab closes', 'error', 8000);
+  }
+})();
+</script>
+</body>
+</html>

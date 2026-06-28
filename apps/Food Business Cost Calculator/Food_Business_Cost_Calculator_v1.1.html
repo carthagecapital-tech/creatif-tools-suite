@@ -1,0 +1,4275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Business Cost Calculator</title>
+
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   MICROAPP SHELL v6 — Design System Template
+   Copy EVERYTHING below this line into your app. Change only app-name,
+   nav items, view sections, and the JavaScript business logic.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("data:font/woff2;base64,d09GMgABAAAAAJ3UABQAAAABfDgAAJ1eAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGoFfG4dOHIGacj9IVkFSiUwGYD9TVEFUgWInJgCFIi9qEQgKgdw4gawuC4YWADCCojABNgIkA4waBCAFiUwHowwMB1u3X3GC6aZjD165bQA/5feRJ7EK5KabcjtIaXvmyAJ27AXYOIA2Nl6c/f//eUlFjkrrJK3ZxsGPe0vJiQjkUtZVnoqpDZk2jITW1o6lySayOlsmsTuc7x7N+YLeweTE5EQKOul1EKTJpAnWK4MLsRcl7bXlKtx/uM/FDpQILw/Vx+Z727G1y+Ojue5TfpDHCTmX7myGnztttzQa90eGEX/4yR1NWGhKKEKKDNIhTUSJg27w+0IgVhWmy/s/QBMhM7ppeJsVbfMfW+mooSNQ/QePQ//wOSf52+lqLusAuwX/YpIyLMfTSvh/+Dbt3DeDDXhIvMSMujpdN/tS/6v6+v/o9b07+fLpBQ3gJBMM9deshVKtWFVbbbunx8/T3N79WxVjazbGYHNElCBgA0YTJmAmJZhgN7SBUYXZhFGUIOy2u+FJN/+h8CGgVAFRgQyySSBrXi53GZdNjiOBcIwAiUBYMlRctKJ1zO/EsUCt/+OYfEcdqwPnV+uodFHdOLsWzKBmOT5nZj1rxYpITlJrredaScVasWLdbxrEiieDWCvWipXZT0SsBEVERa8W6g5hPPNcG1zykQYL72SUNYoOE7C9iRSRIEAkiYq37iYiYe1OtvgpAIRQJgpRI2bLbdqcNMd32eP3vmYQ2pNPhn/495DDJE+zpcQc5UIESwf8j9+zc9xGDPE0LKP3SFri1Ff/Pc7J3/86Z8CgMPEl8SaypNZhT/1XIIO1rujUF3NY8ADodPtwuc5XHl/uHG1PfoBBy05BlkGxLtmWCJG3zfzm1/pFGMMbGCpAKagoEdzzStYfLCRB21/Im8mvk2gpIsv8IZwIAnKiKYmfM62gQgHG1kMM9KC6taSrrqtQDh+64SAMSakpNOLVjY3ZUWETn1ppKXCiWqrg1/f9r7cv3mmjwAy/RIU4qQkXYKNc9M3/3wio+ChUpAHZXMSYK+H+d/nsl6AajAojChejG7eHfepY9J/Oaec6yZuBa+o9koGvxKV9VfeVF3ZvL+jI1uJN0dpKZWeAPxOdbZGcWjsf/7gA01IEGQ1uyVYIShL//vc63eyXDzD1PxvD0i9Bniy7wQLY+WPoYYkdqrFZugYJc7XK1PH2oAEAWddmiGiU5hsAlDvSBafphTwFo0KnfiyTYIIoASYAoAiNsk2InsdP+Xa6V6dfttukRrv9pqctUSn3dl9ccpzjFSfffW6qV/geS0qfk8gKeKU/D3gOaE5wTc+WSrD3uMz1//+5md/8GyEYDlJogLTYgedSkLLsByjIA2S6iAdAESXlJ+pKP49RcRwOUZyBKswtJVg19zXFqZ8/ziLY2iGayCTfcDbIJJwn2PrJ8k2izeIN0g2T9TzPLFPgNaF8PCBk7V7N3mYwNL3Yt71MfZB/dwM5wupuLHYDcOc+zPna9c0YkR2bIlaec5SahQikN5D+uZTbZt1MgTsuqwnyZOls1uJSdAoGrbB2iJNQVig9QAqmz9vy+Zc1OPFL2h8PI3X1YMXTYmrhDiqF/1YW53lO4EP0ZA1hcFBIZjZAYAfTyQ2dzLSMftsTpFuk7VkIfY3mErJDsMCaUWxITwf3oo8jRh8gSgpTz3ap6nvZy2qWRppDCLyGEECS9OfO3+5wEawoZGoHdbIphcZHiCCF89fDfQv/V547d9dKG4LrRL25iGJRFWcTyvOi3lLYsZ4vAxAkVJUHW7/1v2k/rHxq39DdJt2JHQEFBJQpm727+4xWLWquISBEPmA5NpKopuC18fObc/Rlr/vBY2+1+/27HVUlKSkqKgID4NLbbQziknP9RdRNEPhFEeDQQTZqIr");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ── COLOR SYSTEM ── */
+:root {
+  --accent-h: 32;
+  --accent:    oklch(0.555 0.180 var(--accent-h));
+  --accent-2:  oklch(0.65  0.14  var(--accent-h));
+  --accent-3:  oklch(0.42  0.18  var(--accent-h));
+  --accent-soft:   oklch(0.555 0.180 var(--accent-h) / .10);
+  --accent-soft-2: oklch(0.555 0.180 var(--accent-h) / .06);
+  --accent-glow:   oklch(0.555 0.180 var(--accent-h) / .15);
+  --paper:  oklch(0.962 0.012 85);
+  --paper-2:oklch(0.945 0.014 84);
+  --ink:    oklch(0.185 0.012 55);
+  --ink-2:  oklch(0.32  0.012 55);
+  --mid:    oklch(0.52  0.010 60);
+  --rule:   oklch(0.865 0.010 70);
+  --rule-2: oklch(0.91  0.010 70);
+  --signal: oklch(0.68 0.16 145);
+  --warn:   oklch(0.78 0.16 85);
+  --danger: oklch(0.60 0.18 25);
+  --shadow: 0 1px 0 oklch(0.18 0.012 55 / .04), 0 14px 30px -22px oklch(0.18 0.012 55 / .35);
+  --shadow-lg: 0 4px 20px oklch(0.18 0.012 55 / .15);
+  --sidebar-w: 248px;
+  --toggle-icon: "☾";
+}
+[data-theme="dark"] {
+  --paper:  oklch(0.18 0.012 55);
+  --paper-2:oklch(0.22 0.014 60);
+  --ink:    oklch(0.92 0.012 85);
+  --ink-2:  oklch(0.78 0.012 80);
+  --mid:    oklch(0.60 0.010 70);
+  --rule:   oklch(0.35 0.010 45);
+  --rule-2: oklch(0.30 0.010 40);
+  --accent-soft:   oklch(0.65 0.180 var(--accent-h) / .15);
+  --accent-soft-2: oklch(0.65 0.180 var(--accent-h) / .08);
+  --accent-glow:   oklch(0.65 0.180 var(--accent-h) / .20);
+  --shadow: 0 1px 0 oklch(0.10 0.012 40 / .3), 0 14px 30px -22px oklch(0.05 0.012 20 / .5);
+  --shadow-lg: 0 4px 20px oklch(0.05 0.012 20 / .4);
+  --toggle-icon: "☀";
+}
+
+/* ── RESET & BASE ── */
+* { box-sizing:border-box; margin:0; padding:0 }
+html, body { height:100% }
+body {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-feature-settings: "ss01","ss02","cv11","tnum","zero";
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  background: radial-gradient(1200px 700px at 80% -10%, oklch(0.97 0.02 80) 0%, transparent 60%),
+              radial-gradient(900px 500px at -10% 110%, oklch(0.93 0.02 60) 0%, transparent 55%),
+              var(--paper);
+  background-attachment: fixed;
+  font-size:13px; line-height:1.45;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  transition: background .3s ease, color .3s ease;
+}
+[data-theme="dark"] body {
+  background: radial-gradient(1200px 700px at 80% -10%, oklch(0.25 0.02 80) 0%, transparent 60%),
+              radial-gradient(900px 500px at -10% 110%, oklch(0.20 0.02 60) 0%, transparent 55%),
+              var(--paper);
+}
+.app { min-height:100vh; min-height:100dvh; display:grid; grid-template-columns: var(--sidebar-w) 1fr; }
+
+/* ── SIDEBAR ── */
+aside { border-right:1px solid var(--rule); background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%); display:flex; flex-direction:column; position:sticky; top:0; height:100vh; height:100dvh; z-index:10; }
+.brand { padding: 20px 22px 18px; border-bottom:1px solid var(--rule); display:grid; grid-template-columns: auto 1fr auto; align-items:center; gap:12px; }
+.mark { width:24px; height:24px; position:relative; border:1.25px solid var(--ink); display:grid; place-items:center; background:var(--paper); flex-shrink:0; }
+.mark::before { content:""; width:8px; height:8px; background:var(--accent); box-shadow: 0 0 0 2.5px var(--paper); }
+.mark::after  { content:""; position:absolute; inset:-4px; border-top:1px solid var(--ink); border-left:1px solid var(--ink); width:5px; height:5px; }
+.wordmark { font-weight:700; font-size:12.5px; letter-spacing:.04em; text-transform:uppercase; }
+.wordmark .slash { color:var(--accent); font-weight:500; margin:0 1px }
+.wordmark small { display:block; font-weight:400; font-size:9.5px; letter-spacing:.18em; color:var(--mid); margin-top:2px; }
+.ver { font-size:9px; letter-spacing:.12em; color:var(--mid); border:1px solid var(--rule); padding:2px 5px; flex-shrink:0; }
+.theme-toggle { width:22px; height:22px; border:1px solid var(--rule); background:var(--paper-2); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:11px; color:var(--ink-2); margin-left:4px; flex-shrink:0; transition: all .15s; }
+.theme-toggle:hover { border-color:var(--accent); color:var(--accent); }
+.theme-toggle::before { content:var(--toggle-icon); }
+
+.find { margin: 14px 14px 6px; border:1px solid var(--rule); background:var(--paper); display:flex; align-items:center; gap:8px; padding:7px 10px; font-size:11.5px; }
+.find .find-icon { color:var(--mid); font-size:13px; }
+.find input { flex:1; border:none; background:transparent; outline:none; font:inherit; font-size:11.5px; color:var(--ink); min-width:0; }
+.find input::placeholder { color:var(--mid); }
+.find .kbd { margin-left:auto; display:inline-flex; gap:2px; }
+.kbd span { border:1px solid var(--rule); background:linear-gradient(180deg,var(--paper),var(--paper-2)); padding:1px 5px; border-radius:2px; font-size:9.5px; color:var(--ink-2); box-shadow: 0 1px 0 var(--rule); }
+
+.nav-title { padding: 18px 22px 8px; font-size:9.5px; letter-spacing:.22em; color:var(--mid); display:flex; justify-content:space-between; }
+nav { flex:1; display:flex; flex-direction:column; overflow-y:auto; }
+.nav-list { display:flex; flex-direction:column; }
+.nav-item { display:grid; grid-template-columns: 28px 1fr auto; align-items:center; gap:0; padding: 8px 22px; color:var(--ink-2); text-decoration:none; font-size:12px; letter-spacing:.02em; border-left:2px solid transparent; position:relative; transition: background .12s; cursor:pointer; }
+.nav-item .idx { font-size:9.5px; color:var(--mid); letter-spacing:.1em; }
+.nav-item .lbl { text-transform:lowercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.nav-item .meta { font-size:9.5px; color:var(--mid); border:1px solid var(--rule); padding:1px 5px; background:var(--paper); flex-shrink:0; margin-left:8px; }
+.nav-item:hover { background: var(--accent-soft-2) }
+.nav-item.active { background: var(--paper); color:var(--ink); border-left-color: var(--accent); font-weight:600; }
+.nav-item.active::after { content:""; position:absolute; right:18px; top:50%; transform:translateY(-50%); width:5px; height:5px; background:var(--accent); }
+.nav-item.active .idx { color:var(--accent) }
+
+.runtime { margin: 8px 14px 14px; border:1px solid var(--rule); background:var(--paper); padding:12px 12px 10px; flex-shrink:0; }
+.runtime h4 { font-size:9.5px; letter-spacing:.2em; color:var(--mid); font-weight:500; margin-bottom:8px; display:flex; justify-content:space-between; }
+.runtime .row { display:flex; justify-content:space-between; align-items:baseline; font-size:11px; color:var(--ink-2); padding:3px 0; }
+.runtime .row b { font-weight:600; color:var(--ink) }
+.runtime .bar { height:3px; background:var(--rule-2); margin-top:8px; position:relative; overflow:hidden; }
+.runtime .bar-fill { position:absolute; inset:0; background:var(--ink); }
+.runtime .bar-fill.warn { background:var(--accent); left:auto; right:0; width:22%; }
+
+.op { border-top:1px solid var(--rule); padding:12px 22px; display:grid; grid-template-columns:24px 1fr auto; align-items:center; gap:10px; flex-shrink:0; }
+.avatar { width:24px; height:24px; border:1px solid var(--ink); background: repeating-linear-gradient(45deg, var(--ink) 0 1px, transparent 1px 4px), var(--paper); position:relative; flex-shrink:0; }
+.avatar::after { content:""; position:absolute; right:-3px; bottom:-3px; width:7px; height:7px; background:var(--signal); border:1.5px solid var(--paper); }
+.op .who { font-size:11px; line-height:1.3; min-width:0; }
+.op .who small { display:block; color:var(--mid); font-size:9.5px; letter-spacing:.1em }
+.op .out { font-size:9.5px; color:var(--mid); letter-spacing:.1em; border:1px solid var(--rule); padding:2px 5px; flex-shrink:0; cursor:pointer; }
+.op .out:hover { background:var(--paper-2); }
+
+/* ── MAIN & HEADER ── */
+main { min-width:0; display:flex; flex-direction:column; }
+header { border-bottom:1px solid var(--rule); background: linear-gradient(180deg, var(--paper) 0%, oklch(from var(--paper) l c h / 98%) 100%); padding: 16px 28px 14px; display:grid; grid-template-columns: 1fr auto; align-items:end; gap:24px; position:sticky; top:0; z-index:5; }
+.crumbs { font-size:10px; letter-spacing:.18em; color:var(--mid); text-transform:uppercase; display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
+.crumbs .live { display:inline-flex; align-items:center; gap:5px; color:var(--ink); }
+.crumbs .live i { width:6px; height:6px; background:var(--accent); display:inline-block; box-shadow: 0 0 0 3px var(--accent-soft); }
+h1 { font-size:28px; font-weight:700; letter-spacing:-.01em; line-height:1; color:var(--ink); display:flex; flex-direction:column; align-items:flex-start; }
+h1 .of { color:var(--mid); font-weight:300; font-size:.42em; letter-spacing:.04em; margin-top:4px; }
+
+.topbar-right { display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+.telemetry { display:grid; grid-auto-flow:column; gap:0; border:1px solid var(--rule); background:var(--paper); }
+.telemetry div { padding:8px 14px; border-right:1px solid var(--rule); font-size:10px; letter-spacing:.12em; color:var(--mid); display:flex; flex-direction:column; gap:2px; line-height:1; }
+.telemetry div:last-child { border-right:none }
+.telemetry b { color:var(--ink); font-size:12px; font-weight:600; letter-spacing:.02em; }
+
+/* ── BUTTONS ── */
+.btn { font: inherit; cursor:pointer; display:inline-flex; align-items:center; gap:10px; border:1px solid var(--rule); background:var(--paper); color:var(--ink); padding:9px 14px; font-size:11.5px; letter-spacing:.04em; text-decoration:none; box-shadow: var(--shadow); position:relative; transition: background .12s; white-space:nowrap; }
+.btn:hover { background: var(--accent-soft-2) }
+.btn:active { transform:translateY(1px) }
+.btn .k { font-size:9px; letter-spacing:.12em; color:var(--mid); border-left:1px solid var(--rule); padding-left:10px; margin-left:4px; }
+.btn.primary { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.btn.primary:hover { background:oklch(from var(--ink) calc(l + 0.08) c h) }
+.btn.primary .k { color:oklch(0.7 0.01 60); border-left-color: oklch(0.32 0.012 55) }
+.btn.primary::before { content:""; width:6px; height:6px; background:var(--accent); }
+.btn.danger { border-color:var(--danger); color:var(--danger); }
+.btn.danger:hover { background:oklch(0.60 0.18 25 / .10); }
+
+/* ── CANVAS ── */
+.canvas { padding: 28px 28px 40px; position:relative; background: radial-gradient(circle at 1px 1px, oklch(from var(--ink) l c h / 0.08) 1px, transparent 1.5px) 0 0 / 22px 22px; }
+.canvas::before, .canvas::after { content:""; position:absolute; width:18px; height:18px; border:1px solid var(--ink); pointer-events:none; }
+.canvas::before { top:14px; left:14px; border-right:none; border-bottom:none }
+.canvas::after  { top:14px; right:14px; border-left:none; border-bottom:none }
+
+/* ── SECTIONS ── */
+.section-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px; }
+.section-head h2 { font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; color:var(--ink-2); display:flex; align-items:center; gap:10px; }
+.section-head h2 .num { color:var(--accent); font-weight:500; }
+
+/* ── FORMS ── */
+.form-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px 20px; margin-bottom: 20px; }
+.form-group { display:flex; flex-direction:column; gap:6px; }
+.form-group.full-width { grid-column: 1 / -1; }
+.form-group label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--mid); font-weight: 500; display:flex; align-items:center; gap:8px; }
+.form-group label .hint { font-size: 9px; letter-spacing: .08em; color: var(--mid); border: 1px solid var(--rule); padding: 1px 5px; background: var(--paper-2); text-transform: none; }
+.form-group input, .form-group select, .form-group textarea { font: inherit; font-size: 13px; border: 1px solid var(--rule); background: var(--paper); padding: 10px 12px; color: var(--ink); outline: none; width: 100%; transition: border-color .15s, box-shadow .15s; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.form-group input::placeholder { color: var(--mid); opacity: .6; }
+.form-group input[type="number"] { font-variant-numeric: tabular-nums; }
+.form-group select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23555' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+[data-theme="dark"] .form-group select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23aaa' stroke-width='1.5'/%3E%3C/svg%3E"); }
+
+.toggle-wrap { display:flex; align-items:center; gap: 10px; }
+.toggle-wrap .toggle-label { font-size: 12px; color: var(--ink-2); }
+.toggle-switch { position: relative; width: 36px; height: 20px; cursor: pointer; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-switch .track { position: absolute; inset: 0; background: var(--rule-2); border-radius: 20px; transition: background .2s; }
+.toggle-switch .track::after { content: ""; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; background: var(--paper); border-radius: 50%; transition: transform .2s; box-shadow: 0 1px 3px oklch(0 0 0 / .2); }
+.toggle-switch input:checked + .track { background: var(--accent); }
+.toggle-switch input:checked + .track::after { transform: translateX(16px); }
+
+.slider-wrap { display:flex; align-items:center; gap: 12px; }
+.slider-wrap input[type="range"] { flex: 1; -webkit-appearance: none; appearance: none; height: 4px; background: var(--rule-2); border-radius: 2px; outline: none; }
+.slider-wrap input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid var(--paper); cursor: pointer; box-shadow: 0 0 0 2px var(--accent-soft); }
+.slider-wrap input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid var(--paper); cursor: pointer; }
+.slider-wrap .slider-val { font-size: 12px; font-weight: 600; color: var(--accent); min-width: 40px; text-align: right; }
+
+/* ── CARDS ── */
+.stats { display:grid; grid-template-columns: repeat(3, 1fr); gap:0; border:1px solid var(--rule); background:var(--paper); box-shadow: var(--shadow); position:relative; }
+.card { padding: 22px 22px 18px; border-right:1px solid var(--rule); position:relative; display:flex; flex-direction:column; min-height: 140px; }
+.card:last-child { border-right:none }
+.card::before, .card::after { content:""; position:absolute; width:10px; height:10px; border:1px solid var(--ink-2); opacity:.7; pointer-events:none; }
+.card::before { top:8px; left:8px; border-right:none; border-bottom:none }
+.card::after  { bottom:8px; right:8px; border-left:none; border-top:none }
+.card .lbl { font-size:10px; letter-spacing:.2em; color:var(--mid); text-transform:uppercase; display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.card .lbl .tag { font-size:9px; letter-spacing:.14em; border:1px solid var(--rule); padding:2px 6px; color:var(--ink-2); background:var(--paper-2); }
+.card .val { font-size:36px; font-weight:600; letter-spacing:-.02em; line-height:1; color:var(--ink); display:flex; align-items:baseline; gap:8px; }
+.card .val .u { font-size:14px; font-weight:400; color:var(--mid); letter-spacing:.04em; }
+.card .delta { font-size:11px; letter-spacing:.03em; display:flex; align-items:center; gap:8px; margin-top:10px; color:var(--ink-2); }
+.delta .pill { display:inline-flex; align-items:center; gap:5px; border:1px solid var(--rule); background:var(--paper-2); padding:2px 7px; font-size:10.5px; font-weight:600; }
+.delta .pill.up   { color: var(--signal); border-color: oklch(from var(--signal) l calc(c * 0.5) h) }
+.delta .pill.down { color: var(--danger); border-color: oklch(from var(--danger) l calc(c * 0.5) h) }
+.delta .pill.neutral { color: var(--mid); border-color: var(--rule) }
+.delta .pill::before { content:""; width:0; height:0; border-style:solid; }
+.delta .pill.up::before   { border-width:0 4px 5px 4px; border-color:transparent transparent currentColor transparent }
+.delta .pill.down::before { border-width:5px 4px 0 4px; border-color: currentColor transparent transparent transparent }
+.delta .pill.neutral::before { border:none; width:8px; height:1px; background:currentColor; }
+.delta .since { color:var(--mid); font-size:10px; letter-spacing:.06em }
+
+/* ── TABLE ── */
+.tbl-wrap { margin-top:24px; border:1px solid var(--rule); background:var(--paper); box-shadow: var(--shadow); }
+.tbl-head { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--rule); background:linear-gradient(180deg,var(--paper),var(--paper-2)); flex-wrap:wrap; gap:10px; }
+.tbl-head .ttl { font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; display:flex; align-items:center; gap:10px; }
+.tbl-head .ttl .num { color:var(--accent) }
+.tbl-head .ttl .ct { color:var(--mid); font-weight:400; letter-spacing:.12em; border-left:1px solid var(--rule); padding-left:10px; margin-left:4px; }
+.filters { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.chip { font-size:10px; letter-spacing:.12em; text-transform:uppercase; border:1px solid var(--rule); padding:5px 9px; background:var(--paper); display:inline-flex; align-items:center; gap:6px; color:var(--ink-2); cursor:pointer; transition: all .12s; }
+.chip.on, .chip:hover { background:var(--ink); color:var(--paper); border-color:var(--ink) }
+.chip i { width:5px; height:5px; background:currentColor; display:inline-block; }
+.chip.del { color: var(--danger); border-color: var(--danger); }
+.chip.del:hover { background: var(--danger); color: var(--paper); }
+table { width:100%; border-collapse:collapse; font-size:12px; }
+thead th { font-weight:500; font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--mid); text-align:left; padding:10px 18px; border-bottom:1px solid var(--rule); background:var(--paper-2); position:relative; cursor: pointer; user-select: none; white-space: nowrap; }
+thead th:hover { color: var(--ink); background: var(--accent-soft-2); }
+thead th.sortable::after { content: " \2195"; font-size: 8px; opacity: .4; }
+thead th.sort-asc::after { content: " \2191"; opacity: 1; color: var(--accent); }
+thead th.sort-desc::after { content: " \2193"; opacity: 1; color: var(--accent); }
+thead th + th::before { content:""; position:absolute; left:0; top:25%; bottom:25%; border-left:1px solid var(--rule-2); }
+thead th.num, tbody td.num { text-align:right; font-variant-numeric:tabular-nums }
+tbody td { padding:14px 18px; border-bottom:1px solid var(--rule-2); color:var(--ink-2); vertical-align:middle; }
+tbody tr:last-child td { border-bottom:none }
+tbody tr:hover td { background: var(--accent-soft-2) }
+.id { display:inline-flex; align-items:center; gap:10px; }
+.id .dot { width:8px; height:8px; background:var(--ink); display:inline-block; flex-shrink:0; }
+.id .dot.red    { background:var(--danger) }
+.id .dot.green  { background:var(--signal) }
+.id .dot.amber  { background:var(--warn) }
+.id .dot.gray   { background:var(--mid) }
+.id b { font-weight:600; color:var(--ink); letter-spacing:.01em }
+.id small { display:block; color:var(--mid); font-size:10px; letter-spacing:.08em; margin-top:2px }
+
+/* ── EMPTY STATE ── */
+.empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 60px 40px; text-align: center; gap: 16px; border: 1px dashed var(--rule); background: var(--paper); }
+.empty-state .empty-icon { width: 48px; height: 48px; border: 2px dashed var(--rule); display: grid; place-items: center; font-size: 20px; color: var(--mid); }
+.empty-state h3 { font-size: 14px; letter-spacing: .1em; color: var(--ink-2); font-weight: 600; }
+.empty-state p { font-size: 12px; color: var(--mid); max-width: 320px; line-height: 1.6; }
+
+/* ── PAGINATION ── */
+.pagination { display:flex; align-items:center; justify-content:center; gap: 4px; padding: 14px 18px; border-top: 1px solid var(--rule); }
+.pagination button { font: inherit; font-size: 11px; border: 1px solid var(--rule); background: var(--paper); color: var(--ink-2); padding: 5px 10px; cursor: pointer; min-width: 32px; text-align: center; transition: all .12s; }
+.pagination button:hover:not(:disabled) { background: var(--accent-soft-2); border-color: var(--accent); color: var(--ink); }
+.pagination button:disabled { opacity: .4; cursor: not-allowed; }
+.pagination button.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.pagination .page-info { font-size: 10px; color: var(--mid); letter-spacing: .1em; margin: 0 12px; }
+
+/* ── TOASTS ── */
+.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast { pointer-events: all; display: flex; align-items: center; gap: 12px; padding: 12px 18px; min-width: 280px; max-width: 420px; border: 1px solid var(--rule); background: var(--paper); box-shadow: var(--shadow-lg); font-size: 12px; color: var(--ink); animation: toastIn .3s ease forwards; position: relative; overflow: hidden; }
+.toast.toast-out { animation: toastOut .3s ease forwards; }
+.toast.success { border-left: 3px solid var(--signal); }
+.toast.error   { border-left: 3px solid var(--danger); }
+.toast.info    { border-left: 3px solid var(--accent-2); }
+.toast .toast-icon { font-size: 14px; flex-shrink: 0; }
+.toast .toast-msg { flex: 1; line-height: 1.4; }
+.toast .toast-close { cursor: pointer; color: var(--mid); font-size: 16px; line-height: 1; padding: 2px; }
+.toast .toast-close:hover { color: var(--ink); }
+.toast .toast-bar { position: absolute; bottom: 0; left: 0; height: 2px; background: var(--accent-soft); }
+@keyframes toastIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(20px); } }
+@keyframes shrink { from { width: 100%; } to { width: 0%; } }
+
+/* ── MODAL ── */
+.modal-overlay { position: fixed; inset: 0; z-index: 200; background: oklch(0.10 0.012 55 / .55); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--paper); border: 1px solid var(--rule); box-shadow: var(--shadow-lg); width: 90%; max-width: 520px; max-height: 85vh; display: flex; flex-direction: column; transform: translateY(-20px) scale(0.97); transition: transform .25s ease; }
+.modal-overlay.open .modal { transform: translateY(0) scale(1); }
+.modal-header { padding: 18px 22px 14px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; justify-content: space-between; }
+.modal-header h3 { font-size: 13px; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; color: var(--ink); }
+.modal-close { cursor: pointer; color: var(--mid); font-size: 18px; line-height: 1; padding: 4px; border: none; background: none; }
+.modal-close:hover { color: var(--ink); }
+.modal-body { padding: 22px; overflow-y: auto; font-size: 12px; line-height: 1.6; color: var(--ink-2); }
+.modal-footer { padding: 14px 22px; border-top: 1px solid var(--rule); display: flex; justify-content: flex-end; gap: 10px; }
+
+/* ── SETTINGS ── */
+.settings-section { margin-bottom: 32px; }
+.settings-section h3 { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.settings-section h3 .num { color: var(--accent); font-weight: 500; }
+.settings-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border: 1px solid var(--rule); background: var(--paper); margin-bottom: -1px; }
+.settings-row label { font-size: 12px; color: var(--ink-2); }
+.settings-row .desc { font-size: 10px; color: var(--mid); margin-top: 4px; letter-spacing: .04em; }
+.settings-row input, .settings-row select { font: inherit; font-size: 13px; border: 1px solid var(--rule); background: var(--paper); padding: 8px 10px; color: var(--ink); outline: none; }
+.settings-row input:focus, .settings-row select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+/* ── HELP ── */
+.help-block { border: 1px solid var(--rule); background: var(--paper); padding: 22px; margin-bottom: 20px; }
+.help-block h3 { font-size: 12px; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.help-block h3 .num { color: var(--accent); font-weight: 500; }
+.help-block p { font-size: 12px; color: var(--ink-2); line-height: 1.7; margin-bottom: 8px; }
+.help-block ul { margin: 8px 0; padding-left: 20px; }
+.help-block li { font-size: 12px; color: var(--ink-2); line-height: 1.7; margin-bottom: 4px; }
+.help-block .fee-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--rule-2); font-size: 12px; }
+.help-block .fee-row:last-child { border-bottom: none; }
+.help-block .fee-row b { color: var(--ink); font-weight: 600; }
+.help-block .fee-row span { color: var(--ink-2); }
+
+/* ── FOOTER ── */
+.canvas-foot { position:relative }
+.canvas-foot::before, .canvas-foot::after { content:""; position:absolute; width:18px; height:18px; border:1px solid var(--ink); pointer-events:none; }
+.canvas-foot::before { bottom:14px; left:14px; border-right:none; border-top:none }
+.canvas-foot::after  { bottom:14px; right:14px; border-left:none; border-top:none }
+.footstrip { margin-top:22px; display:flex; justify-content:space-between; align-items:center; font-size:10px; letter-spacing:.14em; color:var(--mid); text-transform:uppercase; padding: 12px 4px 4px; flex-wrap:wrap; gap:8px; }
+.footstrip .l, .footstrip .r { display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+.footstrip .sep { width:24px; border-top:1px solid var(--rule) }
+.footstrip b { color:var(--ink); font-weight:500; letter-spacing:.06em }
+
+/* ── PRINT ── */
+@media print {
+  .sidebar-toggle, aside, .theme-toggle, .find, .op, .btn .k, .toast-container, .pagination, .nav-item { display: none !important; }
+  .app { grid-template-columns: 1fr !important; }
+  body { background: white !important; color: black !important; }
+  .canvas { background: none !important; padding: 20px !important; }
+  .stats, .tbl-wrap, .form-grid, .chart-wrap, .help-block, .settings-row { box-shadow: none !important; border: 1px solid #ccc !important; }
+  .card { border-right: 1px solid #ccc !important; break-inside: avoid; }
+  header { position: static !important; background: white !important; border-bottom: 2px solid #333 !important; }
+  h1 { font-size: 24px !important; }
+  .footstrip { border-top: 2px solid #333; margin-top: 30px; }
+}
+
+/* ── RESPONSIVE ── */
+.sidebar-toggle { display:none; position:fixed; top:12px; left:12px; z-index:100; width:36px; height:36px; border:1px solid var(--rule); background:var(--paper); align-items:center; justify-content:center; cursor:pointer; font-size:16px; color:var(--ink); }
+@media (max-width: 1024px) {
+  .app { grid-template-columns: 1fr; }
+  aside { position:fixed; left:0; top:0; height:100vh; height:100dvh; transform: translateX(-100%); transition: transform .25s ease; }
+  aside.open { transform: translateX(0); }
+  .sidebar-toggle { display:flex; }
+  .stats { grid-template-columns: 1fr; }
+  .card { border-right:none; border-bottom:1px solid var(--rule); }
+  .card:last-child { border-bottom:none; }
+  header { padding-left: 56px; }
+  h1 { font-size:22px; }
+}
+@media (max-width: 640px) {
+  .canvas { padding: 20px 16px 32px; }
+  header { padding: 12px 16px 12px 56px; }
+  .telemetry { display:none; }
+  .topbar-right { gap:8px; }
+  .btn { padding:7px 10px; font-size:10.5px; }
+  .btn .k { display:none; }
+  table { font-size:11px; }
+  tbody td, thead th { padding:10px 12px; }
+  .card .val { font-size:28px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .modal { width: 95%; max-height: 90vh; }
+  .toast-container { left: 16px; right: 16px; bottom: 16px; }
+  .toast { min-width: auto; max-width: none; }
+}
+
+/* ── VIEW SYSTEM ── */
+.view { display: none; }
+.view.active { display: block; }
+.hidden { display:none !important; }
+</style>
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='6' fill='none' stroke='%23c8852e' stroke-width='10'/%3E%3Crect x='28' y='28' width='44' height='44' rx='4' fill='%23c8852e'/%3E%3C/svg%3E">
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   FOOD BUSINESS COST CALCULATOR — Additional Styles (beyond shell v6)
+   These styles are specific to the cost/kit app and build on the shell's
+   design system (CSS custom properties, oklch colors, JetBrains Mono).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. CHART STYLES ── */
+.chart-wrap {
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+  padding: 22px;
+  position: relative;
+}
+.chart-wrap:last-child {
+  margin-bottom: 0;
+}
+.chart-title {
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.chart-title .num {
+  color: var(--accent);
+  font-weight: 500;
+}
+.chart-subtitle {
+  font-size: 10px;
+  color: var(--mid);
+  letter-spacing: .06em;
+  margin-bottom: 14px;
+  margin-top: -10px;
+}
+
+/* Vertical bar chart */
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  position: relative;
+  padding-bottom: 24px;
+  min-height: 140px;
+}
+.bar-chart .bar {
+  background: var(--accent);
+  min-width: 24px;
+  flex: 1;
+  transition: height .3s ease;
+  position: relative;
+  border-radius: 2px 2px 0 0;
+  cursor: pointer;
+}
+.bar-chart .bar:hover {
+  filter: brightness(1.1);
+}
+.bar-chart .bar-label {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  color: var(--mid);
+  white-space: nowrap;
+}
+.bar-chart .bar-value {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.bar-chart .bar-target-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed oklch(from var(--danger) l c h / .4);
+  pointer-events: none;
+  z-index: 2;
+}
+.bar-chart .bar-target-label {
+  position: absolute;
+  right: 0;
+  font-size: 9px;
+  color: var(--danger);
+  letter-spacing: .06em;
+  transform: translateY(-50%);
+  background: var(--paper);
+  padding-left: 6px;
+}
+
+/* Horizontal bar chart */
+.bar-chart.horizontal {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding-bottom: 0;
+  min-height: auto;
+}
+.bar-chart.horizontal .bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.bar-chart.horizontal .bar-label-h {
+  font-size: 10px;
+  color: var(--ink-2);
+  min-width: 120px;
+  max-width: 160px;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+.bar-chart.horizontal .bar-track {
+  flex: 1;
+  height: 20px;
+  background: var(--rule-2);
+  position: relative;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.bar-chart.horizontal .bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width .3s ease;
+}
+.bar-chart.horizontal .bar-fill.underpriced {
+  background: var(--danger);
+}
+.bar-chart.horizontal .bar-fill.low-margin {
+  background: var(--warn);
+}
+.bar-chart.horizontal .bar-fill.healthy {
+  background: oklch(0.55 0.14 145);
+}
+.bar-chart.horizontal .bar-fill.strong {
+  background: oklch(0.42 0.16 160);
+}
+.bar-chart.horizontal .bar-fill.neutral {
+  background: var(--accent);
+}
+.bar-chart.horizontal .bar-value-h {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink);
+  min-width: 50px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Doughnut chart */
+.doughnut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.doughnut-chart {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+}
+.doughnut-chart::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--paper);
+}
+.doughnut-center-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 11px;
+  color: var(--mid);
+  text-align: center;
+  z-index: 1;
+  letter-spacing: .1em;
+}
+.doughnut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.doughnut-legend .leg-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--ink-2);
+}
+.doughnut-legend .leg-dot {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+.doughnut-legend .leg-label {
+  white-space: nowrap;
+}
+.doughnut-legend .leg-pct {
+  margin-left: auto;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ── 2. INGREDIENT ROW STYLES ── */
+.ingredient-row {
+  display: grid;
+  grid-template-columns: 1.5fr 0.7fr 0.8fr 0.7fr 0.8fr 0.7fr 0.6fr 0.6fr 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--rule-2);
+  background: var(--paper);
+  transition: background .12s;
+}
+.ingredient-row:last-child {
+  border-bottom: none;
+}
+.ingredient-row:hover {
+  background: var(--accent-soft-2);
+}
+.ingredient-row input,
+.ingredient-row select {
+  font: inherit;
+  font-size: 11.5px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  padding: 6px 8px;
+  color: var(--ink);
+  outline: none;
+  width: 100%;
+  transition: border-color .15s, box-shadow .15s;
+}
+.ingredient-row input:focus,
+.ingredient-row select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+.ingredient-row .ing-name {
+  min-width: 100px;
+}
+.ingredient-row .ing-cost {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 600;
+  white-space: nowrap;
+  text-align: right;
+}
+.ingredient-row .ing-warning {
+  font-size: 10px;
+  color: var(--danger);
+  white-space: nowrap;
+}
+.ingredient-row .ing-btn {
+  font: inherit;
+  font-size: 10px;
+  border: 1px solid var(--rule);
+  background: var(--paper-2);
+  padding: 4px 8px;
+  cursor: pointer;
+  color: var(--ink-2);
+  transition: all .12s;
+  white-space: nowrap;
+}
+.ingredient-row .ing-btn:hover {
+  background: var(--accent-soft-2);
+  border-color: var(--accent);
+}
+.ingredient-row .ing-btn.del:hover {
+  border-color: var(--danger);
+  background: oklch(0.60 0.18 25 / .10);
+  color: var(--danger);
+}
+
+/* Ingredient placeholder row */
+.ingredient-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 14px;
+  border-bottom: 1px solid var(--rule-2);
+  color: var(--mid);
+  font-size: 12px;
+  gap: 10px;
+}
+.ingredient-placeholder .placeholder-icon {
+  font-size: 16px;
+  opacity: .5;
+}
+
+/* Ingredient table wrap */
+.add-ingredient-btn {
+  margin-bottom: 16px;
+}
+.ingredient-table-wrap {
+  border: 1px solid var(--rule);
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+.ingredient-table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+}
+.ingredient-table-wrap th {
+  font-weight: 500;
+  font-size: 9px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--mid);
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper-2);
+  white-space: nowrap;
+}
+.ingredient-table-wrap td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--rule-2);
+}
+
+/* Yield loss hint tooltip */
+.yield-hint {
+  display: inline-block;
+  font-size: 9px;
+  color: var(--mid);
+  border: 1px solid var(--rule);
+  padding: 1px 5px;
+  background: var(--paper-2);
+  cursor: help;
+  margin-left: 4px;
+  letter-spacing: .04em;
+}
+
+/* ── 3. BADGE STYLES ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--rule);
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.badge.underpriced {
+  color: var(--danger);
+  border-color: oklch(from var(--danger) l calc(c * 0.5) h);
+  background: oklch(from var(--danger) l c h / .08);
+}
+.badge.low-margin {
+  color: var(--warn);
+  border-color: oklch(from var(--warn) l calc(c * 0.5) h);
+  background: oklch(from var(--warn) l c h / .08);
+}
+.badge.healthy {
+  color: oklch(0.55 0.14 145);
+  border-color: oklch(0.55 0.08 145);
+  background: oklch(0.55 0.14 145 / .08);
+}
+.badge.strong {
+  color: oklch(0.42 0.16 160);
+  border-color: oklch(0.42 0.10 160);
+  background: oklch(0.42 0.16 160 / .08);
+}
+[data-theme="dark"] .badge.healthy {
+  color: oklch(0.65 0.14 145);
+  border-color: oklch(0.65 0.10 145);
+  background: oklch(0.65 0.14 145 / .12);
+}
+[data-theme="dark"] .badge.strong {
+  color: oklch(0.55 0.16 160);
+  border-color: oklch(0.55 0.10 160);
+  background: oklch(0.55 0.16 160 / .12);
+}
+
+/* ── 4. COST BREAKDOWN BAR ── */
+.cost-breakdown {
+  display: flex;
+  height: 32px;
+  border: 1px solid var(--rule);
+  margin: 16px 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.cost-breakdown .segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--paper);
+  letter-spacing: .06em;
+  transition: width .3s ease;
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.cost-breakdown .segment.ing {
+  background: var(--accent);
+}
+.cost-breakdown .segment.lab {
+  background: oklch(0.55 0.14 250);
+}
+.cost-breakdown .segment.pkg {
+  background: oklch(0.55 0.14 160);
+}
+.cost-breakdown .segment.ovh {
+  background: var(--ink-2);
+}
+.cost-breakdown .segment:first-child {
+  border-radius: 1px 0 0 1px;
+}
+.cost-breakdown .segment:last-child {
+  border-radius: 0 1px 1px 0;
+}
+.breakdown-labels {
+  display: flex;
+  gap: 16px;
+  font-size: 10px;
+  color: var(--mid);
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.breakdown-labels span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.breakdown-labels .dot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 1px;
+}
+
+/* ── 5. COMPARE VIEW ── */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.compare-col {
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  padding: 22px;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+.compare-col .col-header {
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.compare-col .col-header .col-label-tag {
+  font-size: 9px;
+  color: var(--mid);
+  border: 1px solid var(--rule);
+  padding: 2px 6px;
+  letter-spacing: .12em;
+}
+.compare-col .col-winner {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  background: var(--signal);
+  color: var(--paper);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  text-align: center;
+  z-index: 1;
+}
+.compare-col .col-recipe-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 12px;
+  padding-top: 8px;
+}
+.compare-col.has-winner .col-recipe-name {
+  padding-top: 24px;
+}
+.compare-col .col-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 12px;
+  border-bottom: 1px solid var(--rule-2);
+}
+.compare-col .col-row:last-child {
+  border-bottom: none;
+}
+.compare-col .col-label {
+  color: var(--mid);
+}
+.compare-col .col-value {
+  font-weight: 600;
+  color: var(--ink);
+  text-align: right;
+}
+.compare-col .col-value .col-badge {
+  font-size: 9px;
+}
+.compare-col .col-row.highlight {
+  background: var(--accent-soft-2);
+  margin: 0 -22px;
+  padding: 6px 22px;
+  border-bottom-color: var(--rule);
+}
+
+.winner-banner {
+  grid-column: 1 / -1;
+  border: 1px solid var(--signal);
+  background: oklch(from var(--signal) l c h / .08);
+  padding: 14px 18px;
+  font-size: 12px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.winner-banner .trophy {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* ── 6. TRUE HOURLY WAGE DISPLAY ── */
+.wage-display {
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1;
+}
+.wage-display.green {
+  color: var(--signal);
+}
+.wage-display.amber {
+  color: var(--warn);
+}
+.wage-display.red {
+  color: var(--danger);
+}
+.wage-target {
+  font-size: 12px;
+  color: var(--mid);
+  margin-top: 8px;
+  letter-spacing: .04em;
+}
+.wage-verdict {
+  font-size: 12px;
+  color: var(--ink-2);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* ── 7. TOP ACTION BAR ── */
+.top-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.top-actions .btn {
+  font-size: 11px;
+  padding: 8px 12px;
+}
+.top-actions .btn .k {
+  display: none;
+}
+
+/* ── 8. ANALYTICS SUMMARY ── */
+.analytics-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+.analytics-summary .a-card {
+  padding: 18px;
+  border-right: 1px solid var(--rule);
+  text-align: center;
+  position: relative;
+}
+.analytics-summary .a-card:last-child {
+  border-right: none;
+}
+.analytics-summary .a-label {
+  font-size: 9px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 8px;
+}
+.analytics-summary .a-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.analytics-summary .a-value .a-unit {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--mid);
+  margin-left: 2px;
+}
+
+/* ── 9. BULK ACTIONS ── */
+.bulk-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper-2);
+  font-size: 11px;
+  color: var(--ink-2);
+}
+.bulk-actions input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+.bulk-actions .bulk-label {
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-right: 8px;
+}
+
+/* ── 10. VALIDATION ERRORS ── */
+.validation-errors {
+  border: 1px solid var(--danger);
+  background: oklch(from var(--danger) l c h / .06);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: var(--danger);
+  display: none;
+}
+.validation-errors.show {
+  display: block;
+}
+.validation-errors ul {
+  margin: 0;
+  padding-left: 18px;
+}
+.validation-errors li {
+  margin-bottom: 4px;
+}
+.validation-errors li:last-child {
+  margin-bottom: 0;
+}
+
+/* ── 11. ROW ACTIONS ── */
+.row-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.row-actions .row-btn {
+  font: inherit;
+  font-size: 9.5px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  padding: 3px 8px;
+  cursor: pointer;
+  color: var(--ink-2);
+  transition: all .12s;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+.row-actions .row-btn:hover {
+  background: var(--accent-soft-2);
+  border-color: var(--accent);
+  color: var(--ink);
+}
+.row-actions .row-btn.del:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: oklch(0.60 0.18 25 / .10);
+}
+
+/* ── 12. ACCENT PREVIEW BOX ── */
+.accent-preview {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--rule);
+  flex-shrink: 0;
+  transition: background .2s;
+  border-radius: 2px;
+}
+.accent-preview-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ── 13. RESULT CARDS (extended from shell .card) ── */
+.result-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+.result-card {
+  padding: 18px;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+}
+.result-card:last-child {
+  border-right: none;
+}
+.result-card .rc-label {
+  font-size: 9px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 8px;
+}
+.result-card .rc-value {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -.01em;
+  line-height: 1.1;
+}
+.result-card .rc-value .rc-unit {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--mid);
+  margin-left: 2px;
+}
+.result-card .rc-sublabel {
+  font-size: 10px;
+  color: var(--mid);
+  margin-top: 4px;
+}
+
+/* ── 14. FILTER GROUPS ── */
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.filter-group-label {
+  font-size: 9px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--mid);
+  white-space: nowrap;
+}
+
+/* ── 15. SETTINGS ROW EXTENSIONS ── */
+.settings-row .settings-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.settings-row .settings-input-group input[type="number"] {
+  width: 90px;
+  text-align: right;
+}
+.settings-row .settings-input-group .input-unit {
+  font-size: 11px;
+  color: var(--mid);
+}
+
+/* ── 16. SECTION DIVIDER ── */
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 24px 0;
+}
+
+/* ── 17. MARGIN RANGE LABEL ── */
+.margin-range-display {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  min-width: 32px;
+  text-align: right;
+}
+
+/* ── 18. PRINT STYLES (app-specific additions) ── */
+@media print {
+  .ingredient-row .ing-btn,
+  .add-ingredient-btn,
+  .top-actions,
+  .bulk-actions,
+  .row-actions,
+  .chart-wrap,
+  .compare-grid,
+  .analytics-summary,
+  .accent-preview,
+  .accent-preview-row,
+  .validation-errors,
+  .doughnut-wrap,
+  .cost-breakdown,
+  .breakdown-labels,
+  .section-divider,
+  .margin-range-display,
+  .filter-group,
+  .yield-hint {
+    display: none !important;
+  }
+  .ingredient-row {
+    display: table-row !important;
+    border: none !important;
+  }
+  .ingredient-row input,
+  .ingredient-row select {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 4px 0 !important;
+    pointer-events: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .result-card-grid {
+    box-shadow: none !important;
+    border-color: #ccc !important;
+  }
+  .result-card {
+    border-color: #ccc !important;
+    break-inside: avoid;
+  }
+  .ingredient-table-wrap {
+    box-shadow: none !important;
+    border-color: #ccc !important;
+    overflow: visible !important;
+  }
+  .badge {
+    border-color: #ccc !important;
+  }
+}
+
+/* ── 19. RESPONSIVE TWEAKS FOR NEW ELEMENTS ── */
+@media (max-width: 1024px) {
+  .analytics-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .a-card {
+    border-right: none !important;
+    border-bottom: 1px solid var(--rule);
+  }
+  .a-card:nth-child(odd) {
+    border-right: 1px solid var(--rule) !important;
+  }
+  .result-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .compare-grid {
+    grid-template-columns: 1fr;
+  }
+  .winner-banner {
+    grid-column: auto;
+  }
+  .ingredient-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .ingredient-row .ing-cost {
+    grid-column: 1 / -1;
+    text-align: left;
+    padding-top: 4px;
+  }
+  .ingredient-row .ing-name {
+    grid-column: 1 / -1;
+  }
+  .ingredient-row .ing-btn {
+    font-size: 9px;
+    padding: 3px 6px;
+  }
+  .bar-chart.horizontal .bar-label-h {
+    min-width: 80px;
+    max-width: 100px;
+    font-size: 9px;
+  }
+  .doughnut-wrap {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .doughnut-chart {
+    width: 140px;
+    height: 140px;
+  }
+  .doughnut-chart::after {
+    width: 76px;
+    height: 76px;
+  }
+  .analytics-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .result-card-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .wage-display {
+    font-size: 32px;
+  }
+  .cost-breakdown .segment {
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .analytics-summary {
+    grid-template-columns: 1fr;
+  }
+  .a-card {
+    border-right: none !important;
+    padding: 14px;
+  }
+  .a-card:nth-child(odd) {
+    border-right: none !important;
+  }
+  .result-card-grid {
+    grid-template-columns: 1fr;
+  }
+  .result-card {
+    border-right: none !important;
+  }
+  .wage-display {
+    font-size: 28px;
+  }
+  .compare-col {
+    padding: 16px;
+  }
+  .chart-wrap {
+    padding: 16px;
+  }
+  .bar-chart {
+    min-height: 100px;
+    gap: 3px;
+  }
+  .bar-chart .bar {
+    min-width: 16px;
+  }
+  .top-actions {
+    gap: 6px;
+  }
+  .top-actions .btn {
+    font-size: 10px;
+    padding: 6px 8px;
+  }
+  .cost-breakdown {
+    height: 24px;
+  }
+  .cost-breakdown .segment {
+    font-size: 7px;
+  }
+  .bulk-actions {
+    padding: 8px 12px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .analytics-summary {
+    grid-template-columns: 1fr;
+  }
+  .ingredient-row {
+    grid-template-columns: 1fr;
+    padding: 10px;
+  }
+  .ingredient-row .ing-cost {
+    grid-column: auto;
+  }
+  .doughnut-wrap {
+    gap: 16px;
+  }
+  .doughnut-chart {
+    width: 120px;
+    height: 120px;
+  }
+  .doughnut-chart::after {
+    width: 64px;
+    height: 64px;
+  }
+  .result-card .rc-value {
+    font-size: 18px;
+  }
+}
+
+</style>
+</head>
+<body>
+<!-- ═══════════════════════════════════════════════════════════════════════
+     FOOD BUSINESS COST CALCULATOR — Complete Body HTML
+     ═══════════════════════════════════════════════════════════════════════ -->
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SIDEBAR TOGGLE (responsive)
+     ═══════════════════════════════════════════════════════════════════════ -->
+<button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="toggle menu">&#9776;</button>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     APP SHELL — Sidebar + Main
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div class="app">
+
+  <!-- ════════════════════════════════════════════════════════════════
+       SIDEBAR
+       ════════════════════════════════════════════════════════════════ -->
+  <aside id="sidebar">
+    <div class="brand">
+      <div class="mark" aria-hidden="true"></div>
+      <div class="wordmark">
+        <span>cost</span><span class="slash">/</span><span>kit</span>
+        <small>recipe cost &amp; pricing tool</small>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
+        <div class="ver">v1.1</div>
+        <button class="theme-toggle" onclick="toggleTheme()" title="toggle dark mode" aria-label="toggle dark mode"></button>
+      </div>
+    </div>
+
+    <div class="find">
+      <span class="find-icon">&#8981;</span>
+      <input type="text" id="search-input" placeholder="search recipes..." autocomplete="off" oninput="onSidebarSearch()">
+      <span class="kbd"><span>&#8984;</span><span>K</span></span>
+    </div>
+
+    <div class="nav-title"><span>&#8212;&#8212; menu</span></div>
+
+    <nav>
+      <div class="nav-list" id="nav-list">
+        <a class="nav-item active" href="#" data-view="main" onclick="navigateTo('main', event)">
+          <span class="idx">01</span>
+          <span class="lbl">recipe calculator</span>
+        </a>
+        <a class="nav-item" href="#" data-view="data" onclick="navigateTo('data', event)">
+          <span class="idx">02</span>
+          <span class="lbl">saved recipes</span>
+          <span class="meta" id="nav-count">0</span>
+        </a>
+        <a class="nav-item" href="#" data-view="compare" onclick="navigateTo('compare', event)">
+          <span class="idx">03</span>
+          <span class="lbl">compare</span>
+        </a>
+        <a class="nav-item" href="#" data-view="analytics" onclick="navigateTo('analytics', event)">
+          <span class="idx">04</span>
+          <span class="lbl">analytics</span>
+        </a>
+        <a class="nav-item" href="#" data-view="settings" onclick="navigateTo('settings', event)">
+          <span class="idx">05</span>
+          <span class="lbl">settings</span>
+        </a>
+        <a class="nav-item" href="#" data-view="help" onclick="navigateTo('help', event)">
+          <span class="idx">06</span>
+          <span class="lbl">help</span>
+        </a>
+      </div>
+
+      <div class="runtime" id="runtime-block">
+        <h4><span>summary</span><span style="color:var(--signal)">live</span></h4>
+        <div id="runtime-rows">
+          <div class="row"><span>Recipes</span><b id="rt-count">0</b></div>
+          <div class="row"><span>Avg Margin</span><b id="rt-margin">--</b></div>
+        </div>
+        <div class="bar" aria-hidden="true">
+          <div class="bar-fill" id="rt-bar-main"></div>
+          <div class="bar-fill warn" id="rt-bar-warn"></div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="op">
+      <div class="avatar" aria-hidden="true"></div>
+      <div class="who"><span>baker</span><small>active</small></div>
+      <button class="out" id="op-btn" onclick="navigateTo('data', event)">0 recipes</button>
+    </div>
+  </aside>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       MAIN
+       ════════════════════════════════════════════════════════════════ -->
+  <main>
+
+    <!-- ════════════════════════════════════════════════════════════════
+         HEADER
+         ════════════════════════════════════════════════════════════════ -->
+    <header>
+      <div>
+        <div class="crumbs">
+          <span>app</span><span>/</span><span>costkit</span><span>/</span><span id="crumb-view">main</span>
+        </div>
+        <h1>
+          <span id="page-title">Recipe Calculator</span>
+          <span class="of">&#8212; <span id="page-subtitle">cost, price &amp; wage</span></span>
+        </h1>
+      </div>
+      <div class="topbar-right">
+        <div class="telemetry" aria-hidden="true">
+          <div id="tel-costPerUnit">
+            <span>cost/unit</span>
+            <b>$0.00</b>
+          </div>
+          <div id="tel-suggestedPrice">
+            <span>suggested</span>
+            <b>$0.00</b>
+          </div>
+          <div id="tel-trueHourlyWage">
+            <span>wage</span>
+            <b>$0.00/hr</b>
+          </div>
+        </div>
+        <div id="topbar-buttons">
+          <button class="btn" type="button" onclick="exportToCSV()">export csv<span class="k">E</span></button>
+          <button class="btn" type="button" onclick="window.print()">print<span class="k">P</span></button>
+          <button class="btn primary" type="button" onclick="saveRecipe()">save<span class="k">S</span></button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ════════════════════════════════════════════════════════════════
+         CANVAS — ALL VIEWS
+         ════════════════════════════════════════════════════════════════ -->
+    <section class="canvas" id="canvas">
+
+      <!-- ════════════════════════════════════════════════════════════════
+           VIEW 1 — RECIPE CALCULATOR (id="view-main", class="view active")
+           ════════════════════════════════════════════════════════════════ -->
+      <div class="view active" id="view-main">
+
+        <!-- Section Head -->
+        <div class="section-head">
+          <h2><span class="num">&#167; 01</span>Recipe Cost Calculator</h2>
+        </div>
+
+        <!-- Top Action Bar -->
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
+          <button class="btn primary" type="button" onclick="addIngredientRow()">+ Add Ingredient</button>
+          <button class="btn" type="button" onclick="confirmResetForm()">Reset Form</button>
+          <button class="btn" type="button" onclick="sendToCompare('A')">Send to Compare A</button>
+          <button class="btn" type="button" onclick="sendToCompare('B')">Send to Compare B</button>
+        </div>
+
+        <!-- Ingredient Table -->
+        <div class="tbl-wrap" style="margin-bottom:20px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Ingredient</th>
+                <th>Purchased</th>
+                <th>Price</th>
+                <th>Recipe Use</th>
+                <th>Yield Loss</th>
+                <th>Cost</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ingredient-tbody">
+              <tr id="ingredient-placeholder">
+                <td colspan="7">
+                  <div class="empty-state">
+                    <div class="empty-icon">+</div>
+                    <h3>NO INGREDIENTS YET</h3>
+                    <p>Click "Add Ingredient" to start building your recipe. You need at least one ingredient to save.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Validation Error Area -->
+        <div id="calc-validation" style="display:none; margin-bottom:16px; padding:10px 14px; border:1px solid var(--danger); background:oklch(0.60 0.18 25 / .08); color:var(--danger); font-size:12px; border-radius:2px;"></div>
+
+        <!-- Recipe Details Form Grid -->
+        <div class="section-head" style="margin-top:28px;">
+          <h2><span class="num">&#167; 01.1</span>Recipe Details</h2>
+        </div>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="calc-recipeName">Recipe Name <span class="hint">required</span></label>
+            <input type="text" id="calc-recipeName" placeholder="e.g. Lavender Shortbread" maxlength="80" required oninput="recalc()">
+          </div>
+          <div class="form-group">
+            <label for="calc-recipeCategory">Category</label>
+            <select id="calc-recipeCategory" onchange="recalc()">
+              <option value="Baked Goods" selected>Baked Goods</option>
+              <option value="Jams &amp; Preserves">Jams &amp; Preserves</option>
+              <option value="Sauces &amp; Condiments">Sauces &amp; Condiments</option>
+              <option value="Bread">Bread</option>
+              <option value="Candy &amp; Confections">Candy &amp; Confections</option>
+              <option value="Frozen Treats">Frozen Treats</option>
+              <option value="Meal Kits">Meal Kits</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group" style="display:grid; grid-template-columns:1fr auto; gap:8px;">
+            <div>
+              <label for="calc-batchYield">This recipe makes</label>
+              <input type="number" id="calc-batchYield" value="12" min="1" step="1" oninput="recalc()">
+            </div>
+            <div style="width:120px;">
+              <label for="calc-batchYieldUnit">&nbsp;</label>
+              <select id="calc-batchYieldUnit" onchange="recalc()">
+                <option value="Units" selected>Units</option>
+                <option value="Cookies">Cookies</option>
+                <option value="Muffins">Muffins</option>
+                <option value="Jars">Jars</option>
+                <option value="Bottles">Bottles</option>
+                <option value="Loaves">Loaves</option>
+                <option value="Trays">Trays</option>
+                <option value="Portions">Portions</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="calc-desiredBatch">I want to make <span class="hint">live scale</span></label>
+            <input type="number" id="calc-desiredBatch" value="12" min="1" step="1" oninput="recalc()">
+          </div>
+          <div class="form-group">
+            <label for="calc-laborHours">Hours to make this batch</label>
+            <input type="number" id="calc-laborHours" value="1" min="0" step="0.25" oninput="recalc()">
+          </div>
+          <div class="form-group">
+            <label for="calc-hourlyRate">Your hourly pay target ($/hr)</label>
+            <input type="number" id="calc-hourlyRate" value="25" min="0" step="0.5" oninput="recalc()">
+          </div>
+          <div class="form-group">
+            <label for="calc-packagingPerUnit">Packaging cost per unit ($)</label>
+            <input type="number" id="calc-packagingPerUnit" value="0.25" min="0" step="0.01" oninput="recalc()">
+          </div>
+          <div class="form-group">
+            <label for="calc-overhead">Kitchen overhead for this batch ($)</label>
+            <input type="number" id="calc-overhead" value="5.00" min="0" step="0.01" oninput="recalc()">
+          </div>
+          <div class="form-group">
+            <label for="calc-boothFee">Farmers market booth fee ($)</label>
+            <input type="number" id="calc-boothFee" value="0" min="0" step="1" oninput="recalc()">
+          </div>
+          <div class="form-group">
+            <label for="calc-eventUnits">Units you expect to sell at this event</label>
+            <input type="number" id="calc-eventUnits" value="50" min="1" step="1" oninput="recalc()">
+          </div>
+          <div class="form-group">
+            <label for="calc-roundTripMiles">Round trip miles to market</label>
+            <input type="number" id="calc-roundTripMiles" value="0" min="0" step="1" oninput="recalc()">
+          </div>
+          <div class="form-group">
+            <label for="calc-targetMargin">Target margin % <span class="hint" id="targetMargin-label">40%</span></label>
+            <div class="slider-wrap">
+              <input type="range" id="calc-targetMargin" value="40" min="0" max="90" step="1" oninput="updateMarginLabel(); recalc();">
+              <span class="slider-val" id="target-margin-val">40%</span>
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label for="calc-notes">Notes <span class="hint">optional, max 500 chars</span></label>
+            <textarea id="calc-notes" rows="3" maxlength="500" placeholder="Any notes about this recipe, pricing strategy, or ingredient sources..."></textarea>
+          </div>
+        </div>
+
+        <!-- Result Cards Section -->
+        <div class="section-head" style="margin-top:28px;">
+          <h2><span class="num">&#167; 01.2</span>Cost Breakdown</h2>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats" style="margin-bottom:20px;">
+          <div class="card">
+            <div class="lbl"><span>Ingredient Cost</span><span class="tag">RAW</span></div>
+            <div class="val" id="res-ingredientCost">$0.00</div>
+            <div class="delta"><span class="pill neutral">total after yield loss</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>Packaging Cost</span><span class="tag">PKG</span></div>
+            <div class="val" id="res-packagingCost">$0.00</div>
+            <div class="delta"><span class="pill neutral">per unit &times; batch</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>Labor Cost</span><span class="tag">LABOR</span></div>
+            <div class="val" id="res-laborCost">$0.00</div>
+            <div class="delta"><span class="pill neutral">hours &times; rate</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>Overhead &amp; Extras</span><span class="tag">OH+</span></div>
+            <div class="val" id="res-overheadExtras">$0.00</div>
+            <div class="delta"><span class="pill neutral">overhead + mileage + booth</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>Total Batch Cost</span><span class="tag">TOTAL</span></div>
+            <div class="val" id="res-totalBatchCost">$0.00</div>
+            <div class="delta"><span class="pill neutral">all costs combined</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>Cost Per Unit</span><span class="tag">/UNIT</span></div>
+            <div class="val" id="res-costPerUnit">$0.00</div>
+            <div class="delta"><span class="pill neutral">total / batch size</span></div>
+          </div>
+        </div>
+
+        <!-- Large Results Area -->
+        <div class="section-head">
+          <h2><span class="num">&#167; 01.3</span>Pricing &amp; Profit</h2>
+        </div>
+        <div class="stats" style="margin-bottom:20px;">
+          <div class="card">
+            <div class="lbl"><span>Suggested Price</span><span class="tag" id="price-tag">RETAIL</span></div>
+            <div class="val" id="res-suggestedPrice">$--<span class="u">/unit</span></div>
+            <div class="delta"><span class="pill neutral" id="price-note">cost &div; (1 - margin%)</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>Net Profit</span><span class="tag">BATCH</span></div>
+            <div class="val" id="res-netProfit">$0.00</div>
+            <div class="delta"><span class="pill neutral">revenue - total cost</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>Profit Per Unit</span><span class="tag">MARGIN</span></div>
+            <div class="val" id="res-profitPerUnit">$0.00</div>
+            <div class="delta"><span class="pill neutral">net profit / batch size</span></div>
+          </div>
+        </div>
+
+        <!-- True Hourly Wage Display -->
+        <div class="section-head">
+          <h2><span class="num">&#167; 01.4</span>True Hourly Wage</h2>
+        </div>
+        <div class="stats" style="margin-bottom:20px;">
+          <div class="card" style="min-height:160px;">
+            <div class="lbl"><span>You're Paying Yourself</span><span class="tag" id="wage-tag">WAGE</span></div>
+            <div class="val" id="res-trueHourlyWage">$0.00<span class="u">/hr</span></div>
+            <div class="delta"><span class="pill neutral" id="res-wageVerdict">--</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>Break-even Price</span><span class="tag">MIN</span></div>
+            <div class="val" id="res-breakEvenPrice">$0.00</div>
+            <div class="delta"><span class="pill neutral">no profit / no loss</span></div>
+          </div>
+          <div class="card">
+            <div class="lbl"><span>Margin %</span><span class="tag">EFF</span></div>
+            <div class="val" id="res-marginPct">0.0<span class="u">%</span></div>
+            <div class="delta"><span class="pill neutral">net / revenue</span></div>
+          </div>
+        </div>
+
+        <!-- Profitability Badge -->
+        <div style="margin-bottom:20px; text-align:center;">
+          <span id="profitability-badge" style="display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border:2px solid var(--rule); font-size:13px; letter-spacing:.08em; text-transform:uppercase; font-weight:600;">--</span>
+        </div>
+
+        <!-- Animated Cost Breakdown Bar -->
+        <div class="section-head">
+          <h2><span class="num">&#167; 01.5</span>Cost Breakdown Visual</h2>
+        </div>
+        <div style="margin-bottom:20px; padding:18px; border:1px solid var(--rule); background:var(--paper);">
+          <div style="display:flex; height:32px; overflow:hidden; border-radius:2px; position:relative;">
+            <div id="breakdown-ingredients" style="width:0%; background:var(--signal); transition:width .4s ease; display:flex; align-items:center; justify-content:center; font-size:10px; color:white; font-weight:600; letter-spacing:.06em; overflow:hidden; white-space:nowrap;">Ingredients</div>
+            <div id="breakdown-labor" style="width:0%; background:var(--accent); transition:width .4s ease; display:flex; align-items:center; justify-content:center; font-size:10px; color:white; font-weight:600; letter-spacing:.06em; overflow:hidden; white-space:nowrap;">Labor</div>
+            <div id="breakdown-packaging" style="width:0%; background:var(--accent-2); transition:width .4s ease; display:flex; align-items:center; justify-content:center; font-size:10px; color:white; font-weight:600; letter-spacing:.06em; overflow:hidden; white-space:nowrap;">Packaging</div>
+            <div id="breakdown-overhead" style="width:0%; background:var(--mid); transition:width .4s ease; display:flex; align-items:center; justify-content:center; font-size:10px; color:white; font-weight:600; letter-spacing:.06em; overflow:hidden; white-space:nowrap;">Overhead</div>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:10px; letter-spacing:.1em; color:var(--mid); text-transform:uppercase;">
+            <span id="lbl-ingredients">Ingredients $0.00</span>
+            <span id="lbl-labor">Labor $0.00</span>
+            <span id="lbl-packaging">Packaging $0.00</span>
+            <span id="lbl-overhead">Overhead $0.00</span>
+          </div>
+        </div>
+
+        <!-- Save Recipe Button -->
+        <div style="text-align:center; margin-top:24px;">
+          <button class="btn primary" type="button" onclick="saveRecipe()" style="font-size:14px; padding:12px 28px;">Save Recipe</button>
+        </div>
+
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════════
+           VIEW 2 — SAVED RECIPES (id="view-data", class="view")
+           ════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-data">
+
+        <!-- Table Wrapper -->
+        <div class="tbl-wrap">
+          <!-- Table Head -->
+          <div class="tbl-head">
+            <div class="ttl">
+              <span class="num">&#167; 02</span><span>Saved Recipes</span>
+              <span class="ct" id="count-label">0 total</span>
+            </div>
+            <div class="filters" id="category-filters">
+              <span class="chip on" data-filter="category" data-value="all" onclick="filterByCategory('all')">All</span>
+              <span class="chip" data-filter="category" data-value="Baked Goods" onclick="filterByCategory('Baked Goods')">Baked Goods</span>
+              <span class="chip" data-filter="category" data-value="Jams &amp; Preserves" onclick="filterByCategory('Jams &amp; Preserves')">Jams &amp; Preserves</span>
+              <span class="chip" data-filter="category" data-value="Sauces &amp; Condiments" onclick="filterByCategory('Sauces &amp; Condiments')">Sauces</span>
+              <span class="chip" data-filter="category" data-value="Bread" onclick="filterByCategory('Bread')">Bread</span>
+              <span class="chip" data-filter="category" data-value="Candy &amp; Confections" onclick="filterByCategory('Candy &amp; Confections')">Candy</span>
+              <span class="chip" data-filter="category" data-value="Frozen Treats" onclick="filterByCategory('Frozen Treats')">Frozen</span>
+              <span class="chip" data-filter="category" data-value="Meal Kits" onclick="filterByCategory('Meal Kits')">Meal Kits</span>
+              <span class="chip" data-filter="category" data-value="Other" onclick="filterByCategory('Other')">Other</span>
+            </div>
+            <div class="filters" id="badge-filters" style="margin-left:auto;">
+              <span class="chip on" data-filter="badge" data-value="all" onclick="filterByBadge('all')">All</span>
+              <span class="chip" data-filter="badge" data-value="Underpriced" onclick="filterByBadge('Underpriced')">Underpriced</span>
+              <span class="chip" data-filter="badge" data-value="Low Margin" onclick="filterByBadge('Low Margin')">Low Margin</span>
+              <span class="chip" data-filter="badge" data-value="Healthy" onclick="filterByBadge('Healthy')">Healthy</span>
+              <span class="chip" data-filter="badge" data-value="Strong" onclick="filterByBadge('Strong')">Strong</span>
+              <span class="chip del" onclick="clearAllData()">clear all</span>
+            </div>
+          </div>
+
+          <!-- Saved Recipes Table -->
+          <table>
+            <thead>
+              <tr>
+                <th style="width:28px;"><input type="checkbox" id="select-all" class="bulk-select" onclick="toggleSelectAll()" title="Select all"></th>
+                <th class="sortable" data-sort="name" onclick="sortTable('name')">Name</th>
+                <th class="sortable" data-sort="category" onclick="sortTable('category')">Category</th>
+                <th class="sortable num" data-sort="batch" onclick="sortTable('batch')">Batch</th>
+                <th class="sortable num" data-sort="costPerUnit" onclick="sortTable('costPerUnit')">Cost/Unit</th>
+                <th class="sortable num" data-sort="suggestedPrice" onclick="sortTable('suggestedPrice')">Suggested $</th>
+                <th class="sortable num" data-sort="wage" onclick="sortTable('wage')">Wage/hr</th>
+                <th class="sortable num" data-sort="margin" onclick="sortTable('margin')">Margin%</th>
+                <th data-sort="badge">Badge</th>
+                <th class="sortable" data-sort="savedAt" onclick="sortTable('savedAt')">Saved</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="data-tbody">
+              <tr>
+                <td colspan="11">
+                  <div class="empty-state">
+                    <div class="empty-icon">&#8709;</div>
+                    <h3>NO SAVED RECIPES</h3>
+                    <p>Save a recipe from the calculator to see it here.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Pagination -->
+          <div class="pagination" id="data-pagination"></div>
+        </div>
+
+        <!-- Bulk Actions Bar -->
+        <div id="bulk-actions" style="display:none; margin-top:12px; padding:10px 14px; border:1px solid var(--rule); background:var(--paper); display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+          <label style="display:flex; align-items:center; gap:6px; font-size:11px; color:var(--ink-2); cursor:pointer;">
+            <input type="checkbox" id="bulk-select-all" onclick="toggleSelectAll()"> Select all on page
+          </label>
+          <span id="bulk-count" style="font-size:11px; color:var(--mid);">0 selected</span>
+          <button class="btn danger" type="button" onclick="confirmBulkDelete()" style="margin-left:auto; font-size:11px; padding:6px 12px;">Delete Selected</button>
+        </div>
+
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════════
+           VIEW 3 — COMPARE (id="view-compare", class="view")
+           ════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-compare">
+
+        <div class="section-head">
+          <h2><span class="num">&#167; 03</span>Compare Recipes</h2>
+        </div>
+
+        <!-- Winner Banner -->
+        <div id="compare-winner-banner" style="margin-bottom:20px; padding:14px 18px; border:2px solid var(--signal); background:oklch(0.68 0.16 145 / .08); font-size:13px; letter-spacing:.06em; text-align:center; font-weight:600; color:var(--ink); display:none;">
+          --
+        </div>
+
+        <!-- Two-Column Layout -->
+        <div class="compare-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+
+          <!-- Column A -->
+          <div id="compare-col-a" style="border:1px solid var(--rule); background:var(--paper); padding:18px;">
+            <div style="font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:14px;">&#167; A</div>
+            <div class="form-group" style="margin-bottom:14px;">
+              <label>Recipe</label>
+              <select id="comp-a-selector" onchange="onCompareSelect('A')">
+                <option value="">-- Select a saved recipe --</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:14px;">
+              <label>Batch Size <span class="hint">live recalc</span></label>
+              <input type="number" id="comp-a-batchSize" min="1" step="1" oninput="recalcCompare()">
+            </div>
+            <div id="comp-a-details" style="display:none;">
+              <div style="border-top:1px solid var(--rule); padding-top:14px;">
+                <div style="font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--mid); margin-bottom:8px;">Cost Breakdown</div>
+                <div class="fee-row"><span>Ingredient Cost</span><b id="comp-a-ingredientCost">$0.00</b></div>
+                <div class="fee-row"><span>Labor Cost</span><b id="comp-a-laborCost">$0.00</b></div>
+                <div class="fee-row"><span>Packaging Cost</span><b id="comp-a-packagingCost">$0.00</b></div>
+                <div class="fee-row"><span>Overhead &amp; Extras</span><b id="comp-a-overheadExtras">$0.00</b></div>
+                <div class="fee-row" style="border-top:2px solid var(--rule); margin-top:8px; padding-top:10px;"><span><b>Total Batch Cost</b></span><b id="comp-a-totalBatchCost">$0.00</b></div>
+                <div class="fee-row"><span>Cost Per Unit</span><b id="comp-a-costPerUnit">$0.00</b></div>
+                <div class="fee-row"><span>Suggested Price</span><b id="comp-a-suggestedPrice">$0.00</b></div>
+                <div class="fee-row"><span>Profit Per Unit</span><b id="comp-a-profitPerUnit">$0.00</b></div>
+                <div class="fee-row"><span>Margin %</span><b id="comp-a-marginPct">0%</b></div>
+                <div class="fee-row"><span>True Hourly Wage</span><b id="comp-a-trueHourlyWage">$0.00</b></div>
+              </div>
+              <div style="margin-top:14px; text-align:center;">
+                <span id="comp-a-badge" style="display:inline-block; padding:6px 12px; border:1px solid var(--rule); font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:600;">--</span>
+              </div>
+              <div id="comp-a-winner" style="display:none; margin-top:10px; text-align:center; font-size:11px; font-weight:600; color:var(--signal);">&#9733; Winner</div>
+            </div>
+            <div id="comp-a-empty" class="empty-state" style="border:none; padding:40px 20px;">
+              <div class="empty-icon">&#8709;</div>
+              <h3>NO RECIPE LOADED</h3>
+              <p>Use "Send to Compare A" from the calculator or select a recipe above.</p>
+            </div>
+          </div>
+
+          <!-- Column B -->
+          <div id="compare-col-b" style="border:1px solid var(--rule); background:var(--paper); padding:18px;">
+            <div style="font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:14px;">&#167; B</div>
+            <div class="form-group" style="margin-bottom:14px;">
+              <label>Recipe</label>
+              <select id="comp-b-selector" onchange="onCompareSelect('B')">
+                <option value="">-- Select a saved recipe --</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:14px;">
+              <label>Batch Size <span class="hint">live recalc</span></label>
+              <input type="number" id="comp-b-batchSize" min="1" step="1" oninput="recalcCompare()">
+            </div>
+            <div id="comp-b-details" style="display:none;">
+              <div style="border-top:1px solid var(--rule); padding-top:14px;">
+                <div style="font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--mid); margin-bottom:8px;">Cost Breakdown</div>
+                <div class="fee-row"><span>Ingredient Cost</span><b id="comp-b-ingredientCost">$0.00</b></div>
+                <div class="fee-row"><span>Labor Cost</span><b id="comp-b-laborCost">$0.00</b></div>
+                <div class="fee-row"><span>Packaging Cost</span><b id="comp-b-packagingCost">$0.00</b></div>
+                <div class="fee-row"><span>Overhead &amp; Extras</span><b id="comp-b-overheadExtras">$0.00</b></div>
+                <div class="fee-row" style="border-top:2px solid var(--rule); margin-top:8px; padding-top:10px;"><span><b>Total Batch Cost</b></span><b id="comp-b-totalBatchCost">$0.00</b></div>
+                <div class="fee-row"><span>Cost Per Unit</span><b id="comp-b-costPerUnit">$0.00</b></div>
+                <div class="fee-row"><span>Suggested Price</span><b id="comp-b-suggestedPrice">$0.00</b></div>
+                <div class="fee-row"><span>Profit Per Unit</span><b id="comp-b-profitPerUnit">$0.00</b></div>
+                <div class="fee-row"><span>Margin %</span><b id="comp-b-marginPct">0%</b></div>
+                <div class="fee-row"><span>True Hourly Wage</span><b id="comp-b-trueHourlyWage">$0.00</b></div>
+              </div>
+              <div style="margin-top:14px; text-align:center;">
+                <span id="comp-b-badge" style="display:inline-block; padding:6px 12px; border:1px solid var(--rule); font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:600;">--</span>
+              </div>
+              <div id="comp-b-winner" style="display:none; margin-top:10px; text-align:center; font-size:11px; font-weight:600; color:var(--signal);">&#9733; Winner</div>
+            </div>
+            <div id="comp-b-empty" class="empty-state" style="border:none; padding:40px 20px;">
+              <div class="empty-icon">&#8709;</div>
+              <h3>NO RECIPE LOADED</h3>
+              <p>Use "Send to Compare B" from the calculator or select a recipe above.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Compare responsive override -->
+        <style>
+          @media (max-width: 1024px) {
+            .compare-grid { grid-template-columns: 1fr !important; }
+          }
+        </style>
+
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════════
+           VIEW 4 — ANALYTICS (id="view-analytics", class="view")
+           ════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-analytics">
+
+        <div class="section-head">
+          <h2><span class="num">&#167; 04</span>Analytics</h2>
+        </div>
+
+        <!-- Summary Stats Row -->
+        <div id="analytics-summary" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:0; border:1px solid var(--rule); background:var(--paper); box-shadow:var(--shadow); margin-bottom:24px;">
+          <div class="card" style="border-right:1px solid var(--rule); min-height:100px;">
+            <div class="lbl"><span>Total Recipes</span><span class="tag">N</span></div>
+            <div class="val" id="an-totalRecipes">0</div>
+          </div>
+          <div class="card" style="border-right:1px solid var(--rule); min-height:100px;">
+            <div class="lbl"><span>Avg Margin</span><span class="tag">%</span></div>
+            <div class="val" id="an-avgMargin">0<span class="u">%</span></div>
+          </div>
+          <div class="card" style="border-right:1px solid var(--rule); min-height:100px;">
+            <div class="lbl"><span>Avg True Wage</span><span class="tag">$/hr</span></div>
+            <div class="val" id="an-avgWage">$0.00</div>
+          </div>
+          <div class="card" style="min-height:100px;">
+            <div class="lbl"><span>Best Recipe</span><span class="tag">TOP</span></div>
+            <div class="val" id="an-bestRecipe" style="font-size:18px;">--</div>
+          </div>
+        </div>
+
+        <!-- Analytics responsive override -->
+        <style>
+          @media (max-width: 1024px) {
+            #analytics-summary { grid-template-columns: 1fr 1fr !important; }
+          }
+          @media (max-width: 640px) {
+            #analytics-summary { grid-template-columns: 1fr !important; }
+            #analytics-summary .card { border-right:none; border-bottom:1px solid var(--rule); }
+            #analytics-summary .card:last-child { border-bottom:none; }
+          }
+        </style>
+
+        <!-- Chart 1: True Hourly Wage by Recipe -->
+        <div style="margin-bottom:24px; border:1px solid var(--rule); background:var(--paper); padding:18px; box-shadow:var(--shadow);">
+          <div style="font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; color:var(--ink-2); margin-bottom:14px;">
+            <span class="num" style="color:var(--accent); font-weight:500;">&#167; 4.1</span> True Hourly Wage by Recipe
+          </div>
+          <div id="chart-wage" style="min-height:280px; position:relative;">
+            <div class="empty-state" style="border:none; padding:30px;">
+              <div class="empty-icon">&#8709;</div>
+              <h3>NO DATA</h3>
+              <p>Save recipes to see wage analytics.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart 2: Profit Per Unit (Top 10) -->
+        <div style="margin-bottom:24px; border:1px solid var(--rule); background:var(--paper); padding:18px; box-shadow:var(--shadow);">
+          <div style="font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; color:var(--ink-2); margin-bottom:14px;">
+            <span class="num" style="color:var(--accent); font-weight:500;">&#167; 4.2</span> Profit Per Unit (Top 10)
+          </div>
+          <div id="chart-profit" style="min-height:280px; position:relative;">
+            <div class="empty-state" style="border:none; padding:30px;">
+              <div class="empty-icon">&#8709;</div>
+              <h3>NO DATA</h3>
+              <p>Save recipes to see profit analytics.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart 3: Average Cost Composition -->
+        <div style="margin-bottom:24px; border:1px solid var(--rule); background:var(--paper); padding:18px; box-shadow:var(--shadow);">
+          <div style="font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; color:var(--ink-2); margin-bottom:14px;">
+            <span class="num" style="color:var(--accent); font-weight:500;">&#167; 4.3</span> Average Cost Composition
+          </div>
+          <div id="chart-composition" style="min-height:280px; position:relative; display:flex; align-items:center; justify-content:center;">
+            <div class="empty-state" style="border:none; padding:30px;">
+              <div class="empty-icon">&#8709;</div>
+              <h3>NO DATA</h3>
+              <p>Save recipes to see cost composition.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════════
+           VIEW 5 — SETTINGS (id="view-settings", class="view")
+           ════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-settings">
+
+        <div class="section-head">
+          <h2><span class="num">&#167; 05</span>Settings</h2>
+        </div>
+
+        <div class="settings-section">
+          <h3><span class="num">&#167; 05.1</span>Default Values</h3>
+          <p style="font-size:11px; color:var(--mid); margin-bottom:14px; letter-spacing:.04em;">These defaults are pre-filled each time you create a new recipe.</p>
+
+          <div class="settings-row">
+            <div>
+              <label>Default hourly rate ($/hr)</label>
+              <div class="desc">Your target pay rate for new recipes</div>
+            </div>
+            <input type="number" id="set-hourlyRate" value="25" min="0" step="0.5" oninput="onSettingsChange()">
+          </div>
+          <div class="settings-row">
+            <div>
+              <label>Default packaging cost per unit ($)</label>
+              <div class="desc">Boxes, bags, labels per item</div>
+            </div>
+            <input type="number" id="set-packaging" value="0.25" min="0" step="0.01" oninput="onSettingsChange()">
+          </div>
+          <div class="settings-row">
+            <div>
+              <label>Default kitchen overhead ($/batch)</label>
+              <div class="desc">Utilities, gas, water per batch</div>
+            </div>
+            <input type="number" id="set-overhead" value="5.00" min="0" step="0.01" oninput="onSettingsChange()">
+          </div>
+          <div class="settings-row">
+            <div>
+              <label>IRS mileage rate ($/mi)</label>
+              <div class="desc">Current IRS rate for business mileage</div>
+            </div>
+            <input type="number" id="set-mileageRate" value="0.67" min="0" step="0.01" oninput="onSettingsChange()">
+          </div>
+          <div class="settings-row">
+            <div>
+              <label>Default target margin %</label>
+              <div class="desc">Profit margin for suggested price calculation</div>
+            </div>
+            <input type="number" id="set-targetMargin" value="40" min="0" max="90" step="1" oninput="onSettingsChange()">
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3><span class="num">&#167; 05.2</span>Appearance</h3>
+          <div class="settings-row">
+            <div>
+              <label>Accent color hue (0-360)</label>
+              <div class="desc">Adjust the app's accent color</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:14px;">
+              <div id="accent-preview" style="width:32px; height:32px; border:1px solid var(--rule); background:var(--accent); border-radius:2px; flex-shrink:0;"></div>
+              <div class="slider-wrap" style="width:200px;">
+                <input type="range" id="set-accentHue" value="32" min="0" max="360" step="1" oninput="onAccentHueChange()">
+                <span class="slider-val" id="set-accentHue-val">32</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3><span class="num">&#167; 05.3</span>Data Management</h3>
+
+          <div class="settings-row" style="display:flex; align-items:center; justify-content:space-between;">
+            <div>
+              <label>Export all data (JSON)</label>
+              <div class="desc">Download all recipes and settings as a JSON file</div>
+            </div>
+            <button class="btn" type="button" onclick="exportJSON()">Export JSON</button>
+          </div>
+
+          <div class="settings-row" style="display:flex; align-items:center; justify-content:space-between;">
+            <div>
+              <label>Import data (JSON)</label>
+              <div class="desc">Restore recipes and settings from a JSON file</div>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <input type="file" id="import-file" accept=".json,application/json" style="font-size:11px; max-width:200px;">
+              <button class="btn primary" type="button" onclick="importJSON()">Import</button>
+            </div>
+          </div>
+
+          <div class="settings-row" style="display:flex; align-items:center; justify-content:space-between;">
+            <div>
+              <label>Clear all data</label>
+              <div class="desc">Permanently delete all saved recipes and settings</div>
+            </div>
+            <button class="btn danger" type="button" onclick="confirmClearAll()">Clear All Data</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════════
+           VIEW 6 — HELP (id="view-help", class="view")
+           ════════════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-help">
+
+        <div class="section-head">
+          <h2><span class="num">&#167; 06</span>Help &amp; Reference</h2>
+        </div>
+
+        <!-- § 01 How to Use -->
+        <div class="help-block">
+          <h3><span class="num">&#167; 01</span>How to Use</h3>
+          <p><strong>Step 1:</strong> Fill in your recipe details. Enter a name, choose a category, and set your batch yield (e.g., "this recipe makes 12 cookies").</p>
+          <p><strong>Step 2:</strong> Add ingredients one by one. For each ingredient, enter the quantity you purchased, what you paid, the quantity used in your recipe, and any yield loss percentage (waste from peeling, trimming, etc.).</p>
+          <p><strong>Step 3:</strong> Set "I want to make" to scale the batch. All ingredient quantities and costs rescale automatically.</p>
+          <p><strong>Step 4:</strong> Fill in labor hours, your target hourly rate, packaging cost per unit, kitchen overhead, booth fee (if selling at market), expected sales units, and mileage.</p>
+          <p><strong>Step 5:</strong> Adjust the target margin slider to see how different pricing affects your profit and true hourly wage.</p>
+          <p><strong>Step 6:</strong> Click <strong>Save Recipe</strong> to store it. View saved recipes, compare two recipes side-by-side, and analyze trends in the Analytics view.</p>
+        </div>
+
+        <!-- § 02 Formula Reference -->
+        <div class="help-block">
+          <h3><span class="num">&#167; 02</span>Formula Reference</h3>
+          <div class="fee-row"><b>Scaling Factor</b><span>desiredBatch / batchYield</span></div>
+          <div class="fee-row"><b>Scaled Recipe Qty</b><span>recipeQtyUsed &times; scalingFactor</span></div>
+          <div class="fee-row"><b>Effective Qty</b><span>scaledRecipeQty / (1 - yieldLossPct / 100)</span></div>
+          <div class="fee-row"><b>Unit Cost</b><span>purchasePrice / purchaseQty (with unit conversion)</span></div>
+          <div class="fee-row"><b>Ingredient Cost</b><span>effectiveQty &times; unitCost</span></div>
+          <div style="border-top:1px solid var(--rule); margin-top:8px; padding-top:8px;">
+            <div class="fee-row"><b>Total Packaging</b><span>packagingPerUnit &times; desiredBatch</span></div>
+            <div class="fee-row"><b>Total Labor</b><span>laborHours &times; hourlyRate</span></div>
+            <div class="fee-row"><b>Mileage Cost</b><span>roundTripMiles &times; IRS mileage rate</span></div>
+            <div class="fee-row"><b>Booth Allocation</b><span>(boothFee / eventUnits) &times; desiredBatch</span></div>
+            <div class="fee-row"><b>Overhead &amp; Extras</b><span>overhead + mileageCost + boothAllocation</span></div>
+            <div class="fee-row"><b>Total Batch Cost</b><span>ingredients + packaging + labor + overhead extras</span></div>
+          </div>
+          <div style="border-top:1px solid var(--rule); margin-top:8px; padding-top:8px;">
+            <div class="fee-row"><b>Cost Per Unit</b><span>totalBatchCost / desiredBatch</span></div>
+            <div class="fee-row"><b>Suggested Price</b><span>costPerUnit / (1 - targetMargin% / 100)</span></div>
+            <div class="fee-row"><b>Net Profit</b><span>(suggestedPrice &times; desiredBatch) - totalBatchCost</span></div>
+            <div class="fee-row"><b>Profit Per Unit</b><span>netProfit / desiredBatch</span></div>
+            <div class="fee-row"><b>Margin %</b><span>(netProfit / projectedRevenue) &times; 100</span></div>
+            <div class="fee-row"><b>True Hourly Wage</b><span>netProfit / laborHours</span></div>
+            <div class="fee-row"><b>Break-even Price</b><span>totalBatchCost / desiredBatch</span></div>
+          </div>
+        </div>
+
+        <!-- § 03 Yield Loss Guide -->
+        <div class="help-block">
+          <h3><span class="num">&#167; 03</span>Yield Loss Guide</h3>
+          <p>Yield loss accounts for waste when preparing ingredients — peeling, trimming, cooking loss, and unusable portions. Enter the percentage of loss for each ingredient.</p>
+          <div class="fee-row"><b>Onions</b><span>20% (peeling, trimming)</span></div>
+          <div class="fee-row"><b>Butter</b><span>10% (pan residue)</span></div>
+          <div class="fee-row"><b>Carrots</b><span>15% (peeling, tops)</span></div>
+          <div class="fee-row"><b>Potatoes</b><span>18% (peeling, eyes)</span></div>
+          <div class="fee-row"><b>Apples</b><span>15% (coring, peeling)</span></div>
+          <div class="fee-row"><b>Citrus</b><span>25% (zest only, juicing)</span></div>
+          <div class="fee-row"><b>Fresh herbs</b><span>30% (stems, bruised leaves)</span></div>
+          <div class="fee-row"><b>Chocolate</b><span>5% (melting residue)</span></div>
+          <div class="fee-row"><b>Flour (sifted)</b><span>5% (sifting loss)</span></div>
+          <div class="fee-row"><b>Meat (bone-in)</b><span>25-35% (bone, trim)</span></div>
+          <div class="fee-row"><b>Coffee beans</b><span>15% (chaff, grind loss)</span></div>
+          <div class="fee-row"><b>Nuts (shelled)</b><span>5% (shell fragments, dust)</span></div>
+          <p style="margin-top:10px; font-size:11px; color:var(--mid);">Tip: When yield loss reaches 100%, the effective quantity equals the scaled recipe quantity (no infinite cost).</p>
+        </div>
+
+        <!-- § 04 Unit Conversion Table -->
+        <div class="help-block">
+          <h3><span class="num">&#167; 04</span>Unit Conversion Table</h3>
+          <p>Compatible units are converted automatically. Cross-group conversions (e.g., grams to milliliters, ounces to teaspoons) are incompatible — the calculator will show a warning and exclude that ingredient from the total.</p>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--rule); margin-top:10px;">
+            <div style="background:var(--paper-2); padding:8px 12px; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--mid); font-weight:600; border-bottom:1px solid var(--rule);">Weight</div>
+            <div style="background:var(--paper-2); padding:8px 12px; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--mid); font-weight:600; border-bottom:1px solid var(--rule);">Conversion</div>
+            <div class="fee-row" style="padding:6px 12px;"><span>1 kg</span><span>= 1000 g</span></div>
+            <div class="fee-row" style="padding:6px 12px;"><span>1 lb</span><span>= 16 oz</span></div>
+            <div style="background:var(--paper-2); padding:8px 12px; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--mid); font-weight:600; border-bottom:1px solid var(--rule); border-top:1px solid var(--rule);">Volume</div>
+            <div style="background:var(--paper-2); padding:8px 12px; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--mid); font-weight:600; border-bottom:1px solid var(--rule); border-top:1px solid var(--rule);">Conversion</div>
+            <div class="fee-row" style="padding:6px 12px;"><span>1 l</span><span>= 1000 ml</span></div>
+            <div class="fee-row" style="padding:6px 12px;"><span>1 tbsp</span><span>= 3 tsp</span></div>
+            <div class="fee-row" style="padding:6px 12px;"><span>1 cup</span><span>= 16 tbsp</span></div>
+            <div class="fee-row" style="padding:6px 12px;"><span>1 cup</span><span>= 48 tsp</span></div>
+          </div>
+          <p style="margin-top:10px; font-size:11px; color:var(--mid);"><strong>Compatible groups:</strong> Weight (g, kg, oz, lb) | Volume (ml, l, tsp, tbsp, cup) | Count (unit). Units within each group convert automatically.</p>
+        </div>
+
+        <!-- § 05 Badge Guide -->
+        <div class="help-block">
+          <h3><span class="num">&#167; 05</span>Badge Guide</h3>
+          <p>Each recipe receives a profitability badge based on its financial performance. Badges are evaluated in order — the first matching condition wins.</p>
+          <div class="fee-row"><b style="color:var(--danger);">Underpriced</b><span>trueHourlyWage &lt; hourlyRate &times; 0.8</span></div>
+          <div class="fee-row"><b style="color:var(--warn);">Low Margin</b><span>margin% &lt; 20</span></div>
+          <div class="fee-row"><b style="color:var(--signal);">Healthy</b><span>margin% &ge; 20 AND &lt; 40</span></div>
+          <div class="fee-row"><b style="color:var(--accent-3);">Strong</b><span>margin% &ge; 40</span></div>
+          <p style="margin-top:10px; font-size:11px; color:var(--mid);"><strong>True Hourly Wage Color Coding:</strong></p>
+          <div class="fee-row"><span style="color:var(--signal); font-weight:600;">Green</span><span>trueHourlyWage &ge; hourlyRate target</span></div>
+          <div class="fee-row"><span style="color:var(--warn); font-weight:600;">Amber</span><span>&ge; 80% of target, but below target</span></div>
+          <div class="fee-row"><span style="color:var(--danger); font-weight:600;">Red</span><span>&lt; 80% of target hourly rate</span></div>
+        </div>
+
+        <!-- § 06 Pricing Strategy -->
+        <div class="help-block">
+          <h3><span class="num">&#167; 06</span>Pricing Strategy for Cottage Food Sellers</h3>
+          <p><strong>Know your true costs.</strong> Factor in every ingredient, the time you spend (pay yourself first!), packaging, overhead, and market fees. Use the true hourly wage to ensure you're paying yourself fairly.</p>
+          <p><strong>Start at 40% margin.</strong> A 40% target margin is a good starting point for cottage foods. Adjust based on your local market — gourmet or specialty items can command 50-60%.</p>
+          <p><strong>Account for booth fees.</strong> If your market charges $40/week and you sell 50 units, each unit carries an $0.80 booth cost. Use the event amortization fields to see the real impact.</p>
+          <p><strong>Don't forget mileage.</strong> The IRS mileage rate (~$0.67/mi) adds up fast. A 20-mile round trip costs $13.40 — that's real money coming out of your profit.</p>
+          <p><strong>Price psychology matters.</strong> Round prices up to friendly numbers ($8.00 instead of $7.83). Customers perceive quality at whole-dollar price points.</p>
+          <p><strong>Test different batch sizes.</strong> Use the Compare view to see how scaling up affects your per-unit cost and hourly wage. Bigger batches often mean better margins.</p>
+          <p><strong>Track everything.</strong> Save every recipe iteration. Use analytics to spot which recipes earn you the most per hour — focus on those.</p>
+        </div>
+
+        <!-- § 07 Keyboard Shortcuts -->
+        <div class="help-block">
+          <h3><span class="num">&#167; 07</span>Keyboard Shortcuts</h3>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--rule); margin-top:10px;">
+            <div style="background:var(--paper-2); padding:8px 12px; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--mid); font-weight:600; border-bottom:1px solid var(--rule);">Shortcut</div>
+            <div style="background:var(--paper-2); padding:8px 12px; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--mid); font-weight:600; border-bottom:1px solid var(--rule);">Action</div>
+            <div class="fee-row" style="padding:6px 12px;"><span><span class="kbd"><span>Ctrl</span><span>S</span></span></span><span>Save recipe</span></div>
+            <div class="fee-row" style="padding:6px 12px;"><span><span class="kbd"><span>Ctrl</span><span>K</span></span></span><span>Focus search box</span></div>
+            <div class="fee-row" style="padding:6px 12px;"><span><span class="kbd"><span>Ctrl</span><span>E</span></span></span><span>Export to CSV</span></div>
+            <div class="fee-row" style="padding:6px 12px;"><span><span class="kbd"><span>Ctrl</span><span>P</span></span></span><span>Print</span></div>
+            <div class="fee-row" style="padding:6px 12px;"><span><span class="kbd"><span>Esc</span></span></span><span>Close modal</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════════
+           FOOTER (shared across all views)
+           ════════════════════════════════════════════════════════════════ -->
+      <div class="canvas-foot"></div>
+      <div class="footstrip">
+        <div class="l">
+          <span>&copy; 2026 Food Business Cost Calculator &middot; All rights reserved. Licensed for personal use only.</span>
+          <span class="sep"></span>
+          <span>doc &middot; <b>COSTKIT-v1</b></span>
+          <span class="sep"></span>
+          <span>rev <b>2026&middot;05&middot;22</b></span>
+        </div>
+        <div class="r">
+          <span>page <b id="foot-page">01 / 06</b></span>
+          <span class="sep"></span>
+          <span>by <b>baker</b></span>
+        </div>
+      </div>
+
+    </section><!-- /#canvas -->
+  </main>
+</div><!-- /.app -->
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     GLOBAL UI: Toast Container, Modal Overlay
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div class="toast-container" id="toast-container"></div>
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3 id="modal-title">Dialog</h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* ============================================================
+   SHELL UTILITIES — Theme, Navigation, Toasts, Modals
+   DO NOT MODIFY below the "YOUR APP LOGIC" section
+   ============================================================ */
+
+/* ---- THEME ---- */
+function applyAccent(hue) { document.documentElement.style.setProperty('--accent-h', hue || '32'); }
+function toggleTheme() {
+  const h = document.documentElement;
+  if (h.getAttribute('data-theme') === 'dark') { h.removeAttribute('data-theme'); localStorage.removeItem('app_theme'); }
+  else { h.setAttribute('data-theme', 'dark'); localStorage.setItem('app_theme', 'dark'); }
+}
+function initTheme() { if (localStorage.getItem('app_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); }
+
+/* ---- SIDEBAR ---- */
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+/* ---- VIEW ROUTER ---- */
+const VIEWS = {
+  main:      { title: 'Main View',      subtitle: 'description',       crumb: 'main',      page: '01 / 05' },
+  data:      { title: 'Data',           subtitle: 'saved items',       crumb: 'data',      page: '02 / 05' },
+  analytics: { title: 'Analytics',      subtitle: 'visual breakdown',  crumb: 'analytics', page: '03 / 05' },
+  settings:  { title: 'Settings',       subtitle: 'preferences',       crumb: 'settings',  page: '04 / 05' },
+  help:      { title: 'Help',           subtitle: 'reference',         crumb: 'help',      page: '05 / 05' }
+};
+function navigateTo(viewName, e) {
+  if (e) e.preventDefault();
+  if (!VIEWS[viewName]) return;
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const viewEl = document.getElementById('view-' + viewName);
+  if (viewEl) viewEl.classList.add('active');
+  const navEl = document.querySelector('.nav-item[data-view="' + viewName + '"]');
+  if (navEl) navEl.classList.add('active');
+  const v = VIEWS[viewName];
+  document.getElementById('page-title').textContent = v.title;
+  document.getElementById('page-subtitle').textContent = v.subtitle;
+  document.getElementById('crumb-view').textContent = v.crumb;
+  document.getElementById('foot-page').textContent = v.page;
+  document.getElementById('sidebar').classList.remove('open');
+  if (viewName === 'data') renderDataTable();
+  if (viewName === 'analytics') renderAnalytics();
+}
+
+/* ---- TOASTS ---- */
+/* Safe showToast override is defined later in the app logic section */
+
+/* ---- MODAL ---- */
+function openModal(title, body, footer) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  document.getElementById('modal-footer').innerHTML = footer || '';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+
+/* ---- KEYBOARD SHORTCUTS (handled in section 20) ---- */
+
+/* ============================================================
+   FOOD BUSINESS COST CALCULATOR — Complete Application Logic
+   Replaces the "YOUR APP LOGIC" section of the shell template.
+   ============================================================ */
+
+/* ============================================================
+   1. CONSTANTS & CONFIGURATION
+   ============================================================ */
+const LS_PREFIX = 'fbc_';
+const SETTINGS_KEY = LS_PREFIX + 'settings';
+const RECIPES_KEY = LS_PREFIX + 'recipes';
+const COMPARE_A_KEY = LS_PREFIX + 'compareA';
+const COMPARE_B_KEY = LS_PREFIX + 'compareB';
+
+const CATEGORIES = ['Baked Goods','Jams & Preserves','Sauces & Condiments','Bread','Candy & Confections','Frozen Treats','Meal Kits','Other'];
+const YIELD_UNITS = ['Units','Cookies','Muffins','Jars','Bottles','Loaves','Trays','Portions'];
+const UNITS = ['g','kg','oz','lb','ml','l','tsp','tbsp','cup','unit'];
+
+const UNIT_GROUPS = {
+  weight_g: ['g','kg'],
+  weight_oz: ['oz','lb'],
+  volume_ml: ['ml','l'],
+  volume_tsp: ['tsp','tbsp','cup'],
+  count: ['unit']
+};
+
+const CONVERSIONS = {
+  g: 1, kg: 1000,
+  oz: 1, lb: 16,
+  ml: 1, l: 1000,
+  tsp: 1, tbsp: 3, cup: 48,
+  unit: 1
+};
+
+const BADGE_DEFS = [
+  { key: 'Underpriced', test: (c) => c.trueHourlyWage < c.hourlyRate * 0.8 },
+  { key: 'Low Margin',  test: (c) => c.marginPct < 20 },
+  { key: 'Healthy',     test: (c) => c.marginPct >= 20 && c.marginPct < 40 },
+  { key: 'Strong',      test: (c) => c.marginPct >= 40 }
+];
+
+const CSV_COLUMNS = [
+  'name','category','batchYield','batchYieldUnit','desiredBatch','laborHours',
+  'hourlyRate','packagingPerUnit','overhead','boothFee','eventUnits',
+  'roundTripMiles','targetMargin','ingredientCount','ingredientCostTotal',
+  'laborCost','packagingCost','overheadExtras','totalBatchCost','costPerUnit',
+  'suggestedPrice','profitPerUnit','trueHourlyWage','marginPct','badge','savedAt'
+];
+
+/* ============================================================
+   2. localStorage HELPERS
+   ============================================================ */
+const LS = {
+  get: (k, def) => { try { const v = localStorage.getItem(LS_PREFIX + k); return v === null ? def : JSON.parse(v); } catch(e) { return def; } },
+  set: (k, v) => { try { localStorage.setItem(LS_PREFIX + k, JSON.stringify(v)); } catch(e) {} },
+  del: (k) => { try { localStorage.removeItem(LS_PREFIX + k); } catch(e) {} },
+  clearAll: () => { try { for (let i = localStorage.length - 1; i >= 0; i--) { const k = localStorage.key(i); if (k && k.startsWith(LS_PREFIX)) localStorage.removeItem(k); } } catch(e) {} }
+};
+
+/* ============================================================
+   3. UTILITY FUNCTIONS
+   ============================================================ */
+function escapeHtml(text) { const div = document.createElement('div'); div.textContent = String(text); return div.innerHTML; }
+function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 6); }
+function formatCurrency(n) { return '$' + (isNaN(n) ? '0.00' : n.toFixed(2)); }
+function formatNumber(n, d) { return isNaN(n) ? '0' : n.toFixed(d || 0); }
+function formatPct(n) { return (isNaN(n) ? '0' : n.toFixed(1)) + '%'; }
+function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+function val(id) { const el = document.getElementById(id); return el ? el.value : ''; }
+function num(id) { const v = parseFloat(val(id)); return isNaN(v) ? 0 : v; }
+
+/* ============================================================
+   4. UNIT CONVERSION SYSTEM
+   ============================================================ */
+function getUnitGroup(unit) {
+  for (const [group, units] of Object.entries(UNIT_GROUPS)) {
+    if (units.includes(unit)) return group;
+  }
+  return null;
+}
+
+function canConvert(fromUnit, toUnit) {
+  if (fromUnit === toUnit) return true;
+  const g1 = getUnitGroup(fromUnit);
+  const g2 = getUnitGroup(toUnit);
+  return g1 && g2 && g1 === g2;
+}
+
+function convertUnit(value, fromUnit, toUnit) {
+  if (fromUnit === toUnit) return value;
+  const g1 = getUnitGroup(fromUnit);
+  const g2 = getUnitGroup(toUnit);
+  if (!g1 || !g2 || g1 !== g2) return null;
+  const baseValue = value * CONVERSIONS[fromUnit];
+  return baseValue / CONVERSIONS[toUnit];
+}
+
+/* ============================================================
+   5. SETTINGS MANAGEMENT
+   ============================================================ */
+function loadSettings() {
+  return LS.get('settings', {
+    defaultHourlyRate: 25,
+    defaultPackagingPerUnit: 0.25,
+    defaultOverhead: 5.00,
+    defaultMileageRate: 0.67,
+    defaultTargetMargin: 40,
+    accentHue: 32
+  });
+}
+
+function saveSettings(settings) { LS.set('settings', settings); }
+
+let settings = loadSettings();
+
+/* ============================================================
+   6. RECIPE DATA MODEL
+   ============================================================ */
+let recipes = [];
+let currentIngredients = [];
+let editingId = null;
+let ingredientIdCounter = 0;
+
+function loadRecipes() {
+  recipes = LS.get('recipes', []);
+  updateCounts();
+}
+
+/* ============================================================
+   7. CALCULATOR LOGIC — Core Calculations
+   ============================================================ */
+function calculateScalingFactor(batchYield, desiredBatch) {
+  const by = Math.max(1, batchYield || 1);
+  return (desiredBatch || 0) / by;
+}
+
+function calculateIngredientCost(ing, scalingFactor) {
+  const sf = scalingFactor || 0;
+  const purchaseQty = parseFloat(ing.purchaseQty) || 0;
+  const purchasePrice = parseFloat(ing.purchasePrice) || 0;
+  const recipeQtyUsed = parseFloat(ing.recipeQtyUsed) || 0;
+  const yieldLossPct = clamp(parseFloat(ing.yieldLossPct) || 0, 0, 100);
+  const purchaseUnit = ing.purchaseUnit || 'g';
+  const recipeUnit = ing.recipeUnit || 'g';
+
+  if (purchaseQty <= 0 || purchasePrice <= 0 || recipeQtyUsed <= 0) {
+    return { ingredientCost: 0, scaledRecipeQty: 0, effectiveQty: 0, unitCost: 0, compatible: true, warning: '' };
+  }
+
+  // Check unit compatibility
+  if (!canConvert(purchaseUnit, recipeUnit)) {
+    return { ingredientCost: 0, scaledRecipeQty: 0, effectiveQty: 0, unitCost: 0, compatible: false, warning: '\u26A0 units incompatible' };
+  }
+
+  const scaledRecipeQty = recipeQtyUsed * sf;
+
+  let effectiveQty;
+  if (yieldLossPct >= 100) {
+    effectiveQty = scaledRecipeQty;
+  } else {
+    effectiveQty = scaledRecipeQty / (1 - yieldLossPct / 100);
+  }
+
+  // Unit cost: price per base unit of purchase, converted to recipe unit base
+  // We need to express purchase qty in recipe unit terms
+  const convertedPurchaseQty = convertUnit(purchaseQty, purchaseUnit, recipeUnit);
+  if (convertedPurchaseQty === null || convertedPurchaseQty === 0) {
+    return { ingredientCost: 0, scaledRecipeQty, effectiveQty: scaledRecipeQty, unitCost: 0, compatible: true, warning: '' };
+  }
+
+  const unitCost = purchasePrice / convertedPurchaseQty; // $ per recipe-unit
+  const ingredientCost = effectiveQty * unitCost;
+
+  return {
+    ingredientCost: isNaN(ingredientCost) ? 0 : ingredientCost,
+    scaledRecipeQty,
+    effectiveQty,
+    unitCost,
+    compatible: true,
+    warning: ''
+  };
+}
+
+function calculateAll(inputs) {
+  const batchYield = Math.max(1, inputs.batchYield || 1);
+  const desiredBatch = Math.max(1, inputs.desiredBatch || 1);
+  const laborHours = Math.max(0, inputs.laborHours || 0);
+  const hourlyRate = Math.max(0, inputs.hourlyRate || 0);
+  const packagingPerUnit = Math.max(0, inputs.packagingPerUnit || 0);
+  const overhead = Math.max(0, inputs.overhead || 0);
+  const boothFee = Math.max(0, inputs.boothFee || 0);
+  const eventUnits = Math.max(1, inputs.eventUnits || 1);
+  const roundTripMiles = Math.max(0, inputs.roundTripMiles || 0);
+  const mileageRate = Math.max(0, inputs.mileageRate || settings.defaultMileageRate || 0.67);
+  const targetMarginPct = clamp(inputs.targetMargin || 0, 0, 90);
+
+  const sf = calculateScalingFactor(batchYield, desiredBatch);
+
+  // Calculate each ingredient
+  let totalIngredientCost = 0;
+  const ingredientResults = (inputs.ingredients || []).map(ing => {
+    const result = calculateIngredientCost(ing, sf);
+    totalIngredientCost += result.ingredientCost;
+    return { ...ing, ...result };
+  });
+
+  const totalPackagingCost = packagingPerUnit * desiredBatch;
+  const totalLaborCost = laborHours * hourlyRate;
+  const mileageCost = roundTripMiles * mileageRate;
+  const boothCostPerUnit = boothFee / eventUnits;
+  const boothAllocation = boothCostPerUnit * desiredBatch;
+  const overheadExtras = overhead + mileageCost + boothAllocation;
+  const totalBatchCost = totalIngredientCost + totalPackagingCost + totalLaborCost + overheadExtras;
+
+  const costPerUnit = desiredBatch > 0 ? totalBatchCost / desiredBatch : 0;
+
+  let suggestedPrice = 0;
+  if (targetMarginPct >= 100) {
+    suggestedPrice = 0; // will show "\u2014"
+  } else {
+    suggestedPrice = costPerUnit / (1 - targetMarginPct / 100);
+  }
+
+  const projectedRevenue = suggestedPrice * desiredBatch;
+  const netProfit = projectedRevenue - totalBatchCost;
+  const profitPerUnit = desiredBatch > 0 ? netProfit / desiredBatch : 0;
+  const marginPct = projectedRevenue > 0 ? (netProfit / projectedRevenue) * 100 : 0;
+  const trueHourlyWage = laborHours > 0 ? netProfit / laborHours : 0;
+  const breakEvenPrice = desiredBatch > 0 ? totalBatchCost / desiredBatch : 0;
+
+  // Badge logic
+  let badge = 'Unknown';
+  for (const def of BADGE_DEFS) {
+    if (def.test({ trueHourlyWage, marginPct, hourlyRate })) { badge = def.key; break; }
+  }
+
+  return {
+    ingredientResults,
+    totalIngredientCost,
+    totalPackagingCost,
+    totalLaborCost,
+    mileageCost,
+    boothAllocation,
+    overheadExtras,
+    totalBatchCost,
+    costPerUnit,
+    suggestedPrice,
+    projectedRevenue,
+    netProfit,
+    profitPerUnit,
+    marginPct,
+    trueHourlyWage,
+    breakEvenPrice,
+    badge,
+    scalingFactor: sf,
+    targetMarginPct,
+    laborHours,
+    hourlyRate
+  };
+}
+
+/* ============================================================
+   8. INGREDIENT ROW MANAGEMENT
+   ============================================================ */
+function addIngredientRow(prefill) {
+  ingredientIdCounter++;
+  const rowId = 'ing-row-' + ingredientIdCounter;
+  const tbody = document.getElementById('ingredient-tbody');
+  if (!tbody) return;
+
+  const tr = document.createElement('tr');
+  tr.id = rowId;
+  tr.dataset.rowId = String(ingredientIdCounter);
+
+  const ing = prefill || {};
+  const nameVal = escapeHtml(ing.name || '');
+  const pQty = ing.purchaseQty || '';
+  const pUnit = ing.purchaseUnit || 'g';
+  const pPrice = ing.purchasePrice || '';
+  const rQty = ing.recipeQtyUsed || '';
+  const rUnit = ing.recipeUnit || 'g';
+  const yLoss = ing.yieldLossPct || 0;
+
+  const unitOptions = UNITS.map(u => '<option value="' + u + '"' + (u === pUnit ? ' selected' : '') + '>' + u + '</option>').join('');
+  const unitOptionsR = UNITS.map(u => '<option value="' + u + '"' + (u === rUnit ? ' selected' : '') + '>' + u + '</option>').join('');
+
+  tr.innerHTML =
+    '<td style="padding:8px 6px">' +
+      '<input type="text" class="ing-name" placeholder="e.g. Flour" value="' + nameVal + '" style="width:100%;font:inherit;padding:6px 8px;border:1px solid var(--rule);background:var(--paper);color:var(--ink)">' +
+    '</td>' +
+    '<td style="padding:8px 4px">' +
+      '<input type="number" class="ing-purchaseQty" min="0.01" step="0.01" value="' + pQty + '" placeholder="qty" style="width:70px;font:inherit;padding:6px 8px;border:1px solid var(--rule);background:var(--paper);color:var(--ink)">' +
+    '</td>' +
+    '<td style="padding:8px 4px">' +
+      '<select class="ing-purchaseUnit" style="font:inherit;padding:6px 8px;border:1px solid var(--rule);background:var(--paper);color:var(--ink)">' + unitOptions + '</select>' +
+    '</td>' +
+    '<td style="padding:8px 4px">' +
+      '<input type="number" class="ing-purchasePrice" min="0" step="0.01" value="' + pPrice + '" placeholder="$" style="width:70px;font:inherit;padding:6px 8px;border:1px solid var(--rule);background:var(--paper);color:var(--ink)">' +
+    '</td>' +
+    '<td style="padding:8px 4px">' +
+      '<input type="number" class="ing-recipeQtyUsed" min="0.01" step="0.01" value="' + rQty + '" placeholder="qty" style="width:70px;font:inherit;padding:6px 8px;border:1px solid var(--rule);background:var(--paper);color:var(--ink)">' +
+    '</td>' +
+    '<td style="padding:8px 4px">' +
+      '<select class="ing-recipeUnit" style="font:inherit;padding:6px 8px;border:1px solid var(--rule);background:var(--paper);color:var(--ink)">' + unitOptionsR + '</select>' +
+    '</td>' +
+    '<td style="padding:8px 4px">' +
+      '<input type="number" class="ing-yieldLossPct" min="0" max="100" step="1" value="' + yLoss + '" placeholder="0" title="e.g. 20 for onions (peeling), 10 for butter (pan residue)" style="width:55px;font:inherit;padding:6px 8px;border:1px solid var(--rule);background:var(--paper);color:var(--ink)">' +
+    '</td>' +
+    '<td style="padding:8px 6px;font-size:11px;color:var(--ink-2);white-space:nowrap">' +
+      '<span class="ing-cost" style="color:var(--accent);font-weight:600">costs $0.00</span>' +
+      '<span class="ing-warning" style="color:var(--danger);margin-left:6px;font-size:10px"></span>' +
+    '</td>' +
+    '<td style="padding:8px 6px;white-space:nowrap">' +
+      '<button type="button" class="btn" style="padding:4px 8px;font-size:10px" onclick="duplicateIngredientRow(' + ingredientIdCounter + ')" title="Duplicate">\u2398</button>' +
+      '<button type="button" class="btn danger" style="padding:4px 8px;font-size:10px;margin-left:4px" onclick="removeIngredientRow(' + ingredientIdCounter + ')" title="Remove">\u2715</button>' +
+    '</td>';
+
+  // Remove placeholder if present
+  const placeholder = tbody.querySelector('.ingredient-placeholder');
+  if (placeholder) placeholder.remove();
+
+  tbody.appendChild(tr);
+
+  // Attach live listeners
+  tr.querySelectorAll('input, select').forEach(el => {
+    el.addEventListener('input', recalculate);
+    el.addEventListener('change', recalculate);
+  });
+
+  recalculate();
+}
+
+function removeIngredientRow(id) {
+  const row = document.getElementById('ing-row-' + id);
+  if (!row) return;
+  row.remove();
+  const tbody = document.getElementById('ingredient-tbody');
+  if (tbody && tbody.children.length === 0) {
+    tbody.innerHTML = '<tr class="ingredient-placeholder"><td colspan="9" style="padding:24px;text-align:center;color:var(--mid);font-size:12px;border:1px dashed var(--rule)">No ingredients yet. Click "Add Ingredient" to start building your recipe.</td></tr>';
+  }
+  recalculate();
+}
+
+function duplicateIngredientRow(id) {
+  const row = document.getElementById('ing-row-' + id);
+  if (!row) return;
+  const ing = {
+    name: row.querySelector('.ing-name')?.value || '',
+    purchaseQty: row.querySelector('.ing-purchaseQty')?.value || '',
+    purchaseUnit: row.querySelector('.ing-purchaseUnit')?.value || 'g',
+    purchasePrice: row.querySelector('.ing-purchasePrice')?.value || '',
+    recipeQtyUsed: row.querySelector('.ing-recipeQtyUsed')?.value || '',
+    recipeUnit: row.querySelector('.ing-recipeUnit')?.value || 'g',
+    yieldLossPct: row.querySelector('.ing-yieldLossPct')?.value || 0
+  };
+  addIngredientRow(ing);
+}
+
+function getIngredientsFromDOM() {
+  const tbody = document.getElementById('ingredient-tbody');
+  if (!tbody) return [];
+  const rows = tbody.querySelectorAll('tr[data-row-id]');
+  const ingredients = [];
+  rows.forEach(row => {
+    const name = row.querySelector('.ing-name')?.value?.trim() || '';
+    if (!name) return; // skip empty-name rows
+    ingredients.push({
+      name: name,
+      purchaseQty: row.querySelector('.ing-purchaseQty')?.value || '0',
+      purchaseUnit: row.querySelector('.ing-purchaseUnit')?.value || 'g',
+      purchasePrice: row.querySelector('.ing-purchasePrice')?.value || '0',
+      recipeQtyUsed: row.querySelector('.ing-recipeQtyUsed')?.value || '0',
+      recipeUnit: row.querySelector('.ing-recipeUnit')?.value || 'g',
+      yieldLossPct: row.querySelector('.ing-yieldLossPct')?.value || '0'
+    });
+  });
+  return ingredients;
+}
+
+function getAllIngredientRows() {
+  const tbody = document.getElementById('ingredient-tbody');
+  if (!tbody) return [];
+  const rows = tbody.querySelectorAll('tr[data-row-id]');
+  const ingredients = [];
+  rows.forEach(row => {
+    ingredients.push({
+      name: row.querySelector('.ing-name')?.value?.trim() || '',
+      purchaseQty: row.querySelector('.ing-purchaseQty')?.value || '0',
+      purchaseUnit: row.querySelector('.ing-purchaseUnit')?.value || 'g',
+      purchasePrice: row.querySelector('.ing-purchasePrice')?.value || '0',
+      recipeQtyUsed: row.querySelector('.ing-recipeQtyUsed')?.value || '0',
+      recipeUnit: row.querySelector('.ing-recipeUnit')?.value || 'g',
+      yieldLossPct: row.querySelector('.ing-yieldLossPct')?.value || '0'
+    });
+  });
+  return ingredients;
+}
+
+function updateIngredientCosts(results) {
+  const tbody = document.getElementById('ingredient-tbody');
+  if (!tbody) return;
+  const rows = tbody.querySelectorAll('tr[data-row-id]');
+  rows.forEach((row, idx) => {
+    const costEl = row.querySelector('.ing-cost');
+    const warnEl = row.querySelector('.ing-warning');
+    if (!costEl) return;
+    const res = results[idx];
+    if (res) {
+      costEl.textContent = 'costs ' + formatCurrency(res.ingredientCost);
+      if (warnEl) warnEl.textContent = res.warning || '';
+    } else {
+      costEl.textContent = 'costs $0.00';
+      if (warnEl) warnEl.textContent = '';
+    }
+  });
+}
+
+/* ============================================================
+   9. LIVE RECALCULATION
+   ============================================================ */
+function recalculate() {
+  const ingredients = getAllIngredientRows();
+  const inputs = {
+    batchYield: num('calc-batchYield') || 12,
+    desiredBatch: num('calc-desiredBatch') || 12,
+    laborHours: num('calc-laborHours') || 1,
+    hourlyRate: num('calc-hourlyRate') || settings.defaultHourlyRate || 25,
+    packagingPerUnit: num('calc-packagingPerUnit') || settings.defaultPackagingPerUnit || 0.25,
+    overhead: num('calc-overhead') || settings.defaultOverhead || 5.00,
+    boothFee: num('calc-boothFee') || 0,
+    eventUnits: num('calc-eventUnits') || 50,
+    roundTripMiles: num('calc-roundTripMiles') || 0,
+    mileageRate: settings.defaultMileageRate || 0.67,
+    targetMargin: num('calc-targetMargin') || settings.defaultTargetMargin || 40,
+    ingredients: ingredients
+  };
+
+  const c = calculateAll(inputs);
+
+  // Update result cards
+  setText('res-ingredientCost', formatCurrency(c.totalIngredientCost));
+  setText('res-packagingCost', formatCurrency(c.totalPackagingCost));
+  setText('res-laborCost', formatCurrency(c.totalLaborCost));
+  setText('res-overheadExtras', formatCurrency(c.overheadExtras));
+  setText('res-totalBatchCost', formatCurrency(c.totalBatchCost));
+  setText('res-costPerUnit', formatCurrency(c.costPerUnit));
+
+  if (inputs.targetMargin >= 100) {
+    setText('res-suggestedPrice', '\u2014');
+  } else {
+    setText('res-suggestedPrice', formatCurrency(c.suggestedPrice));
+  }
+
+  setText('res-netProfit', formatCurrency(c.netProfit));
+  setText('res-profitPerUnit', formatCurrency(c.profitPerUnit));
+  setText('res-breakEvenPrice', formatCurrency(c.breakEvenPrice));
+  setText('res-marginPct', formatPct(c.marginPct));
+
+  // True hourly wage with color coding
+  const wageEl = document.getElementById('res-trueHourlyWage');
+  if (wageEl) {
+    wageEl.textContent = formatCurrency(c.trueHourlyWage) + '/hr';
+    wageEl.style.color = '';
+    if (c.laborHours > 0) {
+      if (c.trueHourlyWage >= c.hourlyRate) {
+        wageEl.style.color = 'var(--signal)';
+      } else if (c.trueHourlyWage >= c.hourlyRate * 0.8) {
+        wageEl.style.color = 'var(--warn)';
+      } else {
+        wageEl.style.color = 'var(--danger)';
+      }
+    }
+  }
+
+  // Wage verdict
+  const verdictEl = document.getElementById('res-wageVerdict');
+  if (verdictEl) {
+    if (c.laborHours <= 0) {
+      verdictEl.textContent = 'Enter labor hours to see your wage';
+    } else if (c.trueHourlyWage >= c.hourlyRate) {
+      verdictEl.textContent = 'You\'re paying yourself ' + formatCurrency(c.trueHourlyWage) + '/hr \u2014 on target!';
+    } else if (c.trueHourlyWage >= c.hourlyRate * 0.8) {
+      verdictEl.textContent = 'You\'re paying yourself ' + formatCurrency(c.trueHourlyWage) + '/hr \u2014 close to target';
+    } else {
+      verdictEl.textContent = 'You\'re paying yourself ' + formatCurrency(c.trueHourlyWage) + '/hr \u2014 below your target';
+    }
+  }
+
+  // Cost breakdown bar
+  updateBreakdownBar(c);
+
+  // Badge
+  const badgeEl = document.getElementById('profitability-badge');
+  if (badgeEl) {
+    badgeEl.textContent = c.badge;
+    badgeEl.className = 'pill ' + badgeClass(c.badge);
+  }
+
+  // Update inline ingredient costs
+  updateIngredientCosts(c.ingredientResults);
+
+  // Update target margin label
+  const tmLabel = document.getElementById('target-margin-val');
+  if (tmLabel) tmLabel.textContent = (inputs.targetMargin || 0) + '%';
+
+  // Telemetry
+  updateTelemetry(c);
+}
+
+function setText(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+function badgeClass(badge) {
+  switch (badge) {
+    case 'Underpriced': return 'down';
+    case 'Low Margin': return 'neutral';
+    case 'Healthy': return 'up';
+    case 'Strong': return 'up';
+    default: return 'neutral';
+  }
+}
+
+function updateBreakdownBar(c) {
+  const total = c.totalBatchCost || 1;
+  const ingPct = ((c.totalIngredientCost / total) * 100).toFixed(1);
+  const labPct = ((c.totalLaborCost / total) * 100).toFixed(1);
+  const pkgPct = ((c.totalPackagingCost / total) * 100).toFixed(1);
+  const ovhPct = ((c.overheadExtras / total) * 100).toFixed(1);
+
+  const ingBar = document.getElementById('breakdown-ingredients');
+  const labBar = document.getElementById('breakdown-labor');
+  const pkgBar = document.getElementById('breakdown-packaging');
+  const ovhBar = document.getElementById('breakdown-overhead');
+
+  if (ingBar) { ingBar.style.width = ingPct + '%'; }
+  if (labBar) { labBar.style.width = labPct + '%'; }
+  if (pkgBar) { pkgBar.style.width = pkgPct + '%'; }
+  if (ovhBar) { ovhBar.style.width = ovhPct + '%'; }
+
+  setText('lbl-ingredients', 'Ingredients ' + formatCurrency(c.totalIngredientCost));
+  setText('lbl-labor', 'Labor ' + formatCurrency(c.totalLaborCost));
+  setText('lbl-packaging', 'Packaging ' + formatCurrency(c.totalPackagingCost));
+  setText('lbl-overhead', 'Overhead ' + formatCurrency(c.overheadExtras));
+}
+
+function updateTelemetry(c) {
+  const telCost = document.getElementById('tel-costPerUnit');
+  const telPrice = document.getElementById('tel-suggestedPrice');
+  const telWage = document.getElementById('tel-trueHourlyWage');
+  if (telCost) telCost.textContent = formatCurrency(c.costPerUnit);
+  if (telPrice) {
+    if (c.targetMarginPct >= 100) { telPrice.textContent = '\u2014'; }
+    else { telPrice.textContent = formatCurrency(c.suggestedPrice); }
+  }
+  if (telWage) telWage.textContent = formatCurrency(c.trueHourlyWage) + '/hr';
+}
+
+/* ============================================================
+   10. SAVE RECIPE
+   ============================================================ */
+function saveRecipe() {
+  // Validation
+  const recipeName = val('calc-recipeName').trim();
+  if (!recipeName) {
+    showToast('Recipe name is required', 'error');
+    const el = document.getElementById('calc-recipeName');
+    if (el) el.focus();
+    return;
+  }
+
+  const ingredients = getIngredientsFromDOM();
+  if (ingredients.length === 0) {
+    showToast('Add at least one ingredient with a name and price', 'error');
+    return;
+  }
+
+  const desiredBatch = num('calc-desiredBatch');
+  if (desiredBatch < 1) {
+    showToast('Desired batch size must be at least 1', 'error');
+    return;
+  }
+
+  const inputs = {
+    batchYield: num('calc-batchYield') || 12,
+    desiredBatch: desiredBatch,
+    laborHours: num('calc-laborHours') || 1,
+    hourlyRate: num('calc-hourlyRate') || settings.defaultHourlyRate || 25,
+    packagingPerUnit: num('calc-packagingPerUnit') || settings.defaultPackagingPerUnit || 0.25,
+    overhead: num('calc-overhead') || settings.defaultOverhead || 5.00,
+    boothFee: num('calc-boothFee') || 0,
+    eventUnits: num('calc-eventUnits') || 50,
+    roundTripMiles: num('calc-roundTripMiles') || 0,
+    mileageRate: settings.defaultMileageRate || 0.67,
+    targetMargin: num('calc-targetMargin') || settings.defaultTargetMargin || 40,
+    ingredients: ingredients
+  };
+
+  const c = calculateAll(inputs);
+
+  const recipe = {
+    id: editingId || generateId(),
+    recipeName: recipeName,
+    recipeCategory: val('calc-recipeCategory') || 'Baked Goods',
+    batchYield: inputs.batchYield,
+    batchYieldUnit: val('calc-batchYieldUnit') || 'Units',
+    desiredBatch: inputs.desiredBatch,
+    laborHours: inputs.laborHours,
+    hourlyRate: inputs.hourlyRate,
+    packagingPerUnit: inputs.packagingPerUnit,
+    overhead: inputs.overhead,
+    boothFee: inputs.boothFee,
+    eventUnits: inputs.eventUnits,
+    roundTripMiles: inputs.roundTripMiles,
+    targetMargin: inputs.targetMargin,
+    notes: val('calc-notes') || '',
+    ingredients: c.ingredientResults.map(ir => ({
+      name: ir.name,
+      purchaseQty: ir.purchaseQty,
+      purchaseUnit: ir.purchaseUnit,
+      purchasePrice: ir.purchasePrice,
+      recipeQtyUsed: ir.recipeQtyUsed,
+      recipeUnit: ir.recipeUnit,
+      yieldLossPct: ir.yieldLossPct,
+      ingredientCost: ir.ingredientCost
+    })),
+    calculated: {
+      ingredientCostTotal: c.totalIngredientCost,
+      totalPackagingCost: c.totalPackagingCost,
+      laborCost: c.totalLaborCost,
+      mileageCost: c.mileageCost,
+      boothAllocation: c.boothAllocation,
+      overheadExtras: c.overheadExtras,
+      totalBatchCost: c.totalBatchCost,
+      costPerUnit: c.costPerUnit,
+      suggestedPrice: c.suggestedPrice,
+      netProfit: c.netProfit,
+      profitPerUnit: c.profitPerUnit,
+      trueHourlyWage: c.trueHourlyWage,
+      marginPct: c.marginPct,
+      badge: c.badge,
+      breakEvenPrice: c.breakEvenPrice
+    },
+    savedAt: new Date().toISOString()
+  };
+
+  // Update or append
+  if (editingId) {
+    const idx = recipes.findIndex(r => r.id === editingId);
+    if (idx >= 0) recipes[idx] = recipe;
+    else recipes.push(recipe);
+    editingId = null;
+    const saveBtn = document.querySelector('#topbar-buttons .btn.primary');
+    if (saveBtn) saveBtn.innerHTML = 'save recipe<span class="k">S</span>';
+  } else {
+    recipes.push(recipe);
+  }
+
+  LS.set('recipes', recipes);
+  updateCounts();
+  showToast('Recipe "' + recipeName + '" saved', 'success');
+}
+
+/* ============================================================
+   11. SAVED RECIPES TABLE
+   ============================================================ */
+let currentFilterCategory = 'All';
+let currentFilterBadge = 'All';
+let currentSortColumn = 'savedAt';
+let currentSortDirection = 'desc';
+let currentSearchQuery = '';
+let currentPage = 1;
+const PAGE_SIZE = 10;
+
+function renderDataTable() {
+  const tbody = document.getElementById('data-tbody');
+  const paginationEl = document.getElementById('data-pagination');
+  const countLabel = document.getElementById('count-label');
+  if (!tbody) return;
+
+  // Filter
+  let filtered = recipes.filter(r => {
+    if (currentFilterCategory !== 'All' && r.recipeCategory !== currentFilterCategory) return false;
+    if (currentFilterBadge !== 'All' && r.calculated?.badge !== currentFilterBadge) return false;
+    if (currentSearchQuery) {
+      const q = currentSearchQuery.toLowerCase();
+      if (!(r.recipeName || '').toLowerCase().includes(q)) return false;
+    }
+    return true;
+  });
+
+  // Sort
+  filtered.sort((a, b) => {
+    let av, bv;
+    switch (currentSortColumn) {
+      case 'name': av = (a.recipeName || '').toLowerCase(); bv = (b.recipeName || '').toLowerCase(); break;
+      case 'costPerUnit': av = a.calculated?.costPerUnit || 0; bv = b.calculated?.costPerUnit || 0; break;
+      case 'suggestedPrice': av = a.calculated?.suggestedPrice || 0; bv = b.calculated?.suggestedPrice || 0; break;
+      case 'trueHourlyWage': av = a.calculated?.trueHourlyWage || 0; bv = b.calculated?.trueHourlyWage || 0; break;
+      case 'marginPct': av = a.calculated?.marginPct || 0; bv = b.calculated?.marginPct || 0; break;
+      case 'savedAt': default: av = a.savedAt || ''; bv = b.savedAt || ''; break;
+    }
+    if (av < bv) return currentSortDirection === 'asc' ? -1 : 1;
+    if (av > bv) return currentSortDirection === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  const total = filtered.length;
+  if (countLabel) countLabel.textContent = total + ' total';
+
+  // Pagination
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  currentPage = clamp(currentPage, 1, totalPages);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + PAGE_SIZE);
+
+  // Render rows
+  if (pageItems.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">\u2205</div><h3>NO RECIPES</h3><p>Save a recipe from the calculator to see it here.</p></div></td></tr>';
+  } else {
+    tbody.innerHTML = pageItems.map(r => {
+      const c = r.calculated || {};
+      const dotClass = c.badge === 'Underpriced' ? 'red' : c.badge === 'Low Margin' ? 'gray' : c.badge === 'Healthy' ? 'amber' : 'green';
+      const batchText = (r.desiredBatch || 0) + ' ' + escapeHtml(r.batchYieldUnit || 'Units');
+      return '<tr data-id="' + r.id + '">' +
+        '<td><input type="checkbox" onchange="updateBulkCount()"></td>' +
+        '<td><div class="id"><span class="dot ' + dotClass + '"></span><div><b>' + escapeHtml(r.recipeName || 'Untitled') + '</b><small>' + escapeHtml(r.recipeCategory || '') + '</small></div></div></td>' +
+        '<td>' + escapeHtml(r.recipeCategory || '') + '</td>' +
+        '<td class="num">' + batchText + '</td>' +
+        '<td class="num">' + formatCurrency(c.costPerUnit || 0) + '</td>' +
+        '<td class="num">' + formatCurrency(c.suggestedPrice || 0) + '</td>' +
+        '<td class="num">' + formatCurrency(c.trueHourlyWage || 0) + '/hr</td>' +
+        '<td class="num">' + formatPct(c.marginPct || 0) + '</td>' +
+        '<td><span class="pill ' + badgeClass(c.badge) + '">' + (c.badge || 'Unknown') + '</span></td>' +
+        '<td>' + formatDate(r.savedAt) + '</td>' +
+        '<td style="white-space:nowrap">' +
+          '<button class="btn" style="padding:4px 8px;font-size:10px" onclick="loadRecipe(\'' + r.id + '\')">Load</button>' +
+          '<button class="btn" style="padding:4px 8px;font-size:10px;margin-left:4px" onclick="duplicateRecipe(\'' + r.id + '\')">Dup</button>' +
+          '<button class="btn" style="padding:4px 8px;font-size:10px;margin-left:4px" onclick="sendToCompare(\'' + r.id + '\',\'A\')">A</button>' +
+          '<button class="btn" style="padding:4px 8px;font-size:10px;margin-left:4px" onclick="sendToCompare(\'' + r.id + '\',\'B\')">B</button>' +
+          '<button class="btn danger" style="padding:4px 8px;font-size:10px;margin-left:4px" onclick="deleteRecipe(\'' + r.id + '\')">\u2715</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  // Render pagination
+  if (paginationEl) {
+    let pgHTML = '';
+    pgHTML += '<button ' + (currentPage <= 1 ? 'disabled' : '') + ' onclick="changePage(' + (currentPage - 1) + ')">&larr;</button>';
+    for (let p = 1; p <= totalPages; p++) {
+      if (p === 1 || p === totalPages || (p >= currentPage - 1 && p <= currentPage + 1)) {
+        pgHTML += '<button class="' + (p === currentPage ? 'active' : '') + '" onclick="changePage(' + p + ')">' + p + '</button>';
+      } else if (p === currentPage - 2 || p === currentPage + 2) {
+        pgHTML += '<span style="color:var(--mid);font-size:10px">...</span>';
+      }
+    }
+    pgHTML += '<button ' + (currentPage >= totalPages ? 'disabled' : '') + ' onclick="changePage(' + (currentPage + 1) + ')">&rarr;</button>';
+    pgHTML += '<span class="page-info">Page ' + currentPage + ' of ' + totalPages + '</span>';
+    paginationEl.innerHTML = pgHTML;
+  }
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  } catch(e) { return iso; }
+}
+
+function filterDataCategory(cat) {
+  currentFilterCategory = cat;
+  currentPage = 1;
+  // Update chip active states
+  document.querySelectorAll('#view-data .chip[data-filter-category]').forEach(c => {
+    c.classList.toggle('on', c.dataset.filterCategory === cat);
+  });
+  renderDataTable();
+}
+
+function filterDataBadge(badge) {
+  currentFilterBadge = badge;
+  currentPage = 1;
+  document.querySelectorAll('#view-data .chip[data-filter-badge]').forEach(c => {
+    c.classList.toggle('on', c.dataset.filterBadge === badge);
+  });
+  renderDataTable();
+}
+
+function sortData(column) {
+  if (currentSortColumn === column) {
+    currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+  } else {
+    currentSortColumn = column;
+    currentSortDirection = 'asc';
+  }
+  // Update header sort indicators
+  document.querySelectorAll('#view-data thead th').forEach(th => {
+    th.classList.remove('sort-asc', 'sort-desc');
+    if (th.dataset.sort === column) {
+      th.classList.add(currentSortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+    }
+  });
+  renderDataTable();
+}
+
+function searchRecipes(query) {
+  currentSearchQuery = query;
+  currentPage = 1;
+  const activeView = document.querySelector('.view.active');
+  if (activeView && activeView.id === 'view-data') renderDataTable();
+}
+
+function changePage(page) {
+  currentPage = page;
+  renderDataTable();
+}
+
+/* ============================================================
+   12. ROW ACTIONS
+   ============================================================ */
+function loadRecipe(id) {
+  const r = recipes.find(x => x.id === id);
+  if (!r) { showToast('Recipe not found', 'error'); return; }
+
+  document.getElementById('calc-recipeName').value = r.recipeName || '';
+  document.getElementById('calc-recipeCategory').value = r.recipeCategory || 'Baked Goods';
+  document.getElementById('calc-batchYield').value = r.batchYield || 12;
+  document.getElementById('calc-batchYieldUnit').value = r.batchYieldUnit || 'Units';
+  document.getElementById('calc-desiredBatch').value = r.desiredBatch || 12;
+  document.getElementById('calc-laborHours').value = r.laborHours || 1;
+  document.getElementById('calc-hourlyRate').value = r.hourlyRate || settings.defaultHourlyRate || 25;
+  document.getElementById('calc-packagingPerUnit').value = r.packagingPerUnit || settings.defaultPackagingPerUnit || 0.25;
+  document.getElementById('calc-overhead').value = r.overhead || settings.defaultOverhead || 5.00;
+  document.getElementById('calc-boothFee').value = r.boothFee || 0;
+  document.getElementById('calc-eventUnits').value = r.eventUnits || 50;
+  document.getElementById('calc-roundTripMiles').value = r.roundTripMiles || 0;
+  document.getElementById('calc-targetMargin').value = r.targetMargin || settings.defaultTargetMargin || 40;
+  document.getElementById('calc-notes').value = r.notes || '';
+
+  // Clear and rebuild ingredient rows
+  const tbody = document.getElementById('ingredient-tbody');
+  if (tbody) tbody.innerHTML = '';
+  ingredientIdCounter = 0;
+  if (r.ingredients && r.ingredients.length > 0) {
+    r.ingredients.forEach(ing => addIngredientRow(ing));
+  } else {
+    if (tbody) {
+      tbody.innerHTML = '<tr class="ingredient-placeholder"><td colspan="9" style="padding:24px;text-align:center;color:var(--mid);font-size:12px;border:1px dashed var(--rule)">No ingredients yet. Click "Add Ingredient" to start building your recipe.</td></tr>';
+    }
+  }
+
+  editingId = r.id;
+  navigateTo('main');
+  recalculate();
+  showToast('Loaded "' + r.recipeName + '"', 'info');
+  const saveBtn = document.querySelector('#topbar-buttons .btn.primary');
+  if (saveBtn) saveBtn.innerHTML = '&#x270E; update recipe<span class="k">S</span>';
+}
+
+function duplicateRecipe(id) {
+  const r = recipes.find(x => x.id === id);
+  if (!r) { showToast('Recipe not found', 'error'); return; }
+
+  const copy = JSON.parse(JSON.stringify(r));
+  copy.id = generateId();
+  copy.recipeName = 'Copy of ' + (r.recipeName || 'Untitled');
+  copy.savedAt = new Date().toISOString();
+  recipes.push(copy);
+  LS.set('recipes', recipes);
+  updateCounts();
+  renderDataTable();
+  showToast('Duplicated "' + r.recipeName + '"', 'success');
+}
+
+function deleteRecipe(id) {
+  const r = recipes.find(x => x.id === id);
+  if (!r) return;
+  openModal('Delete Recipe',
+    '<p>Delete recipe <b>' + escapeHtml(r.recipeName || 'Untitled') + '</b>?</p><p>This cannot be undone.</p>',
+    '<button class="btn" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="doDeleteRecipe(\'' + id + '\')">Delete</button>');
+}
+
+function doDeleteRecipe(id) {
+  recipes = recipes.filter(r => r.id !== id);
+  LS.set('recipes', recipes);
+  updateCounts();
+  closeModal();
+  renderDataTable();
+  showToast('Recipe deleted', 'info');
+}
+
+function sendToCompare(id, column) {
+  const r = recipes.find(x => x.id === id);
+  if (!r) { showToast('Recipe not found', 'error'); return; }
+  const key = column === 'A' ? COMPARE_A_KEY : COMPARE_B_KEY;
+  localStorage.setItem(key, JSON.stringify(r));
+  showToast('Sent to Compare ' + column, 'success');
+  if (document.querySelector('.view.active')?.id === 'view-compare') {
+    restoreCompareState();
+  }
+}
+
+/* ============================================================
+   13. COMPARE VIEW
+   ============================================================ */
+function restoreCompareState() {
+  // Column A
+  const aData = LS.get('compareA', null);
+  if (aData) populateCompareColumn('a', aData);
+  else clearCompareColumn('a');
+
+  // Column B
+  const bData = LS.get('compareB', null);
+  if (bData) populateCompareColumn('b', bData);
+  else clearCompareColumn('b');
+
+  // Recalculate both
+  calculateCompare('a');
+  calculateCompare('b');
+  updateCompareWinner();
+}
+
+function populateCompareColumn(col, recipe) {
+  const c = recipe.calculated || {};
+  const nameEl = document.getElementById('compare-' + col + '-name');
+  const batchEl = document.getElementById('compare-' + col + '-batch');
+  if (nameEl) nameEl.textContent = recipe.recipeName || 'Untitled';
+  if (batchEl) batchEl.value = recipe.desiredBatch || 12;
+  // Store recipe data on the container for recalculation
+  const container = document.getElementById('compare-col-' + col);
+  if (container) container.dataset.recipeJson = JSON.stringify(recipe);
+}
+
+function clearCompareColumn(col) {
+  const nameEl = document.getElementById('compare-' + col + '-name');
+  const batchEl = document.getElementById('compare-' + col + '-batch');
+  if (nameEl) nameEl.textContent = 'No recipe loaded';
+  if (batchEl) batchEl.value = 12;
+  const container = document.getElementById('compare-col-' + col);
+  if (container) delete container.dataset.recipeJson;
+
+  // Clear all result fields
+  ['ingredientCost','packagingCost','laborCost','overheadExtras','totalBatchCost','costPerUnit',
+   'suggestedPrice','profitPerUnit','marginPct','trueHourlyWage','badge'].forEach(field => {
+    const el = document.getElementById('compare-' + col + '-' + field);
+    if (el) el.textContent = field === 'badge' ? '' : '—';
+  });
+}
+
+function calculateCompare(column) {
+  const container = document.getElementById('compare-col-' + column);
+  if (!container || !container.dataset.recipeJson) return;
+
+  let recipe;
+  try { recipe = JSON.parse(container.dataset.recipeJson); } catch(e) { return; }
+
+  const batchInput = document.getElementById('compare-' + column + '-batch');
+  const desiredBatch = parseInt(batchInput?.value || recipe.desiredBatch || 12, 10);
+  if (batchInput && batchInput.value !== String(desiredBatch)) batchInput.value = desiredBatch;
+
+  // Recalculate with new batch
+  const inputs = {
+    batchYield: recipe.batchYield || 12,
+    desiredBatch: desiredBatch,
+    laborHours: recipe.laborHours || 1,
+    hourlyRate: recipe.hourlyRate || settings.defaultHourlyRate || 25,
+    packagingPerUnit: recipe.packagingPerUnit || settings.defaultPackagingPerUnit || 0.25,
+    overhead: recipe.overhead || settings.defaultOverhead || 5.00,
+    boothFee: recipe.boothFee || 0,
+    eventUnits: recipe.eventUnits || 50,
+    roundTripMiles: recipe.roundTripMiles || 0,
+    mileageRate: settings.defaultMileageRate || 0.67,
+    targetMargin: recipe.targetMargin || settings.defaultTargetMargin || 40,
+    ingredients: (recipe.ingredients || []).map(ing => ({
+      name: ing.name,
+      purchaseQty: ing.purchaseQty,
+      purchaseUnit: ing.purchaseUnit,
+      purchasePrice: ing.purchasePrice,
+      recipeQtyUsed: ing.recipeQtyUsed,
+      recipeUnit: ing.recipeUnit,
+      yieldLossPct: ing.yieldLossPct
+    }))
+  };
+
+  const c = calculateAll(inputs);
+
+  // Update column display
+  setText('compare-' + column + '-ingredientCost', formatCurrency(c.totalIngredientCost));
+  setText('compare-' + column + '-packagingCost', formatCurrency(c.totalPackagingCost));
+  setText('compare-' + column + '-laborCost', formatCurrency(c.totalLaborCost));
+  setText('compare-' + column + '-overheadExtras', formatCurrency(c.overheadExtras));
+  setText('compare-' + column + '-totalBatchCost', formatCurrency(c.totalBatchCost));
+  setText('compare-' + column + '-costPerUnit', formatCurrency(c.costPerUnit));
+  setText('compare-' + column + '-suggestedPrice', formatCurrency(c.suggestedPrice));
+  setText('compare-' + column + '-profitPerUnit', formatCurrency(c.profitPerUnit));
+  setText('compare-' + column + '-marginPct', formatPct(c.marginPct));
+  setText('compare-' + column + '-trueHourlyWage', formatCurrency(c.trueHourlyWage) + '/hr');
+
+  const badgeEl = document.getElementById('compare-' + column + '-badge');
+  if (badgeEl) {
+    badgeEl.textContent = c.badge;
+    badgeEl.className = 'pill ' + badgeClass(c.badge);
+  }
+
+  // Store results for winner comparison
+  container.dataset.profitPerUnit = String(c.profitPerUnit);
+  container.dataset.trueHourlyWage = String(c.trueHourlyWage);
+  container.dataset.badge = c.badge;
+}
+
+function updateCompareWinner() {
+  const banner = document.getElementById('compare-winner-banner');
+  if (!banner) return;
+
+  const colA = document.getElementById('compare-col-a');
+  const colB = document.getElementById('compare-col-b');
+
+  if (!colA?.dataset.recipeJson || !colB?.dataset.recipeJson) {
+    banner.textContent = 'Load two recipes to see comparison';
+    banner.style.background = 'var(--paper-2)';
+    return;
+  }
+
+  const profitA = parseFloat(colA.dataset.profitPerUnit || 0);
+  const profitB = parseFloat(colB.dataset.profitPerUnit || 0);
+  const wageA = parseFloat(colA.dataset.trueHourlyWage || 0);
+  const wageB = parseFloat(colB.dataset.trueHourlyWage || 0);
+
+  const nameA = document.getElementById('compare-a-name')?.textContent || 'A';
+  const nameB = document.getElementById('compare-b-name')?.textContent || 'B';
+
+  let text = '';
+  if (profitA > profitB && wageA > wageB) {
+    text = nameA + ' wins on both profit per unit and true hourly wage';
+    banner.style.background = 'oklch(from var(--signal) l c h / .12)';
+  } else if (profitB > profitA && wageB > wageA) {
+    text = nameB + ' wins on both profit per unit and true hourly wage';
+    banner.style.background = 'oklch(from var(--signal) l c h / .12)';
+  } else {
+    const parts = [];
+    if (profitA > profitB) parts.push(nameA + ' wins on profit per unit');
+    else if (profitB > profitA) parts.push(nameB + ' wins on profit per unit');
+    else parts.push('Tied on profit per unit');
+
+    if (wageA > wageB) parts.push(nameA + ' wins on true hourly wage');
+    else if (wageB > wageA) parts.push(nameB + ' wins on true hourly wage');
+    else parts.push('Tied on true hourly wage');
+
+    text = parts.join(' \u00B7 ');
+    banner.style.background = 'oklch(from var(--warn) l c h / .12)';
+  }
+
+  banner.textContent = text;
+}
+
+function sendCurrentToCompare(column) {
+  // Save current calculator state as a pseudo-recipe for compare
+  const inputs = collectCalculatorInputs();
+  const c = calculateAll(inputs);
+  const pseudoRecipe = {
+    id: generateId(),
+    recipeName: val('calc-recipeName') || 'Current Recipe',
+    recipeCategory: val('calc-recipeCategory') || 'Baked Goods',
+    batchYield: inputs.batchYield,
+    batchYieldUnit: val('calc-batchYieldUnit') || 'Units',
+    desiredBatch: inputs.desiredBatch,
+    laborHours: inputs.laborHours,
+    hourlyRate: inputs.hourlyRate,
+    packagingPerUnit: inputs.packagingPerUnit,
+    overhead: inputs.overhead,
+    boothFee: inputs.boothFee,
+    eventUnits: inputs.eventUnits,
+    roundTripMiles: inputs.roundTripMiles,
+    targetMargin: inputs.targetMargin,
+    notes: val('calc-notes') || '',
+    ingredients: c.ingredientResults,
+    calculated: {
+      ingredientCostTotal: c.totalIngredientCost,
+      totalPackagingCost: c.totalPackagingCost,
+      laborCost: c.totalLaborCost,
+      mileageCost: c.mileageCost,
+      boothAllocation: c.boothAllocation,
+      overheadExtras: c.overheadExtras,
+      totalBatchCost: c.totalBatchCost,
+      costPerUnit: c.costPerUnit,
+      suggestedPrice: c.suggestedPrice,
+      netProfit: c.netProfit,
+      profitPerUnit: c.profitPerUnit,
+      trueHourlyWage: c.trueHourlyWage,
+      marginPct: c.marginPct,
+      badge: c.badge,
+      breakEvenPrice: c.breakEvenPrice
+    },
+    savedAt: new Date().toISOString()
+  };
+  const key = column === 'A' ? COMPARE_A_KEY : COMPARE_B_KEY;
+  localStorage.setItem(key, JSON.stringify(pseudoRecipe));
+  showToast('Current recipe sent to Compare ' + column, 'success');
+  navigateTo('compare');
+}
+
+function collectCalculatorInputs() {
+  return {
+    batchYield: num('calc-batchYield') || 12,
+    desiredBatch: num('calc-desiredBatch') || 12,
+    laborHours: num('calc-laborHours') || 1,
+    hourlyRate: num('calc-hourlyRate') || settings.defaultHourlyRate || 25,
+    packagingPerUnit: num('calc-packagingPerUnit') || settings.defaultPackagingPerUnit || 0.25,
+    overhead: num('calc-overhead') || settings.defaultOverhead || 5.00,
+    boothFee: num('calc-boothFee') || 0,
+    eventUnits: num('calc-eventUnits') || 50,
+    roundTripMiles: num('calc-roundTripMiles') || 0,
+    mileageRate: settings.defaultMileageRate || 0.67,
+    targetMargin: num('calc-targetMargin') || settings.defaultTargetMargin || 40,
+    ingredients: getAllIngredientRows()
+  };
+}
+
+/* ============================================================
+   14. ANALYTICS
+   ============================================================ */
+function renderAnalytics() {
+  const chartContainer = document.getElementById('analytics-chart-container');
+  if (!chartContainer) return;
+
+  if (recipes.length === 0) {
+    chartContainer.innerHTML = '<div class="empty-state" style="border:none;padding:40px"><div class="empty-icon">\u2205</div><h3>NO DATA</h3><p>Save recipes to see analytics.</p></div>';
+    return;
+  }
+
+  // Summary stats
+  let totalMargin = 0, totalWage = 0, bestProfitPerUnit = -Infinity, bestRecipe = null, recipeCount = 0;
+  let totalIngCost = 0, totalLabCost = 0, totalPkgCost = 0, totalOvhCost = 0, totalBatches = 0;
+
+  recipes.forEach(r => {
+    const c = r.calculated || {};
+    totalMargin += c.marginPct || 0;
+    totalWage += c.trueHourlyWage || 0;
+    recipeCount++;
+    const ppu = c.profitPerUnit || 0;
+    if (ppu > bestProfitPerUnit) { bestProfitPerUnit = ppu; bestRecipe = r; }
+    // Cost composition totals
+    totalIngCost += c.ingredientCostTotal || 0;
+    totalLabCost += c.laborCost || 0;
+    totalPkgCost += c.totalPackagingCost || 0;
+    totalOvhCost += (c.overheadExtras || 0);
+    totalBatches++;
+  });
+
+  const avgMargin = recipeCount > 0 ? totalMargin / recipeCount : 0;
+  const avgWage = recipeCount > 0 ? totalWage / recipeCount : 0;
+
+  // Build summary HTML
+  let html = '<div class="stats" style="margin-bottom:24px">' +
+    '<div class="card"><div class="lbl"><span>Avg Margin</span></div><div class="val">' + formatPct(avgMargin) + '</div><div class="delta"><span class="pill neutral">across ' + recipeCount + ' recipes</span></div></div>' +
+    '<div class="card"><div class="lbl"><span>Avg True Hourly Wage</span></div><div class="val">' + formatCurrency(avgWage) + '<span class="u">/hr</span></div><div class="delta"><span class="pill neutral">target: ' + formatCurrency(settings.defaultHourlyRate || 25) + '/hr</span></div></div>' +
+    '<div class="card"><div class="lbl"><span>Total Recipes</span></div><div class="val">' + recipeCount + '</div></div>' +
+    '<div class="card"><div class="lbl"><span>Best Recipe</span></div><div class="val" style="font-size:20px">' + escapeHtml(bestRecipe?.recipeName || 'N/A') + '</div><div class="delta"><span class="pill up">' + formatCurrency(bestProfitPerUnit) + '/unit profit</span></div></div>' +
+  '</div>';
+
+  // Horizontal bar chart: true hourly wage per recipe (last 20 by date)
+  html += '<div style="border:1px solid var(--rule);background:var(--paper);padding:20px;margin-bottom:20px">';
+  html += '<h3 style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:16px"><span style="color:var(--accent)">\u00A7 1</span> True Hourly Wage by Recipe (last 20)</h3>';
+
+  const last20 = recipes.slice().sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt)).slice(0, 20).reverse();
+  const maxWage = Math.max(...last20.map(r => (r.calculated?.trueHourlyWage || 0)), settings.defaultHourlyRate || 25);
+
+  last20.forEach(r => {
+    const c = r.calculated || {};
+    const wage = c.trueHourlyWage || 0;
+    const barWidth = maxWage > 0 ? (wage / maxWage * 100).toFixed(1) : 0;
+    let barColor = 'var(--signal)';
+    if (wage < (r.hourlyRate || settings.defaultHourlyRate || 25) * 0.8) barColor = 'var(--danger)';
+    else if (wage < (r.hourlyRate || settings.defaultHourlyRate || 25)) barColor = 'var(--warn)';
+
+    html += '<div style="display:flex;align-items:center;margin-bottom:6px;font-size:11px">' +
+      '<span style="width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0">' + escapeHtml(r.recipeName || 'Untitled') + '</span>' +
+      '<div style="flex:1;height:18px;background:var(--rule-2);margin:0 10px;position:relative;overflow:hidden">' +
+        '<div style="height:100%;width:' + barWidth + '%;background:' + barColor + ';transition:width .3s"></div>' +
+      '</div>' +
+      '<span style="width:70px;text-align:right;flex-shrink:0;font-weight:600">' + formatCurrency(wage) + '/hr</span>' +
+    '</div>';
+  });
+  html += '</div>';
+
+  // Vertical bar chart: profit per unit top 10
+  html += '<div style="border:1px solid var(--rule);background:var(--paper);padding:20px;margin-bottom:20px">';
+  html += '<h3 style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:16px"><span style="color:var(--accent)">\u00A7 2</span> Profit Per Unit (top 10)</h3>';
+
+  const top10 = recipes.slice().sort((a, b) => (b.calculated?.profitPerUnit || 0) - (a.calculated?.profitPerUnit || 0)).slice(0, 10);
+  const maxPpu = Math.max(...top10.map(r => r.calculated?.profitPerUnit || 0), 0.01);
+
+  html += '<div style="display:flex;align-items:flex-end;gap:4px;height:180px;padding:0 10px">';
+  top10.forEach(r => {
+    const ppu = r.calculated?.profitPerUnit || 0;
+    const barHeight = maxPpu > 0 ? (ppu / maxPpu * 100).toFixed(1) : 0;
+    html += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">' +
+      '<span style="font-size:9px;margin-bottom:4px;font-weight:600">' + formatCurrency(ppu) + '</span>' +
+      '<div style="width:100%;height:' + barHeight + '%;background:var(--accent);min-height:2px;transition:height .3s"></div>' +
+      '<span style="font-size:8px;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;text-align:center;color:var(--mid)">' + escapeHtml(r.recipeName || '') + '</span>' +
+    '</div>';
+  });
+  html += '</div></div>';
+
+  // Doughnut chart: avg cost composition
+  html += '<div style="border:1px solid var(--rule);background:var(--paper);padding:20px;margin-bottom:20px">';
+  html += '<h3 style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:16px"><span style="color:var(--accent)">\u00A7 3</span> Average Cost Composition</h3>';
+
+  const totalAll = totalIngCost + totalLabCost + totalPkgCost + totalOvhCost;
+  if (totalAll > 0) {
+    const ingPct = ((totalIngCost / totalAll) * 100).toFixed(1);
+    const labPct = ((totalLabCost / totalAll) * 100).toFixed(1);
+    const pkgPct = ((totalPkgCost / totalAll) * 100).toFixed(1);
+    const ovhPct = ((totalOvhCost / totalAll) * 100).toFixed(1);
+
+    // Conic gradient for doughnut
+    const g1 = parseFloat(ingPct);
+    const g2 = g1 + parseFloat(labPct);
+    const g3 = g2 + parseFloat(pkgPct);
+    const gradient = 'conic-gradient(' +
+      'var(--accent) 0% ' + g1 + '%,' +
+      'var(--ink) ' + g1 + '% ' + g2 + '%,' +
+      'var(--accent-2) ' + g2 + '% ' + g3 + '%,' +
+      'var(--rule) ' + g3 + '% 100%)';
+
+    html += '<div style="display:flex;align-items:center;gap:30px;flex-wrap:wrap">' +
+      '<div style="width:140px;height:140px;border-radius:50%;background:' + gradient + ';position:relative;flex-shrink:0">' +
+        '<div style="position:absolute;inset:20px;border-radius:50%;background:var(--paper);display:grid;place-items:center;font-size:11px;font-weight:600;color:var(--ink)">100%</div>' +
+      '</div>' +
+      '<div style="font-size:11px;line-height:2">' +
+        '<div><span style="display:inline-block;width:10px;height:10px;background:var(--accent);margin-right:8px"></span>Ingredients ' + ingPct + '%</div>' +
+        '<div><span style="display:inline-block;width:10px;height:10px;background:var(--ink);margin-right:8px"></span>Labor ' + labPct + '%</div>' +
+        '<div><span style="display:inline-block;width:10px;height:10px;background:var(--accent-2);margin-right:8px"></span>Packaging ' + pkgPct + '%</div>' +
+        '<div><span style="display:inline-block;width:10px;height:10px;background:var(--rule);margin-right:8px"></span>Overhead + Mileage + Booth ' + ovhPct + '%</div>' +
+      '</div>' +
+    '</div>';
+  }
+  html += '</div>';
+
+  chartContainer.innerHTML = html;
+}
+
+/* ============================================================
+   15. SETTINGS VIEW
+   ============================================================ */
+function loadSettingsIntoForm() {
+  const s = loadSettings();
+  const elRate = document.getElementById('set-hourlyRate');
+  const elPkg = document.getElementById('set-packagingPerUnit');
+  const elOver = document.getElementById('set-overhead');
+  const elMile = document.getElementById('set-mileageRate');
+  const elMargin = document.getElementById('set-targetMargin');
+  const elHue = document.getElementById('set-accentHue');
+  const elHueVal = document.getElementById('set-accentHue-val');
+
+  if (elRate) elRate.value = s.defaultHourlyRate;
+  if (elPkg) elPkg.value = s.defaultPackagingPerUnit;
+  if (elOver) elOver.value = s.defaultOverhead;
+  if (elMile) elMile.value = s.defaultMileageRate;
+  if (elMargin) elMargin.value = s.defaultTargetMargin;
+  if (elHue) elHue.value = s.accentHue;
+  if (elHueVal) elHueVal.textContent = s.accentHue;
+}
+
+function saveSettingsFromForm() {
+  const newSettings = {
+    defaultHourlyRate: parseFloat(document.getElementById('set-hourlyRate')?.value) || 25,
+    defaultPackagingPerUnit: parseFloat(document.getElementById('set-packagingPerUnit')?.value) || 0.25,
+    defaultOverhead: parseFloat(document.getElementById('set-overhead')?.value) || 5.00,
+    defaultMileageRate: parseFloat(document.getElementById('set-mileageRate')?.value) || 0.67,
+    defaultTargetMargin: parseFloat(document.getElementById('set-targetMargin')?.value) || 40,
+    accentHue: parseInt(document.getElementById('set-accentHue')?.value || '32', 10)
+  };
+  saveSettings(newSettings);
+  settings = newSettings;
+  applyAccent(settings.accentHue);
+  recalculate();
+  showToast('Settings saved', 'success');
+}
+
+function exportJSON() {
+  const payload = {
+    version: '1.0',
+    exportedAt: new Date().toISOString(),
+    settings: loadSettings(),
+    recipes: recipes
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'costkit-export-' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Exported ' + recipes.length + ' recipes', 'success');
+}
+
+function importJSON() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json,application/json';
+  input.onchange = function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (!data.recipes || !Array.isArray(data.recipes)) {
+          showToast('Invalid file format: missing recipes array', 'error');
+          return;
+        }
+        if (data.settings && typeof data.settings === 'object') {
+          settings = { ...loadSettings(), ...data.settings };
+          saveSettings(settings);
+          applyAccent(settings.accentHue);
+        }
+        recipes = data.recipes;
+        LS.set('recipes', recipes);
+        updateCounts();
+        loadSettingsIntoForm();
+        showToast('Imported ' + recipes.length + ' recipes', 'success');
+      } catch(err) {
+        showToast('Failed to import: ' + err.message, 'error');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+function confirmClearAll() {
+  if (recipes.length === 0) { showToast('No data to clear', 'info'); return; }
+  openModal('Clear All Data',
+    '<p>This will permanently delete all ' + recipes.length + ' saved recipes and settings.</p><p>This action cannot be undone.</p>',
+    '<button class="btn" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="doClearAll()">Delete Everything</button>');
+}
+
+function doClearAll() {
+  LS.clearAll();
+  recipes = [];
+  settings = {
+    defaultHourlyRate: 25, defaultPackagingPerUnit: 0.25, defaultOverhead: 5.00,
+    defaultMileageRate: 0.67, defaultTargetMargin: 40, accentHue: 32
+  };
+  saveSettings(settings);
+  applyAccent(32);
+  closeModal();
+  updateCounts();
+  if (document.querySelector('.view.active')?.id === 'view-data') renderDataTable();
+  if (document.querySelector('.view.active')?.id === 'view-analytics') renderAnalytics();
+  showToast('All data cleared', 'info');
+}
+
+function onAccentHueChange(val) {
+  const v = parseInt(val || '32', 10);
+  const el = document.getElementById('set-accentHue-val');
+  if (el) el.textContent = v;
+  applyAccent(v);
+}
+
+/* ============================================================
+   16. CSV EXPORT
+   ============================================================ */
+function exportToCSV() {
+  if (recipes.length === 0) { showToast('No recipes to export', 'info'); return; }
+
+  const rows = recipes.map(r => {
+    const c = r.calculated || {};
+    return [
+      escapeCSV(r.recipeName || ''),
+      escapeCSV(r.recipeCategory || ''),
+      r.batchYield || '',
+      escapeCSV(r.batchYieldUnit || ''),
+      r.desiredBatch || '',
+      r.laborHours || '',
+      r.hourlyRate || '',
+      r.packagingPerUnit || '',
+      r.overhead || '',
+      r.boothFee || '',
+      r.eventUnits || '',
+      r.roundTripMiles || '',
+      r.targetMargin || '',
+      (r.ingredients || []).length,
+      (c.ingredientCostTotal || 0).toFixed(2),
+      (c.laborCost || 0).toFixed(2),
+      (c.totalPackagingCost || 0).toFixed(2),
+      (c.overheadExtras || 0).toFixed(2),
+      (c.totalBatchCost || 0).toFixed(2),
+      (c.costPerUnit || 0).toFixed(2),
+      (c.suggestedPrice || 0).toFixed(2),
+      (c.profitPerUnit || 0).toFixed(2),
+      (c.trueHourlyWage || 0).toFixed(2),
+      (c.marginPct || 0).toFixed(2),
+      escapeCSV(c.badge || ''),
+      r.savedAt || ''
+    ].join(',');
+  });
+
+  const csv = [CSV_COLUMNS.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'costkit-recipes-' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Exported ' + recipes.length + ' recipes to CSV', 'success');
+}
+
+function escapeCSV(str) {
+  if (!str) return '';
+  const s = String(str);
+  if (s.includes(',') || s.includes('"') || s.includes('\n')) {
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+  return s;
+}
+
+/* ============================================================
+   17. RESET FORM
+   ============================================================ */
+function confirmResetForm() {
+  openModal('Reset Calculator',
+    '<p>Clear all fields and start over?</p>',
+    '<button class="btn" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="doResetForm()">Reset</button>');
+}
+
+function doResetForm() {
+  closeModal();
+  resetForm();
+}
+
+function resetForm() {
+  editingId = null;
+  const saveBtn = document.querySelector('#topbar-buttons .btn.primary');
+  if (saveBtn) saveBtn.innerHTML = 'save recipe<span class="k">S</span>';
+  document.getElementById('calc-recipeName').value = '';
+  document.getElementById('calc-recipeCategory').value = 'Baked Goods';
+  document.getElementById('calc-batchYield').value = 12;
+  document.getElementById('calc-batchYieldUnit').value = 'Units';
+  document.getElementById('calc-desiredBatch').value = 12;
+  document.getElementById('calc-laborHours').value = 1;
+  document.getElementById('calc-hourlyRate').value = settings.defaultHourlyRate || 25;
+  document.getElementById('calc-packagingPerUnit').value = settings.defaultPackagingPerUnit || 0.25;
+  document.getElementById('calc-overhead').value = settings.defaultOverhead || 5.00;
+  document.getElementById('calc-boothFee').value = 0;
+  document.getElementById('calc-eventUnits').value = 50;
+  document.getElementById('calc-roundTripMiles').value = 0;
+  document.getElementById('calc-targetMargin').value = settings.defaultTargetMargin || 40;
+  document.getElementById('calc-notes').value = '';
+
+  // Reset ingredients
+  const tbody = document.getElementById('ingredient-tbody');
+  if (tbody) {
+    tbody.innerHTML = '<tr class="ingredient-placeholder"><td colspan="9" style="padding:24px;text-align:center;color:var(--mid);font-size:12px;border:1px dashed var(--rule)">No ingredients yet. Click "Add Ingredient" to start building your recipe.</td></tr>';
+  }
+  ingredientIdCounter = 0;
+
+  recalculate();
+  showToast('Form reset', 'info');
+}
+
+/* ============================================================
+   18. SIDEBAR & COUNTS
+   ============================================================ */
+function updateCounts() {
+  // Nav count
+  const navCount = document.getElementById('nav-count');
+  if (navCount) navCount.textContent = recipes.length;
+
+  // Runtime counts
+  const rtCount = document.getElementById('rt-count');
+  const rtMargin = document.getElementById('rt-margin');
+  if (rtCount) rtCount.textContent = recipes.length;
+
+  if (rtMargin) {
+    if (recipes.length === 0) {
+      rtMargin.textContent = '--';
+    } else {
+      let totalM = 0;
+      recipes.forEach(r => { totalM += r.calculated?.marginPct || 0; });
+      rtMargin.textContent = (totalM / recipes.length).toFixed(1) + '%';
+    }
+  }
+
+  // Runtime bars
+  const barMain = document.getElementById('rt-bar-main');
+  const barWarn = document.getElementById('rt-bar-warn');
+
+  if (recipes.length === 0) {
+    if (barMain) barMain.style.width = '0%';
+    if (barWarn) barWarn.style.width = '0%';
+  } else {
+    let healthyCount = 0;
+    recipes.forEach(r => {
+      const b = r.calculated?.badge || '';
+      if (b === 'Healthy' || b === 'Strong') healthyCount++;
+    });
+    const pct = (healthyCount / recipes.length * 100).toFixed(0);
+    if (barMain) barMain.style.width = pct + '%';
+    if (barWarn) barWarn.style.width = (100 - parseInt(pct)) + '%';
+  }
+
+  // Op button: show recipe count
+  const opBtn = document.querySelector('.op .out');
+  const opWho = document.querySelector('.op .who span');
+  if (opBtn) {
+    opBtn.textContent = recipes.length + ' saved';
+    opBtn.onclick = function() { navigateTo('data'); };
+  }
+  if (opWho) opWho.textContent = recipes.length + ' recipes';
+}
+
+/* ============================================================
+   19. VIEW ROUTER OVERRIDE
+   ============================================================ */
+// Override showToast to use textContent for message
+function showToast(msg, type, dur) {
+  const d = dur || 3000;
+  const c = document.getElementById('toast-container');
+  if (!c) return;
+  const t = document.createElement('div');
+  t.className = 'toast ' + (type || 'info');
+  const icons = { success: '\u2713', error: '\u2715', info: '\u2139' };
+
+  // Use DOM methods to avoid innerHTML on user content
+  const iconSpan = document.createElement('span');
+  iconSpan.className = 'toast-icon';
+  iconSpan.textContent = icons[type] || '\u2139';
+
+  const msgSpan = document.createElement('span');
+  msgSpan.className = 'toast-msg';
+  msgSpan.textContent = msg; // textContent for XSS protection
+
+  const closeSpan = document.createElement('span');
+  closeSpan.className = 'toast-close';
+  closeSpan.textContent = '\u00D7';
+  closeSpan.onclick = function() { t.remove(); };
+
+  const barDiv = document.createElement('div');
+  barDiv.className = 'toast-bar';
+  barDiv.style.cssText = 'width:100%;animation:shrink ' + d + 'ms linear forwards';
+
+  t.appendChild(iconSpan);
+  t.appendChild(msgSpan);
+  t.appendChild(closeSpan);
+  t.appendChild(barDiv);
+  c.appendChild(t);
+
+  setTimeout(() => { t.classList.add('toast-out'); setTimeout(() => t.remove(), 300); }, d);
+}
+
+// Extend VIEWS with all 6 views
+VIEWS.compare = { title: 'Compare', subtitle: 'side-by-side recipe comparison', crumb: 'compare', page: '03 / 06' };
+VIEWS.main.title = 'Recipe Calculator';
+VIEWS.main.subtitle = 'recipe cost & pricing tool';
+VIEWS.main.crumb = 'calculator';
+VIEWS.main.page = '01 / 06';
+VIEWS.data.title = 'Saved Recipes';
+VIEWS.data.subtitle = 'catalog of saved recipes';
+VIEWS.data.page = '02 / 06';
+VIEWS.analytics.title = 'Analytics';
+VIEWS.analytics.subtitle = 'performance insights';
+VIEWS.analytics.page = '04 / 06';
+VIEWS.settings.title = 'Settings';
+VIEWS.settings.subtitle = 'defaults & data management';
+VIEWS.settings.page = '05 / 06';
+VIEWS.help.title = 'Help';
+VIEWS.help.subtitle = 'formula reference & guide';
+VIEWS.help.page = '06 / 06';
+
+// Override navigateTo
+function navigateTo(viewName, e) {
+  if (e) e.preventDefault();
+  if (!VIEWS[viewName]) return;
+
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  const viewEl = document.getElementById('view-' + viewName);
+  if (viewEl) viewEl.classList.add('active');
+
+  const navEl = document.querySelector('.nav-item[data-view="' + viewName + '"]');
+  if (navEl) navEl.classList.add('active');
+
+  const v = VIEWS[viewName];
+  document.getElementById('page-title').textContent = v.title;
+  document.getElementById('page-subtitle').textContent = v.subtitle;
+  document.getElementById('crumb-view').textContent = v.crumb;
+  document.getElementById('foot-page').textContent = v.page;
+
+  document.getElementById('sidebar').classList.remove('open');
+
+  // View-specific initialization
+  if (viewName === 'data') renderDataTable();
+  if (viewName === 'compare') restoreCompareState();
+  if (viewName === 'analytics') renderAnalytics();
+  if (viewName === 'settings') loadSettingsIntoForm();
+}
+
+/* ============================================================
+   20. KEYBOARD SHORTCUTS
+   ============================================================ */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); document.getElementById('search-input').focus(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'p') { e.preventDefault(); window.print(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); saveRecipe(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'e') { e.preventDefault(); exportToCSV(); }
+});
+
+/* ============================================================
+   21. SIDEBAR SEARCH
+   ============================================================ */
+document.getElementById('search-input').addEventListener('input', function(e) {
+  const q = e.target.value.trim();
+  const activeView = document.querySelector('.view.active');
+  if (!activeView) return;
+
+  if (activeView.id === 'view-data') {
+    searchRecipes(q);
+  }
+});
+
+/* ============================================================
+   22. BOOT / INIT
+   ============================================================ */
+function boot() {
+  settings = loadSettings();
+  applyAccent(settings.accentHue || 32);
+  initTheme();
+  loadRecipes();
+
+  // Set default calculator values from settings
+  document.getElementById('calc-hourlyRate').value = settings.defaultHourlyRate || 25;
+  document.getElementById('calc-packagingPerUnit').value = settings.defaultPackagingPerUnit || 0.25;
+  document.getElementById('calc-overhead').value = settings.defaultOverhead || 5.00;
+  document.getElementById('calc-targetMargin').value = settings.defaultTargetMargin || 40;
+
+  // Add initial ingredient row or show placeholder
+  const tbody = document.getElementById('ingredient-tbody');
+  if (tbody && tbody.children.length === 0) {
+    tbody.innerHTML = '<tr class="ingredient-placeholder"><td colspan="9" style="padding:24px;text-align:center;color:var(--mid);font-size:12px;border:1px dashed var(--rule)">No ingredients yet. Click "Add Ingredient" to start building your recipe.</td></tr>';
+  }
+
+  // Attach live recalc listeners to all calculator inputs
+  const inputIds = ['calc-recipeName','calc-recipeCategory','calc-batchYield','calc-batchYieldUnit',
+    'calc-desiredBatch','calc-laborHours','calc-hourlyRate','calc-packagingPerUnit',
+    'calc-overhead','calc-boothFee','calc-eventUnits','calc-roundTripMiles','calc-targetMargin','calc-notes'];
+  inputIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', recalculate);
+      el.addEventListener('change', recalculate);
+    }
+  });
+
+  // Set brand name in sidebar
+  const wordmark = document.querySelector('.wordmark');
+  if (wordmark) {
+    wordmark.innerHTML = '<span>cost</span><span class="slash">/</span><span>kit</span><small>recipe cost & pricing tool</small>';
+  }
+
+  // Set nav labels
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(item => {
+    const view = item.dataset.view;
+    if (view === 'main') item.querySelector('.lbl').textContent = 'recipe calculator';
+    if (view === 'data') item.querySelector('.lbl').textContent = 'saved recipes';
+    if (view === 'compare') item.querySelector('.lbl').textContent = 'compare';
+    if (view === 'analytics') item.querySelector('.lbl').textContent = 'analytics';
+    if (view === 'settings') item.querySelector('.lbl').textContent = 'settings';
+    if (view === 'help') item.querySelector('.lbl').textContent = 'help';
+  });
+
+  // Ensure runtime bars have unique IDs
+  const runtimeBlock = document.getElementById('runtime-block');
+  if (runtimeBlock) {
+    const bars = runtimeBlock.querySelectorAll('.bar-fill');
+    if (bars.length >= 2) {
+      bars[0].id = 'rt-bar-main';
+      bars[1].id = 'rt-bar-warn';
+    }
+    // Update runtime rows
+    const rtRows = document.getElementById('runtime-rows');
+    if (rtRows) {
+      rtRows.innerHTML = '<div class="row"><span>Recipes</span><b id="rt-count">0</b></div>' +
+        '<div class="row"><span>Avg Margin</span><b id="rt-margin">--</b></div>';
+    }
+  }
+
+  // Update footer copyright
+  const footL = document.querySelector('.footstrip .l');
+  if (footL) {
+    footL.innerHTML = '<span>\u00A9 2026 Food Business Cost Calculator \u00B7 All rights reserved. Licensed for personal use only.</span><span class="sep"></span><span>rev <b>v1.1</b></span>';
+  }
+  const footR = document.querySelector('.footstrip .r');
+  if (footR) {
+    footR.innerHTML = '<span>page <b id="foot-page">01 / 06</b></span><span class="sep"></span><span>cost<b>/kit</b></span>';
+  }
+
+  // Override topbar buttons for this app
+  const topbarBtns = document.getElementById('topbar-buttons');
+  if (topbarBtns) {
+    topbarBtns.innerHTML =
+      '<button class="btn" type="button" onclick="exportToCSV()">export csv<span class="k">E</span></button>' +
+      '<button class="btn" type="button" onclick="window.print()">print<span class="k">P</span></button>' +
+      '<button class="btn" type="button" onclick="confirmResetForm()">reset</button>' +
+      '<button class="btn primary" type="button" onclick="saveRecipe()">save recipe<span class="k">S</span></button>';
+  }
+
+  // Override telemetry
+  const telemetry = document.querySelector('.telemetry');
+  if (telemetry) {
+    telemetry.innerHTML =
+      '<div><span>Cost/Unit</span><b id="tel-costPerUnit">$0.00</b></div>' +
+      '<div><span>Suggested</span><b id="tel-suggestedPrice">$0.00</b></div>' +
+      '<div><span>Wage</span><b id="tel-trueHourlyWage">$0.00/hr</b></div>';
+  }
+
+  recalculate();
+  updateCounts();
+}
+
+boot();
+
+/* ---- STORAGE AVAILABILITY CHECK ---- */
+(function() {
+  try {
+    const t = '__storage_test__';
+    localStorage.setItem(t, t);
+    localStorage.removeItem(t);
+  } catch(e) {
+    showToast('Private mode detected — data will not be saved when this tab closes', 'error', 8000);
+  }
+})();
+
+
+
+/* ============================================================
+   WRAPPER FUNCTIONS — HTML event handler bridges
+   ============================================================ */
+
+// HTML uses recalc() but JS defines recalculate()
+function recalc() { recalculate(); }
+
+// HTML uses filterByCategory() but JS defines filterDataCategory()
+function filterByCategory(cat) { filterDataCategory(cat); }
+
+// HTML uses filterByBadge() but JS defines filterDataBadge()
+function filterByBadge(badge) { filterDataBadge(badge); }
+
+// HTML uses sortTable() but JS defines sortData()
+function sortTable(col) { sortData(col); }
+
+// Compare column selection changed
+function onCompareSelect(col) {
+  const selector = document.getElementById('comp-' + col.toLowerCase() + '-selector');
+  if (!selector) return;
+  const recipeId = selector.value;
+  if (!recipeId) { clearCompareColumn(col.toLowerCase()); return; }
+  const r = recipes.find(x => x.id === recipeId);
+  if (r) {
+    populateCompareColumn(col.toLowerCase(), r);
+    calculateCompare(col.toLowerCase());
+    updateCompareWinner();
+  }
+}
+
+// Recalculate compare view
+function recalcCompare() {
+  calculateCompare('a');
+  calculateCompare('b');
+  updateCompareWinner();
+}
+
+// Settings changed — auto-save
+function onSettingsChange() { saveSettingsFromForm(); }
+
+// Sidebar search handler
+function onSidebarSearch() {
+  const q = document.getElementById('search-input')?.value?.trim() || '';
+  const activeView = document.querySelector('.view.active');
+  if (!activeView) return;
+  if (activeView.id === 'view-data') { searchRecipes(q); }
+}
+
+// Update margin label display
+function updateMarginLabel() {
+  const val = document.getElementById('calc-targetMargin')?.value || 40;
+  const labelEl = document.getElementById('targetMargin-label');
+  const valEl = document.getElementById('targetMargin-val');
+  if (labelEl) labelEl.textContent = val + '%';
+  if (valEl) valEl.textContent = val + '%';
+}
+
+// Toggle all checkboxes in data table
+let allSelected = false;
+function toggleSelectAll() {
+  allSelected = !allSelected;
+  const checkboxes = document.querySelectorAll('#data-tbody input[type=checkbox]');
+  checkboxes.forEach(cb => cb.checked = allSelected);
+  updateBulkCount();
+}
+
+function updateBulkCount() {
+  const checked = document.querySelectorAll('#data-tbody input[type=checkbox]:checked');
+  const countEl = document.getElementById('bulk-count');
+  const bar = document.getElementById('bulk-actions');
+  if (countEl) countEl.textContent = checked.length + ' selected';
+  if (bar) bar.style.display = checked.length > 0 ? 'flex' : 'none';
+}
+
+// Confirm bulk delete
+function confirmBulkDelete() {
+  const checked = document.querySelectorAll('#data-tbody input[type=checkbox]:checked');
+  if (checked.length === 0) { showToast('No recipes selected', 'info'); return; }
+  openModal('Delete Selected',
+    '<p>Delete ' + checked.length + ' selected recipes?</p><p>This cannot be undone.</p>',
+    '<button class="btn" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="doBulkDelete()">Delete</button>');
+}
+
+function doBulkDelete() {
+  const checked = document.querySelectorAll('#data-tbody input[type=checkbox]:checked');
+  const idsToDelete = new Set();
+  checked.forEach(cb => {
+    const row = cb.closest('tr');
+    if (row && row.dataset.id) idsToDelete.add(row.dataset.id);
+  });
+  recipes = recipes.filter(r => !idsToDelete.has(r.id));
+  LS.set('recipes', recipes);
+  updateCounts();
+  closeModal();
+  renderDataTable();
+  showToast('Selected recipes deleted', 'info');
+}
+
+// Clear all data with confirmation
+function clearAllData() {
+  if (recipes.length === 0) { showToast('No data to clear', 'info'); return; }
+  openModal('Clear All',
+    '<p>Delete all ' + recipes.length + ' saved recipes?</p><p>This cannot be undone.</p>',
+    '<button class="btn" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="doClearAllData()">Delete All</button>');
+}
+
+function doClearAllData() {
+  recipes = [];
+  LS.set('recipes', recipes);
+  updateCounts();
+  closeModal();
+  renderDataTable();
+  showToast('All recipes deleted', 'info');
+}
+
+// Send current calculator to compare (not from saved recipe)
+function sendToCompare(col) {
+  sendCurrentToCompare(col);
+}
+
+// Populate compare selectors with saved recipes
+function refreshCompareSelectors() {
+  ['a', 'b'].forEach(col => {
+    const sel = document.getElementById('comp-' + col + '-selector');
+    if (!sel) return;
+    const currentVal = sel.value;
+    let html = '<option value="">-- Select a saved recipe --</option>';
+    recipes.forEach(r => {
+      html += '<option value="' + r.id + '">' + escapeHtml(r.recipeName || 'Untitled') + '</option>';
+    });
+    sel.innerHTML = html;
+    if (currentVal) sel.value = currentVal;
+  });
+}
+
+</script>
+</body>
+</html>

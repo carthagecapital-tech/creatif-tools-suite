@@ -1,0 +1,211 @@
+═══════════════════════════════════════════════════
+  AMAZON FBA PROFIT CALCULATOR — USER GUIDE
+  Full Feature Reference | FBA-CALC-v1
+═══════════════════════════════════════════════════
+
+─────────────────────────────────────────
+NAVIGATION
+─────────────────────────────────────────
+The app has 6 sections accessible from the left sidebar:
+
+  01 Calculator  →  Main profit calculator
+  02 Products    →  Saved product catalog
+  03 Compare     →  Side-by-side product comparison
+  04 Analytics   →  Profitability charts and insights
+  05 Settings    →  Defaults and preferences
+  06 Help        →  Fee tables and formula reference
+
+Use the search bar (Ctrl + K) to jump between saved products.
+
+─────────────────────────────────────────
+01 — CALCULATOR
+─────────────────────────────────────────
+The core tool. Fill in your product inputs and all results
+update in real time.
+
+INPUTS:
+  Product Name    Required if you want to save the product
+  ASIN            Optional reference field
+  Category        Determines the Amazon referral fee rate
+  Size Tier       Standard Small / Standard Large / Large Bulky / Extra Large
+  Unit Weight     In lbs — used to calculate FBA fulfillment fee
+  Product Cost    Your per-unit cost (COGS), landed
+  Prep Cost       Per-unit prep or labeling cost
+  Inbound Ship    Cost per unit to ship to an FBA warehouse
+  Selling Price   Your Amazon listing price
+  Monthly Volume  Expected units sold per month
+  Storage Volume  Cubic feet per unit (length × width × height ÷ 1728)
+  Storage Month   Jan-Sep uses standard rate / Oct-Dec uses peak rate
+  Target ROI      Used to calculate your suggested selling price
+
+OUTPUTS — PROFIT ANALYSIS:
+  Net Profit      Selling price minus all fees and costs (per unit)
+  Margin          Net profit as a % of selling price
+  ROI             Net profit as a % of your total cost
+  Amazon's Cut    Referral fee + FBA fulfillment fee + storage fee
+  Your Cost       Product cost + prep cost + inbound shipping
+  Monthly Profit  Net profit × monthly volume
+
+COST BREAKDOWN BAR:
+  Visual bar showing exactly where your money goes:
+  COGS | Referral Fee | FBA Fee | Storage | Prep & Ship
+
+FEE BREAKDOWN TABLE:
+  Referral Fee          → % of selling price (varies by category)
+  FBA Fulfillment Fee   → Based on size tier and unit weight
+  Storage Fee           → Based on volume and storage month
+  Total Amazon Fees     → Sum of all Amazon charges
+  Total Cost            → COGS + prep + inbound shipping
+  Total Deductions      → Total Amazon Fees + Total Cost
+  Net Profit            → Selling Price − Total Deductions
+
+SUGGESTED PRICE & BREAK-EVEN:
+  Suggested Price        → Minimum price to hit your target ROI
+  Break-Even Price       → Minimum price to avoid a loss
+  Break-Even Units/Month → Units needed per month to cover storage costs
+
+PROFITABILITY BADGE:
+  STRONG   Margin > 40%
+  HEALTHY  Margin between 20% and 40%
+  THIN     Margin > 0% but below 20%
+  LOSS     Net profit is negative — selling at a loss
+
+ACTIONS:
+  Save Product    → Saves to your product catalog (requires a name)
+  Reset Form      → Clears all inputs back to defaults
+  Send to Compare → Loads this product into the Compare view
+
+─────────────────────────────────────────
+02 — PRODUCTS
+─────────────────────────────────────────
+Your saved product catalog. All products are stored locally
+in your browser.
+
+FEATURES:
+  - Search by name or ASIN
+  - Sort by any column (name, margin, ROI, profit, fees, date)
+  - Filter by profitability badge (All / Loss / Thin / Healthy / Strong)
+  - Click any product row to load it back into the Calculator
+  - Select multiple products and delete them
+  - Export all products to CSV (Ctrl + E)
+
+SUMMARY BAR (bottom):
+  Shows total saved products, average margin, and average ROI
+  across your entire catalog.
+
+─────────────────────────────────────────
+03 — COMPARE
+─────────────────────────────────────────
+Compare two products side by side to see which is more profitable.
+
+HOW TO USE:
+  Option A: Use "Send to Compare" from the Calculator view
+  Option B: Manually enter two sets of product inputs directly
+            in the Compare view
+
+Both products calculate simultaneously. Results show net profit,
+margin, ROI, total fees, and total cost for each side.
+Export the comparison to CSV using the Export button.
+
+─────────────────────────────────────────
+04 — ANALYTICS
+─────────────────────────────────────────
+Visual overview of your saved product catalog.
+
+CHARTS INCLUDE:
+  - Margin distribution across your products
+  - ROI distribution across your products
+  - Profitability badge breakdown (Strong / Healthy / Thin / Loss)
+  - Average margin and average ROI across all saved products
+
+Useful for spotting which products are underperforming and
+where to focus your sourcing efforts.
+
+─────────────────────────────────────────
+05 — SETTINGS
+─────────────────────────────────────────
+Customize the app to match your default workflow.
+
+DEFAULTS:
+  Default Category     → Pre-selected category when you open the calculator
+  Default Size Tier    → Pre-selected size tier
+  Default Storage Month→ Jan-Sep or Oct-Dec
+  Default Target ROI   → Your standard ROI target (slider)
+
+APPEARANCE:
+  Accent Color Hue     → Customize the app's accent color
+  Theme                → Toggle between light and dark mode (moon/sun icon
+                         in the top-left of the sidebar)
+
+DATA MANAGEMENT:
+  Import Data          → Load a previously exported JSON backup
+  Export Data          → Save all your products as a JSON backup file
+  Clear All Data       → Permanently delete all saved products
+                         (cannot be undone)
+
+─────────────────────────────────────────
+06 — HELP (IN-APP)
+─────────────────────────────────────────
+The Help section inside the app contains:
+  - Referral fee rates by category
+  - FBA fulfillment fee tables by size tier and weight
+  - Monthly storage fee rates (standard and peak)
+  - Full formula guide
+  - Profitability badge thresholds
+  - Keyboard shortcuts
+
+─────────────────────────────────────────
+FORMULAS REFERENCE
+─────────────────────────────────────────
+  Referral Fee (flat)    MAX(price × rate, minimum fee)
+  Referral Fee (tiered)  (threshold × tier1) + MAX(0, (price − threshold) × tier2)
+  FBA Fee                Looked up from size tier + weight bracket table
+  Storage Fee            Storage rate × storage volume (ft³)
+  Total Amazon Fees      Referral + FBA + Storage
+  Total Cost             Product cost + prep cost + inbound shipping
+  Total Deductions       Total Amazon Fees + Total Cost
+  Net Profit             Selling price − Total Deductions
+  Profit Margin          (Net Profit ÷ Selling Price) × 100
+  ROI                    (Net Profit ÷ Total Cost) × 100
+  Break-Even Price       Total Cost ÷ (1 − effective rate) + FBA fee + storage fee
+  Suggested Price        (Total Cost × (1 + target ROI ÷ 100) + FBA + storage) ÷ (1 − effective rate)
+
+─────────────────────────────────────────
+DATA & PRIVACY
+─────────────────────────────────────────
+- All data is stored in your browser's localStorage
+- No data is sent to any server
+- Works 100% offline after the file is downloaded
+- To back up your data: Settings → Export Data (JSON)
+  or Ctrl + E to export a CSV
+- Clearing browser cache will erase saved products —
+  export regularly as a precaution
+
+─────────────────────────────────────────
+COMPATIBILITY
+─────────────────────────────────────────
+  Chrome    ✓ Recommended
+  Firefox   ✓
+  Safari    ✓
+  Edge      ✓
+  Mobile    ✓ Works but optimized for desktop
+
+─────────────────────────────────────────
+KEYBOARD SHORTCUTS
+─────────────────────────────────────────
+  Ctrl + S    Save product
+  Ctrl + E    Export to CSV
+  Ctrl + K    Focus search bar
+  Ctrl + P    Print current view
+  Escape      Close modal
+
+─────────────────────────────────────────
+SUPPORT
+─────────────────────────────────────────
+Contact us through your Etsy order page.
+We respond within 24 hours.
+
+═══════════════════════════════════════════════════
+  FBA-CALC-v1 | © 2026 Amazon FBA Profit Calculator
+  Licensed for personal use only.
+═══════════════════════════════════════════════════
