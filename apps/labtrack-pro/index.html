@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Track and monitor your lab test results over time. Flag out-of-range values instantly.">
+<meta name="theme-color" content="#f4f2ec">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230096c7'/%3E%3Cpath fill='%23fff' d='M22 5H10c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-6 16l-4-4 1.4-1.4L16 18.2l5.6-5.6L23 14l-7 7z'/%3E%3C/svg%3E">
+<title>LabTrack — Personal Lab Results Tracker</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --accent:      #0077a3;
+    --accent-dk:   #0096c7;
+    --bg:          #f4f2ec;
+    --surface:     #ffffff;
+    --surface2:    #faf8f3;
+    --border:      #e5e1d8;
+    --border2:     #d8d3c7;
+    --text:        #2c2a26;
+    --muted:       #9a958a;
+    --muted2:      #b5b0a6;
+    --danger:      #c0584f;
+    --danger-dim:  color-mix(in srgb, var(--danger) 10%, var(--surface));
+    --ok:          #4f8a5b;
+    --ok-dim:      color-mix(in srgb, var(--ok) 10%, var(--surface));
+    --warn:        #b8862f;
+    --warn-dim:    color-mix(in srgb, var(--warn) 10%, var(--surface));
+    --accent-dim:  color-mix(in srgb, var(--accent) 14%, var(--surface));
+    --accent-dim2: color-mix(in srgb, var(--accent) 6%,  var(--surface));
+    --accent-h:    #005f85;
+    --on-accent:   #ffffff;
+    --mono: 'Consolas','Menlo','Courier New',monospace;
+    --sans: 'Trebuchet MS',system-ui,-apple-system,sans-serif;
+    --shadow:      0 1px 2px rgba(40,38,34,.04), 0 2px 6px rgba(40,38,34,.05);
+    --shadow-lg:   0 4px 12px rgba(40,38,34,.07), 0 12px 28px rgba(40,38,34,.07);
+  }
+  [data-theme="dark"] {
+    --accent:      var(--accent-dk);
+    --bg:          #1a1815;
+    --surface:     #242220;
+    --surface2:    #2c2a27;
+    --border:      #36332e;
+    --border2:     #423e38;
+    --text:        #ece9e2;
+    --muted:       #75716a;
+    --muted2:      #5a564e;
+    --danger:      #e0796f;
+    --danger-dim:  color-mix(in srgb, var(--danger) 10%, var(--surface));
+    --ok:          #6cb079;
+    --ok-dim:      color-mix(in srgb, var(--ok) 10%, var(--surface));
+    --warn:        #d6a44f;
+    --warn-dim:    color-mix(in srgb, var(--warn) 10%, var(--surface));
+    --accent-dim:  color-mix(in srgb, var(--accent) 18%, var(--surface));
+    --accent-dim2: color-mix(in srgb, var(--accent) 8%,  var(--surface));
+    --accent-h:    #00b4e8;
+    --on-accent:   #1a1815;
+    --shadow:      0 1px 2px rgba(0,0,0,.25), 0 2px 6px rgba(0,0,0,.3);
+    --shadow-lg:   0 6px 16px rgba(0,0,0,.4);
+  }
+  html { font-size: 15px; -webkit-text-size-adjust: 100%; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; line-height: 1.5; transition: background .25s, color .25s; }
+  input, select, textarea, button { font-family: inherit; font-size: inherit; }
+  input[type=number] { -moz-appearance: textfield; }
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+  /* ── SKIP NAV ── */
+  .skip-nav { position: absolute; top: -100px; left: 12px; background: var(--accent); color: #fff; padding: 8px 16px; font-size: 13px; font-weight: 600; z-index: 9999; transition: top .15s; text-decoration: none; }
+  .skip-nav:focus { top: 8px; }
+
+  /* ── TOP BAR ── */
+  .top-bar { height: 3px; background: var(--accent); }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 14px 24px; display: flex; align-items: center;
+    justify-content: space-between; gap: 14px; flex-wrap: wrap;
+    transition: background .25s, border-color .25s;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: var(--shadow);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-icon { width: 36px; height: 36px; background: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .brand-icon svg { width: 20px; height: 20px; fill: var(--on-accent); }
+  .brand-text { font-weight: 700; font-size: 18px; letter-spacing: -.3px; color: var(--text); transition: color .25s; }
+  .brand-text span { color: var(--accent); }
+  .brand-tag { font-size: 10px; color: var(--muted); letter-spacing: .5px; margin-top: 1px; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .icon-btn { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; }
+  .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .icon-btn svg { width: 17px; height: 17px; }
+
+  /* ── MAIN ── */
+  .main { max-width: 1060px; margin: 0 auto; padding: 24px 20px 80px; }
+
+  /* ── STAT CARDS ── */
+  .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 24px; box-shadow: var(--shadow); }
+  .stat-card { background: var(--surface); padding: 14px 18px; transition: background .25s; }
+  .stat-card.flagged { background: var(--danger-dim); }
+  .stat-label { font-family: var(--mono); font-size: 9px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .stat-val { font-family: var(--mono); font-size: 26px; font-weight: 700; color: var(--text); line-height: 1; }
+  .stat-card.flagged .stat-val { color: var(--danger); }
+  .stat-card.accent .stat-val  { color: var(--accent); }
+  .stat-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* ── SECTION LABEL ── */
+  .section-label { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── ADD FORM ── */
+  .add-form-wrap { border: 1px solid var(--border); background: var(--surface); margin-bottom: 24px; transition: background .25s, border-color .25s; overflow: hidden; box-shadow: var(--shadow); }
+  .add-form-header { padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; transition: background .15s; }
+  .add-form-header:hover { background: var(--surface2); }
+  .add-form-title { font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+  .form-toggle-icon { font-size: 18px; color: var(--muted); transition: transform .2s; }
+  .form-toggle-icon.open { transform: rotate(45deg); }
+  .add-form-body { display: none; padding: 0; }
+  .add-form-body.open { display: block; }
+  .form-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr; gap: 1px; background: var(--border); }
+  .form-field { background: var(--surface); padding: 12px 14px; }
+  .form-field.wide { grid-column: span 2; }
+  .form-field.wide-end { grid-column: 4 / -1; }
+  .form-field.full { grid-column: 1/-1; }
+  .form-label { font-family: var(--mono); font-size: 9px; letter-spacing: 1.3px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .form-field input, .form-field select {
+    font-family: var(--sans); font-size: 14px; color: var(--text);
+    background: transparent; border: none; outline: none; width: 100%;
+  }
+  .form-field select {
+    -webkit-appearance: none; appearance: none; cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%239a958a' d='M0 0h10L5 6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 2px center; padding-right: 18px;
+  }
+  [data-theme="dark"] .form-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%2375716a' d='M0 0h10L5 6z'/%3E%3C/svg%3E");
+  }
+  .form-field input::placeholder { color: var(--muted2); }
+  .form-field input[type="date"] { font-family: var(--mono); font-size: 13px; }
+  .form-field input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(.3); cursor: pointer; }
+  [data-theme="dark"] .form-field input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(.5); }
+  .form-actions { background: var(--surface2); padding: 12px 18px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* ── FILTER BAR ── */
+  .filter-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .filter-tabs { display: flex; gap: 1px; border: 1px solid var(--border2); overflow: hidden; flex-wrap: wrap; }
+  .filter-tab { font-family: var(--sans); font-size: 11px; font-weight: 500; letter-spacing: .5px; padding: 6px 12px; background: transparent; border: none; color: var(--muted); cursor: pointer; transition: all .15s; white-space: nowrap; }
+  .filter-tab.active { background: var(--accent); color: var(--on-accent); font-weight: 600; }
+  .filter-tab:hover:not(.active) { background: var(--surface2); color: var(--text); }
+  .search-box { flex: 1; min-width: 160px; }
+  .search-box input { font-family: var(--sans); font-size: 13px; color: var(--text); background: var(--surface); border: 1px solid var(--border2); padding: 6px 12px; outline: none; width: 100%; transition: border-color .15s; }
+  .search-box input:focus { border-color: var(--accent); }
+  .search-box input::placeholder { color: var(--muted); }
+  .status-filter { font-family: var(--sans); font-size: 12px; color: var(--text); background: var(--surface); border: 1px solid var(--border2); padding: 6px 12px; outline: none; cursor: pointer; -webkit-appearance: none; appearance: none; padding-right: 24px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%239a958a' d='M0 0h10L5 6z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; }
+  [data-theme="dark"] .status-filter { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%2375716a' d='M0 0h10L5 6z'/%3E%3C/svg%3E"); }
+
+  /* ── RESULTS TABLE ── */
+  .table-wrap { border: 1px solid var(--border); overflow: hidden; margin-bottom: 24px; box-shadow: var(--shadow); }
+  .table-head { display: grid; grid-template-columns: 2fr 120px 110px 140px 90px 80px 64px; background: var(--surface2); border-bottom: 1px solid var(--border); }
+  .th { font-family: var(--mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); padding: 10px 14px; border-right: 1px solid var(--border); }
+  .th:last-child { border-right: none; }
+  .th.r { text-align: right; }
+  .result-row { display: grid; grid-template-columns: 2fr 120px 110px 140px 90px 80px 64px; border-bottom: 1px solid var(--border); background: var(--surface); transition: background .1s; }
+  .result-row:last-child { border-bottom: none; }
+  .result-row:hover { background: var(--surface2); }
+  .result-row.high { border-left: 3px solid var(--danger); }
+  .result-row.low  { border-left: 3px solid var(--warn); }
+  .result-row.normal { border-left: 3px solid var(--ok); }
+  .result-row.unknown { border-left: 3px solid var(--border2); }
+  .td { font-size: 13px; color: var(--text); padding: 11px 14px; border-right: 1px solid var(--border); display: flex; align-items: center; overflow: hidden; }
+  .td:last-child { border-right: none; justify-content: center; padding: 0; }
+  .row-actions { display: flex; align-items: center; justify-content: center; gap: 2px; width: 100%; height: 100%; }
+  .btn-edit { background: transparent; border: none; color: var(--muted2); cursor: pointer; transition: color .15s; width: 28px; height: 100%; display: flex; align-items: center; justify-content: center; }
+  .btn-edit svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; }
+  .btn-edit:hover { color: var(--accent); }
+  .result-row.editing { background: var(--accent-dim2); box-shadow: inset 3px 0 0 var(--accent); }
+  .td.r { justify-content: flex-end; font-family: var(--mono); }
+  .td-name { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .td-name .test-name { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .td-name .test-note { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .cat-badge { font-family: var(--mono); font-size: 9px; letter-spacing: .5px; text-transform: uppercase; color: var(--muted); background: var(--surface2); border: 1px solid var(--border2); padding: 2px 7px; white-space: nowrap; }
+  .val-display { font-family: var(--mono); font-size: 14px; font-weight: 600; }
+  .val-display.ok     { color: var(--ok); }
+  .val-display.high   { color: var(--danger); }
+  .val-display.low    { color: var(--warn); }
+  .val-display.unknown{ color: var(--muted); }
+  .range-text { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .status-pill { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; padding: 3px 8px; white-space: nowrap; }
+  .status-pill.ok      { background: var(--ok-dim);     color: var(--ok);     border: 1px solid var(--ok); }
+  .status-pill.high    { background: var(--danger-dim);  color: var(--danger);  border: 1px solid var(--danger); }
+  .status-pill.low     { background: var(--warn-dim);    color: var(--warn);    border: 1px solid var(--warn); }
+  .status-pill.unknown { background: transparent;        color: var(--muted);   border: 1px solid var(--border2); }
+  .date-text { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .btn-del { background: transparent; border: none; color: var(--muted2); cursor: pointer; font-size: 15px; transition: color .15s; width: 28px; height: 100%; display: flex; align-items: center; justify-content: center; }
+  .btn-del:hover { color: var(--danger); }
+
+  /* empty table state */
+  .table-empty { padding: 48px 20px; text-align: center; color: var(--muted); background: var(--surface); }
+  .table-empty .empty-icon { width: 34px; height: 34px; fill: var(--muted); margin: 0 auto 12px; display: block; opacity: .35; }
+  .table-empty p { max-width: 260px; margin: 0 auto; font-size: 13px; line-height: 1.7; }
+
+  /* ── ACTIONS ── */
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-sec { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 9px 18px; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; }
+  .btn-sec:hover { border-color: var(--text); color: var(--text); }
+  .btn-pri { font-family: var(--sans); font-size: 13px; font-weight: 600; padding: 9px 22px; background: var(--accent); border: 1px solid var(--accent); color: var(--on-accent); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; }
+  .btn-pri:hover { background: var(--accent-h); border-color: var(--accent-h); }
+  .btn-danger { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 9px 18px; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; }
+  .btn-danger:hover { border-color: var(--danger); color: var(--danger); }
+
+  /* ── DISCLAIMER ── */
+  .disclaimer { font-size: 11px; color: var(--muted); line-height: 1.6; border-left: 2px solid var(--border2); padding: 8px 12px; margin-top: 20px; display: flex; align-items: flex-start; gap: 8px; }
+  .disclaimer .disc-icon { width: 14px; height: 14px; fill: var(--warn); flex-shrink: 0; margin-top: 1px; }
+
+  /* ── PAGE FOOTER ── */
+  .page-footer { text-align: center; font-size: 11px; color: var(--muted); padding: 20px 20px 28px; border-top: 1px solid var(--border); margin-top: 8px; }
+
+  .print-only { display: none; }
+
+  /* ── PRINT ── */
+  @media print {
+    @page { margin: .5in; size: letter portrait; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { background: #fff !important; color: #111 !important; font-size: 12px; }
+    .header { position: static; background: #fff !important; border-color: #ccc !important; }
+    .icon-btn, .add-form-wrap, .filter-bar, .actions, .btn-del, .form-actions, .page-footer, .app-footer { display: none !important; }
+    .brand-text { color: #1a1a1a !important; }
+    .top-bar { background: #0077a3 !important; }
+    .stats-row { border-color: #ddd !important; background: #ddd !important; }
+    .stat-card { background: #f5f3ef !important; }
+    .stat-val { color: #1a1a1a !important; }
+    .stat-card.flagged .stat-val { color: #d32f2f !important; }
+    .stat-card.accent .stat-val  { color: #0077a3 !important; }
+    .table-wrap { border-color: #ccc !important; overflow: visible !important; box-shadow: none !important; }
+    .table-head, .result-row { grid-template-columns: 25% 12% 11% 20% 10% 10% 0 !important; }
+    .td:last-child, .th:last-child { display: none !important; }
+    .table-head { background: #f5f3ef !important; border-color: #ddd !important; }
+    .th { color: #555 !important; border-color: #ddd !important; }
+    .result-row { background: #fff !important; border-color: #eee !important; }
+    .result-row.high   { border-left-color: #d32f2f !important; }
+    .result-row.low    { border-left-color: #c87d00 !important; }
+    .result-row.normal { border-left-color: #1e8c4e !important; }
+    .td { color: #1a1a1a !important; border-color: #eee !important; }
+    .val-display.ok     { color: #1e8c4e !important; }
+    .val-display.high   { color: #d32f2f !important; }
+    .val-display.low    { color: #c87d00 !important; }
+    .cat-badge { background: #f5f3ef !important; border-color: #ddd !important; color: #555 !important; }
+    .range-text, .date-text { color: #555 !important; }
+    .status-pill.ok      { background: #f0fff6 !important; color: #1e8c4e !important; border-color: #1e8c4e !important; }
+    .status-pill.high    { background: #fff0f0 !important; color: #d32f2f !important; border-color: #d32f2f !important; }
+    .status-pill.low     { background: #fff8f0 !important; color: #c87d00 !important; border-color: #c87d00 !important; }
+    .print-only { display: block !important; }
+    .print-footer { text-align: center; font-size: 9px; color: #999; margin-top: 20px; padding-top: 10px; border-top: 1px solid #ddd; }
+  }
+  #printFooter { display: none; }
+
+  /* ── FOOTER ── */
+  .app-footer { max-width: 1060px; margin: 0 auto; padding: 24px 20px; text-align: center; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+  .app-footer .f-tag { font-family: var(--sans); font-size: 13px; color: var(--muted); font-style: italic; margin-bottom: 6px; }
+  .app-footer .f-rights { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); margin-top: 8px; }
+  .app-footer .f-rights b { color: var(--text); font-weight: 600; }
+  .app-footer .f-priv { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted2); margin-top: 6px; }
+  .app-footer .f-priv svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 760px) {
+    .main { padding: 16px 14px 80px; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .table-head { display: none; }
+    .result-row { grid-template-columns: 1fr; padding: 12px 14px; gap: 5px; }
+    .td { border-right: none; padding: 2px 0; font-size: 13px; }
+    .td[data-label]::before { content: attr(data-label); font-family: var(--mono); font-size: 9px; letter-spacing: 1.3px; text-transform: uppercase; color: var(--muted); display: inline-block; min-width: 64px; flex-shrink: 0; }
+    .td.td-name { gap: 2px; }
+    .td.td-name::before { display: none; }
+    .td.r { justify-content: flex-start; }
+    .td:last-child { justify-content: flex-start; padding: 4px 0 0; }
+    .row-actions { width: auto; height: auto; gap: 14px; justify-content: flex-start; }
+    .btn-edit, .btn-del { width: auto; height: auto; gap: 5px; font-size: 12px; }
+    .btn-edit::after { content: 'Edit'; font-size: 12px; }
+    .btn-del { color: var(--danger); }
+    .btn-del::after { content: 'Delete'; font-size: 12px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-field.wide { grid-column: span 1; }
+    .filter-bar { gap: 8px; }
+    .filter-tabs { flex-wrap: wrap; }
+    .actions { position: sticky; bottom: 0; background: var(--bg); border-top: 1px solid var(--border); padding: 12px 14px; margin: 0 -14px; padding-bottom: calc(12px + env(safe-area-inset-bottom,0px)); }
+    .header { padding: 12px 14px; }
+    .app-footer { padding: 16px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#mainContent" class="skip-nav">Skip to main content</a>
+
+<div class="top-bar"></div>
+
+<header class="header">
+  <div class="brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.4-1.4L12 14.2l7.6-7.6L21 8l-9 9z"/>
+      </svg>
+    </div>
+    <div>
+      <div class="brand-text">Lab<span>Track</span></div>
+      <div class="brand-tag">Personal Lab Results Tracker</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">
+      <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg id="iconSun" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="main" id="mainContent">
+
+  <!-- STAT CARDS -->
+  <div class="stats-row">
+    <div class="stat-card accent">
+      <div class="stat-label">Total Results</div>
+      <div class="stat-val" id="statTotal">0</div>
+      <div class="stat-sub">entries logged</div>
+    </div>
+    <div class="stat-card" id="statFlagCard">
+      <div class="stat-label">Out of Range</div>
+      <div class="stat-val" id="statFlagged">0</div>
+      <div class="stat-sub">need attention</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Normal</div>
+      <div class="stat-val" id="statNormal" style="color:var(--ok)">0</div>
+      <div class="stat-sub">within range</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Last Entry</div>
+      <div class="stat-val" id="statLast" style="font-size:15px;padding-top:4px">—</div>
+      <div class="stat-sub" id="statLastTest">no entries yet</div>
+    </div>
+  </div>
+
+  <!-- ADD RESULT FORM -->
+  <div class="section-label">Add Result</div>
+  <div class="add-form-wrap">
+    <div class="add-form-header" id="formToggle" role="button" tabindex="0" aria-expanded="true" aria-controls="formBody">
+      <div class="add-form-title">
+        <span id="formToggleIcon" class="form-toggle-icon open">+</span>
+        New Lab Result
+      </div>
+      <div style="font-size:11px;color:var(--muted)" id="formToggleHint">Click to collapse</div>
+    </div>
+    <div class="add-form-body open" id="formBody">
+      <div class="form-grid">
+        <div class="form-field wide">
+          <div class="form-label">Test Name</div>
+          <select id="fTest">
+            <option value="">— Select a test or type below —</option>
+            <optgroup label="Complete Blood Count (CBC)">
+              <option value="WBC|CBC|K/µL|4.5|11.0">WBC (White Blood Cells)</option>
+              <option value="RBC|CBC|M/µL|4.2|5.4">RBC (Red Blood Cells)</option>
+              <option value="Hemoglobin|CBC|g/dL|12.0|17.5">Hemoglobin</option>
+              <option value="Hematocrit|CBC|%|34.9|50.0">Hematocrit</option>
+              <option value="Platelets|CBC|K/µL|150|400">Platelets</option>
+              <option value="MCV|CBC|fL|80|100">MCV</option>
+              <option value="MCH|CBC|pg|27|33">MCH</option>
+              <option value="MCHC|CBC|g/dL|32|36">MCHC</option>
+              <option value="Neutrophils|CBC|%|50|70">Neutrophils %</option>
+              <option value="Lymphocytes|CBC|%|20|40">Lymphocytes %</option>
+            </optgroup>
+            <optgroup label="Metabolic Panel">
+              <option value="Glucose (Fasting)|Metabolic|mg/dL|70|100">Glucose (Fasting)</option>
+              <option value="BUN|Metabolic|mg/dL|7|20">BUN</option>
+              <option value="Creatinine|Metabolic|mg/dL|0.6|1.3">Creatinine</option>
+              <option value="eGFR|Metabolic|mL/min|60|999">eGFR</option>
+              <option value="Sodium|Metabolic|mEq/L|136|145">Sodium</option>
+              <option value="Potassium|Metabolic|mEq/L|3.5|5.0">Potassium</option>
+              <option value="Chloride|Metabolic|mEq/L|98|107">Chloride</option>
+              <option value="CO2|Metabolic|mEq/L|22|29">CO2 (Bicarbonate)</option>
+              <option value="Calcium|Metabolic|mg/dL|8.5|10.2">Calcium</option>
+              <option value="Total Protein|Metabolic|g/dL|6.3|8.2">Total Protein</option>
+              <option value="Albumin|Metabolic|g/dL|3.4|5.4">Albumin</option>
+              <option value="ALT|Metabolic|U/L|7|56">ALT (Liver)</option>
+              <option value="AST|Metabolic|U/L|10|40">AST (Liver)</option>
+              <option value="ALP|Metabolic|U/L|44|147">ALP</option>
+              <option value="Total Bilirubin|Metabolic|mg/dL|0.1|1.2">Total Bilirubin</option>
+            </optgroup>
+            <optgroup label="Lipid Panel">
+              <option value="Total Cholesterol|Lipids|mg/dL|0|199">Total Cholesterol</option>
+              <option value="LDL Cholesterol|Lipids|mg/dL|0|99">LDL Cholesterol</option>
+              <option value="HDL Cholesterol|Lipids|mg/dL|40|999">HDL Cholesterol</option>
+              <option value="Triglycerides|Lipids|mg/dL|0|149">Triglycerides</option>
+              <option value="Non-HDL Cholesterol|Lipids|mg/dL|0|129">Non-HDL Cholesterol</option>
+            </optgroup>
+            <optgroup label="Thyroid">
+              <option value="TSH|Thyroid|mIU/L|0.4|4.0">TSH</option>
+              <option value="Free T4|Thyroid|ng/dL|0.8|1.8">Free T4</option>
+              <option value="Free T3|Thyroid|pg/mL|2.3|4.1">Free T3</option>
+              <option value="Total T4|Thyroid|µg/dL|5.0|12.0">Total T4</option>
+            </optgroup>
+            <optgroup label="Vitamins &amp; Minerals">
+              <option value="Vitamin D|Vitamins|ng/mL|30|100">Vitamin D (25-OH)</option>
+              <option value="Vitamin B12|Vitamins|pg/mL|200|900">Vitamin B12</option>
+              <option value="Folate|Vitamins|ng/mL|5.4|999">Folate</option>
+              <option value="Ferritin|Vitamins|ng/mL|12|300">Ferritin</option>
+              <option value="Iron|Vitamins|µg/dL|60|170">Iron (Serum)</option>
+              <option value="Magnesium|Vitamins|mg/dL|1.7|2.2">Magnesium</option>
+              <option value="Zinc|Vitamins|µg/dL|60|120">Zinc</option>
+            </optgroup>
+            <optgroup label="Diabetes">
+              <option value="HbA1c|Diabetes|%|0|5.6">HbA1c</option>
+              <option value="Insulin (Fasting)|Diabetes|µIU/mL|2|25">Insulin (Fasting)</option>
+              <option value="C-Peptide|Diabetes|ng/mL|0.8|3.1">C-Peptide</option>
+            </optgroup>
+            <optgroup label="Hormones">
+              <option value="Testosterone (Total)|Hormones|ng/dL|300|1000">Testosterone (Total)</option>
+              <option value="Estradiol|Hormones|pg/mL|10|400">Estradiol</option>
+              <option value="Progesterone|Hormones|ng/mL|0.1|25">Progesterone</option>
+              <option value="DHEA-S|Hormones|µg/dL|35|430">DHEA-S</option>
+              <option value="Cortisol (AM)|Hormones|µg/dL|6.2|19.4">Cortisol (AM)</option>
+            </optgroup>
+            <optgroup label="Inflammation &amp; Immune">
+              <option value="CRP (hs)|Inflammation|mg/L|0|1.0">CRP (high-sensitivity)</option>
+              <option value="ESR|Inflammation|mm/hr|0|20">ESR</option>
+              <option value="Homocysteine|Inflammation|µmol/L|0|14.4">Homocysteine</option>
+              <option value="Uric Acid|Inflammation|mg/dL|3.4|7.0">Uric Acid</option>
+            </optgroup>
+            <optgroup label="Custom">
+              <option value="custom">Custom test (fill in below)</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="form-field">
+          <div class="form-label">Custom Name</div>
+          <input type="text" id="fCustomName" placeholder="e.g. PSA" maxlength="60">
+        </div>
+        <div class="form-field">
+          <div class="form-label">Category</div>
+          <input type="text" id="fCategory" placeholder="e.g. Other" maxlength="40">
+        </div>
+        <div class="form-field">
+          <div class="form-label">Value</div>
+          <input type="number" id="fValue" placeholder="0.00" step="any">
+        </div>
+        <div class="form-field">
+          <div class="form-label">Unit</div>
+          <input type="text" id="fUnit" placeholder="mg/dL" maxlength="20">
+        </div>
+        <div class="form-field">
+          <div class="form-label">Range Low</div>
+          <input type="number" id="fLow" placeholder="optional" step="any">
+        </div>
+        <div class="form-field">
+          <div class="form-label">Range High</div>
+          <input type="number" id="fHigh" placeholder="optional" step="any">
+        </div>
+        <div class="form-field">
+          <div class="form-label">Date</div>
+          <input type="date" id="fDate">
+        </div>
+        <div class="form-field wide-end">
+          <input type="text" id="fNotes" placeholder="Fasting, medications, lab name…" maxlength="200">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-sec" id="btnFormClear">Clear</button>
+        <button class="btn-pri" id="btnAddResult">+ Add Result</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="section-label">Results</div>
+  <div class="filter-bar">
+    <div class="filter-tabs" id="catTabs">
+      <button class="filter-tab active" data-cat="All">All</button>
+      <button class="filter-tab" data-cat="CBC">CBC</button>
+      <button class="filter-tab" data-cat="Metabolic">Metabolic</button>
+      <button class="filter-tab" data-cat="Lipids">Lipids</button>
+      <button class="filter-tab" data-cat="Thyroid">Thyroid</button>
+      <button class="filter-tab" data-cat="Vitamins">Vitamins</button>
+      <button class="filter-tab" data-cat="Diabetes">Diabetes</button>
+      <button class="filter-tab" data-cat="Hormones">Hormones</button>
+      <button class="filter-tab" data-cat="Inflammation">Inflammation</button>
+      <button class="filter-tab" data-cat="Other">Other</button>
+    </div>
+    <div class="search-box"><input type="text" id="searchBox" placeholder="Search test name…" aria-label="Search test name"></div>
+    <select class="status-filter" id="statusFilter" aria-label="Filter by status">
+      <option value="all">All statuses</option>
+      <option value="high">High ↑</option>
+      <option value="low">Low ↓</option>
+      <option value="normal">Normal ✓</option>
+      <option value="unknown">No range</option>
+    </select>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <div class="table-head">
+      <div class="th">Test</div>
+      <div class="th">Category</div>
+      <div class="th r">Value</div>
+      <div class="th">Reference Range</div>
+      <div class="th">Status</div>
+      <div class="th">Date</div>
+      <div class="th"></div>
+    </div>
+    <div id="tableBody"></div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <button class="btn-sec" id="btnDemo">Load Demo</button>
+    <button class="btn-sec" id="btnPrint">Print / PDF</button>
+    <button class="btn-danger" id="btnClearAll">Clear All</button>
+  </div>
+
+  <div class="disclaimer">
+    <svg class="disc-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 1 21h22L12 2zm0 5 7.5 13h-15L12 7zm-1 4v4h2v-4h-2zm0 5v2h2v-2h-2z"/></svg>LabTrack is a personal reference tool only. Reference ranges vary by lab, age, sex, and health status. Always consult your healthcare provider to interpret your results.
+  </div>
+
+</main>
+
+<div class="print-only print-footer"><span id="printFooterName">Generated by AppName</span></div>
+<footer class="app-footer" id="appFooter"></footer>
+
+<script>
+(function(){
+'use strict';
+
+var STORAGE_KEY = 'labtrack_data';
+var THEME_KEY   = 'labtrack_theme';
+var FORM_KEY    = 'labtrack_formOpen';
+
+/* ── STATE ── */
+var entries = [];       /* [{id,name,category,value,unit,low,high,date,notes}] */
+var activeCat    = 'All';
+var activeStatus = 'all';
+var searchQuery  = '';
+var editingId    = null;
+
+/* ── UTILS ── */
+function localDateStr(){
+  var d=new Date();
+  var mm=String(d.getMonth()+1).padStart(2,'0');
+  var dd=String(d.getDate()).padStart(2,'0');
+  return d.getFullYear()+'-'+mm+'-'+dd;
+}
+
+function sanitize(s){ return typeof s==='string' ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : ''; }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function fmtDate(iso){
+  if(!iso) return '—';
+  var p=iso.split('-'); if(p.length<3) return iso;
+  return p[1]+'/'+p[2]+'/'+p[0];
+}
+function el(id){ return document.getElementById(id); }
+
+/* ── STATUS CALC ── */
+function getStatus(entry){
+  var v   = parseFloat(entry.value);
+  var lo  = entry.low  !== '' && entry.low  !== null && entry.low  !== undefined ? parseFloat(entry.low)  : null;
+  var hi  = entry.high !== '' && entry.high !== null && entry.high !== undefined ? parseFloat(entry.high) : null;
+  if(isNaN(v)) return 'unknown';
+  if(lo===null && hi===null) return 'unknown';
+  if(hi!==null && v > hi) return 'high';
+  if(lo!==null && v < lo) return 'low';
+  return 'normal';
+}
+
+function statusLabel(s){
+  if(s==='high')    return 'High ↑';
+  if(s==='low')     return 'Low ↓';
+  if(s==='normal')  return 'Normal';
+  return 'No range';
+}
+
+/* ── STATS ── */
+function updateStats(){
+  var total    = entries.length;
+  var flagged  = entries.filter(function(e){ var s=getStatus(e); return s==='high'||s==='low'; }).length;
+  var normal   = entries.filter(function(e){ return getStatus(e)==='normal'; }).length;
+
+  el('statTotal').textContent   = total;
+  el('statFlagged').textContent = flagged;
+  el('statNormal').textContent  = normal;
+
+  var fc = el('statFlagCard');
+  fc.classList.toggle('flagged', flagged > 0);
+
+  if(entries.length){
+    var sorted = entries.slice().sort(function(a,b){ return b.date.localeCompare(a.date); });
+    el('statLast').textContent    = fmtDate(sorted[0].date);
+    el('statLastTest').textContent= sorted[0].name;
+  } else {
+    el('statLast').textContent    = '—';
+    el('statLastTest').textContent= 'no entries yet';
+  }
+}
+
+/* ── RENDER TABLE ── */
+function renderTable(){
+  var body = el('tableBody');
+
+  var filtered = entries.filter(function(e){
+    var catMatch    = activeCat==='All' || e.category===activeCat;
+    var statusMatch = activeStatus==='all' || getStatus(e)===activeStatus;
+    var searchMatch = !searchQuery || e.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return catMatch && statusMatch && searchMatch;
+  });
+
+  /* sort: flagged first, then by date desc */
+  filtered.sort(function(a,b){
+    var sa=getStatus(a), sb=getStatus(b);
+    var weight={'high':0,'low':1,'unknown':2,'normal':3};
+    if(weight[sa]!==weight[sb]) return weight[sa]-weight[sb];
+    return b.date.localeCompare(a.date);
+  });
+
+  if(!filtered.length){
+    body.innerHTML =
+      '<div class="table-empty">' +
+        '<svg class="empty-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6v2h-1v3.5l4 7.5a2 2 0 0 1-1.8 3H6.8A2 2 0 0 1 5 16l4-7.5V5H8V3h1zm2 2v4l-.5 1h3l-.5-1V5h-2z"/></svg>' +
+        (entries.length ?
+          '<p>No results match your current filter.</p>' :
+          '<p>No results yet. Use the form above to add your first lab result.</p>') +
+      '</div>';
+    return;
+  }
+
+  body.innerHTML = '';
+  filtered.forEach(function(entry){
+    var status = getStatus(entry);
+    var v = parseFloat(entry.value);
+
+    var rangeStr = '—';
+    if(entry.low!==''&&entry.low!==null&&entry.low!==undefined && entry.high!==''&&entry.high!==null&&entry.high!==undefined){
+      rangeStr = entry.low + ' – ' + entry.high + ' ' + (entry.unit||'');
+    } else if(entry.high!==''&&entry.high!==null&&entry.high!==undefined){
+      rangeStr = '< ' + entry.high + ' ' + (entry.unit||'');
+    } else if(entry.low!==''&&entry.low!==null&&entry.low!==undefined){
+      rangeStr = '> ' + entry.low + ' ' + (entry.unit||'');
+    }
+
+    var row = document.createElement('div');
+    row.className = 'result-row '+status + (entry.id===editingId ? ' editing' : '');
+    row.innerHTML =
+      '<div class="td td-name">'+
+        '<span class="test-name">'+sanitize(entry.name)+'</span>'+
+        (entry.notes?'<span class="test-note">'+sanitize(entry.notes)+'</span>':'')+
+      '</div>'+
+      '<div class="td" data-label="Category"><span class="cat-badge">'+sanitize(entry.category||'Other')+'</span></div>'+
+      '<div class="td r" data-label="Value"><span class="val-display '+status+'">'+(isNaN(v)?'—':v)+'</span>&nbsp;<span style="font-size:11px;color:var(--muted)">'+sanitize(entry.unit||'')+'</span></div>'+
+      '<div class="td" data-label="Range"><span class="range-text">'+sanitize(rangeStr)+'</span></div>'+
+      '<div class="td" data-label="Status"><span class="status-pill '+status+'">'+statusLabel(status)+'</span></div>'+
+      '<div class="td" data-label="Date"><span class="date-text">'+fmtDate(entry.date)+'</span></div>'+
+      '<div class="td"><div class="row-actions">'+
+        '<button class="btn-edit" data-id="'+entry.id+'" aria-label="Edit" title="Edit"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>'+
+        '<button class="btn-del" data-id="'+entry.id+'" aria-label="Delete" title="Delete">✕</button>'+
+      '</div></div>';
+
+    row.querySelector('.btn-edit').addEventListener('click', function(e){
+      startEdit(e.currentTarget.dataset.id);
+    });
+
+    row.querySelector('.btn-del').addEventListener('click', function(e){
+      var id = e.currentTarget.dataset.id;
+      var entry = entries.find(function(en){ return en.id===id; });
+      var label = entry ? entry.name + ' (' + fmtDate(entry.date) + ')' : 'this result';
+      if(!confirm('Delete ' + label + '?\nThis cannot be undone.')) return;
+      entries = entries.filter(function(en){ return en.id!==id; });
+      save(); render();
+    });
+
+    body.appendChild(row);
+  });
+}
+
+function render(){ renderTable(); updateStats(); }
+
+/* ── FORM AUTOFILL ── */
+el('fTest').addEventListener('change', function(){
+  var val = this.value;
+  if(!val || val==='custom'){
+    if(val!=='custom'){ el('fCustomName').value=''; el('fCategory').value=''; el('fUnit').value=''; el('fLow').value=''; el('fHigh').value=''; }
+    return;
+  }
+  var parts = val.split('|');
+  el('fCustomName').value = parts[0]||'';
+  el('fCategory').value   = parts[1]||'';
+  el('fUnit').value       = parts[2]||'';
+  el('fLow').value        = parts[3]||'';
+  el('fHigh').value       = parts[4]||'';
+  el('fValue').focus();
+});
+
+/* ── ADD RESULT ── */
+function addResult(){
+  var name = el('fCustomName').value.trim() || (el('fTest').value && el('fTest').value!=='custom' ? el('fTest').value.split('|')[0] : '');
+  var val  = el('fValue').value.trim();
+
+  if(!name){ alert('Please enter a test name.'); el('fCustomName').focus(); return; }
+  if(val===''){ alert('Please enter a value.'); el('fValue').focus(); return; }
+
+  var data = {
+    name:     name,
+    category: el('fCategory').value.trim() || 'Other',
+    value:    val,
+    unit:     el('fUnit').value.trim(),
+    low:      el('fLow').value.trim(),
+    high:     el('fHigh').value.trim(),
+    date:     el('fDate').value || localDateStr(),
+    notes:    el('fNotes').value.trim()
+  };
+
+  if(editingId){
+    var idx = entries.findIndex(function(e){ return e.id===editingId; });
+    if(idx !== -1){ data.id = editingId; entries[idx] = data; }
+    else { data.id = uid(); entries.push(data); }  /* target gone (deleted/wiped mid-edit): re-add instead of losing it */
+    editingId = null;
+  } else {
+    data.id = uid();
+    entries.push(data);
+  }
+
+  clearForm();
+  save(); render();
+}
+
+/* ── EDIT ── */
+function startEdit(id){
+  var entry = entries.find(function(e){ return e.id===id; });
+  if(!entry) return;
+  editingId = id;
+  el('fTest').value      = '';
+  el('fCustomName').value= entry.name || '';
+  el('fCategory').value  = entry.category || '';
+  el('fValue').value     = entry.value || '';
+  el('fUnit').value      = entry.unit || '';
+  el('fLow').value       = entry.low || '';
+  el('fHigh').value      = entry.high || '';
+  el('fDate').value      = entry.date || localDateStr();
+  el('fNotes').value     = entry.notes || '';
+  el('btnAddResult').textContent = 'Update Result';
+  setFormOpen(true);
+  render();
+  el('formToggle').scrollIntoView({behavior:'smooth', block:'start'});
+  el('fValue').focus();
+}
+
+function clearForm(){
+  el('fTest').value=''; el('fCustomName').value=''; el('fCategory').value='';
+  el('fValue').value=''; el('fUnit').value=''; el('fLow').value='';
+  el('fHigh').value=''; el('fNotes').value='';
+  el('fDate').value=localDateStr();
+  editingId = null;
+  el('btnAddResult').textContent = '+ Add Result';
+  render();
+}
+
+/* ── SAVE / LOAD ── */
+function save(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); }catch(e){}
+}
+function load(){
+  try{
+    var raw=localStorage.getItem(STORAGE_KEY);
+    if(raw) entries=JSON.parse(raw);
+    if(!Array.isArray(entries)) entries=[];
+  }catch(e){ entries=[]; }
+}
+
+/* ── FORM OPEN STATE ── */
+function setFormOpen(open, persist){
+  var body=el('formBody'), icon=el('formToggleIcon'), toggle=el('formToggle');
+  body.classList.toggle('open', open);
+  icon.classList.toggle('open', open);
+  icon.textContent = open ? '+' : '›';
+  toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  el('formToggleHint').textContent = open ? 'Click to collapse' : 'Click to expand';
+  if(persist){ try{ localStorage.setItem(FORM_KEY, open ? 'true' : 'false'); }catch(e){} }
+}
+
+/* ── THEME ── */
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem(THEME_KEY,t);
+  el('iconSun').style.display  = t==='dark'  ? 'block':'none';
+  el('iconMoon').style.display = t==='light' ? 'block':'none';
+}
+
+/* ── DEMO DATA ── */
+function loadDemo(){
+  if(entries.length && !confirm('Replace current data with demo data?')) return;
+  editingId = null; el('btnAddResult').textContent = '+ Add Result';
+  entries = [
+    {id:uid(),name:'Hemoglobin',   category:'CBC',       value:'13.1',unit:'g/dL',   low:'12.0',high:'17.5',date:'2026-01-15',notes:'Annual physical'},
+    {id:uid(),name:'WBC',          category:'CBC',       value:'6.8', unit:'K/µL',   low:'4.5', high:'11.0',date:'2026-01-15',notes:'Annual physical'},
+    {id:uid(),name:'Platelets',    category:'CBC',       value:'188', unit:'K/µL',   low:'150', high:'400', date:'2026-01-15',notes:'Annual physical'},
+    {id:uid(),name:'Glucose (Fasting)',category:'Metabolic',value:'108',unit:'mg/dL',low:'70',  high:'100', date:'2026-01-15',notes:'Fasting 12hrs'},
+    {id:uid(),name:'Creatinine',   category:'Metabolic', value:'0.9', unit:'mg/dL',  low:'0.6', high:'1.3', date:'2026-01-15',notes:''},
+    {id:uid(),name:'ALT',          category:'Metabolic', value:'42',  unit:'U/L',    low:'7',   high:'56',  date:'2026-01-15',notes:''},
+    {id:uid(),name:'Total Cholesterol',category:'Lipids',value:'214', unit:'mg/dL',  low:'0',   high:'199', date:'2026-01-15',notes:'Fasting'},
+    {id:uid(),name:'LDL Cholesterol',  category:'Lipids',value:'138', unit:'mg/dL',  low:'0',   high:'99',  date:'2026-01-15',notes:'Fasting'},
+    {id:uid(),name:'HDL Cholesterol',  category:'Lipids',value:'52',  unit:'mg/dL',  low:'40',  high:'999', date:'2026-01-15',notes:''},
+    {id:uid(),name:'Triglycerides',    category:'Lipids',value:'92',  unit:'mg/dL',  low:'0',   high:'149', date:'2026-01-15',notes:''},
+    {id:uid(),name:'TSH',          category:'Thyroid',   value:'2.1', unit:'mIU/L',  low:'0.4', high:'4.0', date:'2026-01-15',notes:''},
+    {id:uid(),name:'Vitamin D',    category:'Vitamins',  value:'22',  unit:'ng/mL',  low:'30',  high:'100', date:'2026-01-15',notes:'Supplementing 2000IU/day'},
+    {id:uid(),name:'Vitamin B12',  category:'Vitamins',  value:'480', unit:'pg/mL',  low:'200', high:'900', date:'2026-01-15',notes:''},
+    {id:uid(),name:'HbA1c',        category:'Diabetes',  value:'5.8', unit:'%',      low:'0',   high:'5.6', date:'2026-01-15',notes:'Pre-diabetic range — monitoring'},
+    {id:uid(),name:'CRP (hs)',     category:'Inflammation',value:'0.4',unit:'mg/L',  low:'0',   high:'1.0', date:'2026-01-15',notes:''},
+    {id:uid(),name:'Ferritin',     category:'Vitamins',  value:'14',  unit:'ng/mL',  low:'12',  high:'300', date:'2025-10-08',notes:'Previous test — slightly low'},
+    {id:uid(),name:'Vitamin D',    category:'Vitamins',  value:'18',  unit:'ng/mL',  low:'30',  high:'100', date:'2025-10-08',notes:'Before supplementing'},
+  ];
+  save(); render();
+}
+
+/* ── BOOT ── */
+/* ── FOOTER ── */
+function footer(){
+  var f = el('appFooter'); if(!f) return;
+  var year = new Date().getFullYear();
+  var brand = document.querySelector('.brand-text');
+  var name = brand ? sanitize(brand.textContent || 'AppName') : 'AppName';
+  f.innerHTML =
+    '<div class="f-tag">Privacy-first micro-apps for professionals</div>' +
+    '<div class="f-priv"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Your data never leaves this device</div>' +
+    '<div class="f-rights">All rights reserved · <b>' + name + '</b> · ' + year + '</div>';
+  var pf = el('printFooterName');
+  if(pf) pf.textContent = 'Generated by ' + name;
+}
+
+function boot(){
+  setTheme(localStorage.getItem(THEME_KEY)||'light');
+  footer();
+  load(); render();
+
+  el('fDate').value = localDateStr();
+
+  el('themeBtn').addEventListener('click', function(){
+    setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+  });
+
+  /* form toggle */
+  setFormOpen(localStorage.getItem(FORM_KEY) !== 'false');
+  el('formToggle').addEventListener('click', function(){
+    setFormOpen(!el('formBody').classList.contains('open'), true);
+  });
+  el('formToggle').addEventListener('keydown', function(e){
+    if(e.key==='Enter'||e.key===' '){ e.preventDefault(); setFormOpen(!el('formBody').classList.contains('open'), true); }
+  });
+
+  el('btnAddResult').addEventListener('click', addResult);
+  el('btnFormClear').addEventListener('click', clearForm);
+
+  /* enter key on value field */
+  el('fValue').addEventListener('keydown', function(e){ if(e.key==='Enter') addResult(); });
+
+  /* category tabs */
+  el('catTabs').addEventListener('click', function(e){
+    if(!e.target.classList.contains('filter-tab')) return;
+    document.querySelectorAll('.filter-tab').forEach(function(t){ t.classList.remove('active'); });
+    e.target.classList.add('active');
+    activeCat = e.target.dataset.cat;
+    render();
+  });
+
+  /* search */
+  el('searchBox').addEventListener('input', function(){ searchQuery=this.value; render(); });
+
+  /* status filter */
+  el('statusFilter').addEventListener('change', function(){ activeStatus=this.value; render(); });
+
+  /* actions */
+  el('btnDemo').addEventListener('click', loadDemo);
+  el('btnPrint').addEventListener('click', function(){ window.print(); });
+  el('btnClearAll').addEventListener('click', function(){
+    if(!entries.length) return;
+    if(!confirm('Delete ALL '+entries.length+' results? This cannot be undone.')) return;
+    entries=[]; editingId=null; el('btnAddResult').textContent='+ Add Result'; save(); render();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', boot);
+})();
+</script>
+</body>
+</html>

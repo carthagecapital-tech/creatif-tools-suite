@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="LifeWheel Pro — Score all 10 areas of your life and see your balance wheel instantly. Identify your top strengths and biggest opportunities for growth.">
+<meta name="theme-color" content="#f4f2ec">
+<title>LifeWheel Pro — Level 10 Life Assessment</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2712%27%20r%3D%2710%27%20fill%3D%27none%27%20stroke%3D%27%237c3aed%27%20stroke-width%3D%272%27%2F%3E%3Cpath%20d%3D%27M12%202v20M2%2012h20%27%20fill%3D%27none%27%20stroke%3D%27%237c3aed%27%20stroke-width%3D%272%27%2F%3E%3C%2Fsvg%3E">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --accent:      #7c3aed;
+    --accent-dk:   #8b5cf6;
+    --bg:          #f4f2ec;
+    --surface:     #ffffff;
+    --surface2:    #faf8f3;
+    --border:      #e5e1d8;
+    --border2:     #d8d3c7;
+    --text:        #2c2a26;
+    --muted:       #7a756a;
+    --muted2:      #b5b0a6;
+    --danger:      #c0584f;
+    --ok:          #4f8a5b;
+    --warn:        #b8862f;
+    --accent-h:    #6d28d9;
+    --on-accent:   #ffffff;
+    --mono: 'Consolas','Menlo','Courier New',monospace;
+    --sans: 'Trebuchet MS',system-ui,-apple-system,sans-serif;
+    --shadow:      0 1px 2px rgba(40,38,34,.04), 0 2px 6px rgba(40,38,34,.05);
+    --shadow-lg:   0 4px 12px rgba(40,38,34,.07), 0 12px 28px rgba(40,38,34,.07);
+  }
+  [data-theme="dark"] {
+    --accent:      var(--accent-dk);
+    --bg:          #1a1815;
+    --surface:     #242220;
+    --surface2:    #2c2a27;
+    --border:      #36332e;
+    --border2:     #423e38;
+    --text:        #ece9e2;
+    --muted:       #75716a;
+    --muted2:      #5a564e;
+    --danger:      #e0796f;
+    --ok:          #6cb079;
+    --warn:        #d6a44f;
+    --accent-h:    #a375ff;
+    --on-accent:   #1a1815;
+    --shadow:      0 1px 2px rgba(0,0,0,.25), 0 2px 6px rgba(0,0,0,.3);
+  }
+  html { font-size: 15px; -webkit-text-size-adjust: 100%; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; line-height: 1.5; transition: background .25s, color .25s; }
+  input, select, textarea, button { font-family: inherit; font-size: inherit; }
+  .top-bar { height: 3px; background: var(--accent); }
+  .header {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 16px 24px; display: flex; align-items: center;
+    justify-content: space-between; gap: 14px; flex-wrap: wrap;
+    transition: background .25s, border-color .25s;
+    box-shadow: var(--shadow);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-icon { width: 36px; height: 36px; background: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .brand-icon svg { width: 20px; height: 20px; fill: var(--on-accent); }
+  .brand-text { font-weight: 700; font-size: 18px; letter-spacing: -.3px; color: var(--text); transition: color .25s; }
+  .brand-tag { font-size: 11px; color: var(--muted); margin-top: 1px; letter-spacing: .3px; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .icon-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; }
+  .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .icon-btn svg { width: 18px; height: 18px; }
+  .main { max-width: 980px; margin: 0 auto; padding: 28px 24px 100px; }
+  .layout { display: grid; grid-template-columns: 1fr 360px; gap: 28px; align-items: start; }
+  .col-inputs { min-width: 0; }
+  .col-results { position: sticky; top: 20px; }
+  .section-label {
+    font-family: var(--mono); font-size: 10px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); transition: background .25s; }
+
+  /* life area sliders */
+  .area-panel { border: 1px solid var(--border); background: var(--surface); margin-bottom: 18px; transition: background .25s, border-color .25s; box-shadow: var(--shadow); }
+  .area-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    background: var(--surface2); transition: background .25s;
+  }
+  .area-name { font-weight: 600; font-size: 13px; }
+  .area-score-display {
+    font-family: var(--mono); font-size: 22px; font-weight: 700;
+    color: var(--accent); min-width: 32px; text-align: right;
+  }
+  .area-body { padding: 14px 16px; }
+  .area-desc { font-size: 11px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
+  .slider-track {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .slider-labels { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 9px; color: var(--muted2); margin-top: 4px; letter-spacing: .5px; }
+  input[type=range] {
+    flex: 1; height: 6px; cursor: pointer; background: transparent;
+    -webkit-appearance: none; appearance: none;
+    background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--pct,0%), var(--border2) var(--pct,0%), var(--border2) 100%);
+    border-radius: 0;
+  }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--accent); cursor: pointer; border-radius: 0; }
+  input[type=range]::-moz-range-thumb { width: 18px; height: 18px; background: var(--accent); border: none; cursor: pointer; border-radius: 0; }
+  input[type=range]::-moz-range-track { height: 6px; border-radius: 0; background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--pct,0%), var(--border2) var(--pct,0%), var(--border2) 100%); }
+  *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  *:focus:not(:focus-visible) { outline: none; }
+
+  /* results */
+  .wheel-wrap { border: 1px solid var(--border); background: var(--surface); padding: 20px; margin-bottom: 16px; display: flex; justify-content: center; transition: background .25s, border-color .25s; box-shadow: var(--shadow); }
+  #wheelSvg { max-width: 100%; height: auto; overflow: visible; }
+  .score-grid { border: 1px solid var(--border); background: var(--surface); margin-bottom: 16px; transition: background .25s, border-color .25s; box-shadow: var(--shadow); }
+  .score-row { display: grid; grid-template-columns: 1fr 80px 80px; border-bottom: 1px solid var(--border); }
+  .score-row:last-child { border-bottom: none; }
+  .score-row:hover { background: var(--surface2); }
+  .score-cell { padding: 9px 14px; font-size: 12px; display: flex; align-items: center; }
+  .score-cell.r { justify-content: flex-end; font-family: var(--mono); font-size: 13px; font-weight: 600; }
+  .score-name { font-size: 12px; }
+  .score-bar-wrap { display: flex; align-items: center; gap: 6px; }
+  .score-mini-bar { height: 4px; flex: 1; background: var(--border2); }
+  .score-mini-fill { height: 100%; background: var(--accent); transition: width .4s; }
+
+  .summary-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 16px; box-shadow: var(--shadow); }
+  .summary-card { background: var(--surface); padding: 14px 16px; }
+  .summary-label { font-family: var(--mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+  .summary-val { font-family: var(--mono); font-size: 24px; font-weight: 700; color: var(--accent); line-height: 1; }
+  .summary-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  .insight-box { border: 1px solid var(--border); background: var(--surface); padding: 14px 16px; margin-bottom: 16px; transition: background .25s; box-shadow: var(--shadow); }
+  .insight-box.ok-bg { border-left: 3px solid var(--ok); }
+  .insight-box.warn-bg { border-left: 3px solid var(--warn); }
+  .insight-label { font-family: var(--mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+  .insight-val { font-size: 14px; font-weight: 600; }
+  .insight-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .empty-state { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 13px; border: 1px solid var(--border); background: var(--surface); margin-bottom: 16px; box-shadow: var(--shadow); }
+  .empty-icon { margin-bottom: 10px; opacity: .4; display: inline-flex; }
+
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-sec { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 10px 18px; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; }
+  .btn-sec:hover { border-color: var(--text); color: var(--text); }
+  .btn-pri { font-family: var(--sans); font-size: 13px; font-weight: 600; padding: 10px 24px; background: var(--accent); border: 1px solid var(--accent); color: var(--on-accent); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; }
+  .btn-pri:hover { background: var(--accent-h); border-color: var(--accent-h); }
+
+  .notes-area { border: 1px solid var(--border); background: var(--surface); margin-bottom: 24px; box-shadow: var(--shadow); }
+  .notes-area textarea { font-family: var(--sans); font-size: 13px; color: var(--text); background: transparent; border: none; outline: none; width: 100%; padding: 13px 16px; resize: vertical; min-height: 70px; }
+  .notes-area textarea::placeholder { color: var(--muted2); }
+
+  /* hidden file input for import */
+  #importInput { display: none; }
+
+  @media print {
+    @page { margin: .5in; size: auto; }
+    body { background: #fff; color: #000; }
+    .header, .actions, .area-panel, .top-bar, .empty-state, .app-footer,
+    .col-inputs > .section-label:first-child, #areasContainer { display: none !important; }
+    .layout { grid-template-columns: 1fr; }
+    .col-results { order: 1; position: static; }
+    .col-inputs { order: 2; }
+    .wheel-wrap, .score-grid, .summary-cards, .summary-card, .insight-box, .notes-area {
+      background: #fff !important; border-color: #ddd !important; box-shadow: none !important;
+    }
+    .score-mini-bar { background: #e5e5e5 !important; }
+    .score-row { border-bottom-color: #eee !important; }
+    .insight-box.ok-bg { border-left-color: #4f8a5b !important; }
+    .insight-box.warn-bg { border-left-color: #b8862f !important; }
+    .notes-area textarea { overflow: visible; height: auto; min-height: auto; }
+    .wheel-wrap, .summary-cards, .score-grid, .insight-box { break-inside: avoid; }
+    #wheelSvg .grid-ring { stroke: #e5e1d8 !important; fill: none !important; }
+    #wheelSvg .axis-line { stroke: #e5e1d8 !important; }
+    #wheelSvg .data-polygon { fill: rgba(124,58,237,0.15) !important; stroke: #7c3aed !important; }
+    #wheelSvg .data-dot { fill: #7c3aed !important; }
+    #wheelSvg text { fill: #9a958a !important; }
+    .print-only { display: block !important; }
+    .print-footer { text-align: center; font-size: 9px; color: #999; margin-top: 16px; padding-top: 10px; border-top: 1px solid #ddd; }
+  }
+  .print-only { display: none; }
+
+  /* ── FOOTER ── */
+  .app-footer { max-width: 980px; margin: 0 auto; padding: 24px 24px; text-align: center; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+  .app-footer .f-tag { font-family: var(--sans); font-size: 13px; color: var(--muted); font-style: italic; margin-bottom: 6px; }
+  .app-footer .f-rights { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); margin-top: 8px; }
+  .app-footer .f-rights b { color: var(--text); font-weight: 600; }
+  .app-footer .f-priv { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted2); margin-top: 6px; }
+  .app-footer .f-priv svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+  @media (max-width: 720px) {
+    .main { padding: 20px 16px 140px; }
+    .layout { grid-template-columns: 1fr; }
+    .col-results { position: static; order: -1; }
+    .actions { position: sticky; bottom: 0; background: var(--bg); border-top: 1px solid var(--border); padding: 12px 16px; margin: 0 -16px; padding-bottom: calc(12px + env(safe-area-inset-bottom,0px)); }
+    .btn-pri { flex: 1; justify-content: center; }
+    input[type=range]::-webkit-slider-thumb { width: 24px; height: 24px; }
+    input[type=range]::-moz-range-thumb { width: 24px; height: 24px; }
+    .app-footer { padding: 16px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<header class="header">
+  <div class="brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="var(--on-accent)"><circle cx="12" cy="12" r="2.5"/><line x1="12" y1="2" x2="12" y2="9.5" stroke="var(--on-accent)" stroke-width="1.8" stroke-linecap="round"/><line x1="12" y1="14.5" x2="12" y2="22" stroke="var(--on-accent)" stroke-width="1.8" stroke-linecap="round"/><line x1="2" y1="12" x2="9.5" y2="12" stroke="var(--on-accent)" stroke-width="1.8" stroke-linecap="round"/><line x1="14.5" y1="12" x2="22" y2="12" stroke="var(--on-accent)" stroke-width="1.8" stroke-linecap="round"/><line x1="4.93" y1="4.93" x2="10.3" y2="10.3" stroke="var(--on-accent)" stroke-width="1.8" stroke-linecap="round"/><line x1="13.7" y1="13.7" x2="19.07" y2="19.07" stroke="var(--on-accent)" stroke-width="1.8" stroke-linecap="round"/><line x1="19.07" y1="4.93" x2="13.7" y2="10.3" stroke="var(--on-accent)" stroke-width="1.8" stroke-linecap="round"/><line x1="10.3" y1="13.7" x2="4.93" y2="19.07" stroke="var(--on-accent)" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="9.5" fill="none" stroke="var(--on-accent)" stroke-width="1.5" stroke-dasharray="3 2.2"/></svg>
+    </div>
+    <div>
+      <h1 class="brand-text">Life<span>Wheel</span> Pro</h1>
+      <div class="brand-tag">Level 10 Life Assessment</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">
+      <svg id="iconMoon" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="main">
+  <div class="layout">
+    <div class="col-inputs">
+      <h2 class="section-label">Rate Each Life Area (1–10)</h2>
+      <div id="areasContainer"></div>
+      <h2 class="section-label">Reflection Notes</h2>
+      <div class="notes-area">
+        <textarea id="notesArea" placeholder="What patterns do you notice? What's your #1 priority to improve this month?"></textarea>
+      </div>
+    </div>
+
+    <div class="col-results">
+      <h2 class="section-label">Your Wheel</h2>
+      <div class="wheel-wrap" id="wheelWrap">
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 2v20M2 12h20"/>
+            </svg>
+          </div>
+          <p>Move the sliders to see your life wheel appear.</p>
+        </div>
+        <svg id="wheelSvg" width="300" height="300" style="display:none" viewBox="0 0 300 300"></svg>
+      </div>
+
+      <div class="summary-cards" id="summaryCards">
+        <div class="summary-card">
+          <div class="summary-label">Average Score</div>
+          <div class="summary-val" id="avgScore">—</div>
+          <div class="summary-sub" id="avgSub">out of 10</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Balance Score</div>
+          <div class="summary-val" id="balanceScore">—</div>
+          <div class="summary-sub">100 = perfectly balanced</div>
+        </div>
+      </div>
+
+      <div class="insight-box ok-bg" id="topBox" style="display:none">
+        <div class="insight-label">Strongest Area</div>
+        <div class="insight-val" id="topArea">—</div>
+        <div class="insight-sub" id="topScore">—</div>
+      </div>
+      <div class="insight-box warn-bg" id="bottomBox" style="display:none">
+        <div class="insight-label">Biggest Opportunity</div>
+        <div class="insight-val" id="bottomArea">—</div>
+        <div class="insight-sub" id="bottomScore">Build here for biggest life impact</div>
+      </div>
+
+      <h2 class="section-label">Score Breakdown</h2>
+      <div class="score-grid" id="scoreGrid"></div>
+
+      <input type="file" id="importInput" accept=".json">
+      <div class="actions" style="margin-top:16px">
+        <button class="btn-sec" id="btnDemo">Demo</button>
+        <button class="btn-sec" id="btnReset">Reset</button>
+        <button class="btn-sec" id="btnImport">Import</button>
+        <button class="btn-sec" id="btnPrint">Print</button>
+        <button class="btn-pri" id="btnSave">Export</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="print-only print-footer"><span id="printFooterName">Generated by AppName</span></div>
+<footer class="app-footer" id="appFooter"></footer>
+
+<script>
+(function(){
+'use strict';
+
+var STORAGE_KEY = 'lifewheel_v1';
+var THEME_KEY   = 'lifewheel_theme';
+
+var AREAS = [
+  { id:'health',      abbr:'Health', name:'Health & Fitness',        desc:'Energy levels, exercise, diet, sleep, and overall physical wellbeing.' },
+  { id:'mindset',     abbr:'Growth', name:'Mindset & Personal Growth', desc:'Learning, self-awareness, habits, therapy, and emotional intelligence.' },
+  { id:'romance',     abbr:'Love',   name:'Relationships & Romance',  desc:'Quality of your intimate relationship, dating life, or self-love.' },
+  { id:'family',      abbr:'Family', name:'Family & Friends',        desc:'Depth and quality of connections with family and close friends.' },
+  { id:'career',      abbr:'Career', name:'Career & Business',       desc:'Job satisfaction, growth, impact, and professional fulfillment.' },
+  { id:'finances',    abbr:'Wealth', name:'Finances & Wealth',       desc:'Income, savings, debt management, investments, and financial freedom.' },
+  { id:'fun',         abbr:'Fun',    name:'Fun & Recreation',        desc:'Hobbies, travel, entertainment, and activities that bring you joy.' },
+  { id:'environment', abbr:'Home',   name:'Physical Environment',    desc:'Your home, workspace, and surrounding spaces — do they inspire you?' },
+  { id:'spiritual',   abbr:'Spirit', name:'Spiritual & Purpose',     desc:'Sense of purpose, values, mindfulness, faith, or connection to something bigger.' },
+  { id:'contribution',abbr:'Legacy', name:'Contribution & Legacy',   desc:'Giving back, mentoring, volunteering, and the mark you leave on the world.' }
+];
+
+var scores = {};
+AREAS.forEach(function(a){ scores[a.id] = 0; });
+
+function el(id){ return document.getElementById(id); }
+
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem(THEME_KEY,t);
+  el('iconMoon').style.display = t==='dark'?'block':'none';
+  el('iconSun').style.display  = t==='light'?'block':'none';
+}
+
+function updateRangeFill(input){
+  var pct = ((parseFloat(input.value)||0)/10*100).toFixed(1)+'%';
+  input.style.setProperty('--pct',pct);
+}
+
+function buildAreas(){
+  var container = el('areasContainer');
+  AREAS.forEach(function(area){
+    var panel = document.createElement('div');
+    panel.className = 'area-panel';
+    panel.innerHTML =
+      '<div class="area-header">'+
+        '<div><span class="area-name">'+area.name+'</span></div>'+
+        '<div class="area-score-display" id="disp_'+area.id+'">0</div>'+
+      '</div>'+
+      '<div class="area-body">'+
+        '<div class="area-desc">'+area.desc+'</div>'+
+        '<div class="slider-track">'+
+          '<input type="range" id="sl_'+area.id+'" min="0" max="10" step="1" value="0" aria-label="Rate '+area.name+'">'+
+        '</div>'+
+        '<div class="slider-labels"><span>0</span><span>2</span><span>4</span><span>6</span><span>8</span><span>10</span></div>'+
+      '</div>';
+    container.appendChild(panel);
+
+    var slider = panel.querySelector('#sl_'+area.id);
+    slider.addEventListener('input',function(){
+      scores[area.id] = parseInt(this.value)||0;
+      el('disp_'+area.id).textContent = scores[area.id];
+      updateRangeFill(this);
+      calc();
+      schedSave();
+    });
+  });
+}
+
+function scoreColor(score, rated){
+  if(!rated) return 'var(--muted2)';
+  return score>=8?'var(--ok)':score>=5?'var(--accent)':score>=3?'var(--warn)':'var(--danger)';
+}
+
+function buildScoreGrid(){
+  var grid = el('scoreGrid');
+  grid.innerHTML = '';
+  AREAS.forEach(function(area){
+    var row = document.createElement('div');
+    row.className = 'score-row';
+    var score = scores[area.id]||0;
+    var pct   = score/10*100;
+    var rated = score > 0;
+    var color = scoreColor(score, rated);
+    row.innerHTML =
+      '<div class="score-cell"><span class="score-name">'+area.name+'</span></div>'+
+      '<div class="score-cell"><div class="score-bar-wrap"><div class="score-mini-bar"><div class="score-mini-fill" style="width:'+pct+'%;background:'+color+'"></div></div></div></div>'+
+      '<div class="score-cell r" style="color:'+color+'">'+(rated?score+'/10':'—')+'</div>';
+    grid.appendChild(row);
+  });
+}
+
+function drawWheel(){
+  var svg    = el('wheelSvg');
+  var empty  = el('emptyState');
+  var hasAny = AREAS.some(function(a){ return (scores[a.id]||0)>0; });
+
+  if(!hasAny){ svg.style.display='none'; empty.style.display=''; return; }
+  svg.style.display=''; empty.style.display='none';
+
+  var cx=150, cy=150, r=120, n=AREAS.length;
+  var isDark = document.documentElement.getAttribute('data-theme')==='dark';
+  var borderColor = isDark?'#36332e':'#e5e1d8';
+  var textColor   = isDark?'#75716a':'#7a756a';
+  var accentRgba  = isDark?'rgba(139,92,246,0.25)':'rgba(124,58,237,0.2)';
+  var accentStroke= isDark?'#8b5cf6':'#7c3aed';
+
+  var html = '';
+
+  /* grid rings */
+  [2,4,6,8,10].forEach(function(v){
+    var rr = r*v/10;
+    var pts = AREAS.map(function(_,i){
+      var ang = -Math.PI/2 + (2*Math.PI/n)*i;
+      return (cx+rr*Math.cos(ang)).toFixed(1)+','+(cy+rr*Math.sin(ang)).toFixed(1);
+    }).join(' ');
+    html += '<polygon class="grid-ring" points="'+pts+'" fill="none" stroke="'+borderColor+'" stroke-width="1"/>';
+  });
+
+  /* axis lines */
+  AREAS.forEach(function(_,i){
+    var ang = -Math.PI/2 + (2*Math.PI/n)*i;
+    var ex  = (cx+r*Math.cos(ang)).toFixed(1);
+    var ey  = (cy+r*Math.sin(ang)).toFixed(1);
+    html += '<line class="axis-line" x1="'+cx+'" y1="'+cy+'" x2="'+ex+'" y2="'+ey+'" stroke="'+borderColor+'" stroke-width="1"/>';
+  });
+
+  /* score polygon */
+  var dataPts = AREAS.map(function(area,i){
+    var ang = -Math.PI/2 + (2*Math.PI/n)*i;
+    var sr  = r*(scores[area.id]||0)/10;
+    return (cx+sr*Math.cos(ang)).toFixed(1)+','+(cy+sr*Math.sin(ang)).toFixed(1);
+  }).join(' ');
+  html += '<polygon class="data-polygon" points="'+dataPts+'" fill="'+accentRgba+'" stroke="'+accentStroke+'" stroke-width="2"/>';
+
+  /* dots + labels */
+  AREAS.forEach(function(area,i){
+    var ang  = -Math.PI/2 + (2*Math.PI/n)*i;
+    var sr   = r*(scores[area.id]||0)/10;
+    var px   = (cx+sr*Math.cos(ang)).toFixed(1);
+    var py   = (cy+sr*Math.sin(ang)).toFixed(1);
+    html += '<circle class="data-dot" cx="'+px+'" cy="'+py+'" r="4" fill="'+accentStroke+'"/>';
+
+    /* label positioning */
+    var lx = (cx+(r+24)*Math.cos(ang)).toFixed(1);
+    var ly = (cy+(r+24)*Math.sin(ang)).toFixed(1);
+    var anchor = Math.cos(ang)>0.1?'start':Math.cos(ang)<-0.1?'end':'middle';
+    html += '<text x="'+lx+'" y="'+ly+'" text-anchor="'+anchor+'" dy=".3em" font-size="7" fill="'+textColor+'">'+area.abbr+'</text>';
+  });
+
+  svg.innerHTML = html;
+}
+
+function calc(){
+  var vals  = AREAS.map(function(a){ return scores[a.id]||0; });
+  var hasAny = vals.some(function(v){ return v > 0; });
+  var nonZero = vals.filter(function(v){ return v > 0; });
+  var ratedCount = nonZero.length;
+  var avg = ratedCount > 0 ? nonZero.reduce(function(s,v){ return s+v; },0)/ratedCount : 0;
+  /* balance uses all 10 for std dev so unrated areas still penalize imbalance */
+  var mean  = vals.reduce(function(s,v){ return s+v; },0)/vals.length;
+  var variance = vals.reduce(function(s,v){ return s+Math.pow(v-mean,2); },0)/vals.length;
+  var stdDev   = Math.sqrt(variance);
+  var balance  = Math.max(0, Math.min(100, Math.round(100 - stdDev * 20)));
+
+  /* best / worst among rated areas only */
+  var ratedAreas = AREAS.filter(function(a){ return (scores[a.id]||0) > 0; });
+  var sorted = (ratedAreas.length ? ratedAreas : AREAS).slice().sort(function(a,b){ return (scores[b.id]||0)-(scores[a.id]||0); });
+  var best   = sorted[0];
+  var worst  = sorted[sorted.length-1];
+
+  el('avgScore').textContent    = hasAny ? avg.toFixed(1) : '—';
+  el('balanceScore').textContent= hasAny ? balance : '—';
+  var avgSubEl = el('avgSub');
+  if(avgSubEl){
+    if(!hasAny){ avgSubEl.textContent = 'out of 10'; }
+    else if(ratedCount < 10){ avgSubEl.textContent = 'Rate all areas for accurate results'; avgSubEl.style.color='var(--warn)'; }
+    else { avgSubEl.textContent = 'out of 10'; avgSubEl.style.color=''; }
+  }
+
+  if(hasAny){
+    el('topArea').textContent   = best.name;
+    el('topScore').textContent  = 'Score: '+(scores[best.id]||0)+'/10';
+    el('bottomArea').textContent = worst.name;
+    el('bottomScore').textContent = 'Score: '+(scores[worst.id]||0)+'/10 — biggest opportunity';
+    el('topBox').style.display    = '';
+    el('bottomBox').style.display = '';
+  } else {
+    el('topBox').style.display    = 'none';
+    el('bottomBox').style.display = 'none';
+  }
+
+  drawWheel();
+  buildScoreGrid();
+}
+
+var saveTimer = null;
+function schedSave(){ clearTimeout(saveTimer); saveTimer=setTimeout(saveState,600); }
+
+function saveState(){
+  try{
+    var state = { v:1, notes: el('notesArea').value };
+    AREAS.forEach(function(a){ state[a.id]=scores[a.id]; });
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+  }catch(e){}
+}
+
+function applyState(s){
+  AREAS.forEach(function(a){
+    if(s[a.id]!==undefined){
+      scores[a.id]=Math.max(0,Math.min(10,parseInt(s[a.id])||0));
+      var sl=el('sl_'+a.id);
+      if(sl){ sl.value=scores[a.id]; updateRangeFill(sl); }
+      var disp=el('disp_'+a.id);
+      if(disp) disp.textContent=scores[a.id];
+    }
+  });
+  if(s.notes) el('notesArea').value=s.notes;
+}
+
+function loadState(){
+  try{
+    var raw=localStorage.getItem(STORAGE_KEY); if(!raw) return false;
+    var s=JSON.parse(raw); if(!s||s.v!==1) return false;
+    applyState(s);
+    return true;
+  }catch(e){ return false; }
+}
+
+function loadDemo(){
+  var demo = { health:7, mindset:8, romance:5, family:9, career:7, finances:4, fun:6, environment:5, spiritual:6, contribution:4 };
+  AREAS.forEach(function(a){
+    scores[a.id]=demo[a.id]||5;
+    var sl=el('sl_'+a.id); if(sl){ sl.value=scores[a.id]; updateRangeFill(sl); }
+    var disp=el('disp_'+a.id); if(disp) disp.textContent=scores[a.id];
+  });
+  el('notesArea').value='Family is my strongest pillar — time to invest more in finances and contribution. Career is good but not energizing. Finances need a budget overhaul this quarter.';
+  calc();
+  schedSave();
+}
+
+function doReset(){
+  if(!confirm('Reset all scores to zero?')) return;
+  AREAS.forEach(function(a){
+    scores[a.id]=0;
+    var sl=el('sl_'+a.id); if(sl){ sl.value=0; updateRangeFill(sl); }
+    var disp=el('disp_'+a.id); if(disp) disp.textContent='0';
+  });
+  el('notesArea').value='';
+  el('avgScore').textContent = '—';
+  el('balanceScore').textContent = '—';
+  var avgSubEl = el('avgSub');
+  if(avgSubEl){ avgSubEl.textContent='out of 10'; avgSubEl.style.color=''; }
+  el('topBox').style.display='none';
+  el('bottomBox').style.display='none';
+  drawWheel();
+  buildScoreGrid();
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+function doImport(){
+  el('importInput').click();
+}
+
+function handleImport(e){
+  var file = e.target.files[0];
+  if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev){
+    try{
+      var s = JSON.parse(ev.target.result);
+      if(!s || s.v !== 1){ alert('Invalid LifeWheel file.'); return; }
+      applyState(s);
+      calc();
+      schedSave();
+    }catch(err){
+      alert('Could not parse file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+function sanitize(s){ return typeof s==='string'?s.replace(/[<>"]/g,''):''; }
+
+/* ── FOOTER ── */
+function footer(){
+  var f = el('appFooter'); if(!f) return;
+  var year = new Date().getFullYear();
+  var brand = document.querySelector('.brand-text');
+  var name = brand ? sanitize(brand.textContent || 'AppName') : 'AppName';
+  f.innerHTML =
+    '<div class="f-tag">Privacy-first micro-apps for professionals</div>' +
+    '<div class="f-priv"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Your data never leaves this device</div>' +
+    '<div class="f-rights">All rights reserved · <b>' + name + '</b> · ' + year + '</div>';
+  var pf = el('printFooterName');
+  if(pf) pf.textContent = 'Generated by ' + name;
+}
+
+function boot(){
+  setTheme(localStorage.getItem(THEME_KEY)||'light');
+  footer();
+  buildAreas();
+  buildScoreGrid();
+
+  el('themeBtn').addEventListener('click',function(){
+    setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+    if(AREAS.some(function(a){ return (scores[a.id]||0)>0; })){
+      drawWheel();
+      buildScoreGrid();
+    }
+  });
+  el('btnDemo').addEventListener('click',loadDemo);
+  el('btnReset').addEventListener('click',doReset);
+  el('btnImport').addEventListener('click',doImport);
+  el('importInput').addEventListener('change',handleImport);
+  el('btnPrint').addEventListener('click',function(){ window.print(); });
+
+  /* force light theme during print so CSS vars resolve correctly */
+  var _themeBeforePrint = null;
+  window.addEventListener('beforeprint', function(){
+    _themeBeforePrint = document.documentElement.getAttribute('data-theme');
+    document.documentElement.setAttribute('data-theme','light');
+  });
+  window.addEventListener('afterprint', function(){
+    if(_themeBeforePrint) document.documentElement.setAttribute('data-theme',_themeBeforePrint);
+  });
+  el('btnSave').addEventListener('click',function(){
+    var state = { v:1, notes: el('notesArea').value, exported: new Date().toISOString() };
+    AREAS.forEach(function(a){ state[a.id]=scores[a.id]; });
+    var blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'lifewheel-assessment.json';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); }, 100);
+    var btn=el('btnSave'), orig=btn.textContent;
+    btn.textContent='Exported'; setTimeout(function(){ btn.textContent=orig; },1500);
+  });
+  el('notesArea').addEventListener('input',schedSave);
+
+  if(loadState()) calc();
+}
+
+document.addEventListener('DOMContentLoaded',boot);
+})();
+</script>
+</body>
+</html>

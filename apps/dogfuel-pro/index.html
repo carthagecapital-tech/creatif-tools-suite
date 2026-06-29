@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="DogFuel — Raw & kibble dog meal formulator. Enter your dog's weight, age, and activity level to get precise daily feeding targets, calorie needs, and raw food breakdown.">
+<meta name="theme-color" content="#f4f2ec">
+<title>DogFuel — Dog Meal Formulator</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23f97316'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>DF</text></svg>">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --accent:      #ea6110;
+    --accent-dk:   #f97316;
+    --bg:          #f4f2ec;
+    --surface:     #ffffff;
+    --surface2:    #faf8f3;
+    --border:      #e5e1d8;
+    --border2:     #d8d3c7;
+    --text:        #2c2a26;
+    --muted:       #7a756a;
+    --muted2:      #b5b0a6;
+    --danger:      #c0584f;
+    --ok:          #4f8a5b;
+    --warn:        #b8862f;
+    --accent-dim:  #f4ece3;
+    --accent-dim2: #faf7f2;
+    --accent-dim:  color-mix(in srgb, var(--accent) 14%, var(--surface));
+    --accent-dim2: color-mix(in srgb, var(--accent) 6%,  var(--surface));
+    --accent-h:    #c2510d;
+    --on-accent:   #ffffff;
+    --mono: 'Consolas','Menlo','Courier New',monospace;
+    --sans: 'Trebuchet MS',system-ui,-apple-system,sans-serif;
+    --shadow:      0 1px 2px rgba(40,38,34,.04), 0 2px 6px rgba(40,38,34,.05);
+    --shadow-lg:   0 4px 12px rgba(40,38,34,.07), 0 12px 28px rgba(40,38,34,.07);
+  }
+  [data-theme="dark"] {
+    --accent:      var(--accent-dk);
+    --bg:          #1a1815;
+    --surface:     #242220;
+    --surface2:    #2c2a27;
+    --border:      #36332e;
+    --border2:     #423e38;
+    --text:        #ece9e2;
+    --muted:       #75716a;
+    --muted2:      #5a564e;
+    --danger:      #e0796f;
+    --ok:          #6cb079;
+    --warn:        #d6a44f;
+    --accent-dim:  #2c2720;
+    --accent-dim2: #24221e;
+    --accent-dim:  color-mix(in srgb, var(--accent) 18%, var(--surface));
+    --accent-dim2: color-mix(in srgb, var(--accent) 8%,  var(--surface));
+    --accent-h:    #fb923c;
+    --on-accent:   #1a1815;
+    --shadow:      0 1px 2px rgba(0,0,0,.25), 0 2px 6px rgba(0,0,0,.3);
+    --shadow-lg:   0 6px 16px rgba(0,0,0,.4);
+  }
+  html { font-size: 15px; -webkit-text-size-adjust: 100%; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; line-height: 1.5; transition: background .25s, color .25s; }
+  input, select, textarea, button { font-family: inherit; font-size: 16px; }
+  input[type=number] { -moz-appearance: textfield; }
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  .top-bar { height: 3px; background: var(--accent); }
+  .header {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 16px 24px; display: flex; align-items: center;
+    justify-content: space-between; gap: 14px; flex-wrap: wrap;
+    transition: background .25s, border-color .25s;
+    box-shadow: var(--shadow);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-icon { width: 36px; height: 36px; background: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .brand-icon svg { width: 20px; height: 20px; fill: var(--on-accent); }
+  .brand-text { font-weight: 700; font-size: 18px; letter-spacing: -.3px; color: var(--text); transition: color .25s; }
+  .brand-text span { color: var(--accent); }
+  .brand-tag { font-size: 11px; color: var(--muted); margin-top: 1px; letter-spacing: .3px; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .icon-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; }
+  .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .icon-btn svg { width: 18px; height: 18px; }
+  .main { max-width: 940px; margin: 0 auto; padding: 28px 24px 100px; }
+  .layout { display: grid; grid-template-columns: 1fr 340px; gap: 28px; align-items: start; }
+  .col-inputs { min-width: 0; }
+  .col-results { position: sticky; top: 20px; }
+  .section-label {
+    font-family: var(--mono); font-size: 10px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); transition: background .25s; }
+  .input-panel { border: 1px solid var(--border); background: var(--surface); margin-bottom: 24px; transition: background .25s, border-color .25s; box-shadow: var(--shadow); }
+  .input-panel-title { font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); padding: 10px 16px; border-bottom: 1px solid var(--border); background: var(--surface2); transition: background .25s, border-color .25s; }
+  .input-rows { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
+  .input-rows.triple { grid-template-columns: 1fr 1fr 1fr; }
+  .field { background: var(--surface); padding: 13px 16px; transition: background .25s; }
+  .field.full { grid-column: 1/-1; }
+  .field-label { font-family: var(--mono); font-size: 10px; letter-spacing: 1.3px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+  .field-label small { font-size: 9px; color: var(--muted2); letter-spacing: .5px; }
+  .num-wrap { display: flex; align-items: baseline; gap: 5px; }
+  .num-wrap .suffix { font-size: 12px; color: var(--muted); flex-shrink: 0; }
+  .num-wrap input { font-family: var(--mono); font-size: 17px; font-weight: 500; color: var(--text); background: transparent; border: none; outline: none; flex: 1; min-width: 0; }
+  .num-wrap input::placeholder { color: var(--muted2); font-weight: 400; }
+  .field select {
+    font-family: var(--sans); font-size: 16px; color: var(--text);
+    background: var(--surface); border: none; outline: none; width: 100%; cursor: pointer;
+    -webkit-appearance: none; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%237a756a' d='M0 0h10L5 6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 2px center; padding-right: 20px;
+  }
+  [data-theme="dark"] .field select { background-color: var(--surface); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%2375716a' d='M0 0h10L5 6z'/%3E%3C/svg%3E"); }
+  .field select option { background: var(--surface); color: var(--text); }
+  .field input[type=text] { font-family: var(--sans); font-size: 16px; color: var(--text); background: transparent; border: none; outline: none; width: 100%; }
+  .field input::placeholder { color: var(--muted2); }
+
+  /* raw pct slider */
+  .range-wrap { display: flex; flex-direction: column; gap: 6px; }
+  .range-wrap input[type=range] {
+    width: 100%; height: 4px; cursor: pointer; background: transparent;
+    -webkit-appearance: none; appearance: none;
+    background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--pct,50%), var(--border2) var(--pct,50%), var(--border2) 100%);
+  }
+  .range-wrap input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; background: var(--accent); cursor: pointer; }
+  .range-wrap input[type=range]::-moz-range-thumb { width: 16px; height: 16px; background: var(--accent); border: none; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  :focus:not(:focus-visible) { outline: none; }
+  .range-val { font-family: var(--mono); font-size: 17px; font-weight: 500; color: var(--text); }
+
+  /* results */
+  .results-stack { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 16px; box-shadow: var(--shadow); }
+  .result-primary { background: var(--accent-dim); padding: 20px 20px 18px; display: flex; flex-direction: column; gap: 4px; border-bottom: 2px solid var(--accent); }
+  .result-primary-label { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+  .result-primary-val   { font-family: var(--mono); font-size: 34px; font-weight: 700; color: var(--accent); line-height: 1.1; }
+  .result-primary-sub   { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .result-item { background: var(--surface); padding: 13px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+  .result-item:last-child { border-bottom: none; }
+  .result-item.accent-row { background: var(--accent-dim2); }
+  .result-label { font-size: 12px; color: var(--muted); }
+  .result-label b { font-size: 13px; font-weight: 600; color: var(--text); display: block; margin-bottom: 1px; }
+  .result-val { font-family: var(--mono); font-size: 15px; font-weight: 600; color: var(--text); text-align: right; }
+  .result-val.accent { color: var(--accent); }
+  .result-val.ok     { color: var(--ok); }
+
+  /* breakdown table */
+  .breakdown { border: 1px solid var(--border); margin-bottom: 16px; overflow: hidden; box-shadow: var(--shadow); }
+  .breakdown-head { background: var(--surface2); display: grid; border-bottom: 1px solid var(--border); }
+  .breakdown-head span { font-family: var(--mono); font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); padding: 9px 14px; border-right: 1px solid var(--border); }
+  .breakdown-head span:last-child { border-right: none; }
+  .breakdown-row { display: grid; border-bottom: 1px solid var(--border); background: var(--surface); }
+  .breakdown-row:last-child { border-bottom: none; }
+  .breakdown-row:hover { background: var(--surface2); }
+  .breakdown-row span { font-size: 13px; color: var(--text); padding: 10px 14px; border-right: 1px solid var(--border); }
+  .breakdown-row span:last-child { border-right: none; font-family: var(--mono); text-align: right; }
+
+  .empty-state { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 13px; border: 1px solid var(--border); background: var(--surface); margin-bottom: 16px; box-shadow: var(--shadow); }
+  .empty-state .empty-icon { font-size: 28px; margin-bottom: 10px; opacity: .4; }
+  .empty-state p { max-width: 220px; margin: 0 auto; line-height: 1.6; }
+
+  .helper { font-size: 11px; color: var(--muted); line-height: 1.6; border-left: 2px solid var(--border2); padding: 8px 12px; margin-bottom: 20px; }
+
+  .notes-area { border: 1px solid var(--border); background: var(--surface); margin-bottom: 24px; box-shadow: var(--shadow); }
+  .notes-area textarea { font-family: var(--sans); font-size: 16px; color: var(--text); background: transparent; border: none; outline: none; width: 100%; padding: 13px 16px; resize: vertical; min-height: 70px; }
+  .notes-area textarea::placeholder { color: var(--muted2); }
+
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-sec { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 10px 18px; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; }
+  .btn-sec:hover { border-color: var(--text); color: var(--text); }
+  .btn-pri { font-family: var(--sans); font-size: 13px; font-weight: 600; padding: 10px 24px; background: var(--accent); border: 1px solid var(--accent); color: var(--on-accent); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; }
+  .btn-pri:hover { background: var(--accent-h); border-color: var(--accent-h); }
+
+  /* raw section toggle */
+  .raw-section { display: none; }
+  .raw-section.visible { display: block; }
+
+  @media print {
+    @page { margin: .5in; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .header, .actions, .no-print, .top-bar, .app-footer, .col-inputs { display: none !important; }
+    .main { padding: 0; max-width: none; }
+    .layout { grid-template-columns: 1fr; gap: 0; }
+    .col-results { position: static; }
+    .results-stack { background: #ddd !important; border-color: #ddd !important; box-shadow: none !important; }
+    .result-primary { background: #fdf6f0 !important; border-color: #ea6110 !important; }
+    .result-primary-label, .result-primary-val, .result-val.accent { color: #ea6110 !important; }
+    .result-item { background: #fff !important; border-color: #eee !important; }
+    .result-item.accent-row { background: #fdf8f3 !important; }
+    .breakdown { border-color: #ddd !important; box-shadow: none !important; }
+    .breakdown-head { background: #f5f3ef !important; border-color: #ddd !important; }
+    .breakdown-row { background: #fff !important; border-color: #eee !important; }
+    .empty-state { display: none !important; }
+    .section-label::after { background: #ddd !important; }
+    .notes-area { background: #fff !important; border-color: #ddd !important; box-shadow: none !important; }
+    .notes-area textarea { overflow: visible !important; height: auto !important; min-height: auto !important; }
+    .print-only { display: block !important; }
+    .print-footer { text-align: center; font-size: 9px; color: #999; margin-top: 16px; padding-top: 10px; border-top: 1px solid #ddd; }
+    #printNotes:empty { display: none !important; }
+  }
+  .print-only { display: none; }
+
+  /* ── FOOTER ── */
+  .app-footer { max-width: 940px; margin: 0 auto; padding: 24px 24px; text-align: center; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+  .app-footer .f-tag { font-family: var(--sans); font-size: 13px; color: var(--muted); font-style: italic; margin-bottom: 6px; }
+  .app-footer .f-rights { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); margin-top: 8px; }
+  .app-footer .f-rights b { color: var(--text); font-weight: 600; }
+  .app-footer .f-priv { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted2); margin-top: 6px; }
+  .app-footer .f-priv svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+  @media (max-width: 720px) {
+    .main { padding: 20px 16px 90px; }
+    .layout { grid-template-columns: 1fr; }
+    .col-results { position: static; order: -1; }
+    .input-rows { grid-template-columns: 1fr !important; }
+    .actions { position: sticky; bottom: 0; background: var(--bg); border-top: 1px solid var(--border); padding: 12px 16px; margin: 0 -16px; padding-bottom: calc(12px + env(safe-area-inset-bottom,0px)); }
+    .btn-pri { flex: 1; justify-content: center; }
+    .app-footer { padding: 16px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<header class="header">
+  <div class="brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 12c0-1.1.4-2.1 1.1-2.8L9 5.7C9.6 5.2 10.4 5 11 5h2c.6 0 1.4.2 2 .7l3.4 3.5c.7.7 1.1 1.7 1.1 2.8v3c0 1.1-.9 2-2 2H6.5c-1.1 0-2-.9-2-2v-3zm13 3v-3c0-.7-.3-1.4-.7-1.9L13.4 6.7C13.1 6.4 12.6 6 12 6h-1c-.6 0-1.1.4-1.4.7L6.2 10.1c-.5.5-.7 1.2-.7 1.9v3c0 .6.5 1 1 1H17c.5 0 1-.4 1-1zM9 17c0 .6.4 1 1 1h4c.6 0 1-.4 1-1v-1H9v1z"/></svg>
+    </div>
+    <div>
+      <h1 class="brand-text">Dog<span>Fuel</span></h1>
+      <div class="brand-tag">Raw & Kibble Meal Formulator</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">
+      <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg id="iconSun" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="main">
+  <div class="layout">
+    <div class="col-inputs">
+
+      <h2 class="section-label">Dog Profile</h2>
+      <div class="input-panel">
+        <div class="input-panel-title">Basic Information</div>
+        <div class="input-rows">
+          <div class="field full">
+            <div class="field-label">Dog's Name <small>optional</small></div>
+            <input type="text" id="dogName" placeholder="e.g. Buddy">
+          </div>
+          <div class="field">
+            <div class="field-label">Body Weight</div>
+            <div class="num-wrap">
+              <input type="number" id="dogWeight" placeholder="0" min="0.5" step="0.5">
+              <span class="suffix" id="weightUnitLabel">lbs</span>
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">Weight Unit</div>
+            <select id="weightUnit">
+              <option value="lbs">Pounds (lbs)</option>
+              <option value="kg">Kilograms (kg)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-panel">
+        <div class="input-panel-title">Life Stage & Activity</div>
+        <div class="input-rows">
+          <div class="field full">
+            <div class="field-label">Life Stage</div>
+            <select id="lifeStage">
+              <option value="puppy_young">Puppy (under 6 months)</option>
+              <option value="puppy_older">Puppy (6–12 months)</option>
+              <option value="adult_neutered" selected>Adult — Neutered/Spayed</option>
+              <option value="adult_intact">Adult — Intact</option>
+              <option value="pregnant">Pregnant</option>
+              <option value="lactating">Lactating</option>
+              <option value="senior">Senior (7+ years)</option>
+            </select>
+          </div>
+          <div class="field full">
+            <div class="field-label">Activity Level</div>
+            <select id="activityLevel">
+              <option value="sedentary">Sedentary — couch potato, very little exercise</option>
+              <option value="low">Low — short daily walks</option>
+              <option value="moderate" selected>Moderate — 30–60 min active daily</option>
+              <option value="active">Active — 1–2 hrs daily, hiking / play</option>
+              <option value="very_active">Very Active — daily intense exercise</option>
+              <option value="working">Working Dog — sport / herding / service</option>
+            </select>
+          </div>
+          <div class="field full">
+            <div class="field-label">Body Condition Score</div>
+            <select id="bodyCondition">
+              <option value="underweight">Underweight — ribs clearly visible, no fat cover</option>
+              <option value="ideal" selected>Ideal — ribs easily felt, waist visible</option>
+              <option value="overweight">Overweight — ribs hard to feel under fat</option>
+              <option value="obese">Obese — no waist, heavy fat deposits</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="section-label">Diet Type</h2>
+      <div class="input-panel">
+        <div class="input-panel-title">Feeding Method</div>
+        <div class="input-rows">
+          <div class="field full">
+            <div class="field-label">Diet</div>
+            <select id="dietType">
+              <option value="kibble">Dry Kibble</option>
+              <option value="raw">Raw / BARF / Prey Model</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="raw-section" id="rawSection">
+        <div class="input-panel">
+          <div class="input-panel-title">Raw Feeding Settings</div>
+          <div class="input-rows">
+            <div class="field full">
+              <div class="field-label">Feed % of Body Weight <small>typical: 2–3%</small></div>
+              <div class="range-wrap">
+                <div class="range-val" id="feedPctDisplay">2.5%</div>
+                <input type="range" id="feedPctRange" min="1.0" max="5.0" step="0.1" value="2.5">
+              </div>
+            </div>
+            <div class="field full">
+              <div class="field-label">Raw Model</div>
+              <select id="rawModel">
+                <option value="barf">BARF (Biologically Appropriate Raw Food)</option>
+                <option value="prey">Prey Model Raw (PMR)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="helper no-print">
+        Calorie needs are calculated using the National Research Council (NRC) Resting Energy Requirement formula: <strong>RER = 70 × (weight in kg)^0.75</strong>, adjusted for life stage, activity, and body condition. Raw feeding amounts use % of body weight per day. Always consult your vet before making major dietary changes.
+      </div>
+
+      <h2 class="section-label">Notes</h2>
+      <div class="notes-area no-print">
+        <textarea id="notesArea" placeholder="Allergies, supplements, vet notes, brand preferences, current food details…"></textarea>
+      </div>
+
+    </div>
+
+    <div class="col-results">
+      <h2 class="section-label">Daily Feeding Plan</h2>
+
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" opacity=".4"><path d="M12 18c-2.2 0-4-1-4-3 0-1.5 1.2-3.5 4-6 2.8 2.5 4 4.5 4 6 0 2-1.8 3-4 3zm-5-8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-4c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm4 0c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3 4c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg></div>
+        <p>Enter your dog's weight and details to generate a meal plan.</p>
+      </div>
+
+      <div id="resultsBlock" style="display:none">
+
+        <div class="results-stack">
+          <div class="result-primary">
+            <div class="result-primary-label" id="r0label">Daily Calories</div>
+            <div class="result-primary-val" id="r0val">—</div>
+            <div class="result-primary-sub" id="r0sub"></div>
+          </div>
+          <div class="result-item">
+            <div class="result-label"><b id="r1label">Food Amount</b>per day</div>
+            <div class="result-val accent" id="r1val">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label"><b id="r2label">Feeding Method</b>recommended</div>
+            <div class="result-val" id="r2val">—</div>
+          </div>
+          <div class="result-item accent-row">
+            <div class="result-label"><b>Meals Per Day</b>split recommendation</div>
+            <div class="result-val accent" id="r3val">—</div>
+          </div>
+        </div>
+
+        <!-- Macros / breakdown -->
+        <div class="breakdown" id="macroBreakdown">
+          <div class="breakdown-head" style="grid-template-columns:1fr 90px 90px" id="breakdownHead">
+            <span>Component</span>
+            <span style="text-align:right">Amount</span>
+            <span style="text-align:right">Per Meal</span>
+          </div>
+          <div id="breakdownBody"></div>
+        </div>
+
+        <!-- BCS guidance -->
+        <div class="results-stack" id="bcsBox" style="margin-bottom:16px">
+          <div class="result-item">
+            <div class="result-label"><b id="bcsLabel">Body Condition</b>adjustment applied</div>
+            <div class="result-val" id="bcsVal">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label"><b>RER (Base Rate)</b>before multipliers</div>
+            <div class="result-val" id="rerVal">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label"><b>Life Stage Factor</b></div>
+            <div class="result-val" id="stageFactorVal">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label"><b>Activity Factor</b></div>
+            <div class="result-val" id="activityFactorVal">—</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="print-only" id="printNotes" style="border:1px solid #ddd; padding:13px 16px; margin-bottom:16px; font-size:13px; line-height:1.6; white-space:pre-wrap;"></div>
+
+      <div class="actions">
+        <button class="btn-sec" id="btnDemo">Demo</button>
+        <button class="btn-sec" id="btnReset">Reset</button>
+        <button class="btn-sec" id="btnPrint">Print</button>
+        <button class="btn-pri" id="btnCopy">Copy Plan</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="print-only print-footer"><span id="printFooterName">Generated by AppName</span></div>
+<footer class="app-footer" id="appFooter"></footer>
+
+<script>
+(function(){
+'use strict';
+
+var STORAGE_KEY = 'dogfuel_v2';
+var THEME_KEY   = 'dogfuel_theme';
+var hasResult   = false;
+
+function el(id){ return document.getElementById(id); }
+function fmtNum(n,d){ var v=parseFloat(n); if(isNaN(v)) return '0'; return v.toFixed(d||0).replace(/\B(?=(\d{3})+(?!\d))/g,','); }
+
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem(THEME_KEY,t);
+  el('iconMoon').style.display = t==='dark'  ? 'block':'none';
+  el('iconSun').style.display  = t==='light' ? 'block':'none';
+}
+
+function updateRangeFill(input){
+  var min=parseFloat(input.min)||0, max=parseFloat(input.max)||100, val=parseFloat(input.value)||0;
+  input.style.setProperty('--pct',((val-min)/(max-min)*100).toFixed(1)+'%');
+}
+
+function showResults(show){
+  hasResult=show;
+  el('emptyState').style.display    = show?'none':'';
+  el('resultsBlock').style.display  = show?'':'none';
+}
+
+function buildBreakdown(rows, cols){
+  var head = el('breakdownHead');
+  head.style.gridTemplateColumns = cols.map(function(c){ return c.w||'1fr'; }).join(' ');
+  head.innerHTML = cols.map(function(c,i){ return '<span'+(i>0?' style="text-align:right"':'')+'>'+c.label+'</span>'; }).join('');
+
+  var body = el('breakdownBody'); body.innerHTML='';
+  rows.forEach(function(row){
+    var div=document.createElement('div');
+    div.className='breakdown-row';
+    div.style.gridTemplateColumns=head.style.gridTemplateColumns;
+    row.forEach(function(cell,i){
+      var s=document.createElement('span');
+      s.textContent=cell;
+      if(i===0&&row[0].startsWith('·')) s.style.color='var(--muted)';
+      div.appendChild(s);
+    });
+    body.appendChild(div);
+  });
+}
+
+function calc(){
+  var weightRaw  = parseFloat(el('dogWeight').value)||0;
+  var unit       = el('weightUnit').value;
+  var stage      = el('lifeStage').value;
+  var activity   = el('activityLevel').value;
+  var condition  = el('bodyCondition').value;
+  var diet       = el('dietType').value;
+  var feedPct    = parseFloat(el('feedPctRange').value)||2.5;
+  var dogName    = el('dogName').value.trim()||'Your dog';
+
+  /* show/hide raw section */
+  var isRaw = diet==='raw';
+  el('rawSection').classList.toggle('visible', isRaw);
+
+  if(!weightRaw || weightRaw <= 0){ showResults(false); schedSave(); return; }
+
+  /* convert to kg */
+  var weightKg = unit==='kg' ? weightRaw : weightRaw * 0.453592;
+  var weightLbs = unit==='lbs' ? weightRaw : weightRaw * 2.20462;
+
+  /* RER */
+  var rer = 70 * Math.pow(weightKg, 0.75);
+
+  /* Life stage factor */
+  var stageFactors = {
+    puppy_young:    3.0,
+    puppy_older:    2.0,
+    adult_neutered: 1.6,
+    adult_intact:   1.8,
+    pregnant:       3.0,
+    lactating:      4.0,
+    senior:         1.4
+  };
+  var stageFactor = stageFactors[stage]||1.6;
+
+  var stageLabels = {
+    puppy_young:'Puppy <6mo (×3.0)', puppy_older:'Puppy 6-12mo (×2.0)',
+    adult_neutered:'Adult Neutered (×1.6)', adult_intact:'Adult Intact (×1.8)',
+    pregnant:'Pregnant (×3.0)', lactating:'Lactating (×4.0)', senior:'Senior (×1.4)'
+  };
+
+  /* Activity factor */
+  var activityFactors = {
+    sedentary:0.8, low:0.9, moderate:1.0, active:1.2, very_active:1.4, working:1.6
+  };
+  var activityFactor = activityFactors[activity]||1.0;
+
+  var activityLabels = {
+    sedentary:'Sedentary (×0.8)', low:'Low (×0.9)', moderate:'Moderate (×1.0)',
+    active:'Active (×1.2)', very_active:'Very Active (×1.4)', working:'Working Dog (×1.6)'
+  };
+
+  /* BCS adjustment */
+  var bcsFactors = { underweight:1.15, ideal:1.0, overweight:0.85, obese:0.70 };
+  var bcsFactor  = bcsFactors[condition]||1.0;
+  var bcsLabels  = { underweight:'Underweight (+15%)', ideal:'Ideal (no change)', overweight:'Overweight (−15%)', obese:'Obese (−30%)' };
+
+  /* Daily calories */
+  var dailyCal = rer * stageFactor * activityFactor * bcsFactor;
+
+  /* Kibble (~350 kcal/cup average) */
+  var cupsKibble   = dailyCal / 350;
+  var ozKibble     = cupsKibble * 3.527; /* 1 cup dry ≈ 3.5 oz */
+  var gramsKibble  = ozKibble * 28.35;
+
+  /* Raw: % of body weight, adjusted by BCS */
+  var adjustedPct  = feedPct * bcsFactor;
+  var rawOzTotal   = weightLbs * adjustedPct / 100 * 16; /* lbs→oz */
+  var rawGrams     = rawOzTotal * 28.35;
+
+  /* Meal count */
+  var mealsPerDay = (stage==='puppy_young')?4:(stage==='puppy_older')?3:2;
+
+  /* display */
+  el('r0val').textContent  = fmtNum(dailyCal,0)+' kcal';
+  el('r0sub').textContent  = dogName+' · '+(unit==='kg' ? fmtNum(weightKg,1)+' kg ('+fmtNum(weightLbs,1)+' lbs)' : fmtNum(weightLbs,1)+' lbs ('+fmtNum(weightKg,1)+' kg)');
+
+  /* food amount */
+  if(diet==='kibble'){
+    el('r1label').textContent='Dry Kibble';
+    el('r1val').textContent=fmtNum(cupsKibble,2)+' cups ('+fmtNum(gramsKibble,0)+'g)';
+    el('r2val').textContent='~350 kcal/cup kibble';
+  } else if(diet==='raw'){
+    el('r1label').textContent='Raw Food';
+    el('r1val').textContent=fmtNum(rawOzTotal,1)+' oz ('+fmtNum(rawGrams,0)+'g)';
+    el('r2val').textContent=fmtNum(adjustedPct,1)+'% of body weight/day'+(bcsFactor!==1.0?' (adjusted for '+condition+')':'');
+  }
+
+  el('r3val').textContent = mealsPerDay+' meals/day';
+
+  /* breakdown table */
+  var rows = [];
+  if(diet==='raw'){
+    var rawModel = el('rawModel').value;
+    var muscle,bone,organ,liver,veggie,fruit;
+    if(rawModel==='barf'){
+      /* BARF: 70% meat, 10% bone, 7% veg, 5% liver, 5% secreting organ, 3% fruit */
+      muscle=rawOzTotal*0.70; bone=rawOzTotal*0.10; liver=rawOzTotal*0.05;
+      organ=rawOzTotal*0.05; veggie=rawOzTotal*0.07; fruit=rawOzTotal*0.03;
+      rows=[
+        ['Muscle Meat (70%)', fmtNum(muscle,1)+' oz', fmtNum(muscle/mealsPerDay,1)+' oz'],
+        ['Raw Meaty Bone (10%)', fmtNum(bone,1)+' oz', fmtNum(bone/mealsPerDay,1)+' oz'],
+        ['Liver (5%)', fmtNum(liver,1)+' oz', fmtNum(liver/mealsPerDay,1)+' oz'],
+        ['Secreting Organ (5%)', fmtNum(organ,1)+' oz', fmtNum(organ/mealsPerDay,1)+' oz'],
+        ['Vegetables (7%)', fmtNum(veggie,1)+' oz', fmtNum(veggie/mealsPerDay,1)+' oz'],
+        ['Fruit (3%)', fmtNum(fruit,1)+' oz', fmtNum(fruit/mealsPerDay,1)+' oz'],
+        ['TOTAL', fmtNum(rawOzTotal,1)+' oz', fmtNum(rawOzTotal/mealsPerDay,1)+' oz']
+      ];
+    } else {
+      /* PMR: 80% muscle, 10% bone, 5% liver, 5% other organ */
+      muscle=rawOzTotal*0.80; bone=rawOzTotal*0.10; liver=rawOzTotal*0.05; organ=rawOzTotal*0.05;
+      rows=[
+        ['Muscle Meat (80%)', fmtNum(muscle,1)+' oz', fmtNum(muscle/mealsPerDay,1)+' oz'],
+        ['Raw Meaty Bone (10%)', fmtNum(bone,1)+' oz', fmtNum(bone/mealsPerDay,1)+' oz'],
+        ['Liver (5%)', fmtNum(liver,1)+' oz', fmtNum(liver/mealsPerDay,1)+' oz'],
+        ['Other Organ (5%)', fmtNum(organ,1)+' oz', fmtNum(organ/mealsPerDay,1)+' oz'],
+        ['TOTAL', fmtNum(rawOzTotal,1)+' oz', fmtNum(rawOzTotal/mealsPerDay,1)+' oz']
+      ];
+    }
+  } else {
+    var mealLabels = ['Morning','Midday','Afternoon','Evening'];
+    for(var m=0; m<mealsPerDay; m++){
+      rows.push([(mealLabels[m]||'Meal '+(m+1))+' Meal', fmtNum(cupsKibble/mealsPerDay,2)+' cups', fmtNum(gramsKibble/mealsPerDay,0)+'g']);
+    }
+    rows.push(['Daily Total', fmtNum(cupsKibble,2)+' cups', fmtNum(gramsKibble,0)+'g']);
+  }
+
+  var breakdownCols;
+  if(diet==='raw'){
+    breakdownCols=[{label:'Component',w:'1fr'},{label:'Daily',w:'85px'},{label:'Per Meal',w:'85px'}];
+  } else {
+    breakdownCols=[{label:'Meal',w:'1fr'},{label:'Cups',w:'85px'},{label:'Weight',w:'85px'}];
+  }
+  buildBreakdown(rows, breakdownCols);
+
+  /* calculation details */
+  el('bcsLabel').textContent      = 'Body Condition';
+  el('bcsVal').textContent        = bcsLabels[condition]||'Ideal';
+  el('rerVal').textContent        = fmtNum(rer,0)+' kcal';
+  el('stageFactorVal').textContent= stageLabels[stage]||'×'+stageFactor;
+  el('activityFactorVal').textContent = activityLabels[activity]||'×'+activityFactor;
+
+  showResults(true);
+  schedSave();
+}
+
+var saveTimer = null;
+function schedSave(){ clearTimeout(saveTimer); saveTimer=setTimeout(saveState,600); }
+
+function saveState(){
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify({
+      v:2,
+      dogName:    el('dogName').value,
+      dogWeight:  el('dogWeight').value,
+      weightUnit: el('weightUnit').value,
+      lifeStage:  el('lifeStage').value,
+      activity:   el('activityLevel').value,
+      condition:  el('bodyCondition').value,
+      diet:       el('dietType').value,
+      feedPct:    el('feedPctRange').value,
+      rawModel:   el('rawModel').value,
+      notes:      el('notesArea').value
+    }));
+  }catch(e){}
+}
+
+function loadState(){
+  try{
+    var raw=localStorage.getItem(STORAGE_KEY); if(!raw) return false;
+    var s=JSON.parse(raw); if(!s||s.v!==2) return false;
+    if(s.dogName)   el('dogName').value     = s.dogName;
+    if(s.dogWeight) el('dogWeight').value   = s.dogWeight;
+    if(s.weightUnit){ el('weightUnit').value=s.weightUnit; el('weightUnitLabel').textContent=s.weightUnit; }
+    if(s.lifeStage) el('lifeStage').value   = s.lifeStage;
+    if(s.activity)  el('activityLevel').value=s.activity;
+    if(s.condition) el('bodyCondition').value=s.condition;
+    if(s.diet)      el('dietType').value    = s.diet;
+    if(s.feedPct){  el('feedPctRange').value=s.feedPct; updateRangeFill(el('feedPctRange')); el('feedPctDisplay').textContent=fmtNum(s.feedPct,1)+'%'; }
+    if(s.rawModel)  el('rawModel').value    = s.rawModel;
+    if(s.notes)     el('notesArea').value   = s.notes;
+    return true;
+  }catch(e){ return false; }
+}
+
+function loadDemo(){
+  el('dogName').value         = 'Ranger';
+  el('dogWeight').value       = '65';
+  el('weightUnit').value      = 'lbs';
+  el('weightUnitLabel').textContent='lbs';
+  el('lifeStage').value       = 'adult_neutered';
+  el('activityLevel').value   = 'active';
+  el('bodyCondition').value   = 'ideal';
+  el('dietType').value        = 'raw';
+  el('feedPctRange').value    = '2.5';
+  updateRangeFill(el('feedPctRange'));
+  el('feedPctDisplay').textContent='2.5%';
+  el('rawModel').value        = 'barf';
+  el('notesArea').value       = 'Ranger is a 4-year-old German Shepherd. Chicken/turkey base. Salmon oil supplement (1 tsp/day). No grains. Allergic to beef — avoid.';
+  el('printNotes').textContent = el('notesArea').value;
+  calc();
+  schedSave();
+}
+
+function doReset(){
+  if(!confirm('Reset all inputs?')) return;
+  el('dogName').value=''; el('dogWeight').value='';
+  el('weightUnit').value='lbs'; el('weightUnitLabel').textContent='lbs';
+  el('lifeStage').value='adult_neutered'; el('activityLevel').value='moderate';
+  el('bodyCondition').value='ideal'; el('dietType').value='kibble';
+  el('feedPctRange').value='2.5'; updateRangeFill(el('feedPctRange'));
+  el('feedPctDisplay').textContent='2.5%';
+  el('rawModel').value='barf'; el('notesArea').value=''; el('printNotes').textContent='';
+  el('rawSection').classList.remove('visible');
+  localStorage.removeItem(STORAGE_KEY);
+  showResults(false);
+}
+
+/* ── FOOTER ── */
+function footer(){
+  var f = el('appFooter'); if(!f) return;
+  var year = new Date().getFullYear();
+  var brand = document.querySelector('.brand-text');
+  var name = brand ? (brand.textContent || 'AppName').replace(/[<>]/g,'') : 'AppName';
+  f.innerHTML =
+    '<div class="f-tag">Privacy-first micro-apps for professionals</div>' +
+    '<div class="f-priv"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Your data never leaves this device</div>' +
+    '<div class="f-rights">All rights reserved · <b>' + name + '</b> · ' + year + '</div>';
+  var pf = el('printFooterName');
+  if(pf) pf.textContent = 'Generated by ' + name;
+}
+
+function boot(){
+  setTheme(localStorage.getItem(THEME_KEY)||'light');
+  footer();
+
+  el('themeBtn').addEventListener('click',function(){
+    setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+  });
+
+  /* inputs → calc */
+  ['dogWeight','dogName'].forEach(function(id){ el(id).addEventListener('input',calc); });
+  ['weightUnit','lifeStage','activityLevel','bodyCondition','dietType','rawModel'].forEach(function(id){
+    el(id).addEventListener('change',function(){
+      if(id==='weightUnit') el('weightUnitLabel').textContent=this.value;
+      calc();
+    });
+  });
+  el('feedPctRange').addEventListener('input',function(){
+    updateRangeFill(this);
+    el('feedPctDisplay').textContent=fmtNum(this.value,1)+'%';
+    calc();
+  });
+  el('notesArea').addEventListener('input',function(){ el('printNotes').textContent=this.value; schedSave(); });
+
+  el('btnDemo').addEventListener('click',loadDemo);
+  el('btnReset').addEventListener('click',doReset);
+  el('btnPrint').addEventListener('click',function(){ window.print(); });
+
+  /* force light theme during print so CSS vars resolve correctly */
+  var _themeBeforePrint = null;
+  window.addEventListener('beforeprint', function(){
+    _themeBeforePrint = document.documentElement.getAttribute('data-theme');
+    document.documentElement.setAttribute('data-theme','light');
+  });
+  window.addEventListener('afterprint', function(){
+    if(_themeBeforePrint) document.documentElement.setAttribute('data-theme',_themeBeforePrint);
+  });
+  el('btnCopy').addEventListener('click',function(){
+    if(!hasResult){ alert('Enter dog weight first.'); return; }
+    var name=el('dogName').value||'Dog';
+    var cal=el('r0val').textContent;
+    var food=el('r1val').textContent;
+    var meals=el('r3val').textContent;
+    var text=name+' Daily Plan\n'+el('r0label').textContent+': '+cal+'\n'+el('r1label').textContent+': '+food+'\nMeals: '+meals;
+    var btn=el('btnCopy'),orig=btn.textContent;
+    function onSuccess(){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent=orig; },1500); }
+    function onFail(){ prompt('Copy this text:', text); }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(onSuccess).catch(onFail);
+    } else {
+      onFail();
+    }
+  });
+
+  if(loadState()){ el('printNotes').textContent=el('notesArea').value; calc(); }
+  else showResults(false);
+  updateRangeFill(el('feedPctRange'));
+}
+
+document.addEventListener('DOMContentLoaded',boot);
+})();
+</script>
+</body>
+</html>

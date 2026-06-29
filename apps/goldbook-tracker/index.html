@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="GoldBook — Track your gold, silver, platinum & palladium holdings. Log each piece, monitor portfolio value, and see your gain/loss at a glance.">
+<meta name="theme-color" content="#f4f2ec">
+<title>GoldBook — Precious Metals Portfolio Tracker</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23d4a017'/><text x='50' y='72' font-size='60' text-anchor='middle' fill='%230a0a0a' font-weight='700' font-family='sans-serif'>G</text></svg>">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --accent:      #b8891a;
+    --accent-dk:   #d4a017;
+    --bg:          #f4f2ec;
+    --surface:     #ffffff;
+    --surface2:    #faf8f3;
+    --border:      #e5e1d8;
+    --border2:     #d8d3c7;
+    --text:        #2c2a26;
+    --muted:       #7a756a;
+    --muted2:      #b5b0a6;
+    --danger:      #c0584f;
+    --ok:          #4f8a5b;
+    --warn:        #b8862f;
+    --info:        #4a7aa6;
+    --purple:      #7a6aa8;
+    --accent-h:    #9e7515;
+    --on-accent:   #ffffff;
+    --mono: 'Consolas','Menlo','Courier New',monospace;
+    --sans: 'Trebuchet MS',system-ui,-apple-system,sans-serif;
+    --shadow:      0 1px 2px rgba(40,38,34,.04), 0 2px 6px rgba(40,38,34,.05);
+    --shadow-lg:   0 4px 12px rgba(40,38,34,.07), 0 12px 28px rgba(40,38,34,.07);
+  }
+  [data-theme="dark"] {
+    --accent:      var(--accent-dk);
+    --bg:          #1a1815;
+    --surface:     #242220;
+    --surface2:    #2c2a27;
+    --border:      #36332e;
+    --border2:     #423e38;
+    --text:        #ece9e2;
+    --muted:       #75716a;
+    --muted2:      #5a564e;
+    --danger:      #e0796f;
+    --ok:          #6cb079;
+    --warn:        #d6a44f;
+    --info:        #6fa3d0;
+    --purple:      #a292d0;
+    --accent-h:    #e6b825;
+    --on-accent:   #1a1815;
+    --shadow:      0 1px 2px rgba(0,0,0,.25), 0 2px 6px rgba(0,0,0,.3);
+    --shadow-lg:   0 6px 16px rgba(0,0,0,.4);
+  }
+  html { font-size: 15px; -webkit-text-size-adjust: 100%; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; line-height: 1.5; transition: background .25s, color .25s; }
+  input, select, textarea, button { font-family: inherit; font-size: inherit; }
+  input[type=number] { -moz-appearance: textfield; }
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  .top-bar { height: 3px; background: var(--accent); }
+  .header {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 14px 24px; display: flex; align-items: center;
+    justify-content: space-between; gap: 14px; flex-wrap: wrap;
+    position: sticky; top: 0; z-index: 100;
+    transition: background .25s, border-color .25s;
+    box-shadow: var(--shadow);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-icon { width: 36px; height: 36px; background: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .brand-icon svg { width: 20px; height: 20px; fill: var(--on-accent); }
+  .brand-text { font-weight: 700; font-size: 18px; letter-spacing: -.3px; color: var(--text); transition: color .25s; }
+  .brand-text span { color: var(--accent); }
+  .brand-tag { font-size: 10px; color: var(--muted); letter-spacing: .5px; margin-top: 1px; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .icon-btn { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; }
+  .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .icon-btn svg { width: 17px; height: 17px; }
+  .main { max-width: 1100px; margin: 0 auto; padding: 24px 20px 80px; }
+
+  /* P&L Summary Bar */
+  .pnl-bar {
+    display: grid; grid-template-columns: repeat(4,1fr); gap: 1px;
+    background: var(--border); border: 1px solid var(--border);
+    margin-bottom: 24px; transition: background .25s, border-color .25s;
+    box-shadow: var(--shadow);
+  }
+  .pnl-cell { background: var(--surface); padding: 14px 18px; transition: background .25s; }
+  .pnl-label { font-family: var(--mono); font-size: 9px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .pnl-val { font-family: var(--mono); font-size: 26px; font-weight: 700; line-height: 1; }
+  .pnl-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .pnl-val.accent { color: var(--accent); }
+  .pnl-val.ok     { color: var(--ok); }
+  .pnl-val.danger { color: var(--danger); }
+
+  .section-label { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .add-form-wrap { border: 1px solid var(--border); background: var(--surface); margin-bottom: 24px; overflow: hidden; transition: background .25s, border-color .25s; box-shadow: var(--shadow); }
+  .add-form-header { padding: 11px 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; transition: background .15s; }
+  .add-form-header:hover { background: var(--surface2); }
+  .form-header-left { font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+  .form-toggle-icon { font-size: 20px; color: var(--muted); transition: transform .2s; line-height: 1; }
+  .form-toggle-icon.open { transform: rotate(45deg); }
+  .add-form-body { display: none; }
+  .add-form-body.open { display: block; }
+  .form-grid { display: grid; gap: 1px; background: var(--border); }
+  .form-field { background: var(--surface); padding: 12px 14px; transition: background .25s; }
+  .form-label { font-family: var(--mono); font-size: 9px; letter-spacing: 1.3px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .form-field input, .form-field select, .form-field textarea {
+    font-family: var(--sans); font-size: 14px; color: var(--text);
+    background: transparent; border: none; outline: none; width: 100%; resize: none;
+  }
+  .form-field textarea { min-height: 38px; line-height: 1.5; }
+  .form-field input::placeholder, .form-field textarea::placeholder { color: var(--muted2); }
+  .form-field.invalid { box-shadow: inset 0 0 0 1.5px var(--danger); }
+  .field-err { font-family: var(--mono); font-size: 9px; letter-spacing: .3px; color: var(--danger); margin-top: 5px; display: none; }
+  .form-field.invalid .field-err { display: block; }
+  .form-field input[type="date"] { font-family: var(--mono); font-size: 13px; }
+  .form-field input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(.3); cursor: pointer; }
+  [data-theme="dark"] .form-field input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(.5); }
+  .form-field select {
+    cursor: pointer; -webkit-appearance: none; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%237a756a' d='M0 0h10L5 6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 2px center; padding-right: 20px;
+  }
+  [data-theme="dark"] .form-field select { background-color: var(--surface); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%2375716a' d='M0 0h10L5 6z'/%3E%3C/svg%3E"); }
+  .form-field select option { background: var(--surface); color: var(--text); }
+  .form-actions { background: var(--surface2); padding: 11px 18px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  :focus:not(:focus-visible) { outline: none; }
+  .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .filter-tabs { display: flex; border: 1px solid var(--border2); overflow: hidden; flex-wrap: wrap; }
+  .filter-tab { font-family: var(--sans); font-size: 11px; font-weight: 500; padding: 6px 13px; background: transparent; border: none; color: var(--muted); cursor: pointer; transition: all .15s; white-space: nowrap; letter-spacing: .3px; }
+  .filter-tab:hover:not(.active) { background: var(--surface2); color: var(--text); }
+  .filter-tab.active { background: var(--accent); color: var(--on-accent); font-weight: 600; }
+  .search-wrap { flex: 1; min-width: 180px; }
+  .search-wrap input { width: 100%; font-family: var(--sans); font-size: 13px; color: var(--text); background: var(--surface); border: 1px solid var(--border2); padding: 6px 12px; outline: none; transition: border-color .15s; }
+  .search-wrap input:focus { border-color: var(--accent); }
+  .search-wrap input::placeholder { color: var(--muted); }
+  .sort-select { font-family: var(--sans); font-size: 12px; color: var(--text); background: var(--surface); border: 1px solid var(--border2); padding: 6px 28px 6px 10px; outline: none; cursor: pointer; -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%237a756a' d='M0 0h10L5 6z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; }
+  [data-theme="dark"] .sort-select { background-color: var(--surface); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%2375716a' d='M0 0h10L5 6z'/%3E%3C/svg%3E"); }
+  .table-wrap { border: 1px solid var(--border); overflow: hidden; margin-bottom: 20px; transition: border-color .25s; overflow-x: auto; box-shadow: var(--shadow); }
+  .table-head { display: grid; background: var(--surface2); border-bottom: 1px solid var(--border); min-width: 700px; }
+  .th { font-family: var(--mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); padding: 10px 14px; border-right: 1px solid var(--border); white-space: nowrap; }
+  .th:last-child { border-right: none; }
+  .th.r { text-align: right; }
+  .data-row { display: grid; border-bottom: 1px solid var(--border); background: var(--surface); transition: background .1s; min-width: 700px; }
+  .data-row:last-child { border-bottom: none; }
+  .data-row:hover { background: var(--surface2); }
+  .data-row.accent-ok     { border-left: 3px solid var(--ok); }
+  .data-row.accent-warn   { border-left: 3px solid var(--warn); }
+  .data-row.accent-danger { border-left: 3px solid var(--danger); }
+  .data-row.accent-info   { border-left: 3px solid var(--info); }
+  .data-row.accent-purple { border-left: 3px solid var(--purple); }
+  .data-row.accent-accent { border-left: 3px solid var(--accent); }
+  .data-row.accent-muted  { border-left: 3px solid var(--border2); }
+  .td { font-size: 13px; color: var(--text); padding: 11px 14px; border-right: 1px solid var(--border); display: flex; align-items: center; overflow: hidden; }
+  .td:last-child { border-right: none; justify-content: center; padding: 0; }
+  .td.r { justify-content: flex-end; font-family: var(--mono); }
+  .td.muted { color: var(--muted); font-size: 12px; }
+  .td.mono  { font-family: var(--mono); font-size: 13px; }
+  .td-primary { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .td-primary .primary-text { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .td-primary .secondary-text { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .status-pill { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; padding: 3px 8px; white-space: nowrap; border: 1px solid; }
+  .pill-ok     { color: var(--ok);     border-color: var(--ok);     background: #eef6f0; }
+  .pill-warn   { color: var(--warn);   border-color: var(--warn);   background: #fdf3e3; }
+  .pill-danger { color: var(--danger); border-color: var(--danger); background: #fdecea; }
+  .pill-info   { color: var(--info);   border-color: var(--info);   background: #e8f0f8; }
+  .pill-purple { color: var(--purple); border-color: var(--purple); background: #f0edf8; }
+  .pill-accent { color: var(--accent); border-color: var(--accent); background: #fdf5e0; }
+  .pill-muted  { color: var(--muted);  border-color: var(--border2); background: transparent; }
+  .cat-badge { font-family: var(--mono); font-size: 9px; letter-spacing: .5px; text-transform: uppercase; color: var(--muted); background: var(--surface2); border: 1px solid var(--border2); padding: 2px 7px; white-space: nowrap; }
+  .date-text { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .btn-del { background: transparent; border: none; color: var(--muted2); cursor: pointer; font-size: 15px; transition: color .15s; width: 50%; height: 100%; display: flex; align-items: center; justify-content: center; min-height: 42px; }
+  .btn-del:hover { color: var(--danger); }
+  .btn-edit { background: transparent; border: none; color: var(--muted2); cursor: pointer; font-size: 14px; transition: color .15s; width: 50%; height: 100%; display: flex; align-items: center; justify-content: center; min-height: 42px; }
+  .btn-edit:hover { color: var(--accent); }
+  .table-empty { padding: 52px 20px; text-align: center; color: var(--muted); background: var(--surface); box-shadow: var(--shadow); }
+  .table-empty p { max-width: 280px; margin: 0 auto; font-size: 13px; line-height: 1.7; }
+  .memo-wrap { border: 1px solid var(--border); background: var(--surface); margin-bottom: 20px; transition: background .25s, border-color .25s; box-shadow: var(--shadow); }
+  .memo-wrap textarea { font-family: var(--sans); font-size: 13px; color: var(--text); background: transparent; border: none; outline: none; width: 100%; padding: 13px 16px; resize: vertical; min-height: 60px; }
+  .memo-wrap textarea::placeholder { color: var(--muted2); }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-sec { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 9px 18px; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; }
+  .btn-sec:hover { border-color: var(--text); color: var(--text); }
+  .btn-pri { font-family: var(--sans); font-size: 13px; font-weight: 600; padding: 9px 22px; background: var(--accent); border: 1px solid var(--accent); color: var(--on-accent); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; }
+  .btn-pri:hover { background: var(--accent-h); border-color: var(--accent-h); }
+  .btn-danger { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 9px 18px; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; }
+  .btn-danger:hover { border-color: var(--danger); color: var(--danger); }
+  @media print {
+    @page { margin: .4in; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { background: #fff !important; color: #111 !important; font-size: 11px; }
+    .top-bar, .icon-btn, .add-form-body, .add-form-header, .toolbar, .actions, .no-print, .app-footer { display: none !important; }
+    .header { position: static !important; background: #fff !important; border-color: #ccc !important; }
+    .brand-text { color: #1a1a1a !important; }
+    .brand-icon svg { fill: #1a1a1a !important; }
+    .add-form-wrap { display: none !important; }
+    .th:last-child, .td:last-child { display: none !important; }
+    .table-head, .data-row { grid-template-columns: var(--gcols-print) !important; }
+    .pnl-bar { border-color: #ddd !important; background: #ddd !important; }
+    .pnl-cell { background: #f5f3ef !important; }
+    .pnl-val.accent { color: #b8891a !important; }
+    .pnl-val.ok     { color: #4f8a5b !important; }
+    .pnl-val.danger { color: #c0584f !important; }
+    .table-wrap { border-color: #ccc !important; overflow: visible !important; box-shadow: none !important; }
+    .table-head { background: #f5f3ef !important; border-color: #ddd !important; min-width: unset !important; }
+    .th { color: #555 !important; border-color: #ddd !important; font-size: 8px !important; padding: 6px 8px !important; }
+    .data-row { background: #fff !important; border-color: #eee !important; min-width: unset !important; }
+    .data-row.accent-ok     { border-left-color: #4f8a5b !important; }
+    .data-row.accent-warn   { border-left-color: #b8862f !important; }
+    .data-row.accent-danger { border-left-color: #c0584f !important; }
+    .data-row.accent-info   { border-left-color: #4a7aa6 !important; }
+    .data-row.accent-purple { border-left-color: #7a6aa8 !important; }
+    .data-row.accent-accent { border-left-color: #b8891a !important; }
+    .td { color: #1a1a1a !important; border-color: #eee !important; padding: 7px 8px !important; font-size: 11px !important; }
+    .pill-ok     { background: #e8f5e9 !important; color: #4f8a5b !important; border-color: #4f8a5b !important; }
+    .pill-warn   { background: #fdf3e3 !important; color: #b8862f !important; border-color: #b8862f !important; }
+    .pill-danger { background: #fdecea !important; color: #c0584f !important; border-color: #c0584f !important; }
+    .pill-info   { background: #e8f0f8 !important; color: #4a7aa6 !important; border-color: #4a7aa6 !important; }
+    .pill-purple { background: #f0edf8 !important; color: #7a6aa8 !important; border-color: #7a6aa8 !important; }
+    .pill-accent { background: #fdf5e0 !important; color: #b8891a !important; border-color: #b8891a !important; }
+    .pill-muted  { background: transparent !important; color: #888 !important; border-color: #ccc !important; }
+    .cat-badge { background: #f5f3ef !important; border-color: #ddd !important; color: #555 !important; }
+    .section-label::after { background: #ddd !important; }
+    #printNotes:empty { display: none !important; }
+    .print-only { display: block !important; }
+    .print-footer { text-align: center; font-size: 9px; color: #999; margin-top: 16px; padding-top: 10px; border-top: 1px solid #ddd; }
+  }
+  .print-only { display: none; }
+
+  /* ── FOOTER ── */
+  .app-footer { max-width: 1100px; margin: 0 auto; padding: 24px 20px; text-align: center; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+  .app-footer .f-tag { font-family: var(--sans); font-size: 13px; color: var(--muted); font-style: italic; margin-bottom: 6px; }
+  .app-footer .f-rights { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); margin-top: 8px; }
+  .app-footer .f-rights b { color: var(--text); font-weight: 600; }
+  .app-footer .f-priv { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted2); margin-top: 6px; }
+  .app-footer .f-priv svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; }
+  @media (max-width: 720px) {
+    .header { padding: 12px 14px; }
+    .main { padding: 16px 14px 80px; }
+    .pnl-bar { grid-template-columns: 1fr 1fr; }
+    .form-grid { grid-template-columns: 1fr !important; }
+    .toolbar { gap: 8px; }
+    .actions { position: sticky; bottom: 0; background: var(--bg); border-top: 1px solid var(--border); padding: 12px 14px; margin: 0 -14px; padding-bottom: calc(12px + env(safe-area-inset-bottom,0px)); }
+    .btn-pri { flex: 1; justify-content: center; }
+    .app-footer { padding: 16px 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<header class="header">
+  <div class="brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+      </svg>
+    </div>
+    <div>
+      <h1 class="brand-text">Gold<span>Book</span></h1>
+      <div class="brand-tag">Precious Metals Portfolio Tracker</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">
+      <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg id="iconSun" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="main">
+  <!-- P&L Summary Bar -->
+  <div class="pnl-bar" id="pnlBar">
+    <div class="pnl-cell">
+      <div class="pnl-label">Total Holdings</div>
+      <div class="pnl-val accent" id="pnlCount">0</div>
+      <div class="pnl-sub" id="pnlCountSub">pieces logged</div>
+    </div>
+    <div class="pnl-cell">
+      <div class="pnl-label">Market Value</div>
+      <div class="pnl-val accent" id="pnlValue">$0.00</div>
+      <div class="pnl-sub">current value</div>
+    </div>
+    <div class="pnl-cell">
+      <div class="pnl-label">Cost Basis</div>
+      <div class="pnl-val" id="pnlCost">$0.00</div>
+      <div class="pnl-sub">total invested</div>
+    </div>
+    <div class="pnl-cell">
+      <div class="pnl-label">Net Gain / Loss</div>
+      <div class="pnl-val" id="pnlPnl">—</div>
+      <div class="pnl-sub" id="pnlPct">enter values to calculate</div>
+    </div>
+  </div>
+
+  <!-- ADD FORM -->
+  <h2 class="section-label no-print">Log Holding</h2>
+  <div class="add-form-wrap">
+    <div class="add-form-header" id="formToggle">
+      <div class="form-header-left">
+        <span class="form-toggle-icon open" id="formToggleIcon">+</span>
+        <span id="formToggleLabel">Add New Holding</span>
+      </div>
+      <span style="font-size:11px;color:var(--muted)">Click to toggle</span>
+    </div>
+    <div class="add-form-body open" id="formBody">
+      <div class="form-grid" id="formGrid"></div>
+      <div class="form-actions">
+        <button class="btn-sec" id="btnFormClear">Clear</button>
+        <button class="btn-pri" id="btnAdd">+ Add Holding</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <h2 class="section-label" id="tableSectionLabel">Portfolio</h2>
+  <div class="toolbar">
+    <div class="filter-tabs" id="filterTabs"></div>
+    <div class="search-wrap"><input type="text" id="searchBox" placeholder="Search holdings…"></div>
+    <select class="sort-select" id="sortSelect">
+      <option value="newest">Newest first</option>
+      <option value="oldest">Oldest first</option>
+      <option value="name">Name A–Z</option>
+    </select>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-head" id="tableHead"></div>
+    <div id="tableBody"></div>
+  </div>
+
+  <h2 class="section-label no-print">Notes</h2>
+  <div class="memo-wrap no-print">
+    <textarea id="notesArea" placeholder="Storage notes, dealer contacts, insurance info, target sell prices…"></textarea>
+  </div>
+  <div class="print-only" id="printNotes" style="border:1px solid #ddd; padding:13px 16px; margin-bottom:16px; font-size:12px; line-height:1.6; white-space:pre-wrap;"></div>
+
+  <div class="actions">
+    <button class="btn-sec" id="btnDemo">Load Demo</button>
+    <button class="btn-sec" id="btnPrint">Print / PDF</button>
+    <button class="btn-sec" id="btnExport">Export</button>
+    <button class="btn-sec" id="btnImport">Import</button>
+    <input type="file" id="importInput" accept=".json" style="display:none">
+    <button class="btn-danger" id="btnClearAll">Clear All</button>
+  </div>
+
+</main>
+
+<div class="print-only print-footer"><span id="printFooterName">Generated by AppName</span></div>
+<footer class="app-footer" id="appFooter"></footer>
+
+<script>
+(function(){
+'use strict';
+
+var APP = {
+  storageKey: 'goldbook_v1',
+  appName: 'GoldBook',
+
+  columns: [
+    { id:'name',          label:'Description',    type:'text',   placeholder:'e.g. American Gold Eagle 1oz', width:'1.8fr', primary:true, subtitle:'notes', sortKey:true },
+    { id:'metal',         label:'Metal',          type:'select', options:['Gold','Silver','Platinum','Palladium','Copper'], width:'110px', badge:'status', filterBy:true },
+    { id:'form',          label:'Form',           type:'select', options:['Coin','Bar','Round','Junk Silver','Jewelry','ETF','Other'], width:'100px', badge:'category' },
+    { id:'weight_oz',     label:'Weight (oz)',    type:'number', placeholder:'1.000', width:'95px', mono:true, right:true },
+    { id:'purity',        label:'Purity',         type:'select', options:['.9999','.9995','.999','.9167','.925','.900','.800','.750','Other'], width:'80px', mono:true },
+    { id:'cost_basis',    label:'Cost Basis ($)', type:'number', placeholder:'0.00', width:'110px', mono:true, right:true },
+    { id:'current_value', label:'Curr. Value ($)',type:'number', placeholder:'0.00', width:'110px', mono:true, right:true },
+    { id:'date_purchased',label:'Date',           type:'date',   width:'100px', dateFormat:true },
+    { id:'notes',         label:'Notes',          type:'textarea', placeholder:'Storage location, serial, grade…', hidden:true }
+  ],
+
+  statuses: {
+    'Gold':      { color:'warn'   },
+    'Silver':    { color:'muted'  },
+    'Platinum':  { color:'info'   },
+    'Palladium': { color:'purple' },
+    'Copper':    { color:'ok'     }
+  },
+
+  filterColumn: 'metal',
+
+  demoData: [
+    { name:'American Gold Eagle 1 oz',      metal:'Gold',     form:'Coin',  weight_oz:'1.000',  purity:'.9167', cost_basis:'2850.00', current_value:'2980.00', date_purchased:'2024-03-15', notes:'NGC MS-69 · Home safe' },
+    { name:'American Gold Eagle 1/2 oz',    metal:'Gold',     form:'Coin',  weight_oz:'0.500',  purity:'.9167', cost_basis:'1490.00', current_value:'1550.00', date_purchased:'2024-06-01', notes:'Home safe' },
+    { name:'Canadian Maple Leaf 1 oz',      metal:'Gold',     form:'Coin',  weight_oz:'1.000',  purity:'.9999', cost_basis:'2920.00', current_value:'3100.00', date_purchased:'2023-11-10', notes:'Bank vault box' },
+    { name:'PAMP Suisse 10 oz Bar',         metal:'Silver',   form:'Bar',   weight_oz:'10.000', purity:'.9999', cost_basis:'280.00',  current_value:'320.00',  date_purchased:'2024-01-22', notes:'Sealed assay · home safe' },
+    { name:'American Silver Eagle Tube (20)',metal:'Silver',   form:'Coin',  weight_oz:'20.000', purity:'.999',  cost_basis:'620.00',  current_value:'660.00',  date_purchased:'2023-09-05', notes:'Sealed tube · home safe' },
+    { name:'90% Junk Silver (Face $10)',     metal:'Silver',   form:'Junk Silver', weight_oz:'7.150', purity:'.900', cost_basis:'195.00', current_value:'228.80', date_purchased:'2024-02-14', notes:'Pre-1965 dimes/quarters' },
+    { name:'Platinum Maple Leaf 1 oz',      metal:'Platinum', form:'Coin',  weight_oz:'1.000',  purity:'.9995', cost_basis:'980.00',  current_value:'1020.00', date_purchased:'2024-04-30', notes:'Bank vault box' },
+    { name:'Palladium Canadian Maple 1 oz', metal:'Palladium',form:'Coin',  weight_oz:'1.000',  purity:'.9995', cost_basis:'950.00',  current_value:'980.00',  date_purchased:'2023-12-01', notes:'Home safe' },
+    { name:'Silver Britannia 1 oz (x5)',     metal:'Silver',   form:'Coin',  weight_oz:'5.000',  purity:'.999',  cost_basis:'215.00',  current_value:'182.50',  date_purchased:'2024-08-12', notes:'Bought near local top · home safe' }
+  ]
+};
+
+/* ━━━━━━━━━━━━━━━━━ ENGINE ━━━━━━━━━━━━━━━━━ */
+var entries = [];
+var editId = null;
+var activeFilter = 'All';
+var searchQuery  = '';
+var sortOrder    = 'newest';
+var THEME_KEY    = APP.storageKey + '_theme';
+
+function sanitize(s){ return typeof s==='string' ? s.replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}) : ''; }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function el(id){ return document.getElementById(id); }
+function fmtDate(iso){ if(!iso) return '—'; var p=iso.split('-'); return p.length<3?iso:p[1]+'/'+p[2]+'/'+p[0]; }
+function fmtMoney(n){ var v=parseFloat(n)||0; var sign=v<0?'-':''; var abs=Math.abs(v); return sign+'$'+abs.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','); }
+
+function statusColor(val){ var s=APP.statuses[val]; return s?s.color:'muted'; }
+
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem(THEME_KEY,t);
+  el('iconMoon').style.display = t==='dark'  ? 'block':'none';
+  el('iconSun').style.display  = t==='light' ? 'block':'none';
+}
+
+function updatePnlBar(filtered){
+  var source   = (filtered && activeFilter!=='All') ? filtered : entries;
+  var count     = source.length;
+  var totalVal  = source.reduce(function(a,e){ return a+(parseFloat(e.current_value)||0); },0);
+  var totalCost = source.reduce(function(a,e){ return a+(parseFloat(e.cost_basis)||0); },0);
+  var pnl       = totalVal - totalCost;
+  var pnlPct    = totalCost > 0 ? (pnl/totalCost*100) : 0;
+
+  el('pnlCount').textContent = count;
+  el('pnlValue').textContent = fmtMoney(totalVal);
+  el('pnlCost').textContent  = fmtMoney(totalCost);
+  var countSub = el('pnlCountSub');
+  if(countSub) countSub.textContent = (activeFilter!=='All') ? activeFilter+' only' : 'pieces logged';
+
+  var pnlEl  = el('pnlPnl');
+  var pctEl  = el('pnlPct');
+  if(totalCost > 0){
+    pnlEl.textContent = (pnl>=0?'+':'')+fmtMoney(pnl);
+    pnlEl.className   = 'pnl-val '+(pnl>=0?'ok':'danger');
+    pctEl.textContent = (pnl>=0?'+':'')+pnlPct.toFixed(1)+'% return';
+  } else {
+    pnlEl.textContent = '—';
+    pnlEl.className   = 'pnl-val';
+    pctEl.textContent = 'enter values to calculate';
+  }
+}
+
+function buildForm(){
+  var grid = el('formGrid');
+  var cols = APP.columns;
+  var visible = cols.filter(function(c){ return c.type!=='textarea'; });
+  var ncols = Math.min(4, visible.length);
+  grid.style.gridTemplateColumns = 'repeat('+ncols+',1fr)';
+
+  cols.forEach(function(col){
+    var div = document.createElement('div');
+    div.className = 'form-field';
+    if(col.type==='textarea') div.style.gridColumn='1/-1';
+    div.innerHTML = '<div class="form-label">'+sanitize(col.label)+'</div>';
+
+    if(col.type==='select'){
+      var sel = document.createElement('select');
+      sel.id = 'f_'+col.id;
+      sel.innerHTML = '<option value="">— select —</option>';
+      (col.options||[]).forEach(function(o){
+        var opt=document.createElement('option'); opt.value=o; opt.textContent=o; sel.appendChild(opt);
+      });
+      div.appendChild(sel);
+    } else if(col.type==='textarea'){
+      var ta = document.createElement('textarea');
+      ta.id = 'f_'+col.id;
+      ta.placeholder = col.placeholder||'';
+      ta.rows = 2;
+      div.appendChild(ta);
+    } else {
+      var inp = document.createElement('input');
+      inp.type = col.type==='number'?'number':col.type==='date'?'date':'text';
+      inp.id   = 'f_'+col.id;
+      inp.placeholder = col.placeholder||'';
+      if(col.type==='date') inp.value = new Date().toISOString().split('T')[0];
+      if(col.type==='number'){ inp.step='any'; inp.min='0'; }
+      div.appendChild(inp);
+    }
+    var err=document.createElement('div'); err.className='field-err'; err.id='err_'+col.id;
+    div.appendChild(err);
+    grid.appendChild(div);
+  });
+}
+
+function clearFieldErrors(){
+  APP.columns.forEach(function(col){
+    var fld=el('f_'+col.id), e=el('err_'+col.id);
+    if(fld){ var p=fld.closest('.form-field'); if(p) p.classList.remove('invalid'); }
+    if(e) e.textContent='';
+  });
+}
+function setFieldError(colId,msg){
+  var fld=el('f_'+colId), e=el('err_'+colId);
+  if(fld){ var p=fld.closest('.form-field'); if(p) p.classList.add('invalid'); }
+  if(e) e.textContent=msg;
+}
+
+function buildHeader(){
+  var head = el('tableHead');
+  var cols = APP.columns.filter(function(c){ return !c.hidden; });
+  head.style.gridTemplateColumns = cols.map(function(c){ return c.width||'1fr'; }).join(' ')+' 64px';
+  head.style.setProperty('--gcols-print', cols.map(function(c){ return c.width||'1fr'; }).join(' '));
+  head.innerHTML = '';
+  cols.forEach(function(col){
+    var s=document.createElement('span');
+    s.className='th'+(col.right?' r':'');
+    s.textContent=col.label;
+    head.appendChild(s);
+  });
+  var del=document.createElement('span'); del.className='th'; head.appendChild(del);
+}
+
+function buildFilterTabs(){
+  var tabs = el('filterTabs');
+  tabs.innerHTML = '';
+  var filterCol = APP.columns.find(function(c){ return c.id===APP.filterColumn; });
+  var options   = filterCol ? filterCol.options||[] : [];
+
+  var all = document.createElement('button');
+  all.className='filter-tab active'; all.textContent='All'; all.dataset.val='All';
+  tabs.appendChild(all);
+
+  options.forEach(function(o){
+    var btn=document.createElement('button');
+    btn.className='filter-tab'; btn.textContent=o; btn.dataset.val=o;
+    tabs.appendChild(btn);
+  });
+
+  tabs.addEventListener('click',function(e){
+    if(!e.target.classList.contains('filter-tab')) return;
+    document.querySelectorAll('.filter-tab').forEach(function(t){ t.classList.remove('active'); });
+    e.target.classList.add('active');
+    activeFilter=e.target.dataset.val;
+    render();
+  });
+}
+
+function renderTable(){
+  var body = el('tableBody');
+  var cols = APP.columns.filter(function(c){ return !c.hidden; });
+  var colWidths = cols.map(function(c){ return c.width||'1fr'; }).join(' ');
+  var colTemplate = colWidths+' 64px';
+
+  var filtered = entries.filter(function(e){
+    var fm = activeFilter==='All' || e[APP.filterColumn]===activeFilter;
+    var sm = !searchQuery || APP.columns.map(function(c){ return e[c.id]||''; }).join(' ').toLowerCase().includes(searchQuery.toLowerCase());
+    return fm && sm;
+  });
+
+  filtered.sort(function(a,b){
+    if(sortOrder==='oldest') return a._ts-b._ts;
+    if(sortOrder==='name'){
+      var sortCol=APP.columns.find(function(c){ return c.sortKey; });
+      if(sortCol){ var av=(a[sortCol.id]||'').toLowerCase(),bv=(b[sortCol.id]||'').toLowerCase(); return av<bv?-1:av>bv?1:0; }
+    }
+    return b._ts-a._ts;
+  });
+
+  if(!filtered.length){
+    body.innerHTML='<div class="table-empty"><p>'+(entries.length?'No holdings match your filter.':'No holdings yet. Use the form above to log your first piece.')+'</p></div>';
+    return filtered;
+  }
+
+  body.innerHTML='';
+  filtered.forEach(function(entry){
+    var metalVal = entry.metal||'';
+    var color    = statusColor(metalVal);
+    var row=document.createElement('div');
+    row.className='data-row accent-'+color;
+    row.style.gridTemplateColumns=colTemplate;
+    row.style.setProperty('--gcols-print', colWidths);
+
+    cols.forEach(function(col){
+      var td=document.createElement('div');
+      td.className='td'+(col.right?' r':'')+(col.mono?' mono':'');
+      var val=sanitize(entry[col.id]||'');
+
+      if(col.primary){
+        td.classList.add('td-primary');
+        var sub=col.subtitle?sanitize(entry[col.subtitle]||''):'';
+        td.innerHTML='<span class="primary-text">'+val+'</span>'+(sub?'<span class="secondary-text">'+sub+'</span>':'');
+      } else if(col.badge==='status'){
+        td.innerHTML=val?'<span class="status-pill pill-'+color+'">'+val+'</span>':'—';
+      } else if(col.badge==='category'){
+        td.innerHTML=val?'<span class="cat-badge">'+val+'</span>':'';
+      } else if(col.dateFormat){
+        td.innerHTML='<span class="date-text">'+fmtDate(val)+'</span>';
+      } else if(col.type==='number' && val){
+        /* format money columns */
+        if(col.id==='cost_basis'||col.id==='current_value'){
+          var v=parseFloat(val)||0;
+          td.textContent='$'+v.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+        } else {
+          td.textContent=val||'—';
+        }
+      } else {
+        td.textContent=val||'—';
+      }
+
+      row.appendChild(td);
+    });
+
+    var acts=document.createElement('div'); acts.className='td'; acts.style.gap='2px';
+    var btnEdit=document.createElement('button'); btnEdit.className='btn-edit'; btnEdit.textContent='Edit'; btnEdit.setAttribute('aria-label','Edit');
+    btnEdit.addEventListener('click',function(){ editEntry(entry.id); });
+    var btnDel=document.createElement('button'); btnDel.className='btn-del'; btnDel.textContent='Del'; btnDel.setAttribute('aria-label','Delete');
+    btnDel.addEventListener('click',function(){ entries=entries.filter(function(e){ return e.id!==entry.id; }); if(editId===entry.id){ editId=null; el('btnAdd').textContent='+ Add Holding'; el('btnFormClear').textContent='Clear'; el('formToggleLabel').textContent='Add New Holding'; clearForm(); } save(); render(); });
+    acts.appendChild(btnEdit); acts.appendChild(btnDel); row.appendChild(acts);
+    body.appendChild(row);
+  });
+  return filtered;
+}
+
+function render(){ var f=renderTable(); updatePnlBar(f); }
+
+function getFormValues(){
+  var obj={id:uid(),_ts:Date.now()};
+  APP.columns.forEach(function(col){
+    var input=el('f_'+col.id);
+    if(input) obj[col.id]=input.value.trim();
+  });
+  return obj;
+}
+
+function clearForm(){
+  clearFieldErrors();
+  APP.columns.forEach(function(col){
+    var input=el('f_'+col.id);
+    if(!input) return;
+    if(col.type==='date') input.value=new Date().toISOString().split('T')[0];
+    else if(col.type==='select') input.value='';
+    else input.value='';
+  });
+  if(editId){
+    editId=null;
+    el('btnAdd').textContent='+ Add Holding';
+    el('btnFormClear').textContent='Clear';
+    el('formToggleLabel').textContent='Add New Holding';
+  }
+}
+
+function validateForm(){
+  clearFieldErrors();
+  var ok=true, firstBad=null;
+  var nameInp=el('f_name');
+  if(!nameInp||!nameInp.value.trim()){ setFieldError('name','Description is required'); firstBad=firstBad||'name'; ok=false; }
+  ['weight_oz','cost_basis','current_value'].forEach(function(id){
+    var inp=el('f_'+id);
+    if(inp && inp.value.trim()!==''){
+      var v=parseFloat(inp.value);
+      if(isNaN(v)){ setFieldError(id,'Must be a number'); firstBad=firstBad||id; ok=false; }
+      else if(v<0){ setFieldError(id,'Cannot be negative'); firstBad=firstBad||id; ok=false; }
+    }
+  });
+  if(!ok && firstBad){ var f=el('f_'+firstBad); if(f) f.focus(); }
+  return ok;
+}
+
+function addEntry(){
+  if(!validateForm()) return;
+  if(editId){
+    var idx=entries.findIndex(function(e){ return e.id===editId; });
+    if(idx>-1){
+      var updated=getFormValues();
+      updated.id=editId;
+      updated._ts=entries[idx]._ts;
+      entries[idx]=updated;
+    }
+    editId=null;
+    el('btnAdd').textContent='+ Add Holding';
+    el('btnFormClear').textContent='Clear';
+    el('formToggleLabel').textContent='Add New Holding';
+  } else {
+    entries.push(getFormValues());
+  }
+  clearForm();
+  save(); render();
+}
+
+function editEntry(id){
+  var entry=entries.find(function(e){ return e.id===id; });
+  if(!entry) return;
+  editId=id;
+  APP.columns.forEach(function(col){
+    var input=el('f_'+col.id);
+    if(input) input.value=entry[col.id]||'';
+  });
+  el('btnAdd').textContent='Update Holding';
+  el('btnFormClear').textContent='Cancel';
+  el('formToggleLabel').textContent='Edit Holding';
+  var body=el('formBody'),icon=el('formToggleIcon');
+  if(!body.classList.contains('open')){ body.classList.add('open'); icon.classList.add('open'); icon.textContent='+'; }
+  el('f_name').focus();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function save(){ try{ localStorage.setItem(APP.storageKey,JSON.stringify({v:1,entries:entries,notes:el('notesArea').value})); }catch(e){} }
+
+function load(){
+  try{
+    var raw=localStorage.getItem(APP.storageKey); if(!raw) return false;
+    var s=JSON.parse(raw); if(!s||s.v!==1) return false;
+    entries=Array.isArray(s.entries)?s.entries:[];
+    if(s.notes) el('notesArea').value=s.notes;
+    return true;
+  }catch(e){ return false; }
+}
+
+function loadDemo(){
+  if(entries.length&&!confirm('Replace current holdings with demo data?')) return;
+  entries=APP.demoData.map(function(d){
+    var e=JSON.parse(JSON.stringify(d));
+    e.id=uid(); e._ts=Date.now()-Math.random()*10000000;
+    return e;
+  });
+  save(); render();
+  el('printNotes').textContent=el('notesArea').value;
+}
+function footer(){
+  var f = el('appFooter'); if(!f) return;
+  var year = new Date().getFullYear();
+  var brand = document.querySelector('.brand-text');
+  var name = brand ? sanitize(brand.textContent || 'AppName') : 'AppName';
+  f.innerHTML =
+    '<div class="f-tag">Privacy-first micro-apps for professionals</div>' +
+    '<div class="f-priv"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Your data never leaves this device</div>' +
+    '<div class="f-rights">All rights reserved · <b>' + name + '</b> · ' + year + '</div>';
+  var pf = el('printFooterName');
+  if(pf) pf.textContent = 'Generated by ' + name;
+}
+
+function boot(){
+  setTheme(localStorage.getItem(THEME_KEY)||'light');
+  footer();
+  buildForm();
+  buildHeader();
+  buildFilterTabs();
+
+  el('themeBtn').addEventListener('click',function(){
+    setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+  });
+  el('formToggle').addEventListener('click',function(){
+    var body=el('formBody'),icon=el('formToggleIcon');
+    var open=body.classList.toggle('open');
+    icon.classList.toggle('open',open);
+    icon.textContent=open?'+':'›';
+  });
+  el('btnAdd').addEventListener('click',addEntry);
+  el('btnFormClear').addEventListener('click',clearForm);
+
+  APP.columns.forEach(function(col){
+    if(col.type==='text'||col.type==='number'){
+      var inp=el('f_'+col.id);
+      if(inp) inp.addEventListener('keydown',function(e){ if(e.key==='Enter') addEntry(); });
+    }
+  });
+
+  el('searchBox').addEventListener('input',function(){ searchQuery=this.value; render(); });
+  el('sortSelect').addEventListener('change',function(){ sortOrder=this.value; render(); });
+  el('notesArea').addEventListener('input',function(){ el('printNotes').textContent=this.value; clearTimeout(window._nt); window._nt=setTimeout(save,600); });
+  el('btnDemo').addEventListener('click',loadDemo);
+  el('btnPrint').addEventListener('click',function(){ window.print(); });
+  el('btnExport').addEventListener('click',function(){
+    var state={v:1,entries:entries,notes:el('notesArea').value,exported:new Date().toISOString()};
+    var blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a'); a.href=url; a.download='goldbook-holdings.json';
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); },100);
+    var btn=el('btnExport'),orig=btn.textContent;
+    btn.textContent='Exported'; setTimeout(function(){ btn.textContent=orig; },1500);
+  });
+  el('btnImport').addEventListener('click',function(){ el('importInput').click(); });
+  el('importInput').addEventListener('change',function(e){
+    var file=e.target.files[0]; if(!file) return;
+    var reader=new FileReader();
+    reader.onload=function(ev){
+      try{
+        var s=JSON.parse(ev.target.result);
+        if(!s||typeof s!=='object'){ alert('Invalid file: not a GoldBook object.'); return; }
+        if(s.v!==1){ alert('Unsupported file version. Expected v:1, got '+(s.v===undefined?'(none)':s.v)+'.'); return; }
+        if(!Array.isArray(s.entries)){ alert('Invalid file: "entries" is missing or not a list.'); return; }
+        entries=s.entries;
+        if(s.notes){ el('notesArea').value=s.notes; el('printNotes').textContent=s.notes; }
+        save(); render();
+      }catch(err){ alert('Could not parse file: '+err.message); }
+    };
+    reader.readAsText(file);
+    e.target.value='';
+  });
+  el('btnClearAll').addEventListener('click',function(){
+    if(!entries.length) return;
+    if(!confirm('Delete all '+entries.length+' holdings?')) return;
+    entries=[]; el('notesArea').value=''; el('printNotes').textContent=''; localStorage.removeItem(APP.storageKey); render();
+  });
+
+  if(!load()) render(); else render();
+  el('printNotes').textContent=el('notesArea').value;
+}
+
+document.addEventListener('DOMContentLoaded',boot);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Professional junk removal estimator for hauling crews.">
+<meta name="theme-color" content="#f4f2ec">
+<title>JunkQuote — Junk Removal Estimator</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%23f5a623'/%3E%3Cpath stroke='%230a0a0a' stroke-width='1.5' stroke-linecap='round' fill='none' d='M3 9h18l-1.68 10.39A2 2 0 0 1 17.34 21H6.66a2 2 0 0 1-1.98-1.61L3 9zM8 21v-5h8v5M1 3h4l1 6'/%3E%3Crect x='6' y='12' width='12' height='3' fill='%230a0a0a' opacity='.3'/%3E%3C/svg%3E">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent:      #c87d00;
+    --accent-dk:   #f5a623;
+    --bg:          #f4f2ec;
+    --surface:     #ffffff;
+    --surface2:    #faf8f3;
+    --border:      #e5e1d8;
+    --border2:     #d8d3c7;
+    --text:        #2c2a26;
+    --muted:       #9a958a;
+    --muted2:      #b5b0a6;
+    --danger:      #c0584f;
+    --accent-dim:  #f6ecd6;
+    --accent-dim:  color-mix(in srgb, var(--accent) 14%, var(--surface));
+    --accent-dim2: #faf4e8;
+    --accent-dim2: color-mix(in srgb, var(--accent) 6%,  var(--surface));
+    --accent-h:    #a86800;
+    --on-accent:   #ffffff;
+    --mono: 'Consolas','Menlo','Courier New',monospace;
+    --sans: 'Trebuchet MS',system-ui,-apple-system,sans-serif;
+    --shadow:      0 1px 2px rgba(40,38,34,.04), 0 2px 6px rgba(40,38,34,.05);
+    --shadow-lg:   0 4px 12px rgba(40,38,34,.07), 0 12px 28px rgba(40,38,34,.07);
+  }
+  [data-theme="dark"] {
+    --accent:      var(--accent-dk);
+    --bg:          #1a1815;
+    --surface:     #242220;
+    --surface2:    #2c2a27;
+    --border:      #36332e;
+    --border2:     #423e38;
+    --text:        #ece9e2;
+    --muted:       #75716a;
+    --muted2:      #5a564e;
+    --danger:      #e0796f;
+    --accent-dim:  #3a3322;
+    --accent-dim:  color-mix(in srgb, var(--accent) 18%, var(--surface));
+    --accent-dim2: #2e2b25;
+    --accent-dim2: color-mix(in srgb, var(--accent) 8%,  var(--surface));
+    --accent-h:    #ffbe4d;
+    --on-accent:   #1a1815;
+    --shadow:      0 1px 2px rgba(0,0,0,.25), 0 2px 6px rgba(0,0,0,.3);
+    --shadow-lg:   0 6px 16px rgba(0,0,0,.4);
+  }
+
+  html { font-size: 15px; -webkit-text-size-adjust: 100%; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; line-height: 1.5; transition: background .25s, color .25s; }
+
+  /* TOP BAR */
+  .top-bar { height: 3px; background: var(--accent); }
+
+  /* HEADER */
+  .header {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 16px 24px; display: flex; align-items: center;
+    justify-content: space-between; gap: 14px; flex-wrap: wrap;
+    transition: background .25s, border-color .25s;
+    box-shadow: var(--shadow);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-icon { width: 36px; height: 36px; background: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .brand-icon svg { width: 20px; height: 20px; fill: var(--on-accent); }
+  .brand-text { font-weight: 700; font-size: 18px; letter-spacing: -.3px; color: var(--text); transition: color .25s; }
+  .brand-text span { color: var(--accent); }
+  .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .icon-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; flex-shrink: 0; }
+  .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .icon-btn svg { width: 18px; height: 18px; }
+  .badge-input {
+    font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 1px;
+    color: var(--accent); background: var(--accent-dim2);
+    border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border)); padding: 6px 10px;
+    width: 148px; text-align: center; outline: none; transition: all .25s;
+  }
+  [data-theme="dark"] .badge-input { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); border-color: color-mix(in srgb, var(--accent) 20%, var(--border)); }
+  .badge-input:focus { border-color: var(--accent); background: var(--surface2); }
+
+  /* SEG TOGGLE */
+  .seg-toggle { display: flex; border: 1px solid var(--border2); overflow: hidden; }
+  .seg-toggle button { font-family: var(--sans); font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; padding: 7px 16px; background: transparent; border: none; color: var(--muted); cursor: pointer; transition: all .15s; }
+  .seg-toggle button.active { background: var(--accent); color: var(--on-accent); font-weight: 600; }
+
+  /* STAMP */
+  .stamp-wrap { text-align: right; margin: -6px 0 18px; min-height: 36px; }
+  .stamp-badge { display: inline-block; border: 3px double; font-size: 16px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; padding: 6px 22px; border-radius: 3px; transform: rotate(-3deg); opacity: .85; font-family: var(--sans); }
+  .stamp-badge.paid   { border-color: var(--accent); color: var(--accent); }
+  .stamp-badge.unpaid { border-color: var(--danger);  color: var(--danger); }
+
+  /* COMPANY BAR */
+  .company-bar {
+    background: var(--surface2); border-bottom: 1px solid var(--border);
+    padding: 10px 24px; font-size: 12px; color: var(--muted);
+    display: none; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    transition: background .25s, border-color .25s;
+  }
+  .company-bar.visible { display: flex; }
+  .company-bar strong { color: var(--text); font-weight: 600; }
+
+  /* SETTINGS PANEL */
+  .settings-panel { display: none; background: var(--surface); border-bottom: 1px solid var(--border); transition: background .25s, border-color .25s; }
+  .settings-panel.open { display: block; }
+  .settings-inner { max-width: 820px; margin: 0 auto; padding: 24px 24px 28px; }
+  .settings-title { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+  .settings-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+  .settings-grid .field { display: flex; flex-direction: column; gap: 5px; }
+  .settings-grid .field.full { grid-column: 1 / -1; }
+  .settings-grid .field.half { grid-column: span 1; }
+  .settings-grid label { font-family: var(--mono); font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); }
+  .settings-grid input { font-family: var(--sans); font-size: 14px; color: var(--text); background: var(--surface2); border: 1px solid var(--border2); padding: 9px 12px; outline: none; width: 100%; transition: border-color .15s; }
+  .settings-grid input:focus { border-color: var(--accent); }
+  .settings-grid input::placeholder { color: var(--muted2); }
+  .settings-divider { grid-column: 1/-1; border: none; border-top: 1px solid var(--border); margin: 4px 0; }
+  .settings-actions { display: flex; gap: 10px; margin-top: 18px; justify-content: flex-end; }
+
+  /* MAIN */
+  .main { max-width: 820px; margin: 0 auto; padding: 28px 24px 100px; }
+
+  /* SECTION LABEL */
+  .section-label { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); transition: background .25s; }
+
+  /* META GRID */
+  .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 28px; transition: background .25s, border-color .25s; box-shadow: var(--shadow); }
+  .meta-cell { background: var(--surface); padding: 14px 16px; transition: background .25s; }
+  .meta-cell.full { grid-column: 1 / -1; }
+  .meta-label { font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .meta-cell input, .meta-cell select {
+    font-family: var(--sans); font-size: 14px; color: var(--text);
+    background: transparent; border: none; outline: none; width: 100%;
+  }
+  .meta-cell input::placeholder { color: var(--muted2); }
+  .meta-cell input[type="date"] { font-family: var(--mono); font-size: 13px; color: var(--text); background: transparent; border: none; outline: none; padding: 0; }
+  .meta-cell input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(.3); cursor: pointer; }
+  [data-theme="dark"] .meta-cell input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(.5); }
+
+  /* LOAD SIZE */
+  .load-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 28px; box-shadow: var(--shadow); }
+  .load-card { background: var(--surface); padding: 14px 8px; cursor: pointer; text-align: center; border: none; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: background .15s; width: 100%; }
+  .load-card:hover { background: var(--surface2); }
+  .load-card.selected { background: var(--accent-dim); }
+  .load-card.selected .load-label { color: var(--accent); }
+  .load-card.selected .load-price { color: var(--accent); }
+  .truck-vis { width: 44px; height: 28px; border: 2px solid var(--border2); position: relative; background: var(--surface2); }
+  .load-card.selected .truck-vis { border-color: var(--accent); }
+  .truck-fill { position: absolute; bottom: 0; left: 0; right: 0; background: var(--muted2); transition: height .2s; }
+  .load-card.selected .truck-fill { background: var(--accent); }
+  .load-label { font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; color: var(--muted); line-height: 1.3; }
+  .load-price { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--text); }
+  .load-yards { font-family: var(--mono); font-size: 9px; color: var(--muted); }
+
+  /* EXTRAS GRID */
+  .extras-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 28px; box-shadow: var(--shadow); }
+  .extras-cell { background: var(--surface); padding: 14px 16px; transition: background .25s; }
+
+  /* TOGGLE */
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; }
+  .toggle-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .toggle-switch { width: 44px; height: 24px; background: var(--border2); border: none; cursor: pointer; position: relative; transition: background .2s; flex-shrink: 0; }
+  .toggle-switch.on { background: var(--accent); }
+  .toggle-knob { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; background: var(--muted); transition: transform .2s, background .2s; pointer-events: none; }
+  .toggle-switch.on .toggle-knob { transform: translateX(20px); background: var(--on-accent); }
+
+  /* STEPPER */
+  .stepper { display: flex; align-items: center; margin-top: 8px; }
+  .stepper-btn { width: 32px; height: 32px; background: var(--surface2); border: 1px solid var(--border2); color: var(--text); font-size: 18px; font-weight: 300; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; line-height: 1; }
+  .stepper-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .stepper-val { font-family: var(--mono); font-size: 16px; font-weight: 600; color: var(--text); min-width: 44px; text-align: center; }
+
+  /* INLINE NUMBER */
+  .num-row { display: flex; align-items: baseline; gap: 6px; margin-top: 6px; }
+  .num-row span { font-size: 12px; color: var(--muted); }
+  .num-row input[type="number"] {
+    font-family: var(--mono); font-size: 16px; font-weight: 500;
+    color: var(--text); background: transparent; border: none; outline: none;
+    width: 80px; -moz-appearance: textfield;
+  }
+  .num-row input[type="number"]::-webkit-inner-spin-button,
+  .num-row input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+  /* NOTES */
+  .notes-area { border: 1px solid var(--border); background: var(--surface); margin-bottom: 28px; transition: background .25s, border-color .25s; box-shadow: var(--shadow); }
+  .notes-area textarea { font-family: var(--sans); font-size: 13px; color: var(--text); background: transparent; border: none; outline: none; width: 100%; padding: 14px 16px; resize: vertical; min-height: 70px; }
+  .notes-area textarea::placeholder { color: var(--muted2); }
+
+  /* SUMMARY */
+  .summary-block { border: 1px solid var(--border); margin-bottom: 28px; overflow: hidden; transition: border-color .25s; box-shadow: var(--shadow); }
+  .sum-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); transition: border-color .25s; }
+  .sum-row:last-child { border-bottom: none; }
+  .sum-row.total { background: var(--accent-dim); border-top: 2px solid var(--accent); }
+  .s-label { font-size: 12px; color: var(--muted); }
+  .s-label b { font-size: 13px; font-weight: 600; color: var(--text); display: block; }
+  .s-val { font-family: var(--mono); font-size: 14px; font-weight: 500; color: var(--text); text-align: right; }
+  .s-val.big { font-size: 26px; font-weight: 700; color: var(--accent); }
+
+  /* BREAKDOWN */
+  .breakdown { background: var(--surface2); border-top: 1px solid var(--border); padding: 10px 16px; font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 2.1; }
+  .br-row { display: flex; justify-content: space-between; }
+  .br-row.active { color: var(--text); }
+
+  /* ACTIONS */
+  .actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+  .btn-sec { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 10px 20px; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; }
+  .btn-sec:hover { border-color: var(--text); color: var(--text); }
+  .btn-pri { font-family: var(--sans); font-size: 13px; font-weight: 600; padding: 10px 24px; background: var(--accent); border: 1px solid var(--accent); color: var(--on-accent); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; }
+  .btn-pri:hover { background: var(--accent-h); border-color: var(--accent-h); }
+
+  /* PRINT */
+  .print-only { display: none; }
+
+  /* ── FOOTER ── */
+  .app-footer { max-width: 820px; margin: 0 auto; padding: 24px 24px; text-align: center; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+  .app-footer .f-tag { font-family: var(--sans); font-size: 13px; color: var(--muted); font-style: italic; margin-bottom: 6px; }
+  .app-footer .f-rights { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); margin-top: 8px; }
+  .app-footer .f-rights b { color: var(--text); font-weight: 600; }
+  .app-footer .f-priv { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted2); margin-top: 6px; }
+  .app-footer .f-priv svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; }
+  @media print {
+    @page { margin: .5in; size: letter; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { background: #fff !important; color: #111 !important; }
+    .top-bar, .header, .company-bar, .settings-panel, .actions, .no-print, .app-footer { display: none !important; }
+    .main { padding: 0; max-width: 100%; }
+    .print-only { display: block !important; }
+    .print-head { display: flex !important; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid #1a1a1a; }
+    .print-co-name { font-size: 18px; font-weight: 800; text-transform: uppercase; color: #1a1a1a; margin-bottom: 4px; }
+    .print-co-meta { font-size: 11px; color: #555; line-height: 1.6; }
+    .print-doc { text-align: right; }
+    .print-doc-type { font-size: 20px; font-weight: 800; text-transform: uppercase; color: #1a1a1a; }
+    .print-doc-num { font-size: 12px; color: #555; margin-top: 2px; font-family: monospace; }
+    .section-label { color: #1a1a1a !important; }
+    .section-label::after { background: #ccc !important; }
+    .meta-grid { background: #ddd !important; border-color: #ddd !important; }
+    .meta-cell { background: #f5f3ef !important; }
+    .meta-label { color: #555 !important; }
+    .meta-cell input { color: #1a1a1a !important; }
+    .meta-cell input[type="date"]::-webkit-calendar-picker-indicator { display: none !important; }
+    .load-grid { background: #ddd !important; border-color: #ddd !important; }
+    .load-card { background: #f5f3ef !important; }
+    .load-card.selected { background: #fff8e6 !important; border: none !important; }
+    .load-label { color: #555 !important; }
+    .load-price { color: #1a1a1a !important; }
+    .load-card.selected .load-label { color: #c87d00 !important; }
+    .load-card.selected .load-price { color: #c87d00 !important; }
+    .extras-grid { background: #ddd !important; border-color: #ddd !important; }
+    .extras-cell { background: #f5f3ef !important; }
+    .toggle-sub, .meta-label { color: #555 !important; }
+    .stepper-btn, .toggle-switch { display: none !important; }
+    .summary-block { border-color: #ccc !important; box-shadow: none !important; }
+    .sum-row { border-bottom-color: #eee !important; }
+    .sum-row.total { background: #fff8e6 !important; border-top-color: #c87d00 !important; }
+    .s-label { color: #555 !important; }
+    .s-val { color: #1a1a1a !important; }
+    .s-val.big { color: #c87d00 !important; }
+    .notes-area { border-color: #ccc !important; background: #fff !important; box-shadow: none !important; }
+    .notes-area textarea { color: #1a1a1a !important; }
+    .breakdown { background: #f5f3ef !important; border-top-color: #ddd !important; }
+    .br-row { color: #888 !important; }
+    .br-row.active { color: #1a1a1a !important; }
+    .print-footer { text-align: center; font-size: 9px; color: #999; margin-top: 24px; padding-top: 10px; border-top: 1px solid #ddd; }
+  }
+
+  /* MOBILE */
+  @media (max-width: 680px) {
+    .header { padding: 14px 16px; }
+    .main { padding: 20px 16px 90px; }
+    .load-grid { grid-template-columns: repeat(3,1fr); }
+    .meta-grid, .extras-grid { grid-template-columns: 1fr; }
+    .settings-grid { grid-template-columns: 1fr; }
+    .actions { position: sticky; bottom: 0; background: var(--bg); border-top: 1px solid var(--border); padding: 12px 16px; margin: 0 -16px; justify-content: stretch; }
+    .btn-pri { flex: 1; justify-content: center; }
+    .badge-input { width: 130px; }
+    .app-footer { padding: 16px 16px; }
+    input, textarea, select { font-size: 16px !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar"></div>
+
+<header class="header">
+  <div class="brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 9h18l-1.68 10.39A2 2 0 0 1 17.34 21H6.66a2 2 0 0 1-1.98-1.61L3 9zM3 9l-.9-4.5H1M8 21v-5h8v5M1 3h4l1 6"/>
+        <rect x="6" y="12" width="12" height="3" fill="currentColor" opacity=".2"/>
+      </svg>
+    </div>
+    <div class="brand-text">Junk<span>Quote</span></div>
+  </div>
+  <div class="header-right">
+    <button class="icon-btn no-print" id="settingsBtn" title="Company profile" aria-label="Company settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+    <button class="icon-btn no-print" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">
+      <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg id="iconSun" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <input type="text" class="badge-input no-print" id="estBadge" value="EST-0001" maxlength="20">
+    <div class="seg-toggle no-print">
+      <button class="active" id="btnQuote">Quote</button>
+      <button id="btnInvoice">Invoice</button>
+    </div>
+  </div>
+</header>
+
+<!-- COMPANY BAR -->
+<div class="company-bar" id="companyBar">
+  <div id="barLeft"></div>
+  <div id="barRight" style="font-family:var(--mono);font-size:11px;"></div>
+</div>
+
+<!-- SETTINGS PANEL -->
+<div class="settings-panel" id="settingsPanel">
+  <div class="settings-inner">
+    <div class="settings-title">Company Profile &amp; Pricing</div>
+    <div class="settings-grid">
+      <div class="field full"><label for="cName">Company Name</label><input type="text" id="cName" placeholder="Haul Masters LLC" maxlength="100"></div>
+      <div class="field full"><label for="cAddr">Address</label><input type="text" id="cAddr" placeholder="123 Main St, City, ST 00000" maxlength="200"></div>
+      <div class="field"><label for="cPhone">Phone</label><input type="text" id="cPhone" placeholder="(555) 000-0000" maxlength="40"></div>
+      <div class="field"><label for="cEmail">Email</label><input type="text" id="cEmail" placeholder="info@company.com" maxlength="120"></div>
+      <div class="field"><label for="cLicense">License #</label><input type="text" id="cLicense" placeholder="LIC-12345" maxlength="60"></div>
+      <hr class="settings-divider">
+      <div class="field"><label for="pHeavy">Heavy Item Fee ($)</label><input type="number" id="pHeavy" placeholder="60" min="0" step="1"></div>
+      <div class="field"><label for="pStair">Stair Fee / Flight ($)</label><input type="number" id="pStair" placeholder="35" min="0" step="1"></div>
+      <div class="field"><label for="pFreeMi">Free Miles</label><input type="number" id="pFreeMi" placeholder="10" min="0" step="1"></div>
+      <div class="field"><label for="pMiRate">Rate / Mile After ($)</label><input type="number" id="pMiRate" placeholder="2.50" min="0" step="0.25"></div>
+    </div>
+    <div class="settings-actions">
+      <button class="btn-sec" id="btnClearCo">Clear</button>
+      <button class="btn-pri" id="btnSaveCo">Save Profile</button>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- PRINT LETTERHEAD -->
+  <div class="print-only print-head" id="printHead">
+    <div>
+      <div class="print-co-name" id="printCoName">Your Company</div>
+      <div class="print-co-meta" id="printCoMeta"></div>
+    </div>
+    <div class="print-doc">
+      <div class="print-doc-type" id="printDocType">ESTIMATE</div>
+      <div class="print-doc-num" id="printEstNum">EST-0001</div>
+      <div class="print-doc-num" id="printDate" style="margin-top:4px;"></div>
+    </div>
+  </div>
+
+  <!-- STAMP (invoice mode) -->
+  <div class="stamp-wrap no-print" id="stampWrap" style="display:none">
+    <div class="stamp-badge unpaid" id="stampBadge">UNPAID</div>
+  </div>
+  <div id="printStampWrap" style="display:none;text-align:right;margin-bottom:12px;">
+    <div class="stamp-badge unpaid" id="printStamp">UNPAID</div>
+  </div>
+
+  <!-- CUSTOMER INFO -->
+  <div class="section-label">Customer</div>
+  <div class="meta-grid">
+    <div class="meta-cell">
+      <div class="meta-label">Customer Name</div>
+      <input type="text" id="custName" placeholder="Full name or company" maxlength="120">
+    </div>
+    <div class="meta-cell">
+      <div class="meta-label">Phone / Email</div>
+      <input type="text" id="custContact" placeholder="Contact details" maxlength="120">
+    </div>
+    <div class="meta-cell full">
+      <div class="meta-label">Pickup Address</div>
+      <input type="text" id="custAddr" placeholder="Job site address" maxlength="200">
+    </div>
+    <div class="meta-cell">
+      <div class="meta-label">Date</div>
+      <input type="date" id="jobDate">
+    </div>
+    <div class="meta-cell" id="dueDateCell" style="display:none">
+      <div class="meta-label">Due Date</div>
+      <input type="date" id="dueDate">
+    </div>
+    <div class="meta-cell">
+      <div class="meta-label">Job Type</div>
+      <input type="text" id="jobType" placeholder="Residential, commercial, estate…" maxlength="100">
+    </div>
+    <div class="meta-cell" id="payStatusCell" style="display:none">
+      <div class="meta-label">Payment Status</div>
+      <div style="display:flex;gap:14px;padding-top:4px;">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;"><input type="radio" name="payStatus" value="unpaid" checked> Unpaid</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;"><input type="radio" name="payStatus" value="paid"> Paid</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOAD SIZE -->
+  <div class="section-label">Load Size</div>
+  <div class="load-grid" id="loadGrid"></div>
+
+  <!-- EXTRAS -->
+  <div class="section-label">Extras</div>
+  <div class="extras-grid">
+    <div class="extras-cell">
+      <div class="meta-label">Heavy Items</div>
+      <div class="toggle-row">
+        <span class="toggle-sub" id="heavyDesc">Appliances, safes, pianos</span>
+        <button class="toggle-switch" id="heavyToggle" aria-label="Toggle heavy items"><div class="toggle-knob"></div></button>
+      </div>
+      <div id="heavyStepperWrap" style="display:none">
+        <div class="stepper">
+          <button class="stepper-btn" id="heavyMinus">−</button>
+          <div class="stepper-val" id="heavyVal">1</div>
+          <button class="stepper-btn" id="heavyPlus">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="extras-cell">
+      <div class="meta-label">Flights of Stairs</div>
+      <div class="stepper">
+        <button class="stepper-btn" id="stairMinus">−</button>
+        <div class="stepper-val" id="stairVal">0</div>
+        <button class="stepper-btn" id="stairPlus">+</button>
+      </div>
+    </div>
+
+    <div class="extras-cell">
+      <div class="meta-label">Distance (miles)</div>
+      <div class="num-row">
+        <input type="number" id="distInput" placeholder="0" min="0" step="1" value="0">
+        <span>mi</span>
+      </div>
+    </div>
+
+    <div class="extras-cell">
+      <div class="meta-label">Disposal / Dump Fee</div>
+      <div class="num-row">
+        <span>$</span>
+        <input type="number" id="dispInput" placeholder="0.00" min="0" step="0.01" value="0">
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="section-label">Notes</div>
+  <div class="notes-area">
+    <textarea id="notesArea" placeholder="Special instructions, access notes, hazardous materials disclaimer…"></textarea>
+  </div>
+
+  <!-- ESTIMATE / INVOICE -->
+  <div class="section-label" id="summaryLabel">Estimate</div>
+  <div class="summary-block">
+    <div class="sum-row">
+      <div class="s-label"><b>Truck Space</b>Estimated volume</div>
+      <div class="s-val" id="outYards">— cu yd</div>
+    </div>
+    <div class="sum-row">
+      <div class="s-label"><b>Labor Estimate</b>Included in base price</div>
+      <div class="s-val" id="outLabor">—</div>
+    </div>
+    <div class="sum-row">
+      <div class="s-label"><b>Extras</b>Heavy items + stairs + distance + disposal</div>
+      <div class="s-val" id="outExtras">—</div>
+    </div>
+    <div class="sum-row total">
+      <div class="s-label"><b id="totalLabel" style="color:var(--accent);font-size:14px;font-family:var(--mono);letter-spacing:.5px;text-transform:uppercase">Total Estimate</b></div>
+      <div class="s-val big" id="outTotal">—</div>
+    </div>
+    <div class="breakdown" id="breakdown">
+      <div class="br-row" id="brBase"><span>Base (load size)</span><span>—</span></div>
+      <div class="br-row" id="brHeavy"><span>Heavy items</span><span>—</span></div>
+      <div class="br-row" id="brStairs"><span>Stairs</span><span>—</span></div>
+      <div class="br-row" id="brDist"><span>Distance surcharge</span><span>—</span></div>
+      <div class="br-row" id="brDisp"><span>Disposal / dump</span><span>—</span></div>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions no-print">
+    <button class="btn-sec" id="btnDemo">Demo</button>
+    <button class="btn-sec" id="btnReset">Reset</button>
+    <button class="btn-sec" id="btnPrint">Print / PDF</button>
+    <button class="btn-pri" id="btnCopy">Copy Estimate</button>  </div>
+
+</main>
+
+<div class="print-only print-footer"><span id="printFooterName">Generated by AppName</span></div>
+<footer class="app-footer" id="appFooter"></footer>
+
+<script>
+(function(){
+'use strict';
+
+/* ── DEFAULTS (overridden by saved company profile) ── */
+var pricing = { heavy: 60, stair: 35, freeMi: 10, miRate: 2.50 };
+
+var LOADS = [
+  { id:'min',  label:'Min Load',  yards:2,  fill:14,  base:75,  labor:45  },
+  { id:'q',    label:'1/4 Truck', yards:4,  fill:28,  base:150, labor:90  },
+  { id:'h',    label:'1/2 Truck', yards:7,  fill:50,  base:275, labor:165 },
+  { id:'tq',   label:'3/4 Truck', yards:10, fill:75,  base:375, labor:225 },
+  { id:'full', label:'Full Truck',yards:14, fill:100, base:500, labor:300 }
+];
+
+/* ── STATE ── */
+var selLoad    = null;
+var heavyOn    = false;
+var heavyCount = 1;
+var stairCount = 0;
+var company    = {};
+var mode       = 'quote';
+
+function sanitize(s){ return typeof s==='string' ? s.replace(/[<>"]/g,'') : ''; }
+function localDate(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function fmt(n){ var v=parseFloat(n); return isNaN(v)?'$0.00':'$'+v.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','); }
+
+/* ── LOAD CARDS ── */
+var loadGrid = document.getElementById('loadGrid');
+LOADS.forEach(function(L){
+  var c = document.createElement('button');
+  c.className = 'load-card'; c.dataset.id = L.id;
+  c.innerHTML =
+    '<div class="truck-vis"><div class="truck-fill" style="height:'+L.fill+'%"></div></div>'+
+    '<div class="load-label">'+L.label+'</div>'+
+    '<div class="load-price">'+fmt(L.base)+'</div>'+
+    '<div class="load-yards">'+L.yards+' cu yd</div>';
+  c.addEventListener('click', function(){ selectLoad(L.id); save(); });
+  loadGrid.appendChild(c);
+});
+
+function selectLoad(id){
+  selLoad = id;
+  document.querySelectorAll('.load-card').forEach(function(c){ c.classList.toggle('selected', c.dataset.id===id); });
+  calc();
+}
+
+/* ── HEAVY ── */
+var heavyToggle     = document.getElementById('heavyToggle');
+var heavyStepperWrap= document.getElementById('heavyStepperWrap');
+var heavyDesc       = document.getElementById('heavyDesc');
+
+function updateHeavyDesc(){
+  heavyDesc.textContent = heavyOn
+    ? heavyCount+' item'+(heavyCount>1?'s':'')+' × $'+pricing.heavy+' = '+fmt(heavyCount*pricing.heavy)
+    : 'Appliances, safes, pianos — +$'+pricing.heavy+' each';
+}
+
+heavyToggle.addEventListener('click', function(){
+  heavyOn = !heavyOn;
+  heavyToggle.classList.toggle('on', heavyOn);
+  heavyStepperWrap.style.display = heavyOn ? '' : 'none';
+  updateHeavyDesc(); calc(); save();
+});
+
+function stepper(minusId, plusId, getV, setV, minV, onUpdate){
+  document.getElementById(minusId).addEventListener('click', function(){
+    setV(Math.max(minV, getV()-1)); onUpdate(); calc(); save();
+  });
+  document.getElementById(plusId).addEventListener('click', function(){
+    setV(getV()+1); onUpdate(); calc(); save();
+  });
+}
+
+stepper('heavyMinus','heavyPlus',
+  function(){ return heavyCount; },
+  function(v){ heavyCount=v; },
+  1,
+  function(){ document.getElementById('heavyVal').textContent=heavyCount; updateHeavyDesc(); }
+);
+stepper('stairMinus','stairPlus',
+  function(){ return stairCount; },
+  function(v){ stairCount=v; },
+  0,
+  function(){ document.getElementById('stairVal').textContent=stairCount; }
+);
+
+var distInput = document.getElementById('distInput');
+var dispInput = document.getElementById('dispInput');
+distInput.addEventListener('input', function(){ calc(); save(); });
+dispInput.addEventListener('input', function(){ calc(); save(); });
+
+/* ── CALC ── */
+function calc(){
+  if(!selLoad){
+    ['outYards','outLabor','outExtras','outTotal'].forEach(function(id){ document.getElementById(id).textContent='—'; });
+    setBr('brBase','Base (load size)',null);
+    setBr('brHeavy','Heavy items',null);
+    setBr('brStairs','Stairs',null);
+    setBr('brDist','Distance surcharge',null);
+    setBr('brDisp','Disposal / dump',null);
+    return;
+  }
+  var L      = LOADS.find(function(l){ return l.id===selLoad; });
+  var heavy  = heavyOn ? heavyCount*pricing.heavy : 0;
+  var stairs = stairCount*pricing.stair;
+  var miles  = Math.max(0, parseFloat(distInput.value)||0);
+  var dist   = miles>pricing.freeMi ? (miles-pricing.freeMi)*pricing.miRate : 0;
+  var disp   = Math.max(0, parseFloat(dispInput.value)||0);
+  var extras = heavy+stairs+dist+disp;
+  var total  = L.base+extras;
+
+  document.getElementById('outYards').textContent  = L.yards+' cu yd';
+  document.getElementById('outLabor').textContent  = fmt(L.labor);
+  document.getElementById('outExtras').textContent = fmt(extras);
+  document.getElementById('outTotal').textContent  = fmt(total);
+
+  setBr('brBase',  'Base ('+L.label+')', L.base);
+  setBr('brHeavy', 'Heavy items ('+heavyCount+' × $'+pricing.heavy+')', heavy);
+  setBr('brStairs','Stairs ('+stairCount+' flight'+(stairCount!==1?'s':'')+')', stairs);
+  setBr('brDist',  'Distance ('+miles+' mi, '+Math.max(0,miles-pricing.freeMi).toFixed(0)+' billable)', dist);
+  setBr('brDisp',  'Disposal / dump fee', disp);
+}
+
+function setBr(id, label, val){
+  var el = document.getElementById(id);
+  el.className = 'br-row'+(val!==null&&val>0?' active':'');
+  el.innerHTML = '<span>'+label+'</span><span>'+(val!==null?fmt(val):'—')+'</span>';
+}
+
+/* ── COMPANY ── */
+function numOr(v, d){ var n=parseFloat(v); return isNaN(n)?d:n; }
+
+function loadCompany(){
+  try{ var r=localStorage.getItem('jq_company'); if(r) company=JSON.parse(r); }catch(e){ company={}; }
+  if(company.heavy!==undefined)  pricing.heavy  = numOr(company.heavy,  60);
+  if(company.stair!==undefined)  pricing.stair  = numOr(company.stair,  35);
+  if(company.freeMi!==undefined) pricing.freeMi = numOr(company.freeMi, 10);
+  if(company.miRate!==undefined) pricing.miRate = numOr(company.miRate, 2.50);
+  document.getElementById('cName').value    = company.name    || '';
+  document.getElementById('cAddr').value    = company.address || '';
+  document.getElementById('cPhone').value   = company.phone   || '';
+  document.getElementById('cEmail').value   = company.email   || '';
+  document.getElementById('cLicense').value = company.license || '';
+  document.getElementById('pHeavy').value   = pricing.heavy;
+  document.getElementById('pStair').value   = pricing.stair;
+  document.getElementById('pFreeMi').value  = pricing.freeMi;
+  document.getElementById('pMiRate').value  = pricing.miRate;
+  updateCompanyBar(); updatePrintHead();
+}
+
+function saveCompany(){
+  company = {
+    name:    sanitize(document.getElementById('cName').value),
+    address: sanitize(document.getElementById('cAddr').value),
+    phone:   sanitize(document.getElementById('cPhone').value),
+    email:   sanitize(document.getElementById('cEmail').value),
+    license: sanitize(document.getElementById('cLicense').value),
+    heavy:   numOr(document.getElementById('pHeavy').value,  60),
+    stair:   numOr(document.getElementById('pStair').value,  35),
+    freeMi:  numOr(document.getElementById('pFreeMi').value, 10),
+    miRate:  numOr(document.getElementById('pMiRate').value, 2.50)
+  };
+  pricing.heavy  = company.heavy;
+  pricing.stair  = company.stair;
+  pricing.freeMi = company.freeMi;
+  pricing.miRate = company.miRate;
+  localStorage.setItem('jq_company', JSON.stringify(company));
+  updateCompanyBar(); updatePrintHead();
+  updateHeavyDesc(); calc();
+  document.getElementById('settingsPanel').classList.remove('open');
+}
+
+function clearCompany(){
+  if(!confirm('Clear company profile?')) return;
+  company={}; pricing={heavy:60,stair:35,freeMi:10,miRate:2.50};
+  localStorage.removeItem('jq_company');
+  ['cName','cAddr','cPhone','cEmail','cLicense'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('pHeavy').value=60; document.getElementById('pStair').value=35;
+  document.getElementById('pFreeMi').value=10; document.getElementById('pMiRate').value=2.50;
+  updateCompanyBar(); updatePrintHead();
+  updateHeavyDesc(); calc();
+}
+
+function updateCompanyBar(){
+  var bar=document.getElementById('companyBar');
+  if(!company.name){ bar.classList.remove('visible'); return; }
+  bar.classList.add('visible');
+  var left='<strong>'+sanitize(company.name)+'</strong>';
+  var parts=[];
+  if(company.phone) parts.push(sanitize(company.phone));
+  if(company.email) parts.push(sanitize(company.email));
+  if(parts.length) left+=' &nbsp;|&nbsp; '+parts.join(' &nbsp;|&nbsp; ');
+  document.getElementById('barLeft').innerHTML=left;
+  document.getElementById('barRight').textContent=company.license?'License: '+sanitize(company.license):'';
+}
+
+function updatePrintHead(){
+  var nameEl=document.getElementById('printCoName');
+  var metaEl=document.getElementById('printCoMeta');
+  if(company.name){
+    nameEl.textContent=sanitize(company.name);
+    var lines=[]; if(company.address) lines.push(sanitize(company.address));
+    var contacts=[]; if(company.phone) contacts.push(sanitize(company.phone)); if(company.email) contacts.push(sanitize(company.email));
+    if(contacts.length) lines.push(contacts.join('  |  '));
+    if(company.license) lines.push('License: '+sanitize(company.license));
+    metaEl.innerHTML=lines.join('<br>');
+  } else { nameEl.textContent='Your Company'; metaEl.textContent=''; }
+}
+
+/* ── AUTO-SAVE DRAFT ── */
+var saveT=null;
+function save(){
+  clearTimeout(saveT); saveT=setTimeout(function(){
+    try{ localStorage.setItem('jq_draft', JSON.stringify({
+      v:1, mode:mode, load:selLoad, heavyOn:heavyOn, heavyCount:heavyCount, stairs:stairCount,
+      dist:distInput.value, disp:dispInput.value,
+      estNum:document.getElementById('estBadge').value,
+      dueDate:document.getElementById('dueDate').value,
+      payStatus:(document.querySelector('input[name="payStatus"]:checked')||{value:'unpaid'}).value,
+      custName:document.getElementById('custName').value,
+      custContact:document.getElementById('custContact').value,
+      custAddr:document.getElementById('custAddr').value,
+      jobDate:document.getElementById('jobDate').value,
+      jobType:document.getElementById('jobType').value,
+      notes:document.getElementById('notesArea').value
+    })); }catch(e){}
+  }, 600);
+}
+
+function loadDraft(){
+  try{
+    var raw=localStorage.getItem('jq_draft'); if(!raw) return false;
+    var s=JSON.parse(raw); if(!s||s.v!==1) return false;
+    if(s.load) selectLoad(s.load);
+    heavyOn=!!s.heavyOn; heavyToggle.classList.toggle('on',heavyOn);
+    heavyStepperWrap.style.display=heavyOn?'':'none';
+    heavyCount=parseInt(s.heavyCount)||1; document.getElementById('heavyVal').textContent=heavyCount;
+    stairCount=parseInt(s.stairs)||0;     document.getElementById('stairVal').textContent=stairCount;
+    distInput.value=s.dist||'0'; dispInput.value=s.disp||'0';
+    document.getElementById('estBadge').value=s.estNum||'EST-0001';
+    if(s.dueDate) document.getElementById('dueDate').value=s.dueDate;
+    var payR=document.querySelector('input[name="payStatus"][value="'+(s.payStatus||'unpaid')+'"]');
+    if(payR) payR.checked=true;
+    document.getElementById('custName').value=s.custName||'';
+    document.getElementById('custContact').value=s.custContact||'';
+    document.getElementById('custAddr').value=s.custAddr||'';
+    document.getElementById('jobDate').value=s.jobDate||'';
+    document.getElementById('jobType').value=s.jobType||'';
+    document.getElementById('notesArea').value=s.notes||'';
+    updateHeavyDesc(); calc();
+    setMode(s.mode||'quote');
+    updatePrintDate();
+    return true;
+  }catch(e){ return false; }
+}
+
+function setMode(m){
+  mode = m;
+  var isInv = m === 'invoice';
+  document.getElementById('btnQuote').classList.toggle('active', !isInv);
+  document.getElementById('btnInvoice').classList.toggle('active', isInv);
+  document.getElementById('dueDateCell').style.display   = isInv ? '' : 'none';
+  document.getElementById('payStatusCell').style.display = isInv ? '' : 'none';
+  document.getElementById('stampWrap').style.display     = isInv ? '' : 'none';
+  document.getElementById('printStampWrap').classList.toggle('print-only', isInv);
+  document.getElementById('summaryLabel').textContent    = isInv ? 'Invoice' : 'Estimate';
+  document.getElementById('totalLabel').textContent      = isInv ? 'Total Due' : 'Total Estimate';
+  document.getElementById('printDocType').textContent    = isInv ? 'INVOICE' : 'ESTIMATE';
+  document.getElementById('btnCopy').textContent         = isInv ? 'Mark Paid' : 'Copy Estimate';
+  if(isInv && !document.getElementById('dueDate').value){
+    var d=new Date(); d.setDate(d.getDate()+15);
+    document.getElementById('dueDate').value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  }
+  syncDocNumber(); updateStamp(); updatePrintDate();
+}
+
+function syncDocNumber(){
+  var prefix = mode==='invoice' ? 'INV-' : 'EST-';
+  var badge  = document.getElementById('estBadge');
+  var num    = badge.value.replace(/^(EST-|INV-)/,'') || '0001';
+  badge.value = prefix+num;
+  document.getElementById('printEstNum').textContent = badge.value;
+}
+
+function updateStamp(){
+  var status  = document.querySelector('input[name="payStatus"]:checked');
+  var isPaid  = status && status.value==='paid';
+  var label   = isPaid ? 'PAID' : 'UNPAID';
+  var cls     = isPaid ? 'paid' : 'unpaid';
+  document.getElementById('stampBadge').textContent  = label;
+  document.getElementById('stampBadge').className    = 'stamp-badge '+cls;
+  document.getElementById('printStamp').textContent  = label;
+  document.getElementById('printStamp').className    = 'stamp-badge '+cls;
+}
+
+function updatePrintDate(){
+  var d=document.getElementById('jobDate').value||localDate();
+  var due=document.getElementById('dueDate').value;
+  var txt='Date: '+d;
+  if(mode==='invoice'&&due) txt+='\nDue: '+due;
+  document.getElementById('printDate').style.whiteSpace='pre';
+  document.getElementById('printDate').textContent=txt;
+  document.getElementById('printEstNum').textContent=document.getElementById('estBadge').value;
+}
+
+/* ── DEMO DATA ── */
+function loadDemo(){
+  resetSoft();
+  selectLoad('h');
+  heavyOn=true; heavyCount=2; stairCount=1;
+  heavyToggle.classList.add('on');
+  heavyStepperWrap.style.display='';
+  document.getElementById('heavyVal').textContent='2';
+  document.getElementById('stairVal').textContent='1';
+  distInput.value='18'; dispInput.value='75';
+  document.getElementById('estBadge').value=(mode==='invoice'?'INV-':'EST-')+'2026-042';
+  document.getElementById('custName').value='David Morales';
+  document.getElementById('custContact').value='(555) 871-3304 | dmorales@email.com';
+  document.getElementById('custAddr').value='89 Birchwood Lane, Austin, TX 78701';
+  document.getElementById('jobDate').value=localDate();
+  document.getElementById('jobType').value='Residential — garage cleanout';
+  document.getElementById('notesArea').value='Old refrigerator and washing machine on site. Access through side gate. Client will be home after 10am.';
+  updateHeavyDesc(); calc(); updatePrintDate(); save();
+}
+
+/* ── RESET ── */
+function resetSoft(){
+  selLoad=null; heavyOn=false; heavyCount=1; stairCount=0;
+  heavyToggle.classList.remove('on'); heavyStepperWrap.style.display='none';
+  document.getElementById('heavyVal').textContent='1';
+  document.getElementById('stairVal').textContent='0';
+  distInput.value='0'; dispInput.value='0';
+  document.querySelectorAll('.load-card').forEach(function(c){ c.classList.remove('selected'); });
+  var unpaid=document.querySelector('input[name="payStatus"][value="unpaid"]');
+  if(unpaid) unpaid.checked=true;
+  updateHeavyDesc();
+}
+
+function resetAll(){
+  if(!confirm('Reset entire estimate?')) return;
+  resetSoft();
+  document.getElementById('estBadge').value='EST-0001';
+  document.getElementById('custName').value='';
+  document.getElementById('custContact').value='';
+  document.getElementById('custAddr').value='';
+  document.getElementById('jobDate').value=localDate();
+  document.getElementById('dueDate').value='';
+  document.getElementById('jobType').value='';
+  document.getElementById('notesArea').value='';
+  localStorage.removeItem('jq_draft');
+  setMode('quote');
+  calc(); updatePrintDate();
+}
+
+/* ── THEME ── */
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem('jq_theme',t);
+  document.getElementById('iconMoon').style.display = t==='dark'  ? 'block':'none';
+  document.getElementById('iconSun').style.display  = t==='light' ? 'block':'none';
+}
+
+/* ── BOOT ── */
+/* ── FOOTER ── */
+function footer(){
+  var f = document.getElementById('appFooter'); if(!f) return;
+  var year = new Date().getFullYear();
+  var brand = document.querySelector('.brand-text');
+  var name = brand ? (brand.textContent || 'AppName').replace(/[<>]/g,'') : 'AppName';
+  f.innerHTML =
+    '<div class="f-tag">Privacy-first micro-apps for professionals</div>' +
+    '<div class="f-priv"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Your data never leaves this device</div>' +
+    '<div class="f-rights">All rights reserved · <b>' + name + '</b> · ' + year + '</div>';
+  var pf = document.getElementById('printFooterName');
+  if(pf) pf.textContent = 'Generated by ' + name;
+}
+
+function boot(){
+  setTheme(localStorage.getItem('jq_theme')||'light');
+  footer();
+  loadCompany();
+  if(!loadDraft()){
+    document.getElementById('jobDate').value=localDate();
+    updatePrintDate();
+    calc();
+  }
+
+  document.getElementById('themeBtn').addEventListener('click', function(){
+    setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+  });
+  document.getElementById('settingsBtn').addEventListener('click', function(){
+    document.getElementById('settingsPanel').classList.toggle('open');
+  });
+  document.getElementById('btnSaveCo').addEventListener('click', saveCompany);
+  document.getElementById('btnClearCo').addEventListener('click', clearCompany);
+  document.getElementById('btnQuote').addEventListener('click', function(){ setMode('quote'); save(); });
+  document.getElementById('btnInvoice').addEventListener('click', function(){ setMode('invoice'); save(); });
+  document.querySelectorAll('input[name="payStatus"]').forEach(function(r){
+    r.addEventListener('change', function(){ updateStamp(); save(); });
+  });
+  document.getElementById('dueDate').addEventListener('change', function(){ updatePrintDate(); save(); });
+  document.getElementById('btnDemo').addEventListener('click', loadDemo);
+  document.getElementById('btnReset').addEventListener('click', resetAll);
+  document.getElementById('btnPrint').addEventListener('click', function(){ window.print(); });
+  document.getElementById('btnCopy').addEventListener('click', function(){
+    if(mode==='invoice'){
+      var unpaid=document.querySelector('input[name="payStatus"][value="unpaid"]');
+      var paid=document.querySelector('input[name="payStatus"][value="paid"]');
+      if(unpaid&&unpaid.checked){ paid.checked=true; updateStamp(); save(); }
+      var btn=document.getElementById('btnCopy'); var orig=btn.textContent;
+      btn.textContent='Marked Paid!'; setTimeout(function(){ btn.textContent=orig; },1500);
+      return;
+    }
+    var t=document.getElementById('outTotal').textContent;
+    if(t==='—'){ alert('Select a load size first.'); return; }
+    var cust=document.getElementById('custName').value;
+    var text=(cust?cust+' — ':'')+('Junk Removal Estimate: '+t);
+    var btn=document.getElementById('btnCopy'); var orig=btn.textContent;
+    function flashOK(){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent=orig; },1500); }
+    function flashErr(){ btn.textContent='Copy failed'; setTimeout(function(){ btn.textContent=orig; },1500); }
+    function legacyCopy(str){ try{ var ta=document.createElement('textarea'); ta.value=str; ta.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0;'; document.body.appendChild(ta); ta.focus(); ta.select(); var ok=document.execCommand('copy'); document.body.removeChild(ta); return ok; }catch(e){ return false; } }
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(flashOK).catch(function(){ legacyCopy(text)?flashOK():flashErr(); });
+    } else { legacyCopy(text)?flashOK():flashErr(); }
+  });
+
+  /* auto-save on all text inputs */
+  ['custName','custContact','custAddr','jobType','notesArea'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', save);
+  });
+  document.getElementById('jobDate').addEventListener('change', function(){ updatePrintDate(); save(); });
+  document.getElementById('estBadge').addEventListener('input', function(){
+    document.getElementById('printEstNum').textContent=this.value; save();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', boot);
+})();
+</script>
+</body>
+</html>

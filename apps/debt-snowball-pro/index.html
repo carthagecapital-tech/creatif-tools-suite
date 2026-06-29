@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Debt Snowball Calculator — create a step-by-step debt payoff plan. 100% private, zero subscriptions.">
+<meta name="theme-color" content="#f4f2ec">
+<title>Debt Snowball Calculator</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2300a884' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z'/%3E%3C/svg%3E">
+<!--
+╔══════════════════════════════════════════════════════════════╗
+║  DEBT SNOWBALL CALCULATOR v2.0                              ║
+║  100% standalone · zero dependencies · sharp corners        ║
+╚══════════════════════════════════════════════════════════════╝
+-->
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOKENS ── */
+  :root {
+    --accent:      #00a884;
+    --accent-dk:   #00d4aa;
+    --bg:          #f4f2ec;
+    --surface:     #ffffff;
+    --surface2:    #faf8f3;
+    --border:      #e5e1d8;
+    --border2:     #d8d3c7;
+    --text:        #2c2a26;
+    --muted:       #9a958a;
+    --muted2:      #b5b0a6;
+    --danger:      #c0584f;
+    --ok:          #4f8a5b;
+    --warn:        #b8862f;
+    --info:        #4a7aa6;
+    --purple:      #7a6aa8;
+    --accent-dim:  color-mix(in srgb, var(--accent) 14%, var(--surface));
+    --accent-dim2: color-mix(in srgb, var(--accent) 6%,  var(--surface));
+    --accent-h:    #008f70;
+    --on-accent:   #ffffff;
+    --mono: 'Consolas','Menlo','Courier New',monospace;
+    --sans: 'Trebuchet MS',system-ui,-apple-system,sans-serif;
+    --shadow:      0 1px 2px rgba(40,38,34,.04), 0 2px 6px rgba(40,38,34,.05);
+    --shadow-lg:   0 4px 12px rgba(40,38,34,.07), 0 12px 28px rgba(40,38,34,.07);
+  }
+  [data-theme="dark"] {
+    --accent:      var(--accent-dk);
+    --bg:          #1a1815;
+    --surface:     #242220;
+    --surface2:    #2c2a27;
+    --border:      #36332e;
+    --border2:     #423e38;
+    --text:        #ece9e2;
+    --muted:       #75716a;
+    --muted2:      #5a564e;
+    --danger:      #e0796f;
+    --ok:          #6cb079;
+    --warn:        #d6a44f;
+    --info:        #6fa3d0;
+    --purple:      #a292d0;
+    --accent-dim:  color-mix(in srgb, var(--accent) 18%, var(--surface));
+    --accent-dim2: color-mix(in srgb, var(--accent) 8%,  var(--surface));
+    --accent-h:    #00f0c4;
+    --on-accent:   #1a1815;
+    --shadow:      0 1px 2px rgba(0,0,0,.25), 0 2px 6px rgba(0,0,0,.3);
+    --shadow-lg:   0 6px 16px rgba(0,0,0,.4);
+  }
+  html { font-size: 15px; -webkit-text-size-adjust: 100%; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; line-height: 1.5; transition: background .25s, color .25s; }
+  input, select, textarea, button { font-family: inherit; font-size: inherit; }
+  input[type=number] { -moz-appearance: textfield; }
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+  /* ── TOP BAR ── */
+  .top-bar { height: 3px; background: var(--accent); }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 14px 24px; display: flex; align-items: center;
+    justify-content: space-between; gap: 14px; flex-wrap: wrap;
+    position: sticky; top: 0; z-index: 100;
+    transition: background .25s, border-color .25s;
+    box-shadow: var(--shadow);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-icon { width: 36px; height: 36px; background: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .brand-icon svg { width: 20px; height: 20px; fill: var(--on-accent); }
+  .brand-text { font-weight: 700; font-size: 18px; letter-spacing: -.3px; color: var(--text); transition: color .25s; }
+  .brand-text span { color: var(--accent); }
+  .brand-tag { font-size: 10px; color: var(--muted); letter-spacing: .5px; margin-top: 1px; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .icon-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; }
+  .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .icon-btn svg { width: 18px; height: 18px; }
+
+  /* ── MAIN ── */
+  .main { max-width: 1100px; margin: 0 auto; padding: 24px 20px 80px; }
+
+  /* ── SECTION LABEL ── */
+  .section-label { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── STAT CARDS ── */
+  .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 24px; transition: background .25s, border-color .25s; box-shadow: var(--shadow); }
+  .stat-card { background: var(--surface); padding: 14px 18px; transition: background .25s; }
+  .stat-label { font-family: var(--mono); font-size: 9px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .stat-val { font-family: var(--mono); font-size: 26px; font-weight: 700; color: var(--text); line-height: 1; }
+  .stat-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* ── GLOBAL SETTINGS ── */
+  .global-settings { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 24px; overflow: hidden; box-shadow: var(--shadow); }
+  .global-field { background: var(--surface); padding: 12px 14px; transition: background .25s; }
+  .global-field input { font-family: var(--sans); font-size: 14px; color: var(--text); background: transparent; border: none; outline: none; width: 100%; }
+  .global-field input::placeholder { color: var(--muted2); }
+  .global-field select {
+    font-family: var(--sans); font-size: 14px; color: var(--text);
+    background: transparent; border: none; outline: none; width: 100%;
+    cursor: pointer; -webkit-appearance: none; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%239a958a' d='M0 0h10L5 6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 2px center; padding-right: 20px;
+  }
+  [data-theme="dark"] .global-field select {
+    background-color: var(--surface);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%2375716a' d='M0 0h10L5 6z'/%3E%3C/svg%3E");
+  }
+  .global-field select option { background: var(--surface); color: var(--text); }
+
+  /* ── ADD FORM ── */
+  .add-form-wrap { border: 1px solid var(--border); background: var(--surface); margin-bottom: 24px; overflow: hidden; transition: background .25s, border-color .25s; box-shadow: var(--shadow); }
+  .add-form-header { padding: 11px 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; transition: background .15s; }
+  .add-form-header:hover { background: var(--surface2); }
+  .form-header-left { font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+  .form-toggle-icon { font-size: 20px; color: var(--muted); transition: transform .2s; line-height: 1; }
+  .form-toggle-icon.open { transform: rotate(45deg); }
+  .add-form-body { display: none; }
+  .add-form-body.open { display: block; }
+  .form-grid { display: grid; gap: 1px; background: var(--border); }
+  .form-field { background: var(--surface); padding: 12px 14px; transition: background .25s; }
+  .form-label { font-family: var(--mono); font-size: 9px; letter-spacing: 1.3px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .form-field input, .form-field select, .form-field textarea {
+    font-family: var(--sans); font-size: 14px; color: var(--text);
+    background: transparent; border: none; outline: none; width: 100%; resize: none;
+  }
+  .form-field textarea { min-height: 38px; line-height: 1.5; }
+  .form-field input::placeholder, .form-field textarea::placeholder { color: var(--muted2); }
+  .form-field input[type="date"] { font-family: var(--mono); font-size: 13px; }
+  .form-field input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(.3); cursor: pointer; }
+  [data-theme="dark"] .form-field input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(.5); }
+  .form-field select {
+    cursor: pointer; -webkit-appearance: none; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%239a958a' d='M0 0h10L5 6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 2px center; padding-right: 20px;
+  }
+  [data-theme="dark"] .form-field select {
+    background-color: var(--surface);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%2375716a' d='M0 0h10L5 6z'/%3E%3C/svg%3E");
+  }
+  .form-field select option { background: var(--surface); color: var(--text); }
+  .form-validation { display: none; color: var(--danger); font-size: 12px; padding: 8px 18px; background: var(--surface2); border-top: 1px solid var(--border); }
+  .form-actions { background: var(--surface2); padding: 11px 18px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* ── TOOLBAR ── */
+  .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .filter-tabs { display: flex; border: 1px solid var(--border2); overflow: hidden; flex-wrap: wrap; }
+  .filter-tab { font-family: var(--sans); font-size: 11px; font-weight: 500; padding: 6px 13px; background: transparent; border: none; color: var(--muted); cursor: pointer; transition: all .15s; white-space: nowrap; letter-spacing: .3px; }
+  .filter-tab:hover:not(.active) { background: var(--surface2); color: var(--text); }
+  .filter-tab.active { background: var(--accent); color: var(--on-accent); font-weight: 600; }
+  .sort-select { font-family: var(--sans); font-size: 12px; color: var(--text); background: var(--surface); border: 1px solid var(--border2); padding: 6px 28px 6px 10px; outline: none; cursor: pointer; -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%239a958a' d='M0 0h10L5 6z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; }
+  [data-theme="dark"] .sort-select { background-color: var(--surface); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%2375716a' d='M0 0h10L5 6z'/%3E%3C/svg%3E"); }
+
+  /* ── TABLE ── */
+  .table-wrap { border: 1px solid var(--border); overflow: hidden; margin-bottom: 20px; transition: border-color .25s; overflow-x: auto; box-shadow: var(--shadow); }
+  .table-head { display: grid; background: var(--surface2); border-bottom: 1px solid var(--border); min-width: 600px; }
+  .th { font-family: var(--mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); padding: 10px 14px; border-right: 1px solid var(--border); white-space: nowrap; }
+  .th:last-child { border-right: none; }
+  .th.r { text-align: right; }
+  .data-row { display: grid; border-bottom: 1px solid var(--border); background: var(--surface); transition: background .1s; min-width: 600px; }
+  .data-row:last-child { border-bottom: none; }
+  .data-row:hover { background: var(--surface2); }
+  .data-row.accent-ok      { border-left: 3px solid var(--ok); }
+  .data-row.accent-warn    { border-left: 3px solid var(--warn); }
+  .data-row.accent-danger  { border-left: 3px solid var(--danger); }
+  .data-row.accent-info    { border-left: 3px solid var(--info); }
+  .data-row.accent-purple  { border-left: 3px solid var(--purple); }
+  .data-row.accent-accent  { border-left: 3px solid var(--accent); }
+  .data-row.accent-muted   { border-left: 3px solid var(--border2); }
+  .td { font-size: 13px; color: var(--text); padding: 11px 14px; border-right: 1px solid var(--border); display: flex; align-items: center; overflow: hidden; }
+  .td:last-child { border-right: none; justify-content: center; padding: 0; }
+  .td.r { justify-content: flex-end; font-family: var(--mono); }
+  .td.muted { color: var(--muted); font-size: 12px; }
+  .td.mono  { font-family: var(--mono); font-size: 13px; }
+  .td.bold  { font-weight: 600; }
+  .td-primary { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .td-primary .primary-text { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .td-primary .secondary-text { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+
+  .status-pill { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; padding: 3px 8px; white-space: nowrap; border: 1px solid; }
+  .pill-ok     { color: var(--ok);     border-color: var(--ok);     background: color-mix(in srgb, var(--ok) 10%, var(--surface)); }
+  .pill-warn   { color: var(--warn);   border-color: var(--warn);   background: color-mix(in srgb, var(--warn) 10%, var(--surface)); }
+  .pill-danger { color: var(--danger); border-color: var(--danger); background: color-mix(in srgb, var(--danger) 10%, var(--surface)); }
+  .pill-info   { color: var(--info);   border-color: var(--info);   background: color-mix(in srgb, var(--info) 10%, var(--surface)); }
+  .pill-purple { color: var(--purple); border-color: var(--purple); background: color-mix(in srgb, var(--purple) 10%, var(--surface)); }
+  .pill-accent { color: var(--accent); border-color: var(--accent); background: var(--accent-dim2); }
+  .pill-muted  { color: var(--muted);  border-color: var(--border2); background: transparent; }
+
+  .cat-badge { font-family: var(--mono); font-size: 9px; letter-spacing: .5px; text-transform: uppercase; color: var(--muted); background: var(--surface2); border: 1px solid var(--border2); padding: 2px 7px; white-space: nowrap; }
+  .date-text { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+  .btn-del { background: transparent; border: none; color: var(--muted2); cursor: pointer; transition: color .15s; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; min-height: 42px; }
+  .btn-del:hover { color: var(--danger); }
+  .btn-edit { background: transparent; border: none; color: var(--muted2); cursor: pointer; transition: color .15s; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; min-height: 42px; }
+  .btn-edit:hover { color: var(--accent); }
+
+  .table-empty { padding: 52px 20px; text-align: center; color: var(--muted); background: var(--surface); box-shadow: var(--shadow); }
+  .table-empty p { max-width: 260px; margin: 0 auto; font-size: 13px; line-height: 1.7; }
+
+  /* ── CALCULATE ── */
+  .calculate-wrap { text-align: center; margin: 28px 0 32px; }
+  .btn-pri-lg { font-family: var(--sans); font-size: 15px; font-weight: 600; padding: 12px 32px; background: var(--accent); border: 1px solid var(--accent); color: var(--on-accent); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-pri-lg:hover { background: var(--accent-h); border-color: var(--accent-h); }
+  .snowball-hint { font-size: 12px; color: var(--muted); text-align: center; max-width: 420px; margin: 12px auto 0; line-height: 1.5; }
+
+  /* ── RESULTS ── */
+  .results-section { display: none; }
+  .results-section.visible { display: block; animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .warning-box { border: 1px solid var(--warn); background: rgba(245,166,35,.08); padding: 14px 18px; margin-bottom: 24px; color: var(--warn); font-size: 13px; line-height: 1.6; }
+  .warning-box strong { color: var(--warn); font-weight: 600; }
+
+  /* ── MILESTONES ── */
+  .milestone-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 24px; box-shadow: var(--shadow); }
+  .milestone-card { background: var(--surface); padding: 16px 18px; transition: background .25s; }
+  .milestone-label { font-family: var(--mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .milestone-val { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--text); line-height: 1; }
+  .milestone-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* ── COMPARISON ── */
+  .comparison-wrap { border: 1px solid var(--border); background: var(--surface); margin-bottom: 24px; overflow: hidden; transition: background .25s, border-color .25s; box-shadow: var(--shadow); }
+  .comparison-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; border-bottom: 1px solid var(--border); }
+  .comparison-row:last-child { border-bottom: none; }
+  .comparison-row.highlight { background: var(--accent-dim2); }
+  .comparison-label { font-size: 13px; color: var(--text); }
+  .comparison-val { font-family: var(--mono); font-size: 14px; font-weight: 600; color: var(--text); }
+  .comparison-val.saved { color: var(--ok); }
+  .comparison-val.lost { color: var(--danger); }
+
+  /* ── PROGRESS ── */
+  .progress-list { border: 1px solid var(--border); background: var(--surface); margin-bottom: 24px; padding: 16px 18px; transition: background .25s, border-color .25s; box-shadow: var(--shadow); }
+  .progress-item { margin-bottom: 16px; }
+  .progress-item:last-child { margin-bottom: 0; }
+  .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .progress-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .progress-meta { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .progress-bar-bg { height: 6px; background: var(--border2); overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: var(--accent); transition: width .4s ease; }
+  .progress-bar-fill.paid { background: var(--ok); }
+
+  /* ── SCHEDULE ── */
+  .schedule-table { max-height: 440px; overflow-y: auto; }
+  .schedule-row { display: grid; grid-template-columns: 60px 90px 100px 90px 90px 110px 1fr; border-bottom: 1px solid var(--border); background: var(--surface); min-width: 700px; }
+  .schedule-row:last-child { border-bottom: none; }
+  .schedule-row.head { background: var(--surface2); }
+  .schedule-row.head .td { font-family: var(--mono); font-size: 9px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); }
+  .schedule-row .td { padding: 9px 12px; font-size: 12px; border-right: 1px solid var(--border); }
+  .schedule-row .td:last-child { border-right: none; }
+
+  /* ── ACTIONS ── */
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+  .btn-sec { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 9px 18px; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; }
+  .btn-sec:hover { border-color: var(--text); color: var(--text); }
+  .btn-pri { font-family: var(--sans); font-size: 13px; font-weight: 600; padding: 9px 22px; background: var(--accent); border: 1px solid var(--accent); color: var(--on-accent); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; }
+  .btn-pri:hover { background: var(--accent-h); border-color: var(--accent-h); }
+  .btn-danger { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 9px 18px; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; }
+  .btn-danger:hover { border-color: var(--danger); color: var(--danger); }
+
+  .print-only { display: none; }
+
+  /* ── FOOTER ── */
+  .app-footer { max-width: 1100px; margin: 0 auto; padding: 24px 20px; text-align: center; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+  .app-footer .f-tag { font-family: var(--sans); font-size: 13px; color: var(--muted); font-style: italic; margin-bottom: 6px; }
+  .app-footer .f-rights { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); margin-top: 8px; }
+  .app-footer .f-rights b { color: var(--text); font-weight: 600; }
+  .app-footer .f-priv { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted2); margin-top: 6px; }
+  .app-footer .f-priv svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+  /* ── PRINT ── */
+  @media print {
+    @page { margin: .4in; size: portrait; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { background: #fff !important; color: #111 !important; font-size: 11px; }
+    .top-bar, .icon-btn, .add-form-body, .add-form-header, .toolbar, .actions, .btn-del, .btn-edit, .calculate-wrap, .form-validation, #scheduleToggle, #importFile, .app-footer { display: none !important; }
+    .header { position: static !important; box-shadow: none !important; background: #fff !important; border-color: #ccc !important; }
+    .brand-text { color: #1a1a1a !important; }
+    .add-form-wrap { display: none !important; }
+    #settingsSectionLabel, #addSectionLabel { display: none !important; }
+    .global-settings { display: none !important; }
+    .stats-row { border-color: #ddd !important; background: #ddd !important; }
+    .stat-card { background: #f5f3ef !important; }
+    .stat-val { color: #1a1a1a !important; }
+    .table-wrap { border-color: #ccc !important; overflow: visible !important; box-shadow: none !important; }
+    .table-head { background: #f5f3ef !important; border-color: #ddd !important; min-width: unset !important; }
+    .th { color: #555 !important; border-color: #ddd !important; font-size: 8px !important; padding: 6px 8px !important; }
+    .data-row { background: #fff !important; border-color: #eee !important; min-width: unset !important; }
+    .td { color: #1a1a1a !important; border-color: #eee !important; padding: 7px 8px !important; font-size: 11px !important; }
+    .status-pill { font-size: 8px !important; }
+    .cat-badge { background: #f5f3ef !important; border-color: #ddd !important; color: #555 !important; }
+    .results-section.visible { display: block !important; }
+    .warning-box { background: #fdf8f0 !important; border-color: #b8862f !important; color: #5a3d00 !important; }
+    .milestone-grid { border-color: #ddd !important; background: #ddd !important; }
+    .milestone-card { background: #f5f3ef !important; }
+    .comparison-wrap { border-color: #ccc !important; }
+    .comparison-row { border-color: #eee !important; }
+    .comparison-row.highlight { background: #f8faf9 !important; }
+    .progress-list { border-color: #ccc !important; }
+    .progress-bar-bg { background: #e0e0e0 !important; }
+    .schedule-table { max-height: none !important; overflow: visible !important; }
+    .schedule-row { border-color: #eee !important; background: #fff !important; min-width: unset !important; }
+    .schedule-row.head { background: #f5f3ef !important; }
+    #scheduleBodyWrap { display: block !important; }
+    .print-only { display: block !important; }
+    .print-footer { text-align: center; font-size: 9px; color: #999; margin-top: 16px; padding-top: 10px; border-top: 1px solid #ddd; }
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 720px) {
+    .header { padding: 12px 14px; }
+    .main { padding: 16px 14px 80px; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .global-settings { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr !important; }
+    .toolbar { gap: 8px; }
+    .actions { position: sticky; bottom: 0; background: var(--bg); border-top: 1px solid var(--border); padding: 12px 14px; margin: 0 -14px; padding-bottom: calc(12px + env(safe-area-inset-bottom,0px)); }
+    .btn-pri { flex: 1; justify-content: center; }
+    .milestone-grid { grid-template-columns: 1fr 1fr; }
+    .schedule-row { grid-template-columns: 50px 80px 80px 70px 70px 90px 1fr; }
+    .app-footer { padding: 16px 14px; }
+  }
+  @media (max-width: 480px) {
+    .milestone-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar"></div>
+
+<header class="header">
+  <div class="brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+      </svg>
+    </div>
+    <div>
+      <div class="brand-text">Debt<span>Snowball</span></div>
+      <div class="brand-tag" id="brandTag">Create a step-by-step debt payoff plan</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">
+      <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg id="iconSun" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- GLOBAL SETTINGS -->
+  <div class="section-label" id="settingsSectionLabel">Plan Settings</div>
+  <div class="global-settings">
+    <div class="global-field">
+      <div class="form-label">Extra Monthly Payment</div>
+      <input type="number" id="extraPayment" placeholder="0.00" min="0" step="0.01">
+      <div id="totalCommitment" style="font-size:11px;color:var(--muted);margin-top:6px;"></div>
+    </div>
+    <div class="global-field">
+      <div class="form-label">Start Date</div>
+      <input type="date" id="startDate">
+    </div>
+    <div class="global-field">
+      <div class="form-label">Payoff Method</div>
+      <select id="methodSelect">
+        <option value="snowball">Snowball — Smallest balance first</option>
+        <option value="avalanche">Avalanche — Highest APR first</option>
+      </select>
+    </div>
+    <div class="global-field">
+      <div class="form-label">Currency</div>
+      <select id="currencySelect">
+        <option value="$">$ USD</option>
+        <option value="€">€ EUR</option>
+        <option value="£">£ GBP</option>
+        <option value="¥">¥ JPY/CNY</option>
+        <option value="C$">C$ CAD</option>
+        <option value="A$">A$ AUD</option>
+        <option value="₹">₹ INR</option>
+        <option value="R$">R$ BRL</option>
+        <option value="₩">₩ KRW</option>
+        <option value="CHF">CHF</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- TOP STATS -->
+  <div class="stats-row" id="statsRow"></div>
+
+  <!-- ADD DEBT FORM -->
+  <div class="section-label" id="addSectionLabel">Add a Debt</div>
+  <div class="add-form-wrap">
+    <div class="add-form-header" id="formToggle" tabindex="0" role="button" aria-expanded="true">
+      <div class="form-header-left">
+        <span class="form-toggle-icon open" id="formToggleIcon">+</span>
+        <span id="formToggleLabel">New Debt</span>
+      </div>
+      <span style="font-size:11px;color:var(--muted)">Click to toggle</span>
+    </div>
+    <div class="add-form-body open" id="formBody">
+      <div class="form-grid" id="formGrid"></div>
+      <div class="form-validation" id="formValidation"></div>
+      <div class="form-actions">
+        <button class="btn-sec" id="btnFormClear">Clear</button>
+        <button class="btn-pri" id="btnAdd">+ Add Debt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEBT LIST -->
+  <div class="section-label" id="tableSectionLabel">Your Debts</div>
+  <div class="toolbar">
+    <div class="filter-tabs" id="filterTabs"></div>
+    <select class="sort-select" id="sortSelect">
+      <option value="newest">Newest first</option>
+      <option value="name">Name A–Z</option>
+    </select>
+  </div>
+  <div class="table-wrap">
+    <div class="table-head" id="tableHead"></div>
+    <div id="tableBody"></div>
+  </div>
+
+  <!-- CALCULATE -->
+  <div class="calculate-wrap">
+    <button class="btn-pri-lg" id="btnCalculate">Calculate Payoff Plan</button>
+    <p class="snowball-hint" id="methodHint">The snowball method pays off your smallest balance first, then rolls that payment into the next debt.</p>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="resultsSection" class="results-section">
+
+    <div id="warningBox" class="warning-box" style="display:none;"></div>
+
+    <div class="section-label">Payoff Summary</div>
+    <div class="stats-row" id="resultsStatsRow"></div>
+
+    <div class="section-label">Payoff Order</div>
+    <div class="table-wrap" id="payoffOrderWrap">
+      <div class="table-head" id="payoffHead"></div>
+      <div id="payoffBody"></div>
+    </div>
+
+    <div class="section-label">Payoff Progress</div>
+    <div class="progress-list" id="progressList"></div>
+
+    <div class="section-label">Milestones</div>
+    <div class="milestone-grid" id="milestoneGrid"></div>
+
+    <div class="section-label">Interest Comparison</div>
+    <div class="comparison-wrap" id="comparisonWrap"></div>
+
+    <div class="section-label">Monthly Schedule</div>
+    <div class="add-form-header" id="scheduleToggle" tabindex="0" role="button" aria-expanded="false" style="border:1px solid var(--border);border-bottom:none;background:var(--surface);">
+      <div class="form-header-left">
+        <span class="form-toggle-icon" id="scheduleToggleIcon">›</span>
+        <span>Monthly Schedule</span>
+      </div>
+      <span style="font-size:11px;color:var(--muted)">Click to expand</span>
+    </div>
+    <div class="add-form-body" id="scheduleBodyWrap" style="border:1px solid var(--border);border-top:none;">
+      <div class="table-wrap schedule-table" id="scheduleTableWrap">
+        <div class="schedule-row head">
+          <div class="td">Month</div>
+          <div class="td">Date</div>
+          <div class="td r">Payment</div>
+          <div class="td r">Interest</div>
+          <div class="td r">Principal</div>
+          <div class="td r">Balance</div>
+          <div class="td">Events</div>
+        </div>
+        <div id="scheduleBody"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <button class="btn-sec" id="btnDemo">Load Demo</button>
+    <button class="btn-sec" id="btnExport">Export Data</button>
+    <button class="btn-sec" id="btnImport">Import Data</button>
+    <button class="btn-sec" id="btnPrint">Print / PDF</button>
+    <button class="btn-danger" id="btnClearAll">Clear All</button>
+    <input type="file" id="importFile" accept=".json" style="display:none">
+  </div>
+
+</main>
+
+<div class="print-only print-footer"><span id="printFooterName">Generated by AppName</span></div>
+<footer class="app-footer" id="appFooter"></footer>
+
+<script>
+(function(){
+'use strict';
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   APP CONFIG
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+var APP = {
+  storageKey: 'snowball_v1',
+  appName: 'DebtSnowball',
+
+  columns: [
+    { id:'name',       label:'Debt Name',     type:'text',     placeholder:'e.g. Visa Credit Card', width:'1.4fr', primary:true, subtitle:'notes', sortKey:true },
+    { id:'balance',    label:'Balance',       type:'number',   placeholder:'0.00', width:'110px', mono:true, right:true },
+    { id:'apr',        label:'APR %',         type:'number',   placeholder:'0.00', width:'80px',  mono:true, right:true },
+    { id:'minPayment', label:'Min Payment',   type:'number',   placeholder:'0.00', width:'110px', mono:true, right:true },
+    { id:'dueDate',    label:'Due Date',      type:'date',     width:'100px', dateFormat:true },
+    { id:'type',       label:'Type',          type:'select',   options:['Credit Card','Student Loan','Auto Loan','Personal Loan','Medical Debt','Other'], width:'110px', badge:'category' },
+    { id:'notes',      label:'Notes',         type:'textarea', placeholder:'Optional notes…', hidden:true }
+  ],
+
+  stats: [
+    { label:'Total Debts',   type:'count',   sub:'logged', accentColor:true },
+    { label:'Total Balance', type:'sum',     column:'balance', sub:'owed', positiveColor:true },
+    { label:'Min Payments',  type:'sum',     column:'minPayment', sub:'/ month' },
+    { label:'Highest APR',   type:'max',     column:'apr', sub:'annual rate' }
+  ],
+
+  filterColumn: 'type',
+
+  demoData: [
+    { name:'Visa Credit Card', balance:'1200',  apr:'22.99', minPayment:'45',  dueDate:'2026-06-15', type:'Credit Card',  notes:'Store card, highest priority' },
+    { name:'Personal Loan',    balance:'3200',  apr:'11.99', minPayment:'95',  dueDate:'2026-06-20', type:'Personal Loan',notes:'Consolidation from 2024' },
+    { name:'Car Loan',         balance:'8500',  apr:'5.99',  minPayment:'320', dueDate:'2026-06-01', type:'Auto Loan',    notes:'Toyota Camry 2022' },
+    { name:'Student Loan',     balance:'12000', apr:'4.50',  minPayment:'150', dueDate:'2026-06-10', type:'Student Loan', notes:'Federal unsubsidized' }
+  ]
+};
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ENGINE
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+var entries     = [];
+var activeFilter= 'All';
+var sortOrder   = 'newest';
+var editingId   = null;
+var THEME_KEY   = APP.storageKey + '_theme';
+var GLOBAL_KEY  = APP.storageKey + '_globals';
+
+function sanitize(s){ return typeof s==='string' ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;') : ''; }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function el(id){ return document.getElementById(id); }
+
+function fmtDate(iso){
+  if(!iso) return '—';
+  var p=iso.split('-'); return p.length < 3 ? iso : p[1]+'/'+p[2]+'/'+p[0];
+}
+function fmtMoney(n){
+  var sym=el('currencySelect')?el('currencySelect').value:'$';
+  return sym+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+}
+function fmtPct(n){
+  return n.toFixed(2)+'%';
+}
+function fmtMonths(m){
+  if(m < 1) return '< 1 month';
+  var y=Math.floor(m/12), mo=m%12;
+  if(y===0) return mo+' month'+(mo>1?'s':'');
+  return y+' yr'+(y>1?'s':'')+(mo>0?' '+mo+' mo':'');
+}
+function addMonths(iso, months){
+  if(!iso) return '';
+  var d=new Date(iso+'T00:00:00');
+  d.setMonth(d.getMonth()+months);
+  return d.toISOString().split('T')[0];
+}
+
+/* ── THEME ── */
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem(THEME_KEY,t);
+  el('iconMoon').style.display = t==='dark'  ? 'block':'none';
+  el('iconSun').style.display  = t==='light' ? 'block':'none';
+}
+
+/* ── GLOBALS ── */
+function saveGlobals(){
+  try{
+    localStorage.setItem(GLOBAL_KEY, JSON.stringify({
+      extra: el('extraPayment').value,
+      date: el('startDate').value,
+      method: el('methodSelect').value,
+      currency: el('currencySelect').value
+    }));
+  }catch(e){}
+}
+function loadGlobals(){
+  try{
+    var raw=localStorage.getItem(GLOBAL_KEY);
+    if(!raw) return;
+    var g=JSON.parse(raw);
+    if(g.extra!==undefined) el('extraPayment').value=g.extra;
+    if(g.date) el('startDate').value=g.date;
+    if(g.method&&el('methodSelect')) el('methodSelect').value=g.method;
+    if(g.currency&&el('currencySelect')) el('currencySelect').value=g.currency;
+  }catch(e){}
+}
+
+/* ── VALIDATION MESSAGES ── */
+function showValidation(msg, isGlobal){
+  // Ensure the form body is open so the message is visible
+  var body=el('formBody'), icon=el('formToggleIcon');
+  if(body && !body.classList.contains('open')){
+    body.classList.add('open');
+    if(icon) icon.classList.add('open');
+    el('formToggle') && el('formToggle').setAttribute('aria-expanded','true');
+  }
+  var v=el('formValidation');
+  v.textContent=msg;
+  v.style.display='block';
+  // For global (non-form) errors, scroll the message into view so it isn't missed
+  if(isGlobal){
+    try{ v.scrollIntoView({behavior:'smooth', block:'center'}); }catch(e){}
+  }
+}
+function clearValidation(){
+  var v=el('formValidation');
+  v.textContent='';
+  v.style.display='none';
+}
+
+/* ── BUILD FORM ── */
+function buildForm(){
+  var grid=el('formGrid');
+  var cols=APP.columns;
+  var visible=cols.filter(function(c){ return c.type!=='textarea'; });
+  var ncols=Math.min(4, visible.length);
+  grid.style.gridTemplateColumns='repeat('+ncols+',1fr)';
+
+  cols.forEach(function(col){
+    var div=document.createElement('div');
+    div.className='form-field';
+    if(col.type==='textarea') div.style.gridColumn='1/-1';
+    div.innerHTML='<div class="form-label">'+sanitize(col.label)+'</div>';
+
+    if(col.type==='select'){
+      var sel=document.createElement('select');
+      sel.id='f_'+col.id;
+      sel.innerHTML='<option value="">— select —</option>';
+      (col.options||[]).forEach(function(o){
+        var opt=document.createElement('option'); opt.value=o; opt.textContent=o; sel.appendChild(opt);
+      });
+      div.appendChild(sel);
+    } else if(col.type==='textarea'){
+      var ta=document.createElement('textarea');
+      ta.id='f_'+col.id;
+      ta.placeholder=col.placeholder||'';
+      ta.rows=2;
+      div.appendChild(ta);
+    } else {
+      var inp=document.createElement('input');
+      inp.type=col.type==='number'?'number':col.type==='date'?'date':'text';
+      inp.id='f_'+col.id;
+      inp.placeholder=col.placeholder||'';
+      if(col.type==='date') inp.value=new Date().toISOString().split('T')[0];
+      if(col.type==='number'){
+        if(col.id==='balance' || col.id==='minPayment'){ inp.min='0.01'; inp.step='0.01'; }
+        if(col.id==='apr'){ inp.min='0'; inp.max='99.99'; inp.step='0.01'; }
+      }
+      div.appendChild(inp);
+    }
+    grid.appendChild(div);
+  });
+}
+
+/* ── BUILD TABLE HEADER ── */
+function buildHeader(){
+  var head=el('tableHead');
+  var cols=APP.columns.filter(function(c){ return !c.hidden; });
+  head.style.gridTemplateColumns=cols.map(function(c){ return c.width||'1fr'; }).join(' ')+' 36px 36px';
+  head.innerHTML='';
+  cols.forEach(function(col){
+    var s=document.createElement('span');
+    s.className='th'+(col.right?' r':'');
+    s.textContent=col.label;
+    head.appendChild(s);
+  });
+  var editTh=document.createElement('span'); editTh.className='th'; head.appendChild(editTh);
+  var del=document.createElement('span'); del.className='th'; head.appendChild(del);
+}
+
+/* ── BUILD FILTER TABS ── */
+function buildFilterTabs(){
+  var tabs=el('filterTabs');
+  tabs.innerHTML='';
+  var filterCol=APP.columns.find(function(c){ return c.id===APP.filterColumn; });
+  var options=filterCol?filterCol.options||[]:[];
+
+  var all=document.createElement('button');
+  all.className='filter-tab active'; all.textContent='All'; all.dataset.val='All';
+  tabs.appendChild(all);
+
+  options.forEach(function(o){
+    var btn=document.createElement('button');
+    btn.className='filter-tab'; btn.textContent=o; btn.dataset.val=o;
+    tabs.appendChild(btn);
+  });
+
+  tabs.addEventListener('click', function(e){
+    if(!e.target.classList.contains('filter-tab')) return;
+    document.querySelectorAll('.filter-tab').forEach(function(t){ t.classList.remove('active'); });
+    e.target.classList.add('active');
+    activeFilter=e.target.dataset.val;
+    render();
+  });
+}
+
+/* ── STAT CARDS ── */
+function buildStats(){
+  var row=el('statsRow');
+  row.innerHTML='';
+  APP.stats.forEach(function(s){
+    var card=document.createElement('div');
+    card.className='stat-card';
+    card.innerHTML='<div class="stat-label">'+sanitize(s.label)+'</div><div class="stat-val" id="stat_'+sanitize(s.label.replace(/\s+/g,'_'))+'">—</div><div class="stat-sub">'+sanitize(s.sub||'')+'</div>';
+    row.appendChild(card);
+  });
+}
+
+function updateStats(){
+  APP.stats.forEach(function(s){
+    var id='stat_'+s.label.replace(/\s+/g,'_');
+    var card=el(id); if(!card) return;
+    var parent=card.parentElement;
+    var val;
+    if(s.type==='count'){
+      val=entries.length;
+      if(s.accentColor) card.style.color='var(--accent)';
+    } else if(s.type==='status'){
+      val=entries.filter(function(e){ return e.status===s.value; }).length;
+      if(s.positiveColor) card.style.color=val>0?'var(--ok)':'var(--text)';
+    } else if(s.type==='sum'){
+      val=entries.reduce(function(acc,e){ return acc+(parseFloat(e[s.column])||0); },0);
+      val='$'+val.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+    } else if(s.type==='max'){
+      var max=entries.reduce(function(acc,e){ var v=parseFloat(e[s.column])||0; return v>acc?v:acc; },0);
+      val=max>0?max.toFixed(2)+'%':'—';
+    } else if(s.type==='last'){
+      if(entries.length){
+        var sorted=entries.slice().sort(function(a,b){ return b._ts-a._ts; });
+        val=sorted[0].name||'—';
+        parent.querySelector('.stat-sub').textContent=fmtDate(sorted[0].date||'')||s.sub;
+      } else {
+        val='—';
+      }
+    }
+    card.textContent=val!==undefined?val:'—';
+  });
+}
+
+/* ── RENDER TABLE ── */
+function renderTable(){
+  var body=el('tableBody');
+  var cols=APP.columns.filter(function(c){ return !c.hidden; });
+  var colTemplate=cols.map(function(c){ return c.width||'1fr'; }).join(' ')+' 36px 36px';
+
+  var filtered=entries.filter(function(e){
+    return activeFilter==='All'||e[APP.filterColumn]===activeFilter;
+  });
+
+  filtered.sort(function(a,b){
+    if(sortOrder==='name'){
+      var sortCol=APP.columns.find(function(c){ return c.sortKey; });
+      if(sortCol){ var av=(a[sortCol.id]||'').toLowerCase(), bv=(b[sortCol.id]||'').toLowerCase(); return av<bv?-1:av>bv?1:0; }
+    }
+    return b._ts-a._ts;
+  });
+
+  if(!filtered.length){
+    body.innerHTML='<div class="table-empty"><p style="font-weight:600;margin-bottom:6px;">'+(entries.length?'No matches for this filter':'No debts yet')+'</p><p>'+(entries.length?'Try selecting a different type.':'Add your first debt above to get started.')+'</p></div>';
+    return;
+  }
+
+  body.innerHTML='';
+  filtered.forEach(function(entry){
+    var typeVal=entry.type||'';
+    var color='muted';
+    if(typeVal==='Credit Card') color='danger';
+    else if(typeVal==='Student Loan') color='info';
+    else if(typeVal==='Auto Loan') color='warn';
+    else if(typeVal==='Personal Loan') color='purple';
+    else if(typeVal==='Medical Debt') color='accent';
+    else color='muted';
+
+    var row=document.createElement('div');
+    row.className='data-row accent-'+color;
+    row.style.gridTemplateColumns=colTemplate;
+
+    cols.forEach(function(col){
+      var td=document.createElement('div');
+      td.className='td'+(col.right?' r':'')+(col.mono?' mono':'');
+      var val=sanitize(entry[col.id]||'');
+
+      if(col.primary){
+        td.classList.add('td-primary');
+        var sub=col.subtitle?sanitize(entry[col.subtitle]||''):'';
+        td.innerHTML='<span class="primary-text">'+val+'</span>'+(sub?'<span class="secondary-text">'+sub+'</span>':'');
+      } else if(col.badge==='category'){
+        td.innerHTML=val?'<span class="cat-badge">'+val+'</span>':'';
+      } else if(col.dateFormat){
+        td.innerHTML='<span class="date-text">'+fmtDate(val)+'</span>';
+      } else if(col.id==='balance'||col.id==='minPayment'){
+        var num=parseFloat(entry[col.id]);
+        td.textContent=!isNaN(num)?fmtMoney(num):(val||'—');
+      } else if(col.id==='apr'){
+        var pct=parseFloat(entry[col.id]);
+        td.textContent=!isNaN(pct)?fmtPct(pct):(val||'—');
+      } else {
+        td.textContent=val||'—';
+      }
+      row.appendChild(td);
+    });
+
+    var editTd=document.createElement('div'); editTd.className='td';
+    var editBtn=document.createElement('button'); editBtn.className='btn-edit';
+    editBtn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>';
+    editBtn.setAttribute('aria-label','Edit');
+    editBtn.addEventListener('click', function(e){ e.stopPropagation(); startEdit(entry.id); });
+    editTd.appendChild(editBtn);
+    row.appendChild(editTd);
+
+    var del=document.createElement('div'); del.className='td';
+    var btn=document.createElement('button'); btn.className='btn-del';
+    btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+    btn.setAttribute('aria-label','Delete');
+    btn.addEventListener('click', function(){ if(!confirm('Delete "'+entry.name+'"?')) return; entries=entries.filter(function(e){ return e.id!==entry.id; }); save(); render(); });
+    del.appendChild(btn); row.appendChild(del);
+    body.appendChild(row);
+  });
+}
+
+function updateCommitment(){
+  var node=el('totalCommitment');
+  if(!node) return;
+  var mins=entries.reduce(function(acc,e){ return acc+(parseFloat(e.minPayment)||0); },0);
+  var extra=parseFloat(el('extraPayment').value)||0;
+  if(entries.length===0 && extra<=0){ node.textContent=''; return; }
+  node.textContent='Total monthly commitment: '+fmtMoney(mins+extra)+' (minimums + extra)';
+}
+function render(){ renderTable(); updateStats(); updateCommitment(); }
+
+/* ── EDIT ── */
+function startEdit(id){
+  var entry=entries.find(function(e){ return e.id===id; });
+  if(!entry) return;
+
+  APP.columns.forEach(function(col){
+    var input=el('f_'+col.id);
+    if(input) input.value=entry[col.id]||'';
+  });
+
+  editingId=id;
+  el('btnAdd').textContent='Save Changes';
+  el('btnFormClear').textContent='Cancel';
+  el('formToggleLabel').textContent='Edit Debt';
+  clearValidation();
+
+  var body=el('formBody');
+  var icon=el('formToggleIcon');
+  if(!body.classList.contains('open')){
+    body.classList.add('open');
+    icon.classList.add('open');
+    icon.textContent='+';
+  }
+
+  el('addSectionLabel').scrollIntoView({ behavior:'smooth' });
+}
+
+function cancelEdit(){
+  editingId=null;
+  clearForm();
+  el('btnAdd').textContent='+ Add Debt';
+  el('btnFormClear').textContent='Clear';
+  el('formToggleLabel').textContent='New Debt';
+  clearValidation();
+}
+
+/* ── ADD ENTRY ── */
+function getFormValues(){
+  var obj={ id:uid(), _ts:Date.now() };
+  APP.columns.forEach(function(col){
+    var input=el('f_'+col.id);
+    if(input) obj[col.id]=sanitize(input.value.trim());
+  });
+  return obj;
+}
+
+function clearForm(){
+  APP.columns.forEach(function(col){
+    var input=el('f_'+col.id);
+    if(!input) return;
+    if(col.type==='date') input.value=new Date().toISOString().split('T')[0];
+    else if(col.type==='select') input.value='';
+    else input.value='';
+  });
+  clearValidation();
+}
+
+function addEntry(){
+  var addBtn=el('btnAdd');
+  addBtn.disabled=true;
+  clearValidation();
+  var obj=getFormValues();
+  var primaryCol=APP.columns.find(function(c){ return c.primary; });
+  if(primaryCol){
+    var inp=el('f_'+primaryCol.id);
+    if(!inp||!inp.value.trim()){ showValidation('Please enter a '+primaryCol.label.toLowerCase()+'.'); inp&&inp.focus(); addBtn.disabled=false; return; }
+  }
+  // validate numbers
+  var bal=parseFloat(obj.balance);
+  var apr=parseFloat(obj.apr);
+  var min=parseFloat(obj.minPayment);
+  if(isNaN(bal)||bal<=0){ showValidation('Balance must be greater than 0.'); el('f_balance')&&el('f_balance').focus(); addBtn.disabled=false; return; }
+  if(isNaN(min)||min<=0){ showValidation('Minimum payment must be greater than 0.'); el('f_minPayment')&&el('f_minPayment').focus(); addBtn.disabled=false; return; }
+  if(isNaN(apr)||apr < 0){ showValidation('APR cannot be negative.'); el('f_apr')&&el('f_apr').focus(); addBtn.disabled=false; return; }
+  if(apr>99.99){ showValidation('APR cannot exceed 99.99%.'); el('f_apr')&&el('f_apr').focus(); addBtn.disabled=false; return; }
+
+  if(editingId){
+    var idx=entries.findIndex(function(e){ return e.id===editingId; });
+    if(idx!==-1){
+      obj.id=editingId;
+      obj._ts=entries[idx]._ts;
+      entries[idx]=obj;
+    }
+    editingId=null;
+    el('btnAdd').textContent='+ Add Debt';
+    el('btnFormClear').textContent='Clear';
+    el('formToggleLabel').textContent='New Debt';
+  } else {
+    entries.push(obj);
+  }
+
+  clearForm();
+  save(); render();
+  addBtn.disabled=false;
+}
+
+/* ── SAVE / LOAD ── */
+function save(){
+  try{ localStorage.setItem(APP.storageKey, JSON.stringify({ v:1, entries:entries })); }catch(e){}
+  try{ el('resultsSection').classList.remove('visible'); }catch(e){}
+  lastResult=null;
+}
+function load(){
+  try{
+    var raw=localStorage.getItem(APP.storageKey);
+    if(!raw) return false;
+    var s=JSON.parse(raw);
+    if(!s||s.v!==1) return false;
+    entries=Array.isArray(s.entries)?s.entries:[];
+    return true;
+  }catch(e){ return false; }
+}
+
+/* ── DEMO ── */
+function loadDemo(){
+  if(entries.length&&!confirm('Replace current debts with demo data?')) return;
+  entries=APP.demoData.map(function(d){
+    var e=JSON.parse(JSON.stringify(d));
+    e.id=uid(); e._ts=Date.now()-Math.random()*1000000;
+    return e;
+  });
+  el('extraPayment').value='200';
+  el('startDate').value=new Date().toISOString().split('T')[0];
+  saveGlobals(); save(); render();
+}
+
+/* ── EXPORT / IMPORT ── */
+function exportData(){
+  var data={
+    app:APP.appName, v:1, exported:new Date().toISOString(),
+    globals:{ extra:el('extraPayment').value, date:el('startDate').value, method:el('methodSelect')?el('methodSelect').value:'snowball' },
+    entries:entries
+  };
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='DebtSnowball_backup_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click(); URL.revokeObjectURL(a.href);
+}
+function importData(file){
+  if(!file) return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var data=JSON.parse(e.target.result);
+      if(!data||!Array.isArray(data.entries)){ alert('Invalid backup file.'); return; }
+      if(entries.length&&!confirm('Replace current debts with imported data ('+data.entries.length+' debts)?')) return;
+      entries=data.entries;
+      if(data.globals){
+        if(data.globals.extra!==undefined) el('extraPayment').value=data.globals.extra;
+        if(data.globals.date) el('startDate').value=data.globals.date;
+        if(data.globals.method&&el('methodSelect')) el('methodSelect').value=data.globals.method;
+        saveGlobals();
+      }
+      save(); render();
+    }catch(err){ alert('Could not parse file: '+err.message); }
+  };
+  reader.readAsText(file);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SNOWBALL CALCULATION ENGINE
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+function calculateSnowball(){
+  var extra=parseFloat(el('extraPayment').value)||0;
+  if(extra<0){ extra=0; el('extraPayment').value='0'; }
+  var startDate=el('startDate').value||new Date().toISOString().split('T')[0];
+
+  if(entries.length===0){ showValidation('Add at least one debt to calculate a payoff plan.', true); return; }
+
+  // validate entries
+  for(var i=0;i < entries.length;i++){
+    var e=entries[i];
+    var b=parseFloat(e.balance), a=parseFloat(e.apr), m=parseFloat(e.minPayment);
+    if(isNaN(b)||b<=0||isNaN(m)||m<=0||isNaN(a)||a < 0){
+      showValidation('Please fix invalid numbers in your debt list.', true);
+      return;
+    }
+  }
+
+  // sort by selected method
+  var method=el('methodSelect')?el('methodSelect').value:'snowball';
+  var sorted=entries.map(function(d){
+    return {
+      id:d.id, name:d.name, type:d.type||'',
+      balance:parseFloat(d.balance),
+      apr:parseFloat(d.apr),
+      minPayment:parseFloat(d.minPayment),
+      originalBalance:parseFloat(d.balance),
+      currentBalance:parseFloat(d.balance),
+      totalInterest:0,
+      payoffMonth:null,
+      paidOff:false
+    };
+  }).sort(function(a,b){
+    if(method==='avalanche') return b.apr-a.apr||a.balance-b.balance;
+    return a.balance-b.balance;
+  });
+
+  var month=0;
+  var maxMonths=600;
+  var totalInterest=0;
+  var schedule=[];
+  var rollingExtra=extra;
+  var warnings=[];
+  var totalDebt=sorted.reduce(function(s,d){ return s+d.originalBalance; },0);
+
+  // check impossible minimums
+  sorted.forEach(function(d){
+    var monthlyInterest=d.currentBalance*(d.apr/100/12);
+    if(d.minPayment<=monthlyInterest){
+      warnings.push('<strong>'+sanitize(d.name)+':</strong> minimum payment ('+fmtMoney(d.minPayment)+') does not cover monthly interest ('+fmtMoney(monthlyInterest)+'). This debt may never be paid off without a higher payment.');
+    }
+  });
+
+  while(month < maxMonths){
+    var allPaid=sorted.every(function(d){ return d.paidOff; });
+    if(allPaid) break;
+
+    var monthData={
+      month:month+1,
+      date:addMonths(startDate,month),
+      totalPaid:0,
+      monthInterest:0,
+      monthPrincipal:0,
+      startingBalance:sorted.reduce(function(s,d){ return s+(d.paidOff?0:d.currentBalance); },0),
+      events:[]
+    };
+
+    // 1. apply interest to all active debts
+    sorted.forEach(function(d){
+      if(!d.paidOff){
+        var interest=d.currentBalance*(d.apr/100/12);
+        d.currentBalance+=interest;
+        d.totalInterest+=interest;
+        totalInterest+=interest;
+        monthData.monthInterest+=interest;
+      }
+    });
+
+    // 2. pay minimums on all active debts
+    sorted.forEach(function(d){
+      if(!d.paidOff){
+        var payment=Math.min(d.minPayment,d.currentBalance);
+        d.currentBalance-=payment;
+        monthData.totalPaid+=payment;
+        if(d.currentBalance<=0.005){
+          d.paidOff=true;
+          d.payoffMonth=month;
+          d.currentBalance=0;
+          monthData.events.push(sanitize(d.name)+' paid off');
+          rollingExtra+=d.minPayment;
+        }
+      }
+    });
+
+    // 3. apply rolling extra to targets until exhausted
+    var remainingExtra=rollingExtra;
+    while(remainingExtra>0.005){
+      var target=sorted.find(function(d){ return !d.paidOff; });
+      if(!target) break;
+      var payment=Math.min(remainingExtra,target.currentBalance);
+      target.currentBalance-=payment;
+      remainingExtra-=payment;
+      monthData.totalPaid+=payment;
+      if(target.currentBalance<=0.005){
+        target.paidOff=true;
+        target.payoffMonth=month;
+        target.currentBalance=0;
+        if(!monthData.events.includes(sanitize(target.name)+' paid off')){
+          monthData.events.push(sanitize(target.name)+' paid off');
+        }
+        rollingExtra+=target.minPayment;
+        remainingExtra+=target.minPayment;
+      }
+    }
+
+    monthData.endingBalance=sorted.reduce(function(s,d){ return s+(d.paidOff?0:d.currentBalance); },0);
+    monthData.monthPrincipal=monthData.totalPaid-monthData.monthInterest;
+    schedule.push(monthData);
+    month++;
+  }
+
+  var allPaidOff=sorted.every(function(d){ return d.paidOff; });
+  var payoffMonth=allPaidOff?month:null;
+  var payoffDate=allPaidOff&&schedule.length?schedule[schedule.length-1].date:null;
+
+  // minimum-only comparison
+  var minOnlyInterest=0;
+  var minOnlyComplete=true;
+  entries.forEach(function(d){
+    var bal=parseFloat(d.balance);
+    var apr=parseFloat(d.apr);
+    var min=parseFloat(d.minPayment);
+    var interest=0;
+    var months=0;
+    while(bal>0.01&&months < 600){
+      var int=bal*(apr/100/12);
+      bal+=int;
+      interest+=int;
+      var pay=Math.min(min,bal);
+      bal-=pay;
+      months++;
+    }
+    if(bal>0.01) minOnlyComplete=false;
+    minOnlyInterest+=interest;
+  });
+
+  var comparisonValid=allPaidOff&&minOnlyComplete;
+  var interestSaved=comparisonValid?(minOnlyInterest-totalInterest):null;
+
+  return {
+    debts:sorted,
+    schedule:schedule,
+    totalInterest:totalInterest,
+    payoffMonths:payoffMonth,
+    payoffDate:payoffDate,
+    allPaidOff:allPaidOff,
+    warnings:warnings,
+    minOnlyInterest:minOnlyInterest,
+    minOnlyComplete:minOnlyComplete,
+    comparisonValid:comparisonValid,
+    interestSaved:interestSaved,
+    totalDebt:totalDebt,
+    startDate:startDate
+  };
+}
+
+var lastResult=null;
+function calculateAndShow(){
+  var result=calculateSnowball();
+  if(!result) return;
+  lastResult=result;
+  renderResults(result);
+  el('resultsSection').classList.add('visible');
+  window.scrollTo({ top: el('resultsSection').offsetTop-80, behavior:'smooth' });
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   RESULTS RENDERING
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+function renderResults(r){
+  // warnings
+  var wbox=el('warningBox');
+  if(r.warnings.length){
+    wbox.style.display='';
+    wbox.innerHTML=r.warnings.join('<br>');
+  } else {
+    wbox.style.display='none';
+  }
+
+  // results stats
+  var rstats=el('resultsStatsRow');
+  rstats.innerHTML='';
+  var stats=[
+    { label:'Debt-Free Date', val:r.payoffDate?fmtDate(r.payoffDate):'—', sub:r.allPaidOff?fmtMonths(r.payoffMonths)+' from start':'May not be achievable', color:r.allPaidOff?'var(--accent)':'var(--warn)' },
+    { label:'Total Interest', val:fmtMoney(r.totalInterest), sub:'over payoff period', color:'var(--text)' },
+    { label:'Payoff Time', val:r.allPaidOff?fmtMonths(r.payoffMonths):'—', sub:'total duration', color:'var(--text)' },
+    { label:'Interest Saved', val:r.comparisonValid?fmtMoney(Math.max(0,r.interestSaved)):'—', sub:r.comparisonValid?'vs minimum payments':'payoff not achievable', color:(r.comparisonValid&&r.interestSaved>0)?'var(--ok)':'var(--text)' }
+  ];
+  stats.forEach(function(s){
+    var card=document.createElement('div');
+    card.className='stat-card';
+    card.innerHTML='<div class="stat-label">'+s.label+'</div><div class="stat-val" style="color:'+s.color+'">'+s.val+'</div><div class="stat-sub">'+s.sub+'</div>';
+    rstats.appendChild(card);
+  });
+
+  // payoff order table
+  var phead=el('payoffHead');
+  var pbody=el('payoffBody');
+  var pcols=[
+    { id:'order', label:'Order', width:'60px', right:true, mono:true },
+    { id:'name', label:'Debt', width:'1.4fr', primary:true },
+    { id:'balance', label:'Balance', width:'110px', right:true, mono:true },
+    { id:'apr', label:'APR', width:'80px', right:true, mono:true },
+    { id:'min', label:'Min Payment', width:'100px', right:true, mono:true },
+    { id:'payoff', label:'Payoff', width:'100px', right:true, mono:true },
+    { id:'interest', label:'Interest', width:'100px', right:true, mono:true }
+  ];
+  phead.style.gridTemplateColumns=pcols.map(function(c){ return c.width; }).join(' ');
+  phead.innerHTML='';
+  pcols.forEach(function(c){
+    var th=document.createElement('div');
+    th.className='th'+(c.right?' r':'');
+    th.textContent=c.label;
+    phead.appendChild(th);
+  });
+
+  pbody.innerHTML='';
+  r.debts.forEach(function(d, i){
+    var row=document.createElement('div');
+    row.className='data-row';
+    row.style.gridTemplateColumns=pcols.map(function(c){ return c.width; }).join(' ');
+    var color='muted';
+    if(d.type==='Credit Card') color='danger';
+    else if(d.type==='Student Loan') color='info';
+    else if(d.type==='Auto Loan') color='warn';
+    else if(d.type==='Personal Loan') color='purple';
+    else if(d.type==='Medical Debt') color='accent';
+    row.classList.add('accent-'+color);
+
+    pcols.forEach(function(c){
+      var td=document.createElement('div');
+      td.className='td'+(c.right?' r':'')+(c.mono?' mono':'');
+      if(c.id==='order') td.textContent=(i+1).toString();
+      else if(c.id==='name'){
+        td.classList.add('td-primary');
+        td.innerHTML='<span class="primary-text">'+sanitize(d.name)+'</span><span class="secondary-text">'+(d.type||'')+'</span>';
+      }
+      else if(c.id==='balance') td.textContent=fmtMoney(d.originalBalance);
+      else if(c.id==='apr') td.textContent=d.apr.toFixed(2)+'%';
+      else if(c.id==='min') td.textContent=fmtMoney(d.minPayment);
+      else if(c.id==='payoff') td.textContent=d.payoffMonth!==null?fmtMonths(d.payoffMonth+1):'—';
+      else if(c.id==='interest') td.textContent=fmtMoney(d.totalInterest);
+      row.appendChild(td);
+    });
+    pbody.appendChild(row);
+  });
+
+  // progress bars
+  var plist=el('progressList');
+  plist.innerHTML='';
+  if(!r.allPaidOff){
+    plist.innerHTML='<div style="color:var(--muted);font-size:13px;">Payoff plan could not be completed — some debts may never be paid off at current rates.</div>';
+  } else {
+    r.debts.forEach(function(d){
+      var pct=r.payoffMonths>0?((d.payoffMonth+1)/r.payoffMonths*100):0;
+      var item=document.createElement('div');
+      item.className='progress-item';
+      item.innerHTML=
+        '<div class="progress-header">'+
+          '<div class="progress-name">'+sanitize(d.name)+'</div>'+
+          '<div class="progress-meta">'+(d.payoffMonth!==null?'Paid off in '+(d.payoffMonth+1)+' months':'—')+'</div>'+
+        '</div>'+
+        '<div class="progress-bar-bg"><div class="progress-bar-fill '+(pct>=100?'paid':'')+'" style="width:'+pct+'%"></div></div>';
+      plist.appendChild(item);
+    });
+  }
+
+  // milestones
+  var mgrid=el('milestoneGrid');
+  mgrid.innerHTML='';
+  if(r.allPaidOff){
+    mgrid.style.display='';
+    var firstDebt=r.debts.find(function(d){ return d.payoffMonth!==null; });
+    var halfTotalMonth=null;
+    for(var m=0;m < r.schedule.length;m++){
+      if(r.schedule[m].endingBalance<=r.totalDebt/2){ halfTotalMonth=m+1; break; }
+    }
+    var milestones=[
+      { label:'First Debt Free', val:firstDebt?fmtMonths(firstDebt.payoffMonth+1):'—', sub:firstDebt?sanitize(firstDebt.name):'' },
+      { label:'50% Debt Gone', val:halfTotalMonth?fmtMonths(halfTotalMonth):'—', sub:halfTotalMonth?'half balance paid':'—' },
+      { label:'Debt Free', val:fmtMonths(r.payoffMonths), sub:r.payoffDate?fmtDate(r.payoffDate):'' },
+      { label:'Interest Saved', val:r.comparisonValid?fmtMoney(Math.max(0,r.interestSaved)):'—', sub:'vs minimum payments' }
+    ];
+    milestones.forEach(function(m){
+      var card=document.createElement('div');
+      card.className='milestone-card';
+      card.innerHTML='<div class="milestone-label">'+m.label+'</div><div class="milestone-val">'+m.val+'</div><div class="milestone-sub">'+m.sub+'</div>';
+      mgrid.appendChild(card);
+    });
+  } else {
+    mgrid.style.display='block';
+    mgrid.innerHTML='<div style="color:var(--muted);font-size:13px;line-height:1.5;">Payoff not achievable with current payments. Increase your minimum payments or extra monthly payment so they cover more than the monthly interest.</div>';
+  }
+
+  // comparison
+  var cwrap=el('comparisonWrap');
+  cwrap.innerHTML='';
+  var methodLabel=el('methodSelect')&&el('methodSelect').value==='avalanche'?'Debt Avalanche Method':'Debt Snowball Method';
+  var crows=[
+    { label:'Minimum Payments Only', val:r.minOnlyComplete?fmtMoney(r.minOnlyInterest):'Never pays off', highlight:false, cls:'' },
+    { label:methodLabel, val:r.allPaidOff?fmtMoney(r.totalInterest):'Never pays off', highlight:false, cls:'' },
+    { label:'Interest Saved', val:r.comparisonValid?fmtMoney(Math.max(0,r.interestSaved)):'—', highlight:true, cls:'saved' }
+  ];
+  crows.forEach(function(c){
+    var row=document.createElement('div');
+    row.className='comparison-row'+(c.highlight?' highlight':'');
+    row.innerHTML='<div class="comparison-label">'+c.label+'</div><div class="comparison-val '+c.cls+'">'+c.val+'</div>';
+    cwrap.appendChild(row);
+  });
+
+  // monthly schedule
+  var sbody=el('scheduleBody');
+  sbody.innerHTML='';
+  if(r.schedule.length===0){
+    sbody.innerHTML='<div class="table-empty"><p>No schedule to display.</p></div>';
+  } else {
+    r.schedule.forEach(function(m){
+      var row=document.createElement('div');
+      row.className='schedule-row';
+      var events=m.events.length?m.events.join(' • '):'—';
+      row.innerHTML=
+        '<div class="td mono">'+m.month+'</div>'+
+        '<div class="td">'+fmtDate(m.date)+'</div>'+
+        '<div class="td r mono">'+fmtMoney(m.totalPaid)+'</div>'+
+        '<div class="td r mono">'+fmtMoney(m.monthInterest)+'</div>'+
+        '<div class="td r mono">'+fmtMoney(m.monthPrincipal)+'</div>'+
+        '<div class="td r mono">'+fmtMoney(m.endingBalance)+'</div>'+
+        '<div class="td muted">'+events+'</div>';
+      sbody.appendChild(row);
+    });
+  }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   BOOT
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ── FOOTER ── */
+function footer(){
+  var f = el('appFooter'); if(!f) return;
+  var year = new Date().getFullYear();
+  var brand = document.querySelector('.brand-text');
+  var name = brand ? sanitize(brand.textContent || 'AppName') : 'AppName';
+  f.innerHTML =
+    '<div class="f-tag">Privacy-first micro-apps for professionals</div>' +
+    '<div class="f-priv"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Your data never leaves this device</div>' +
+    '<div class="f-rights">All rights reserved · <b>' + name + '</b> · ' + year + '</div>';
+  var pf = el('printFooterName');
+  if(pf) pf.textContent = 'Generated by ' + name;
+}
+
+function boot(){
+  setTheme(localStorage.getItem(THEME_KEY)||'light');
+  footer();
+
+  // defaults
+  if(!el('startDate').value) el('startDate').value=new Date().toISOString().split('T')[0];
+
+  buildStats();
+  buildForm();
+  buildHeader();
+  buildFilterTabs();
+  loadGlobals();
+
+  // sync method hint to loaded value
+  var m=el('methodSelect').value;
+  el('methodHint').textContent=m==='avalanche'
+    ?'The avalanche method targets your highest-APR debt first, saving you the most interest over time.'
+    :'The snowball method pays off your smallest balance first, then rolls that payment into the next debt.';
+
+  el('themeBtn').addEventListener('click', function(){
+    setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+  });
+
+  function handleFormToggle(){
+    var body=el('formBody'), icon=el('formToggleIcon');
+    var open=body.classList.toggle('open');
+    icon.classList.toggle('open',open);
+    icon.textContent=open?'+':'›';
+    el('formToggle').setAttribute('aria-expanded',open);
+  }
+  el('formToggle').addEventListener('click', handleFormToggle);
+  el('formToggle').addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); handleFormToggle(); }});
+
+  function handleScheduleToggle(){
+    var body=el('scheduleBodyWrap'), icon=el('scheduleToggleIcon');
+    var open=body.classList.toggle('open');
+    icon.classList.toggle('open',open);
+    icon.textContent=open?'+':'›';
+    el('scheduleToggle').setAttribute('aria-expanded',open);
+  }
+  el('scheduleToggle').addEventListener('click', handleScheduleToggle);
+  el('scheduleToggle').addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); handleScheduleToggle(); }});
+
+  el('btnAdd').addEventListener('click', addEntry);
+  el('btnFormClear').addEventListener('click', function(){
+    if(editingId){ cancelEdit(); }
+    else { clearForm(); }
+  });
+
+  APP.columns.forEach(function(col){
+    if(col.type==='text'||col.type==='number'){
+      var inp=el('f_'+col.id);
+      if(inp) inp.addEventListener('keydown', function(e){ if(e.key==='Enter') addEntry(); });
+    }
+  });
+
+  el('sortSelect').addEventListener('change', function(){ sortOrder=this.value; render(); });
+
+  el('extraPayment').addEventListener('change', saveGlobals);
+  el('extraPayment').addEventListener('input', updateCommitment);
+  el('startDate').addEventListener('change', saveGlobals);
+  el('methodSelect').addEventListener('change', function(){
+    saveGlobals();
+    var m=this.value;
+    el('methodHint').textContent=m==='avalanche'
+      ?'The avalanche method targets your highest-APR debt first, saving you the most interest over time.'
+      :'The snowball method pays off your smallest balance first, then rolls that payment into the next debt.';
+  });
+  el('currencySelect').addEventListener('change', function(){
+    saveGlobals();
+    render();
+    if(lastResult && el('resultsSection').classList.contains('visible')) renderResults(lastResult);
+  });
+
+  el('btnCalculate').addEventListener('click', calculateAndShow);
+
+  el('btnDemo').addEventListener('click', loadDemo);
+  el('btnExport').addEventListener('click', exportData);
+  el('btnImport').addEventListener('click', function(){ el('importFile').click(); });
+  el('importFile').addEventListener('change', function(){ if(this.files[0]) importData(this.files[0]); this.value=''; });
+  el('btnPrint').addEventListener('click', function(){ window.print(); });
+  el('btnClearAll').addEventListener('click', function(){
+    if(!entries.length) return;
+    if(!confirm('Delete all '+entries.length+' debts and clear results?')) return;
+    entries=[]; localStorage.removeItem(APP.storageKey); el('resultsSection').classList.remove('visible'); render();
+  });
+
+  if(!load()) render();
+  else render();
+}
+
+document.addEventListener('DOMContentLoaded', boot);
+})();
+</script>
+</body>
+</html>

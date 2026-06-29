@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Pet Medication Tracker — manage pets and medications, track daily doses, never miss a dose again.">
+<meta name="theme-color" content="#f4f2ec">
+<title>PetMed Tracker</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='14.5' rx='4.5' ry='3' fill='%2300d4aa'/%3E%3Ccircle cx='6.5' cy='7.5' r='1.8' fill='%2300d4aa'/%3E%3Ccircle cx='10' cy='5.5' r='1.8' fill='%2300d4aa'/%3E%3Ccircle cx='14' cy='5.5' r='1.8' fill='%2300d4aa'/%3E%3Ccircle cx='17.5' cy='7.5' r='1.8' fill='%2300d4aa'/%3E%3C/svg%3E">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --accent:      #00a884;
+  --accent-dk:   #00d4aa;
+  --bg:          #f4f2ec;
+  --surface:     #ffffff;
+  --surface2:    #faf8f3;
+  --border:      #e5e1d8;
+  --border2:     #d8d3c7;
+  --text:        #2c2a26;
+  --muted:       #7a756a;
+  --muted2:      #b5b0a6;
+  --danger:      #c0584f;
+  --ok:          #4f8a5b;
+  --warn:        #b8862f;
+  --info:        #4a7aa6;
+  --purple:      #7a6aa8;
+  --accent-dim:  #e6f5f0;
+  --accent-dim2: #f2faf7;
+  --accent-h:    #008f70;
+  --on-accent:   #ffffff;
+  --mono: 'Consolas','Menlo','Courier New',monospace;
+  --sans: 'Trebuchet MS',system-ui,-apple-system,sans-serif;
+  --shadow:      0 1px 2px rgba(40,38,34,.04), 0 2px 6px rgba(40,38,34,.05);
+  --shadow-lg:   0 4px 12px rgba(40,38,34,.07), 0 12px 28px rgba(40,38,34,.07);
+}
+[data-theme="dark"] {
+  --accent:      var(--accent-dk);
+  --bg:          #1a1815;
+  --surface:     #242220;
+  --surface2:    #2c2a27;
+  --border:      #36332e;
+  --border2:     #423e38;
+  --text:        #ece9e2;
+  --muted:       #75716a;
+  --muted2:      #5a564e;
+  --danger:      #e0796f;
+  --ok:          #6cb079;
+  --warn:        #d6a44f;
+  --info:        #6fa3d0;
+  --purple:      #a292d0;
+  --accent-dim:  #2a3a36;
+  --accent-dim2: #252c29;
+  --accent-h:    #00f0c4;
+  --on-accent:   #1a1815;
+  --shadow:      0 1px 2px rgba(0,0,0,.25), 0 2px 6px rgba(0,0,0,.3);
+  --shadow-lg:   0 6px 16px rgba(0,0,0,.4);
+}
+
+html { font-size: 15px; -webkit-text-size-adjust: 100%; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; line-height: 1.5; transition: background .25s, color .25s; }
+input, select, textarea, button { font-family: inherit; font-size: inherit; }
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.top-bar { height: 3px; background: var(--accent); }
+.skip-link { position: absolute; left: -9999px; top: 0; z-index: 200; background: var(--accent); color: var(--on-accent); padding: 10px 16px; font-weight: 600; font-size: 13px; }
+.skip-link:focus { left: 8px; top: 8px; }
+
+.header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; transition: background .25s, border-color .25s; box-shadow: var(--shadow); }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-icon { width: 36px; height: 36px; background: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 2px; }
+.brand-icon svg { width: 20px; height: 20px; fill: var(--on-accent); }
+.brand-text { font-weight: 700; font-size: 18px; letter-spacing: -.3px; color: var(--text); transition: color .25s; }
+.brand-text span { color: var(--accent); }
+.brand-tag { font-size: 10px; color: var(--muted); letter-spacing: .5px; margin-top: 1px; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.icon-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; border-radius: 2px; }
+.icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+.icon-btn svg { width: 17px; height: 17px; }
+
+.nav-tabs { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; overflow-x: auto; -webkit-overflow-scrolling: touch; transition: background .25s, border-color .25s; box-shadow: var(--shadow); align-items: center; gap: 4px; }
+.nav-tab { padding: 12px 18px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; white-space: nowrap; transition: all .15s; display: flex; align-items: center; gap: 6px; }
+.nav-tab:hover { color: var(--text); }
+.nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.nav-tab svg { width: 13px; height: 13px; }
+.badge-count { background: var(--accent); color: var(--on-accent); font-family: var(--mono); font-size: 10px; font-weight: 700; padding: 1px 6px; min-width: 18px; text-align: center; border-radius: 2px; }
+
+.nav-utils { display: flex; gap: 6px; margin-left: auto; padding: 8px 0; }
+.nav-util-btn { font-family: var(--sans); font-size: 11px; font-weight: 500; padding: 6px 14px; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; border-radius: 2px; }
+.nav-util-btn:hover { border-color: var(--accent); color: var(--accent); }
+.nav-util-btn.danger:hover { border-color: var(--danger); color: var(--danger); }
+.nav-util-btn svg { width: 12px; height: 12px; }
+#importFileInput { display: none; }
+
+.main { max-width: 1100px; margin: 0 auto; padding: 24px 20px 80px; }
+
+.section-label { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); transition: background .25s; }
+
+.stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 24px; transition: background .25s, border-color .25s; box-shadow: var(--shadow); }
+.stats-row.cols3 { grid-template-columns: repeat(3,1fr); }
+.stat-card { background: var(--surface); padding: 14px 18px; transition: background .25s; }
+.stat-label { font-family: var(--mono); font-size: 9px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.stat-val { font-family: var(--mono); font-size: 26px; font-weight: 700; color: var(--text); line-height: 1; }
+.stat-val.accent { color: var(--accent); }
+.stat-val.ok     { color: var(--ok); }
+.stat-val.warn   { color: var(--warn); }
+.stat-val.danger { color: var(--danger); }
+.stat-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+.pet-group { margin-bottom: 20px; }
+.pet-group-header { background: var(--surface2); border: 1px solid var(--border); border-bottom: none; padding: 9px 16px; display: flex; align-items: center; gap: 12px; }
+.pet-group-icon { width: 28px; height: 28px; background: var(--accent-dim); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 2px; }
+.pet-group-icon svg { width: 14px; height: 14px; color: var(--accent); }
+.pet-group-name { font-weight: 700; font-size: 14px; }
+.pet-group-meta { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: .5px; margin-top: 1px; }
+.med-row { background: var(--surface); border: 1px solid var(--border); border-top: none; padding: 12px 16px; display: flex; align-items: center; gap: 14px; transition: background .1s; }
+.med-row.given { background: rgba(79,138,91,.04); }
+.med-row.overdue { border-left: 3px solid var(--danger); }
+.med-time-col { font-family: var(--mono); font-size: 14px; font-weight: 700; color: var(--accent); white-space: nowrap; min-width: 72px; }
+.med-row.given .med-time-col { color: var(--ok); }
+.med-row.overdue .med-time-col { color: var(--danger); }
+.med-info { flex: 1; min-width: 0; }
+.med-name { font-weight: 600; font-size: 14px; }
+.med-detail { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.med-note-tag { font-size: 11px; color: var(--muted2); margin-top: 1px; font-style: italic; }
+.btn-give { padding: 8px 16px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; transition: all .15s; white-space: nowrap; flex-shrink: 0; min-height: 38px; display: inline-flex; align-items: center; gap: 6px; border-radius: 2px; }
+.btn-give.mark { background: var(--accent); color: var(--on-accent); border: 1px solid var(--accent); }
+.btn-give.mark:hover { background: var(--accent-h); border-color: var(--accent-h); }
+.btn-give.undo { background: transparent; color: var(--ok); border: 1px solid var(--ok); }
+.btn-give.undo:hover { background: rgba(79,138,91,.1); }
+.upcoming-wrap { border: 1px solid var(--border); margin-bottom: 24px; overflow: hidden; box-shadow: var(--shadow); }
+.upcoming-row { background: var(--surface); padding: 10px 16px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid var(--border); }
+.upcoming-row:last-child { border-bottom: none; }
+.upcoming-in { font-family: var(--mono); font-size: 11px; color: var(--warn); font-weight: 700; min-width: 54px; }
+.upcoming-med { font-weight: 600; font-size: 13px; }
+.upcoming-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+.add-form-wrap { border: 1px solid var(--border); background: var(--surface); margin-bottom: 24px; overflow: hidden; transition: background .25s, border-color .25s; box-shadow: var(--shadow); }
+.add-form-header { padding: 11px 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; transition: background .15s; }
+.add-form-header:hover { background: var(--surface2); }
+.add-form-header[aria-expanded="true"] { border-bottom-color: var(--accent); }
+.form-header-left { font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+.form-toggle-icon { font-size: 20px; color: var(--muted); transition: transform .2s; line-height: 1; display: inline-block; }
+.form-toggle-icon.open { transform: rotate(45deg); }
+.add-form-body { display: none; }
+.add-form-body.open { display: block; }
+.form-grid { display: grid; gap: 1px; background: var(--border); }
+.form-field { background: var(--surface); padding: 12px 14px; transition: background .25s; }
+.form-label { font-family: var(--mono); font-size: 9px; letter-spacing: 1.3px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; display: block; }
+.form-field input, .form-field select, .form-field textarea { font-family: var(--sans); font-size: 14px; color: var(--text); background: transparent; border: none; outline: none; width: 100%; resize: none; }
+.form-field textarea { min-height: 38px; line-height: 1.5; }
+.form-field input::placeholder, .form-field textarea::placeholder { color: var(--muted2); }
+.form-field input[type="date"], .form-field input[type="time"] { font-family: var(--mono); font-size: 13px; }
+.form-field input[type="date"]::-webkit-calendar-picker-indicator,
+.form-field input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(.3); cursor: pointer; }
+[data-theme="dark"] .form-field input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="dark"] .form-field input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(.5); }
+.form-field select { cursor: pointer; -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%237a756a' d='M0 0h10L5 6z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 2px center; padding-right: 20px; }
+[data-theme="dark"] .form-field select { background-color: var(--surface); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%2375716a' d='M0 0h10L5 6z'/%3E%3C/svg%3E"); }
+.form-field select option { background: var(--surface); color: var(--text); }
+.form-actions { background: var(--surface2); padding: 11px 18px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+
+.toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.filter-tabs { display: flex; border: 1px solid var(--border2); overflow: hidden; flex-wrap: wrap; border-radius: 2px; }
+.filter-tab { font-family: var(--sans); font-size: 11px; font-weight: 500; padding: 8px 14px; background: transparent; border: none; color: var(--muted); cursor: pointer; transition: all .15s; white-space: nowrap; letter-spacing: .3px; }
+.filter-tab:hover:not(.active) { background: var(--surface2); color: var(--text); }
+.filter-tab.active { background: var(--accent); color: var(--on-accent); font-weight: 600; }
+.search-wrap { flex: 1; min-width: 180px; }
+.search-wrap input { width: 100%; font-family: var(--sans); font-size: 13px; color: var(--text); background: var(--surface); border: 1px solid var(--border2); padding: 6px 12px; outline: none; transition: border-color .15s; border-radius: 2px; }
+.search-wrap input:focus { border-color: var(--accent); }
+.search-wrap input::placeholder { color: var(--muted); }
+.sort-select { font-family: var(--sans); font-size: 12px; color: var(--text); background: var(--surface); border: 1px solid var(--border2); padding: 6px 28px 6px 10px; outline: none; cursor: pointer; -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%237a756a' d='M0 0h10L5 6z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; border-radius: 2px; }
+[data-theme="dark"] .sort-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%2375716a' d='M0 0h10L5 6z'/%3E%3C/svg%3E"); }
+
+.table-wrap { border: 1px solid var(--border); overflow: hidden; margin-bottom: 20px; transition: border-color .25s; overflow-x: auto; box-shadow: var(--shadow); -webkit-overflow-scrolling: touch; }
+.table-head { display: grid; background: var(--surface2); border-bottom: 1px solid var(--border); min-width: 560px; }
+.th { font-family: var(--mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); padding: 10px 14px; border-right: 1px solid var(--border); white-space: nowrap; }
+.th:last-child { border-right: none; }
+.data-row { display: grid; border-bottom: 1px solid var(--border); background: var(--surface); transition: background .1s; min-width: 560px; }
+.data-row:last-child { border-bottom: none; }
+.data-row:hover { background: var(--surface2); }
+.data-row.accent-ok     { border-left: 3px solid var(--ok); }
+.data-row.accent-warn   { border-left: 3px solid var(--warn); }
+.data-row.accent-danger { border-left: 3px solid var(--danger); }
+.data-row.accent-info   { border-left: 3px solid var(--info); }
+.data-row.accent-accent { border-left: 3px solid var(--accent); }
+.data-row.accent-muted  { border-left: 3px solid var(--border2); }
+.td { font-size: 13px; color: var(--text); padding: 11px 14px; border-right: 1px solid var(--border); display: flex; align-items: center; overflow: hidden; }
+.td:last-child { border-right: none; justify-content: center; padding: 0; }
+.td.mono { font-family: var(--mono); font-size: 12px; }
+.td-primary { flex-direction: column; align-items: flex-start; gap: 2px; }
+.td-primary .primary-text { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.td-primary .secondary-text { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.status-pill { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; padding: 3px 8px; white-space: nowrap; border: 1px solid; border-radius: 2px; }
+.pill-ok     { color: var(--ok);     border-color: var(--ok);     background: rgba(79,138,91,.1); }
+.pill-warn   { color: var(--warn);   border-color: var(--warn);   background: rgba(184,134,47,.1); }
+.pill-danger { color: var(--danger); border-color: var(--danger); background: rgba(192,88,79,.1); }
+.pill-info   { color: var(--info);   border-color: var(--info);   background: rgba(74,122,166,.1); }
+.pill-accent { color: var(--accent); border-color: var(--accent); background: var(--accent-dim2); }
+.pill-muted  { color: var(--muted);  border-color: var(--border2); background: transparent; }
+.cat-badge { font-family: var(--mono); font-size: 9px; letter-spacing: .5px; text-transform: uppercase; color: var(--muted); background: var(--surface2); border: 1px solid var(--border2); padding: 2px 7px; white-space: nowrap; border-radius: 2px; }
+.date-text { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.btn-del { background: transparent; border: none; color: var(--muted2); cursor: pointer; font-size: 15px; transition: color .15s; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; min-height: 44px; }
+.btn-del:hover { color: var(--danger); }
+.table-empty { padding: 52px 20px; text-align: center; color: var(--muted); background: var(--surface); }
+.table-empty svg { width: 32px; height: 32px; margin: 0 auto 12px; display: block; opacity: .25; }
+.table-empty p { max-width: 260px; margin: 0 auto; font-size: 13px; line-height: 1.7; }
+
+.pet-item { background: var(--surface); border: 1px solid var(--border); border-bottom: none; padding: 12px 16px; display: flex; align-items: center; gap: 14px; }
+.pet-item:last-of-type { border-bottom: 1px solid var(--border); }
+.pet-item-icon { width: 30px; height: 30px; background: var(--surface2); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 2px; }
+.pet-item-icon svg { width: 15px; height: 15px; color: var(--accent); }
+.pet-item-info { flex: 1; min-width: 0; }
+.pet-item-name { font-weight: 700; font-size: 14px; }
+.pet-item-meta { font-size: 12px; color: var(--muted); margin-top: 1px; }
+.med-count-badge { font-family: var(--mono); font-size: 10px; color: var(--accent); background: var(--accent-dim2); border: 1px solid var(--border2); padding: 2px 8px; letter-spacing: .5px; white-space: nowrap; border-radius: 2px; }
+.pet-item-actions { display: flex; gap: 6px; }
+.med-item { background: var(--surface2); border-left: 3px solid var(--border2); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-left: 22px; padding: 9px 14px; display: flex; align-items: flex-start; gap: 12px; }
+.med-item-info { flex: 1; min-width: 0; }
+.med-item-name { font-weight: 700; font-size: 13px; }
+.med-item-detail { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.med-item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+.memo-wrap { border: 1px solid var(--border); background: var(--surface); margin-bottom: 20px; transition: background .25s, border-color .25s; box-shadow: var(--shadow); }
+.memo-wrap textarea { font-family: var(--sans); font-size: 13px; color: var(--text); background: transparent; border: none; outline: none; width: 100%; padding: 13px 16px; resize: vertical; min-height: 60px; }
+.memo-wrap textarea::placeholder { color: var(--muted2); }
+.notes-print-mirror { display: none; }
+
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-sec { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 9px 18px; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; border-radius: 2px; }
+.btn-sec:hover { border-color: var(--text); color: var(--text); }
+.btn-pri { font-family: var(--sans); font-size: 13px; font-weight: 600; padding: 9px 22px; background: var(--accent); border: 1px solid var(--accent); color: var(--on-accent); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; border-radius: 2px; }
+.btn-pri:hover { background: var(--accent-h); border-color: var(--accent-h); }
+.btn-pri svg { width: 13px; height: 13px; }
+.btn-danger { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 9px 18px; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: all .15s; border-radius: 2px; }
+.btn-danger:hover { border-color: var(--danger); color: var(--danger); }
+.btn-sm { padding: 6px 12px; font-size: 12px; min-height: 30px; }
+
+.empty-state { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 13px; border: 1px solid var(--border); background: var(--surface); margin-bottom: 20px; box-shadow: var(--shadow); }
+.empty-state svg { width: 34px; height: 34px; margin: 0 auto 12px; display: block; opacity: .25; }
+.empty-state h3 { font-size: 14px; color: var(--text); margin-bottom: 5px; }
+.empty-state p { max-width: 240px; margin: 0 auto 16px; line-height: 1.6; }
+
+.demo-banner { background: var(--accent-dim); border: 1px solid var(--border); padding: 10px 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--muted); box-shadow: var(--shadow); }
+.demo-banner strong { color: var(--accent); }
+.demo-banner .btn-dismiss { background: none; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; padding: 4px 12px; font-size: 11px; transition: all .15s; border-radius: 2px; }
+.demo-banner .btn-dismiss:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── CONFIRMATION MODAL ── */
+.confirm-actions { display: flex; gap: 10px; justify-content: flex-end; padding: 16px 18px; background: var(--surface2); border-top: 1px solid var(--border); }
+.confirm-message { padding: 16px 18px; font-size: 14px; line-height: 1.6; color: var(--text); }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 200; display: flex; align-items: flex-end; justify-content: center; }
+.modal-overlay[aria-hidden="true"] { visibility: hidden; }
+.modal-overlay[aria-hidden="false"] { visibility: visible; }
+.modal-overlay[aria-hidden="true"] .modal { transform: translateY(20px); }
+.modal { background: var(--surface); border: 1px solid var(--border); border-bottom: none; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; transition: transform .25s; }
+.modal-overlay[aria-hidden="false"] .modal { transform: translateY(0); }
+@media(min-width:600px){ .modal-overlay { align-items: center; } .modal { border-bottom: 1px solid var(--border); max-height: 85vh; } }
+.modal-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid var(--border); background: var(--surface2); position: sticky; top: 0; z-index: 1; }
+.modal-title { font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+.modal-close { width: 44px; height: 44px; background: none; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: all .15s; border-radius: 2px; }
+.modal-close:hover { border-color: var(--accent); color: var(--accent); }
+.modal-body { padding: 0; }
+.modal-footer { padding: 12px 18px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; background: var(--surface2); }
+
+.toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(16px); background: var(--ok); color: #fff; padding: 10px 22px; font-weight: 700; font-size: 13px; z-index: 300; opacity: 0; transition: all .25s; pointer-events: none; white-space: nowrap; box-shadow: var(--shadow-lg); border-radius: 2px; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.error { background: var(--danger); color: #fff; }
+.toast-undo { pointer-events: auto; cursor: pointer; }
+.toast-undo .toast-undo-link { text-decoration: underline; margin-left: 8px; opacity: .9; }
+
+.view { display: none; }
+.view.active { display: block; }
+
+.print-only { display: none; }
+
+.app-footer { max-width: 1100px; margin: 0 auto; padding: 24px 20px; text-align: center; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+.app-footer .f-tag { font-family: var(--sans); font-size: 13px; color: var(--muted); font-style: italic; margin-bottom: 6px; }
+.app-footer .f-rights { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); margin-top: 8px; }
+.app-footer .f-rights b { color: var(--text); font-weight: 600; }
+.app-footer .f-priv { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted2); margin-top: 6px; }
+.app-footer .f-priv svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+@media print {
+  @page { margin: .4in; size: auto portrait; }
+  :root, [data-theme="dark"] {
+    --bg:#fff; --surface:#fff; --surface2:#f5f3ef;
+    --border:#ddd; --border2:#ccc;
+    --text:#1a1a1a; --muted:#555; --muted2:#888;
+    --accent:#00866a; --accent-dim:#e6f5f0; --accent-dim2:#f2faf7;
+    --accent-h:#00866a; --on-accent:#fff;
+    --danger:#c0584f; --ok:#4f8a5b; --warn:#b8862f; --info:#4a7aa6; --purple:#7a6aa8;
+    --shadow:none; --shadow-lg:none;
+  }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body { background: #fff !important; color: #111 !important; font-size: 11px; }
+  .header { position: static !important; background: #fff !important; border-color: #ccc !important; }
+  .icon-btn, .nav-utils, .nav-tab, .toolbar, .actions, .btn-del, .memo-wrap, .modal-overlay, .demo-banner, .app-footer { display: none !important; }
+  .btn-give, .add-form-wrap, .empty-state .btn-pri, .pet-item-actions, .med-item-actions, .vaccine-actions { display: none !important; }
+  .th:last-child, .td:last-child { display: none !important; }
+  .brand-text { color: #1a1a1a !important; }
+  .stats-row { border-color: #ddd !important; background: #ddd !important; }
+  .stat-card { background: #f5f3ef !important; }
+  .stat-val { color: #1a1a1a !important; }
+  .table-wrap { border-color: #ccc !important; overflow: visible !important; box-shadow: none !important; }
+  .table-head { background: #f5f3ef !important; border-color: #ddd !important; min-width: unset !important; }
+  .th { color: #555 !important; border-color: #ddd !important; font-size: 8px !important; padding: 6px 8px !important; }
+  .data-row { background: #fff !important; border-color: #eee !important; min-width: unset !important; }
+  .td { color: #1a1a1a !important; border-color: #eee !important; padding: 7px 8px !important; font-size: 11px !important; }
+  .status-pill { font-size: 8px !important; }
+  .view { display: none !important; }
+  .view.active { display: block !important; }
+  .pet-group-header { background: #f5f3ef !important; border-color: #ddd !important; }
+  .pet-group-icon { background: #eee !important; border-color: #ddd !important; }
+  .pet-group-icon svg { color: #333 !important; }
+  .med-row { background: #fff !important; border-color: #eee !important; }
+  .med-row.given { background: #f8f8f8 !important; }
+  .upcoming-wrap { border-color: #ccc !important; }
+  .upcoming-row { background: #fff !important; border-color: #eee !important; }
+  .pet-item { background: #fff !important; border-color: #eee !important; }
+  .pet-item-icon { background: #eee !important; border-color: #ddd !important; }
+  .pet-item-icon svg { color: #333 !important; }
+  .med-item { background: #f5f3ef !important; border-color: #eee !important; }
+  .med-count-badge { background: #eee !important; border-color: #ddd !important; color: #333 !important; }
+  .vaccine-row { background: #fff !important; border-color: #eee !important; }
+  .vaccine-row.overdue { border-left: 3px solid #c0584f !important; }
+  .vaccine-row.due-soon { border-left: 3px solid #b8862f !important; }
+  .vaccine-row.current { border-left: 3px solid #4f8a5b !important; }
+  .vaccine-upcoming-wrap { border-color: #ccc !important; }
+  .vaccine-upcoming-row { background: #fff !important; border-color: #eee !important; }
+  .empty-state { background: #fff !important; border-color: #ddd !important; }
+  .section-label { color: #333 !important; }
+  .section-label::after { background: #ddd !important; }
+  .print-only { display: block !important; }
+  .print-footer { text-align: center; font-size: 9px; color: #999; margin-top: 16px; padding-top: 10px; border-top: 1px solid #ddd; }
+  .notes-print-mirror { display: block !important; padding: 8px 12px; border: 1px solid #ddd; background: #fff; font-size: 11px; color: #333; white-space: pre-wrap; margin-bottom: 12px; }
+  .nav-tabs { display: block !important; border-bottom: 1px solid #ddd !important; padding: 8px 24px !important; background: #f5f3ef !important; }
+  .nav-tab.active { display: inline-block !important; color: #00866a !important; border: none !important; }
+  .nav-tab:not(.active) { display: none !important; }
+}
+
+::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--border2); }
+
+@media(max-width:720px) {
+  .header { padding: 12px 14px; }
+  .nav-tabs { padding: 0 14px; flex-wrap: wrap; }
+  .nav-utils { margin-left: 0; width: 100%; justify-content: flex-start; padding: 8px 0; }
+  .main { padding: 16px 14px 80px; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .stats-row.cols3 { grid-template-columns: 1fr 1fr; }
+  .form-grid { grid-template-columns: 1fr !important; }
+  .toolbar { gap: 8px; }
+  .med-row { flex-wrap: wrap; gap: 10px; }
+  .btn-give { width: 100%; justify-content: center; }
+  .btn-pri { flex: 1; justify-content: center; }
+  .app-footer { padding: 16px 14px; }
+  .table-wrap { -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; }
+  .data-row { scroll-snap-align: start; }
+}
+
+.vaccine-row { background: var(--surface); border: 1px solid var(--border); border-top: none; padding: 10px 16px; display: flex; align-items: center; gap: 14px; transition: background .1s; flex-wrap: wrap; }
+.vaccine-row:last-child { border-bottom: 1px solid var(--border); }
+.vaccine-row:hover { background: var(--surface2); }
+.vaccine-row.overdue { border-left: 3px solid var(--danger); }
+.vaccine-row.due-soon { border-left: 3px solid var(--warn); }
+.vaccine-row.current { border-left: 3px solid var(--ok); }
+.vaccine-name { font-weight: 600; font-size: 14px; min-width: 140px; }
+.vaccine-dates { flex: 1; min-width: 0; font-size: 12px; color: var(--muted); }
+.vaccine-dates span { font-family: var(--mono); color: var(--text); }
+.vaccine-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.vaccine-upcoming-wrap { border: 1px solid var(--border); margin-bottom: 24px; overflow: hidden; box-shadow: var(--shadow); }
+.vaccine-upcoming-row { background: var(--surface); padding: 10px 16px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid var(--border); }
+.vaccine-upcoming-row:last-child { border-bottom: none; }
+.vaccine-upcoming-label { font-family: var(--mono); font-size: 11px; font-weight: 700; min-width: 90px; }
+.vaccine-upcoming-label.overdue { color: var(--danger); }
+.vaccine-upcoming-label.due-soon { color: var(--warn); }
+.vaccine-upcoming-label.current { color: var(--ok); }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+<div class="top-bar"></div>
+
+<header class="header" role="banner">
+  <div class="brand">
+    <div class="brand-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="14.5" rx="4.5" ry="3"/><circle cx="6.5" cy="7.5" r="1.8"/><circle cx="10" cy="5.5" r="1.8"/><circle cx="14" cy="5.5" r="1.8"/><circle cx="17.5" cy="7.5" r="1.8"/></svg>
+    </div>
+    <div>
+      <h1 class="brand-text">PetMed <span>Tracker</span></h1>
+      <div class="brand-tag">Never miss a dose</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="icon-btn" onclick="toggleTheme()" title="Toggle dark/light theme" aria-label="Toggle dark/light theme">
+      <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <button class="icon-btn" onclick="showConfirm('Delete ALL data? This cannot be undone.', confirmReset)" title="Reset all data" aria-label="Reset all data">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+    </button>
+  </div>
+</header>
+
+<nav class="nav-tabs" role="navigation" aria-label="Main navigation">
+  <button class="nav-tab active" data-view="today" onclick="switchView('today')" aria-label="Today view" aria-current="page">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="0"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    Today
+    <span class="badge-count" id="todayBadge" style="display:none" aria-label="0 pending doses">0</span>
+  </button>
+  <button class="nav-tab" data-view="vaccines" onclick="switchView('vaccines')" aria-label="Vaccines view">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+    Vaccines
+    <span class="badge-count" id="vaccineBadge" style="display:none" aria-label="0 vaccines need attention">0</span>
+  </button>
+  <button class="nav-tab" data-view="log" onclick="switchView('log')" aria-label="Dose log view">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+    Dose Log
+  </button>
+  <button class="nav-tab" data-view="pets" onclick="switchView('pets')" aria-label="Pets and medications view">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    Pets &amp; Meds
+  </button>
+  <div class="nav-utils" role="toolbar" aria-label="Utility actions">
+    <button class="nav-util-btn" onclick="loadDemo()" title="Load sample data" aria-label="Load demo data">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Demo
+    </button>
+    <button class="nav-util-btn" onclick="exportData()" title="Download backup" aria-label="Download backup of all data">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Backup
+    </button>
+    <button class="nav-util-btn" onclick="document.getElementById('importFileInput').click()" title="Restore from backup" aria-label="Restore data from backup file">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Restore
+    </button>
+    <input type="file" id="importFileInput" accept=".json" onchange="importData(event)" aria-label="Choose backup file to restore">
+    <button class="nav-util-btn" onclick="window.print()" title="Print current view" aria-label="Print current view">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 12H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Print
+    </button>
+    <button class="nav-util-btn danger" onclick="clearCurrentView()" title="Clear current view data" aria-label="Clear current view data">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+      Clear
+    </button>
+  </div>
+</nav>
+
+<main class="main" id="main" tabindex="-1" role="main">
+
+  <div class="demo-banner" id="demoBanner" style="display:none" role="alert">
+    <span><strong>Demo mode</strong> &mdash; sample data loaded so you can explore. Your changes are saved locally.</span>
+    <button class="btn-dismiss" onclick="dismissDemo()" aria-label="Dismiss demo banner">Dismiss</button>
+  </div>
+
+  <section class="view active" id="view-today" aria-label="Today's medication schedule">
+    <div class="stats-row cols3" id="todayStats"></div>
+    <div class="section-label">Upcoming Next</div>
+    <div id="upcomingList"></div>
+    <div class="section-label">Today's Schedule</div>
+    <div id="todaySchedule"></div>
+  </section>
+
+  <section class="view" id="view-vaccines" aria-label="Vaccination records">
+    <div class="stats-row cols3" id="vaccineStats"></div>
+    <div class="section-label">Upcoming Vaccinations</div>
+    <div id="vaccineUpcoming"></div>
+    <div class="section-label">Vaccination Records</div>
+    <div id="vaccineList"></div>
+  </section>
+
+  <section class="view" id="view-log" aria-label="Medication dose log">
+    <div class="stats-row" id="logStats"></div>
+
+    <div class="section-label">Add Dose Entry</div>
+    <div class="add-form-wrap" role="region" aria-label="Add dose entry form">
+      <div class="add-form-header" onclick="toggleForm()" role="button" tabindex="0" aria-expanded="true" aria-controls="formBody" onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); toggleForm(); }">
+        <div class="form-header-left">
+          <span class="form-toggle-icon open" id="formIcon" aria-hidden="true">+</span>
+          <span>New Dose Entry</span>
+        </div>
+        <span style="font-size:11px;color:var(--muted)">Click to toggle</span>
+      </div>
+      <div class="add-form-body open" id="formBody" role="form" aria-label="Dose entry form">
+        <div class="form-grid" id="formGrid" style="grid-template-columns:1.4fr 1.4fr 90px 120px 110px 110px"></div>
+        <div class="form-actions">
+          <button class="btn-sec" onclick="clearLogForm()" aria-label="Clear form fields">Clear</button>
+          <button class="btn-pri" onclick="addLogEntry()" aria-label="Add dose entry">+ Add Entry</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Medication Log</div>
+    <div class="toolbar" role="toolbar" aria-label="Log filters">
+      <div class="filter-tabs" id="filterTabs" role="radiogroup" aria-label="Filter by status"></div>
+      <div class="search-wrap"><input type="text" id="searchBox" placeholder="Search by pet or medication&hellip;" oninput="onSearch(this.value)" aria-label="Search log entries"></div>
+      <select class="sort-select" id="sortSelect" onchange="onSort(this.value)" aria-label="Sort log entries">
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+        <option value="pet">Pet name A&ndash;Z</option>
+      </select>
+    </div>
+    <div class="table-wrap" role="table" aria-label="Dose log entries">
+      <div class="table-head" id="tableHead" style="grid-template-columns:1.6fr 90px 120px 110px 110px 36px" role="row">
+        <div class="th" role="columnheader">Pet &amp; Medication</div>
+        <div class="th" role="columnheader">Dosage</div>
+        <div class="th" role="columnheader">Frequency</div>
+        <div class="th" role="columnheader">Date</div>
+        <div class="th" role="columnheader">Status</div>
+        <div class="th" role="columnheader"></div>
+      </div>
+      <div id="tableBody" role="rowgroup"></div>
+    </div>
+
+    <div class="section-label">Notes</div>
+    <div class="memo-wrap"><textarea id="notesArea" placeholder="Vet contact info, pharmacy reminders, general notes&hellip;" oninput="onNotesChange()" aria-label="Free-text notes"></textarea></div>
+    <div class="notes-print-mirror" id="notesPrintMirror"></div>
+  </section>
+
+  <section class="view" id="view-pets" aria-label="Pets and medications management">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div class="section-label" style="margin-bottom:0;flex:1">Your Pets</div>
+      <button class="btn-pri" onclick="openPetModal()" aria-label="Add a new pet">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Pet
+      </button>
+    </div>
+    <div id="petList" role="list" aria-label="Pet list"></div>
+  </section>
+
+  <div class="print-only print-footer"><span id="printFooterName">Generated by AppName</span></div>
+  <footer class="app-footer" id="appFooter" role="contentinfo"></footer>
+
+</main>
+
+<!-- CONFIRMATION MODAL -->
+<div class="modal-overlay" id="confirmModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title" id="confirmModalTitle">Confirm Action</span>
+      <button class="modal-close" onclick="closeModal('confirmModal')" aria-label="Close dialog">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <div class="confirm-message" id="confirmMessage"></div>
+    </div>
+    <div class="confirm-actions">
+      <button class="btn-sec" id="confirmCancelBtn" onclick="closeModal('confirmModal')">Cancel</button>
+      <button class="btn-danger" id="confirmOkBtn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- PET MODAL -->
+<div class="modal-overlay" id="petModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="petModalTitle">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title" id="petModalTitle">Add Pet</span>
+      <button class="modal-close" onclick="closeModal('petModal')" aria-label="Close dialog">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="petEditId">
+      <div class="form-grid" style="grid-template-columns:1fr">
+        <div class="form-field"><label class="form-label" for="petName">Pet Name *</label><input id="petName" placeholder="e.g. Buddy" autocomplete="off" required></div>
+      </div>
+      <div class="form-grid" style="grid-template-columns:1fr 1fr;margin-top:1px">
+        <div class="form-field"><label class="form-label" for="petSpecies">Species</label>
+          <select id="petSpecies"><option>Dog</option><option>Cat</option><option>Bird</option><option>Fish</option><option>Rabbit</option><option>Other</option></select></div>
+        <div class="form-field"><label class="form-label" for="petBreed">Breed / Notes</label><input id="petBreed" placeholder="Optional" autocomplete="off"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-sec" onclick="closeModal('petModal')">Cancel</button>
+      <button class="btn-pri" onclick="savePet()">Save Pet</button>
+    </div>
+  </div>
+</div>
+
+<!-- MED MODAL -->
+<div class="modal-overlay" id="medModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="medModalTitle">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title" id="medModalTitle">Add Medication</span>
+      <button class="modal-close" onclick="closeModal('medModal')" aria-label="Close dialog">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="medEditId">
+      <input type="hidden" id="medPetId">
+      <div class="form-grid" style="grid-template-columns:1fr">
+        <div class="form-field"><label class="form-label" for="medName">Medication Name *</label><input id="medName" placeholder="e.g. Apoquel" autocomplete="off" required></div>
+      </div>
+      <div class="form-grid" style="grid-template-columns:1fr 1fr;margin-top:1px">
+        <div class="form-field"><label class="form-label" for="medDosage">Dosage *</label><input id="medDosage" placeholder="e.g. 16mg" autocomplete="off" required></div>
+        <div class="form-field"><label class="form-label" for="medFrequency">Frequency</label>
+          <select id="medFrequency"><option>Once daily</option><option>Twice daily</option><option>Three times daily</option><option>Every other day</option><option>Weekly</option><option>As needed</option></select></div>
+      </div>
+      <div class="form-grid" style="grid-template-columns:1fr 1fr;margin-top:1px">
+        <div class="form-field"><label class="form-label" for="medTime">Time 1 *</label><input type="time" id="medTime" value="08:00" required></div>
+        <div class="form-field"><label class="form-label" for="medTime2">Time 2 (optional)</label><input type="time" id="medTime2"><div style="font-size:11px;color:var(--muted);margin-top:4px;">Leave blank and doses auto-space (e.g. Twice daily fills +12h).</div></div>
+      </div>
+      <div class="form-grid" style="grid-template-columns:1fr 1fr;margin-top:1px">
+        <div class="form-field"><label class="form-label" for="medStart">Start Date</label><input type="date" id="medStart"></div>
+        <div class="form-field"><label class="form-label" for="medEnd">End Date</label><input type="date" id="medEnd"></div>
+      </div>
+      <div class="form-grid" style="grid-template-columns:1fr;margin-top:1px">
+        <div class="form-field"><label class="form-label" for="medNotes">Notes (optional)</label><textarea id="medNotes" placeholder="e.g. Give with food&hellip;"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-sec" onclick="closeModal('medModal')">Cancel</button>
+      <button class="btn-pri" onclick="saveMed()">Save Medication</button>
+    </div>
+  </div>
+</div>
+
+<!-- VACCINE MODAL -->
+<div class="modal-overlay" id="vaccineModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="vaccineModalTitle">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title" id="vaccineModalTitle">Add Vaccination</span>
+      <button class="modal-close" onclick="closeModal('vaccineModal')" aria-label="Close dialog">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="vaccineEditId">
+      <input type="hidden" id="vaccinePetId">
+      <div class="form-grid" style="grid-template-columns:1fr">
+        <div class="form-field"><label class="form-label" for="vaccineNameInput">Vaccine Name *</label><input id="vaccineNameInput" placeholder="e.g. Rabies" autocomplete="off" required></div>
+      </div>
+      <div class="form-grid" style="grid-template-columns:1fr 1fr;margin-top:1px">
+        <div class="form-field"><label class="form-label" for="vaccineDateGiven">Date Given *</label><input type="date" id="vaccineDateGiven" required></div>
+        <div class="form-field"><label class="form-label" for="vaccineDateDue">Next Due Date</label><input type="date" id="vaccineDateDue"><div style="font-size:11px;color:var(--muted);margin-top:4px;">Leave blank if not applicable.</div></div>
+      </div>
+      <div class="form-grid" style="grid-template-columns:1fr;margin-top:1px">
+        <div class="form-field"><label class="form-label" for="vaccineVet">Veterinarian / Clinic (optional)</label><input id="vaccineVet" placeholder="e.g. Dr. Smith, Downtown Vet" autocomplete="off"></div>
+      </div>
+      <div class="form-grid" style="grid-template-columns:1fr;margin-top:1px">
+        <div class="form-field"><label class="form-label" for="vaccineNotesInput">Notes (optional)</label><textarea id="vaccineNotesInput" placeholder="e.g. Batch number, reaction observed&hellip;"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-sec" onclick="closeModal('vaccineModal')">Cancel</button>
+      <button class="btn-pri" onclick="saveVaccine()">Save Vaccination</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+'use strict';
+var STORAGE_KEY = 'petmed_v2';
+var THEME_KEY   = 'petmed_theme';
+var SCHEMA_VERSION = 2;
+var state = { pets:[], meds:[], log:[], vaccines:[], todayGiven:{}, notes:'', _schema: SCHEMA_VERSION };
+var logFilter = 'All', logSearch = '', logSort = 'newest';
+var isDemo = false;
+var _confirmCallback = null;
+var _undoActions = {};
+
+var COL_TEMPLATE = '1.6fr 90px 120px 110px 110px 36px';
+
+/* ── CONFIRMATION DIALOG (replaces all confirm() calls) ── */
+function showConfirm(message, callback) {
+  _confirmCallback = callback;
+  el('confirmMessage').textContent = message;
+  openModal('confirmModal');
+  setTimeout(function(){ el('confirmOkBtn').focus(); }, 150);
+}
+el('confirmOkBtn').addEventListener('click', function(){
+  closeModal('confirmModal');
+  if(_confirmCallback) { _confirmCallback(); _confirmCallback = null; }
+});
+el('confirmCancelBtn').addEventListener('click', function(){
+  _confirmCallback = null;
+  closeModal('confirmModal');
+});
+
+/* ── UNDO TOAST for destructive actions ── */
+function toastWithUndo(msg, undoFn) {
+  var id = uid();
+  _undoActions[id] = undoFn;
+  var t = el('toast');
+  t.innerHTML = msg + ' <span class="toast-undo-link" onclick="executeUndo(\''+id+'\')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();executeUndo(\''+id+'\')}">Undo</span>';
+  t.className = 'toast show toast-undo';
+  clearTimeout(t._tid);
+  t._tid = setTimeout(function(){ t.classList.remove('show'); delete _undoActions[id]; }, 5000);
+}
+function executeUndo(id) {
+  if(_undoActions[id]) { _undoActions[id](); delete _undoActions[id]; }
+  el('toast').classList.remove('show');
+}
+
+/* ── DATA ── */
+function save(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){ toast('Storage full. Please export your data.',true); } }
+function load(){
+  try{
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    var d=JSON.parse(raw);
+    if(d){
+      if(!d._schema || d._schema < SCHEMA_VERSION){
+        d = migrateData(d);
+      }
+      state=d;
+      if(!state.todayGiven) state.todayGiven={};
+      if(!state.log) state.log=[];
+      if(!state.notes) state.notes='';
+      if(!state.vaccines) state.vaccines=[];
+      if(!state._schema) state._schema = SCHEMA_VERSION;
+    }
+  }catch(e){
+    state={pets:[],meds:[],log:[],vaccines:[],todayGiven:{_date:todayStr()},notes:'',_schema:SCHEMA_VERSION};
+    save();
+    toast('Previous data was corrupted and has been reset.', true);
+  }
+  cleanTodayGiven();
+}
+
+function migrateData(old){
+  if(!old.vaccines) old.vaccines = [];
+  if(!old.notes) old.notes = '';
+  if(!old.todayGiven) old.todayGiven = {};
+  old._schema = SCHEMA_VERSION;
+  return old;
+}
+
+function exportData(){
+  var blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'petmed-backup-'+todayStr()+'.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('Backup downloaded');
+}
+
+function importData(event){
+  var file = event.target.files[0];
+  if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      var imported = JSON.parse(e.target.result);
+      if(!imported.pets && !imported.meds && !imported.log){
+        toast('Invalid backup file.', true);
+        return;
+      }
+      showConfirm('This will replace ALL current data with the backup. Continue?', function(){
+        if(!imported._schema || imported._schema < SCHEMA_VERSION){
+          imported = migrateData(imported);
+        }
+        state = imported;
+        if(!state.todayGiven) state.todayGiven={};
+        if(!state.log) state.log=[];
+        if(!state.notes) state.notes='';
+        if(!state.vaccines) state.vaccines=[];
+        cleanTodayGiven();
+        save();
+        renderAll();
+        toast('Data restored successfully');
+      });
+    }catch(err){
+      toast('Failed to parse backup file.', true);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function el(id){ return document.getElementById(id); }
+
+function escapeHtml(s){
+  if(typeof s!=='string') return '';
+  var map={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+  return s.replace(/[&<>"']/g,function(c){return map[c];});
+}
+
+function localDayStr(offsetDays){
+  var d=new Date();
+  if(offsetDays) d.setDate(d.getDate()+offsetDays);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function todayStr(){ return localDayStr(0); }
+function cleanTodayGiven(){ if(state.todayGiven._date!==todayStr()){ state.todayGiven={_date:todayStr()}; save(); } }
+
+function fmtTime(t){
+  if(!t) return '';
+  var p=t.split(':'),h=parseInt(p[0]),m=p[1],ap=h>=12?'PM':'AM';
+  h=h%12||12; return h+':'+m+' '+ap;
+}
+function fmtDate(iso){
+  if(!iso) return '\u2014';
+  var p=iso.split('-'); return p.length < 3 ? iso : p[1]+'/'+p[2]+'/'+p[0];
+}
+function fmtDateTime(ts){
+  var d=new Date(ts);
+  return (d.getMonth()+1)+'/'+(d.getDate())+' '+fmtTime(d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0'));
+}
+
+/* ── THEME ── */
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem(THEME_KEY,t);
+  el('iconMoon').style.display = t==='dark'  ? 'block':'none';
+  el('iconSun').style.display  = t==='light' ? 'block':'none';
+  var mc=document.querySelector('meta[name="theme-color"]');
+  if(mc) mc.setAttribute('content', t==='dark' ? '#1a1815' : '#f4f2ec');
+}
+function toggleTheme(){ setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); }
+
+/* ── NAV ── */
+function switchView(name){
+  document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active');});
+  document.querySelectorAll('.nav-tab').forEach(function(t){
+    t.classList.remove('active');
+    t.removeAttribute('aria-current');
+  });
+  el('view-'+name).classList.add('active');
+  var activeTab = document.querySelector('[data-view="'+name+'"]');
+  activeTab.classList.add('active');
+  activeTab.setAttribute('aria-current', 'page');
+  if(name==='today') renderToday();
+  else if(name==='vaccines') renderVaccines();
+  else if(name==='log'){ renderLogStats(); renderTable(); el('notesArea').value=state.notes||''; el('notesPrintMirror').textContent=state.notes||''; }
+  else if(name==='pets') renderPets();
+}
+
+/* ── MODALS with focus trapping ── */
+function openModal(id){
+  var overlay = el(id);
+  overlay.setAttribute('aria-hidden', 'false');
+  overlay._prevFocus = document.activeElement;
+  var focusable = overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if(focusable.length > 0) {
+    overlay._firstFocus = focusable[0];
+    overlay._lastFocus = focusable[focusable.length-1];
+  }
+  overlay.addEventListener('keydown', trapFocus);
+}
+
+function closeModal(id){
+  var overlay = el(id);
+  overlay.setAttribute('aria-hidden', 'true');
+  overlay.removeEventListener('keydown', trapFocus);
+  if(overlay._prevFocus && typeof overlay._prevFocus.focus === 'function'){
+    overlay._prevFocus.focus();
+  }
+}
+
+function trapFocus(e){
+  if(e.key !== 'Tab') return;
+  var overlay = e.currentTarget;
+  if(!overlay._firstFocus || !overlay._lastFocus) return;
+  if(e.shiftKey){
+    if(document.activeElement === overlay._firstFocus){
+      e.preventDefault();
+      overlay._lastFocus.focus();
+    }
+  } else {
+    if(document.activeElement === overlay._lastFocus){
+      e.preventDefault();
+      overlay._firstFocus.focus();
+    }
+  }
+}
+
+function toast(msg,isError){
+  var t=el('toast'); t.textContent=msg;
+  t.className='toast show'+(isError?' error':'');
+  clearTimeout(t._tid); t._tid=setTimeout(function(){t.classList.remove('show');},2400);
+}
+
+/* ── CLEAR CURRENT VIEW ── */
+function clearCurrentView(){
+  var active=document.querySelector('.nav-tab.active');
+  var view=active?active.getAttribute('data-view'):'today';
+  
+  if(view==='today'){
+    showConfirm('Clear all today\'s given doses?', function(){
+      state.todayGiven={_date:todayStr()};
+      save(); renderToday(); toast('Today\'s doses cleared');
+    });
+  }
+  else if(view==='vaccines'){
+    if(!state.vaccines.length) return;
+    var vaxBackup = state.vaccines.slice();
+    showConfirm('Delete all '+state.vaccines.length+' vaccination records?', function(){
+      state.vaccines=[];
+      save(); renderVaccines();
+      toastWithUndo('All vaccination records cleared.', function(){
+        state.vaccines = vaxBackup;
+        save(); renderVaccines();
+        toast('Vaccination records restored.');
+      });
+    });
+  }
+  else if(view==='log'){
+    if(!state.log.length) return;
+    var logBackup = state.log.slice();
+    showConfirm('Delete all '+state.log.length+' log entries?', function(){
+      state.log=[];
+      save(); renderLogStats(); renderTable();
+      toastWithUndo('Log cleared.', function(){
+        state.log = logBackup;
+        save(); renderLogStats(); renderTable();
+        toast('Log entries restored.');
+      });
+    });
+  }
+  else if(view==='pets'){
+    if(!state.pets.length) return;
+    var petsBackup = state.pets.slice();
+    var medsBackup = state.meds.slice();
+    showConfirm('Delete ALL '+state.pets.length+' pets and their medications?', function(){
+      state.pets=[]; state.meds=[];
+      save(); renderPets();
+      toastWithUndo('All pets deleted.', function(){
+        state.pets = petsBackup;
+        state.meds = medsBackup;
+        save(); renderPets();
+        toast('Pets restored.');
+      });
+    });
+  }
+}
+
+/* ── ACTIVE MED CHECK ── */
+function isMedActiveToday(med){
+  if(med.frequency==='As needed') return false;
+  var today=todayStr();
+  if(med.startDate && today < med.startDate) return false;
+  if(med.endDate && today > med.endDate) return false;
+  if(med.frequency==='Every other day' && med.startDate){
+    var diff=Math.round((new Date(today+'T00:00:00')-new Date(med.startDate+'T00:00:00'))/86400000);
+    if(diff%2!==0) return false;
+  }
+  if(med.frequency==='Weekly' && med.startDate){
+    var d=Math.round((new Date(today+'T00:00:00')-new Date(med.startDate+'T00:00:00'))/86400000);
+    if(d%7!==0) return false;
+  }
+  return true;
+}
+function getSlots(med){
+  var s=[]; if(med.time) s.push(med.time);
+  if(med.time2) s.push(med.time2);
+  if(med.frequency==='Twice daily' && s.length===1){
+    var p=med.time.split(':'), h=(parseInt(p[0])+12)%24;
+    s.push(h.toString().padStart(2,'0')+':'+p[1]);
+  }
+  if(med.frequency==='Three times daily'){ if(s.length===1){s.push('14:00');s.push('20:00');} else if(s.length===2) s.push('20:00'); }
+  return s;
+}
+function givenKey(medId,slot){ return medId+'_'+slot; }
+
+/* ── TODAY ── */
+function buildDoses(){
+  cleanTodayGiven();
+  var now=new Date(), nowMins=now.getHours()*60+now.getMinutes();
+  var doses=[];
+  state.meds.forEach(function(med){
+    if(!isMedActiveToday(med)) return;
+    var pet=state.pets.find(function(p){return p.id===med.petId;}); if(!pet) return;
+    getSlots(med).forEach(function(slot){
+      var sm=parseInt(slot.split(':')[0])*60+parseInt(slot.split(':')[1]);
+      var key=givenKey(med.id,slot);
+      doses.push({med:med,pet:pet,time:slot,slotMins:sm,given:!!state.todayGiven[key],overdue:!state.todayGiven[key] && sm < nowMins});
+    });
+  });
+  doses.sort(function(a,b){return a.slotMins-b.slotMins;});
+  return doses;
+}
+
+function renderToday(){
+  var doses=buildDoses();
+  var total=doses.length, given=doses.filter(function(d){return d.given;}).length, overdue=doses.filter(function(d){return d.overdue;}).length;
+  el('todayStats').innerHTML=
+    '<div class="stat-card"><div class="stat-label">Today\'s Doses</div><div class="stat-val accent">'+total+'</div><div class="stat-sub">scheduled</div></div>'+
+    '<div class="stat-card"><div class="stat-label">Given</div><div class="stat-val ok">'+given+'</div><div class="stat-sub">completed</div></div>'+
+    '<div class="stat-card"><div class="stat-label">Overdue</div><div class="stat-val'+(overdue>0?' warn':'')+'">'+overdue+'</div><div class="stat-sub">needs attention</div></div>';
+  var pending=total-given, badge=el('todayBadge');
+  if(pending>0){badge.textContent=pending;badge.style.display='inline';badge.setAttribute('aria-label', pending+' pending doses');}else{badge.style.display='none';}
+
+  var now=new Date(), nowMins=now.getHours()*60+now.getMinutes();
+  var upcoming=doses.filter(function(d){return !d.given && d.slotMins >= nowMins;}).slice(0,4);
+  if(upcoming.length>0){
+    el('upcomingList').innerHTML='<div class="upcoming-wrap">'+upcoming.map(function(d){
+      var mins=d.slotMins-nowMins;
+      var label=mins < 60 ? 'in '+mins+'m' : 'in '+Math.floor(mins/60)+'h'+(mins%60>0?' '+(mins%60)+'m':'');
+      return '<div class="upcoming-row"><div class="upcoming-in">'+label+'</div><div><div class="upcoming-med">'+escapeHtml(d.med.name)+' &mdash; '+escapeHtml(d.med.dosage)+'</div><div class="upcoming-sub">'+escapeHtml(d.pet.name)+' &middot; '+fmtTime(d.time)+'</div></div></div>';
+    }).join('')+'</div>';
+  } else {
+    if(doses.length>0){
+      if(overdue>0) el('upcomingList').innerHTML='<p style="font-size:13px;color:var(--warn);padding:0 0 16px;">'+overdue+' overdue dose'+(overdue!==1?'s':'')+' need'+(overdue===1?'s':'')+' attention.</p>';
+      else if(given===total) el('upcomingList').innerHTML='<p style="font-size:13px;color:var(--ok);padding:0 0 16px;">All doses completed for today.</p>';
+      else el('upcomingList').innerHTML='<p style="font-size:13px;color:var(--ok);padding:0 0 16px;">No more upcoming doses today.</p>';
+    } else { el('upcomingList').innerHTML=''; }
+  }
+
+  if(doses.length===0){
+    el('todaySchedule').innerHTML=state.pets.length===0
+      ?'<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><h3>No pets added yet</h3><p>Go to Pets &amp; Meds to add your first pet and their medications.</p><button class="btn-pri" onclick="switchView(\'pets\')" aria-label="Go to pets view">Add a Pet</button></div>'
+      :'<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><h3>No medications scheduled today</h3><p>Add medications under Pets &amp; Meds to see today\'s schedule.</p></div>';
+    return;
+  }
+  var grouped={};
+  doses.forEach(function(d){ if(!grouped[d.pet.id]) grouped[d.pet.id]={pet:d.pet,doses:[]}; grouped[d.pet.id].doses.push(d); });
+  var html='';
+  Object.keys(grouped).forEach(function(pid){
+    var g=grouped[pid];
+    html+='<div class="pet-group"><div class="pet-group-header"><div class="pet-group-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div><div class="pet-group-name">'+escapeHtml(g.pet.name)+'</div><div class="pet-group-meta">'+escapeHtml(g.pet.species)+(g.pet.breed?' &middot; '+escapeHtml(g.pet.breed):'')+' &middot; '+g.doses.length+' dose'+(g.doses.length!==1?'s':'')+' today</div></div></div>';
+    g.doses.forEach(function(d){
+      var cls='med-row'+(d.given?' given':'')+(d.overdue?' overdue':'');
+      html+='<div class="'+cls+'"><div class="med-time-col">'+fmtTime(d.time)+'</div><div class="med-info"><div class="med-name">'+escapeHtml(d.med.name)+'</div><div class="med-detail">'+escapeHtml(d.med.dosage)+' &middot; '+escapeHtml(d.med.frequency)+'</div>'+(d.med.notes?'<div class="med-note-tag">'+escapeHtml(d.med.notes)+'</div>':'')+'</div>';
+      if(d.given){ html+='<button class="btn-give undo" onclick="undoGiven(\''+d.med.id+'\',\''+d.time+'\')" aria-label="Undo given dose of '+escapeHtml(d.med.name)+' for '+escapeHtml(d.pet.name)+'">&#10003; Undo</button>'; }
+      else { html+='<button class="btn-give mark" onclick="markGiven(\''+d.med.id+'\',\''+d.time+'\',\''+d.pet.id+'\')" aria-label="Mark '+escapeHtml(d.med.name)+' as given for '+escapeHtml(d.pet.name)+'">Mark as Given</button>'; }
+      html+='</div>';
+    });
+    html+='</div>';
+  });
+  el('todaySchedule').innerHTML=html;
+}
+
+function markGiven(medId,slot,petId){
+  var med=state.meds.find(function(m){return m.id===medId;}), pet=state.pets.find(function(p){return p.id===petId;}); if(!med||!pet) return;
+  var key=givenKey(medId,slot), ts=Date.now();
+  state.todayGiven[key]=ts;
+  state.log.unshift({id:uid(),petId:petId,petName:pet.name,petSpecies:pet.species,medId:medId,medName:med.name,dosage:med.dosage,frequency:med.frequency,date:todayStr(),givenAt:ts,status:'Given',notes:med.notes||''});
+  save(); renderToday(); toast(med.name+' marked as given for '+pet.name);
+}
+function undoGiven(medId,slot){
+  var key=givenKey(medId,slot), ts=state.todayGiven[key];
+  delete state.todayGiven[key];
+  state.log=state.log.filter(function(e){return !(e.medId===medId&&e.givenAt===ts);});
+  save(); renderToday();
+}
+
+/* ── LOG FORM ── */
+function buildLogForm(){
+  var fields=[
+    {id:'lf_pet',   label:'Pet Name',   type:'text',   ph:'e.g. Buddy'},
+    {id:'lf_med',   label:'Medication', type:'text',   ph:'e.g. Apoquel'},
+    {id:'lf_dose',  label:'Dosage',     type:'text',   ph:'e.g. 16mg'},
+    {id:'lf_freq',  label:'Frequency',  type:'select', opts:['Once daily','Twice daily','Three times daily','Every other day','Weekly','As needed']},
+    {id:'lf_date',  label:'Date',       type:'date'},
+    {id:'lf_status',label:'Status',     type:'select', opts:['Given','Upcoming','Overdue','Skipped']}
+  ];
+  el('formGrid').innerHTML=fields.map(function(f){
+    var inp='';
+    if(f.type==='select') inp='<select id="'+f.id+'" aria-label="'+f.label+'">'+(f.opts||[]).map(function(o){return '<option>'+o+'</option>';}).join('')+'</select>';
+    else if(f.type==='date') inp='<input type="date" id="'+f.id+'" value="'+todayStr()+'" aria-label="'+f.label+'">';
+    else inp='<input id="'+f.id+'" placeholder="'+f.ph+'" autocomplete="off" aria-label="'+f.label+'">';
+    return '<div class="form-field"><label class="form-label" for="'+f.id+'">'+f.label+'</label>'+inp+'</div>';
+  }).join('');
+}
+function clearLogForm(){
+  el('lf_pet').value=''; el('lf_med').value=''; el('lf_dose').value='';
+  el('lf_freq').value='Once daily'; el('lf_date').value=todayStr(); el('lf_status').value='Given';
+}
+function addLogEntry(){
+  var pet=el('lf_pet').value.trim(), med=el('lf_med').value.trim();
+  if(!pet||!med){ toast('Pet name and medication are required',true); return; }
+  state.log.unshift({id:uid(),petId:'',petName:pet,petSpecies:'',medId:'',medName:med,dosage:el('lf_dose').value.trim(),frequency:el('lf_freq').value,date:el('lf_date').value,givenAt:Date.now(),status:el('lf_status').value,notes:''});
+  clearLogForm(); save(); renderLogStats(); renderTable(); toast('Entry added');
+}
+function toggleForm(){
+  var b=el('formBody'), i=el('formIcon'), header=document.querySelector('.add-form-header');
+  var open=b.classList.toggle('open');
+  i.classList.toggle('open',open); i.textContent=open?'+':'\u203A';
+  header.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+/* ── LOG TABLE ── */
+var STATUS_COLOR={'Given':'ok','Upcoming':'info','Overdue':'danger','Skipped':'warn'};
+var FILTER_LABELS=['All','Given','Upcoming','Overdue','Skipped'];
+
+function buildFilterTabs(){
+  el('filterTabs').innerHTML=FILTER_LABELS.map(function(f){
+    return '<button class="filter-tab'+(f==='All'?' active':'')+'" onclick="setFilter(\''+f+'\')" role="radio" aria-checked="'+(f==='All'?'true':'false')+'" aria-label="Filter by '+f+'">'+f+'</button>';
+  }).join('');
+}
+function setFilter(f){
+  logFilter=f;
+  document.querySelectorAll('.filter-tab').forEach(function(t){
+    t.classList.toggle('active',t.textContent===f);
+    t.setAttribute('aria-checked', t.textContent===f ? 'true' : 'false');
+  });
+  renderTable();
+}
+function onSearch(v){ logSearch=v; renderTable(); }
+function onSort(v){ logSort=v; renderTable(); }
+
+function renderLogStats(){
+  var today=todayStr(), weekAgo=localDayStr(-7);
+  var total=state.log.length;
+  var todayCount=state.log.filter(function(e){return e.date===today;}).length;
+  var weekCount=state.log.filter(function(e){return e.date>=weekAgo;}).length;
+  var last=state.log.length?fmtDateTime(state.log[0].givenAt):'\u2014';
+  el('logStats').innerHTML=
+    '<div class="stat-card"><div class="stat-label">Total Entries</div><div class="stat-val accent">'+total+'</div><div class="stat-sub">all time</div></div>'+
+    '<div class="stat-card"><div class="stat-label">Today</div><div class="stat-val ok">'+todayCount+'</div><div class="stat-sub">doses logged</div></div>'+
+    '<div class="stat-card"><div class="stat-label">This Week</div><div class="stat-val">'+weekCount+'</div><div class="stat-sub">last 7 days</div></div>'+
+    '<div class="stat-card"><div class="stat-label">Last Entry</div><div class="stat-val" style="font-size:14px;margin-top:2px;">'+last+'</div></div>';
+}
+
+function renderTable(){
+  var filtered=state.log.filter(function(e){
+    if(logFilter!=='All'&&e.status!==logFilter) return false;
+    if(logSearch){ var q=logSearch.toLowerCase(); if(e.petName.toLowerCase().indexOf(q)<0&&e.medName.toLowerCase().indexOf(q)<0) return false; }
+    return true;
+  });
+  filtered.sort(function(a,b){
+    if(logSort==='oldest') return a.givenAt-b.givenAt;
+    if(logSort==='pet') return a.petName.localeCompare(b.petName);
+    return b.givenAt-a.givenAt;
+  });
+  var body=el('tableBody');
+  if(!filtered.length){
+    body.innerHTML='<div class="table-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><p>'+(state.log.length?'No entries match your filter.':'No dose entries yet. Mark doses on the Today tab or add them manually above.')+'</p></div>';
+    return;
+  }
+  body.innerHTML='';
+  filtered.forEach(function(entry){
+    var color=STATUS_COLOR[entry.status]||'muted';
+    var row=document.createElement('div');
+    row.className='data-row accent-'+color;
+    row.style.gridTemplateColumns=COL_TEMPLATE;
+    row.setAttribute('role','row');
+
+    var t0=document.createElement('div'); t0.className='td td-primary'; t0.setAttribute('role','cell');
+    t0.innerHTML='<span class="primary-text">'+escapeHtml(entry.petName)+(entry.petSpecies?' <span style="font-weight:400;color:var(--muted);font-size:11px;">&middot; '+escapeHtml(entry.petSpecies)+'</span>':'')+'</span><span class="secondary-text">'+escapeHtml(entry.medName)+'</span>';
+    row.appendChild(t0);
+    var t2=document.createElement('div'); t2.className='td mono'; t2.setAttribute('role','cell'); t2.textContent=entry.dosage||'\u2014'; row.appendChild(t2);
+    var t3=document.createElement('div'); t3.className='td'; t3.setAttribute('role','cell'); t3.innerHTML='<span class="cat-badge">'+escapeHtml(entry.frequency||'')+'</span>'; row.appendChild(t3);
+    var t4=document.createElement('div'); t4.className='td'; t4.setAttribute('role','cell'); t4.innerHTML='<span class="date-text">'+fmtDate(entry.date)+'</span>'; row.appendChild(t4);
+    var t5=document.createElement('div'); t5.className='td'; t5.setAttribute('role','cell'); t5.innerHTML='<span class="status-pill pill-'+color+'">'+escapeHtml(entry.status)+'</span>'; row.appendChild(t5);
+    var t6=document.createElement('div'); t6.className='td'; t6.setAttribute('role','cell');
+    var btn=document.createElement('button'); btn.className='btn-del'; btn.innerHTML='&#10005;'; btn.title='Delete entry'; btn.setAttribute('aria-label','Delete dose entry for '+entry.petName+' - '+entry.medName);
+    btn.onclick=function(){ state.log=state.log.filter(function(e){return e.id!==entry.id;}); save(); renderLogStats(); renderTable(); };
+    t6.appendChild(btn); row.appendChild(t6);
+    body.appendChild(row);
+  });
+}
+
+function onNotesChange(){
+  clearTimeout(window._nt);
+  window._nt=setTimeout(function(){
+    state.notes=el('notesArea').value; save();
+    el('notesPrintMirror').textContent = state.notes||'';
+  },600);
+}
+
+/* ── PET CRUD ── */
+function openPetModal(petId){
+  el('petEditId').value=petId||'';
+  if(petId){ var p=state.pets.find(function(x){return x.id===petId;}); if(!p) return; el('petModalTitle').textContent='Edit Pet'; el('petName').value=p.name; el('petSpecies').value=p.species; el('petBreed').value=p.breed||''; }
+  else { el('petModalTitle').textContent='Add Pet'; el('petName').value=''; el('petSpecies').value='Dog'; el('petBreed').value=''; }
+  openModal('petModal'); setTimeout(function(){el('petName').focus();},200);
+}
+function savePet(){
+  var name=el('petName').value.trim(); if(!name){ toast('Name required',true); return; }
+  var eid=el('petEditId').value;
+  if(eid){ var p=state.pets.find(function(x){return x.id===eid;}); if(p){p.name=name;p.species=el('petSpecies').value;p.breed=el('petBreed').value.trim(); syncPetNameToLog(p.id, name, p.species);} }
+  else state.pets.push({id:uid(),name:name,species:el('petSpecies').value,breed:el('petBreed').value.trim()});
+  save(); closeModal('petModal'); renderPets(); toast(eid?'Pet updated':'Pet added');
+}
+function deletePet(id){
+  var pet = state.pets.find(function(p){return p.id===id;});
+  if(!pet) return;
+  var petName = pet.name;
+  var petData = Object.assign({}, pet);
+  var medsData = state.meds.filter(function(m){return m.petId===id;}).map(function(m){return Object.assign({}, m);});
+  showConfirm('Delete '+petName+' and all their '+medsData.length+' medication(s)?', function(){
+    state.pets=state.pets.filter(function(p){return p.id!==id;});
+    state.meds=state.meds.filter(function(m){return m.petId!==id;});
+    save(); renderPets();
+    toastWithUndo(petName+' deleted.', function(){
+      state.pets.push(petData);
+      medsData.forEach(function(m){ state.meds.push(m); });
+      save(); renderPets();
+      toast(petName+' restored.');
+    });
+  });
+}
+function syncPetNameToLog(petId, newName, newSpecies){
+  state.log.forEach(function(entry){
+    if(entry.petId===petId){ entry.petName=newName; entry.petSpecies=newSpecies; }
+  });
+}
+
+/* ── MED CRUD ── */
+function openMedModal(petId,medId){
+  el('medEditId').value=medId||''; el('medPetId').value=petId;
+  el('medStart').value=todayStr(); el('medEnd').value='';
+  if(medId){ var m=state.meds.find(function(x){return x.id===medId;}); if(!m) return; el('medModalTitle').textContent='Edit Medication'; el('medName').value=m.name; el('medDosage').value=m.dosage; el('medFrequency').value=m.frequency; el('medTime').value=m.time||'08:00'; el('medTime2').value=m.time2||''; el('medStart').value=m.startDate||''; el('medEnd').value=m.endDate||''; el('medNotes').value=m.notes||''; }
+  else { el('medModalTitle').textContent='Add Medication'; el('medName').value=''; el('medDosage').value=''; el('medFrequency').value='Once daily'; el('medTime').value='08:00'; el('medTime2').value=''; el('medNotes').value=''; }
+  openModal('medModal'); setTimeout(function(){el('medName').focus();},200);
+}
+function saveMed(){
+  var name=el('medName').value.trim(), dosage=el('medDosage').value.trim(), time=el('medTime').value;
+  if(!name||!dosage||!time){ toast('Name, dosage and time are required',true); return; }
+  var start=el('medStart').value, end=el('medEnd').value;
+  if(start && end && start > end){ toast('Start date cannot be after end date',true); return; }
+  var obj={name:name,dosage:dosage,frequency:el('medFrequency').value,time:time,time2:el('medTime2').value||'',startDate:start,endDate:end,notes:el('medNotes').value.trim(),petId:el('medPetId').value};
+  var eid=el('medEditId').value;
+  if(eid){ var m=state.meds.find(function(x){return x.id===eid;}); if(m) Object.assign(m,obj); }
+  else { obj.id=uid(); state.meds.push(obj); }
+  save(); closeModal('medModal'); renderPets(); toast(eid?'Medication updated':'Medication added');
+}
+function deleteMed(id){
+  var med = state.meds.find(function(m){return m.id===id;});
+  if(!med) return;
+  var medData = Object.assign({}, med);
+  showConfirm('Delete '+med.name+'?', function(){
+    state.meds=state.meds.filter(function(m){return m.id!==id;});
+    save(); renderPets();
+    toastWithUndo(medData.name+' deleted.', function(){
+      state.meds.push(medData);
+      save(); renderPets();
+      toast(medData.name+' restored.');
+    });
+  });
+}
+
+function renderPets(){
+  if(state.pets.length===0){ el('petList').innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><h3>No pets yet</h3><p>Tap "Add Pet" above to get started.</p></div>'; return; }
+  var html='';
+  state.pets.forEach(function(pet){
+    var meds=state.meds.filter(function(m){return m.petId===pet.id;});
+    html+='<div class="pet-item" role="listitem"><div class="pet-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div class="pet-item-info"><div class="pet-item-name">'+escapeHtml(pet.name)+'</div><div class="pet-item-meta">'+escapeHtml(pet.species)+(pet.breed?' &middot; '+escapeHtml(pet.breed):'')+' </div></div><span class="med-count-badge" aria-label="'+meds.length+' medication'+(meds.length!==1?'s':'')+'">'+meds.length+' med'+(meds.length!==1?'s':'')+'</span><div class="pet-item-actions"><button class="btn-sec btn-sm" onclick="openMedModal(\''+pet.id+'\')" title="Add medication" aria-label="Add medication for '+escapeHtml(pet.name)+'">+ Med</button><button class="btn-sec btn-sm" onclick="openPetModal(\''+pet.id+'\')" aria-label="Edit '+escapeHtml(pet.name)+'">Edit</button><button class="btn-danger btn-sm" onclick="deletePet(\''+pet.id+'\')" aria-label="Delete '+escapeHtml(pet.name)+'">Del</button></div></div>';
+    meds.forEach(function(m){
+      html+='<div class="med-item"><div class="med-item-info"><div class="med-item-name">'+escapeHtml(m.name)+'</div><div class="med-item-detail">'+escapeHtml(m.dosage)+' &middot; '+escapeHtml(m.frequency)+' &middot; '+fmtTime(m.time)+(m.time2?' &amp; '+fmtTime(m.time2):'')+(m.notes?' &middot; '+escapeHtml(m.notes):'')+'</div>'+(m.startDate||m.endDate?'<div class="med-item-detail">'+(m.startDate?fmtDate(m.startDate):'...')+' &rarr; '+(m.endDate?fmtDate(m.endDate):'ongoing')+'</div>':'')+(m.frequency==='As needed'?'<div class="med-item-detail" style="color:var(--muted)">Not shown in daily schedule &mdash; log manually when given</div>':'')+'</div><div class="med-item-actions"><button class="btn-sec btn-sm" onclick="openMedModal(\''+pet.id+'\',\''+m.id+'\')" aria-label="Edit '+escapeHtml(m.name)+'">Edit</button><button class="btn-danger btn-sm" onclick="deleteMed(\''+m.id+'\')" aria-label="Delete '+escapeHtml(m.name)+'">Del</button></div></div>';
+    });
+  });
+  el('petList').innerHTML=html;
+}
+
+/* ── DEMO ── */
+function loadDemo(){
+  if(state.log.length){
+    showConfirm('Replace current data with demo data?', _loadDemoData);
+  } else {
+    _loadDemoData();
+  }
+}
+function _loadDemoData(){
+  var p1=uid(),p2=uid(),p3=uid();
+  state.pets=[{id:p1,name:'Buddy',species:'Dog',breed:'Golden Retriever'},{id:p2,name:'Luna',species:'Cat',breed:'Tabby'},{id:p3,name:'Max',species:'Dog',breed:'Labrador'}];
+  var m1=uid(),m2=uid(),m3=uid(),m4=uid();
+  function dOff(n){ return localDayStr(n); }
+  state.meds=[
+    {id:m1,petId:p1,name:'Apoquel',dosage:'16mg',frequency:'Once daily',time:'08:00',time2:'',startDate:dOff(-26),endDate:'',notes:'Give with food'},
+    {id:m2,petId:p1,name:'Fish Oil',dosage:'1000mg',frequency:'Once daily',time:'08:00',time2:'',startDate:'',endDate:'',notes:''},
+    {id:m3,petId:p2,name:'Prednisolone',dosage:'5mg',frequency:'Twice daily',time:'07:30',time2:'19:30',startDate:dOff(-7),endDate:dOff(24),notes:'Taper after 2 weeks'},
+    {id:m4,petId:p3,name:'Rimadyl',dosage:'100mg',frequency:'Twice daily',time:'08:00',time2:'20:00',startDate:dOff(-26),endDate:'',notes:'With food, monitor for GI issues'}
+  ];
+  var v1=uid(),v2=uid(),v3=uid(),v4=uid(),v5=uid();
+  state.vaccines=[
+    {id:v1,petId:p1,name:'Rabies',dateGiven:dOff(-365),dateDue:dOff(365),vet:'Dr. Smith, Downtown Vet',notes:'1-year vaccine'},
+    {id:v2,petId:p1,name:'DHPP',dateGiven:dOff(-730),dateDue:dOff(365),vet:'Dr. Smith, Downtown Vet',notes:''},
+    {id:v3,petId:p2,name:'FVRCP',dateGiven:dOff(-180),dateDue:dOff(180),vet:'Dr. Lee, Cat Care Clinic',notes:'Indoor cat schedule'},
+    {id:v4,petId:p3,name:'Rabies',dateGiven:dOff(-400),dateDue:dOff(-35),vet:'Dr. Smith, Downtown Vet',notes:'Overdue — schedule ASAP'},
+    {id:v5,petId:p3,name:'Bordetella',dateGiven:dOff(-60),dateDue:dOff(30),vet:'Dr. Smith, Downtown Vet',notes:'Kennel required'}
+  ];
+  var now=Date.now();
+  state.log=[
+    {id:uid(),petId:p1,petName:'Buddy',petSpecies:'Dog',medId:m1,medName:'Apoquel',dosage:'16mg',frequency:'Once daily',date:dOff(0),givenAt:now-3600000,status:'Given',notes:'Give with food'},
+    {id:uid(),petId:p3,petName:'Max',petSpecies:'Dog',medId:m4,medName:'Rimadyl',dosage:'100mg',frequency:'Twice daily',date:dOff(0),givenAt:now-7200000,status:'Given',notes:'With food'},
+    {id:uid(),petId:p2,petName:'Luna',petSpecies:'Cat',medId:m3,medName:'Prednisolone',dosage:'5mg',frequency:'Twice daily',date:dOff(-1),givenAt:now-86400000,status:'Given',notes:''},
+    {id:uid(),petId:p1,petName:'Buddy',petSpecies:'Dog',medId:m1,medName:'Apoquel',dosage:'16mg',frequency:'Once daily',date:dOff(-1),givenAt:now-90000000,status:'Given',notes:''},
+    {id:uid(),petId:p3,petName:'Max',petSpecies:'Dog',medId:m4,medName:'Rimadyl',dosage:'100mg',frequency:'Twice daily',date:dOff(-2),givenAt:now-172800000,status:'Skipped',notes:'Vomiting, vet advised skip'},
+    {id:uid(),petId:p2,petName:'Luna',petSpecies:'Cat',medId:m3,medName:'Prednisolone',dosage:'5mg',frequency:'Twice daily',date:dOff(-2),givenAt:now-180000000,status:'Given',notes:''}
+  ];
+  state.todayGiven={_date:todayStr()};
+  isDemo=true;
+  el('demoBanner').style.display='flex';
+  save(); renderAll(); toast('Demo data loaded');
+}
+
+function dismissDemo(){
+  isDemo=false;
+  el('demoBanner').style.display='none';
+}
+
+/* ── RESET ── */
+function confirmReset(){
+  state={pets:[],meds:[],log:[],vaccines:[],todayGiven:{_date:todayStr()},notes:'',_schema:SCHEMA_VERSION};
+  isDemo=false;
+  el('demoBanner').style.display='none';
+  save(); renderAll(); toast('All data cleared');
+}
+
+function renderAll(){
+  var active=document.querySelector('.nav-tab.active');
+  var v=active?active.getAttribute('data-view'):'today';
+  renderToday(); renderVaccines(); renderLogStats(); renderTable();
+  if(v==='pets') renderPets();
+}
+
+/* ── VACCINE CRUD ── */
+function openVaccineModal(petId, vaccineId){
+  el('vaccineEditId').value=vaccineId||''; el('vaccinePetId').value=petId;
+  el('vaccineDateGiven').value=todayStr(); el('vaccineDateDue').value='';
+  if(vaccineId){ var v=state.vaccines.find(function(x){return x.id===vaccineId;}); if(!v) return; el('vaccineModalTitle').textContent='Edit Vaccination'; el('vaccineNameInput').value=v.name; el('vaccineDateGiven').value=v.dateGiven||''; el('vaccineDateDue').value=v.dateDue||''; el('vaccineVet').value=v.vet||''; el('vaccineNotesInput').value=v.notes||''; }
+  else { el('vaccineModalTitle').textContent='Add Vaccination'; el('vaccineNameInput').value=''; el('vaccineDateGiven').value=todayStr(); el('vaccineDateDue').value=''; el('vaccineVet').value=''; el('vaccineNotesInput').value=''; }
+  openModal('vaccineModal'); setTimeout(function(){el('vaccineNameInput').focus();},200);
+}
+function saveVaccine(){
+  var name=el('vaccineNameInput').value.trim(), dateGiven=el('vaccineDateGiven').value;
+  if(!name||!dateGiven){ toast('Vaccine name and date given are required',true); return; }
+  var dateDue=el('vaccineDateDue').value;
+  if(dateDue && dateGiven > dateDue){ toast('Start date cannot be after due date',true); return; }
+  var obj={name:name,dateGiven:dateGiven,dateDue:dateDue||'',vet:el('vaccineVet').value.trim(),notes:el('vaccineNotesInput').value.trim(),petId:el('vaccinePetId').value};
+  var eid=el('vaccineEditId').value;
+  if(eid){ var v=state.vaccines.find(function(x){return x.id===eid;}); if(v) Object.assign(v,obj); }
+  else { obj.id=uid(); state.vaccines.push(obj); }
+  save(); closeModal('vaccineModal'); renderVaccines(); toast(eid?'Vaccination updated':'Vaccination added');
+}
+function deleteVaccine(id){
+  var vax = state.vaccines.find(function(v){return v.id===id;});
+  if(!vax) return;
+  var vaxData = Object.assign({}, vax);
+  showConfirm('Delete '+vax.name+' vaccination record?', function(){
+    state.vaccines=state.vaccines.filter(function(v){return v.id!==id;});
+    save(); renderVaccines();
+    toastWithUndo(vaxData.name+' record deleted.', function(){
+      state.vaccines.push(vaxData);
+      save(); renderVaccines();
+      toast(vaxData.name+' record restored.');
+    });
+  });
+}
+
+/* ── VACCINE STATUS HELPERS ── */
+function vaccineStatus(v){
+  if(!v.dateDue) return 'current';
+  var today=todayStr(), diff=Math.round((new Date(v.dateDue+'T00:00:00')-new Date(today+'T00:00:00'))/86400000);
+  if(diff < 0) return 'overdue';
+  if(diff <= 30) return 'due-soon';
+  return 'current';
+}
+function vaccineStatusLabel(v){
+  var s=vaccineStatus(v);
+  if(s==='overdue') return 'Overdue';
+  if(s==='due-soon') return 'Due Soon';
+  return 'Current';
+}
+function vaccineStatusColor(v){
+  var s=vaccineStatus(v);
+  if(s==='overdue') return 'danger';
+  if(s==='due-soon') return 'warn';
+  return 'ok';
+}
+function daysUntilDue(v){
+  if(!v.dateDue) return null;
+  var today=todayStr();
+  if(v.dateDue < today) return 'Overdue by '+Math.round((new Date(today+'T00:00:00')-new Date(v.dateDue+'T00:00:00'))/86400000)+' days';
+  var diff=Math.round((new Date(v.dateDue+'T00:00:00')-new Date(today+'T00:00:00'))/86400000);
+  if(diff===0) return 'Due today';
+  if(diff===1) return 'Due tomorrow';
+  return 'Due in '+diff+' days';
+}
+
+/* ── RENDER VACCINES VIEW ── */
+function renderVaccines(){
+  var vaccines=state.vaccines;
+  var total=vaccines.length, overdue=vaccines.filter(function(v){return vaccineStatus(v)==='overdue';}).length, dueSoon=vaccines.filter(function(v){return vaccineStatus(v)==='due-soon';}).length;
+  el('vaccineStats').innerHTML=
+    '<div class="stat-card"><div class="stat-label">Total Vaccines</div><div class="stat-val accent">'+total+'</div><div class="stat-sub">records</div></div>'+
+    '<div class="stat-card"><div class="stat-label">Due Soon</div><div class="stat-val'+(dueSoon>0?' warn':'')+'">'+dueSoon+'</div><div class="stat-sub">within 30 days</div></div>'+
+    '<div class="stat-card"><div class="stat-label">Overdue</div><div class="stat-val'+(overdue>0?' danger':'')+'">'+overdue+'</div><div class="stat-sub">needs attention</div></div>';
+  var badge=el('vaccineBadge');
+  if(overdue+dueSoon>0){badge.textContent=overdue+dueSoon;badge.style.display='inline';badge.setAttribute('aria-label', (overdue+dueSoon)+' vaccines need attention');}else{badge.style.display='none';}
+
+  var upcoming=vaccines.filter(function(v){return v.dateDue && vaccineStatus(v)!=='current';}).sort(function(a,b){return a.dateDue.localeCompare(b.dateDue);}).slice(0,5);
+  if(upcoming.length>0){
+    el('vaccineUpcoming').innerHTML='<div class="vaccine-upcoming-wrap">'+upcoming.map(function(v){
+      var pet=state.pets.find(function(p){return p.id===v.petId;}); var petName=pet?pet.name:'Unknown';
+      var status=vaccineStatus(v); var label=daysUntilDue(v);
+      var labelClass=status==='overdue'?'overdue':(status==='due-soon'?'due-soon':'current');
+      return '<div class="vaccine-upcoming-row"><div class="vaccine-upcoming-label '+labelClass+'">'+label+'</div><div style="flex:1;min-width:0;"><div style="font-weight:600;font-size:13px;">'+escapeHtml(v.name)+'</div><div style="font-size:11px;color:var(--muted);">'+escapeHtml(petName)+' &middot; Given: '+fmtDate(v.dateGiven)+'</div></div></div>';
+    }).join('')+'</div>';
+  } else {
+    el('vaccineUpcoming').innerHTML='<p style="font-size:13px;color:var(--muted);padding:0 0 16px;">No upcoming or overdue vaccinations.</p>';
+  }
+
+  if(state.pets.length===0){
+    el('vaccineList').innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><h3>No pets yet</h3><p>Add pets first, then record their vaccinations.</p><button class="btn-pri" onclick="switchView(\'pets\')" aria-label="Go to pets view">Add a Pet</button></div>';
+    return;
+  }
+
+  el('vaccineList').innerHTML='';
+  state.pets.forEach(function(pet){
+    var petVaccines=vaccines.filter(function(v){return v.petId===pet.id;}).sort(function(a,b){return (b.dateGiven||'').localeCompare(a.dateGiven||'');});
+    var h='<div class="pet-group"><div class="pet-group-header"><div class="pet-group-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div style="flex:1;min-width:0;"><div class="pet-group-name">'+escapeHtml(pet.name)+'</div><div class="pet-group-meta">'+escapeHtml(pet.species)+(pet.breed?' &middot; '+escapeHtml(pet.breed):'')+' &middot; '+petVaccines.length+' record'+(petVaccines.length!==1?'s':'')+'</div></div><button class="btn-sec btn-sm" onclick="openVaccineModal(\''+pet.id+'\')" aria-label="Add vaccine for '+escapeHtml(pet.name)+'">+ Vaccine</button></div>';
+    if(petVaccines.length===0){
+      h+='<div style="background:var(--surface);border:1px solid var(--border);border-top:none;padding:12px 16px;font-size:12px;color:var(--muted);">No vaccination records for '+escapeHtml(pet.name)+'.</div>';
+    } else {
+      petVaccines.forEach(function(v){
+        var status=vaccineStatus(v); var statusColor=vaccineStatusColor(v); var statusLabel=vaccineStatusLabel(v);
+        h+='<div class="vaccine-row '+status+'"><div class="vaccine-name">'+escapeHtml(v.name)+'</div><div class="vaccine-dates">Given: <span>'+fmtDate(v.dateGiven)+'</span>'+(v.dateDue?' &middot; Next: <span>'+fmtDate(v.dateDue)+'</span>':'')+'</div><span class="status-pill pill-'+statusColor+'">'+statusLabel+'</span><div class="vaccine-actions"><button class="btn-sec btn-sm" onclick="openVaccineModal(\''+pet.id+'\',\''+v.id+'\')" aria-label="Edit '+escapeHtml(v.name)+'">Edit</button><button class="btn-danger btn-sm" onclick="deleteVaccine(\''+v.id+'\')" aria-label="Delete '+escapeHtml(v.name)+'">Del</button></div></div>';
+        if(v.vet || v.notes) h+='<div style="background:var(--surface2);border:1px solid var(--border);border-top:none;padding:8px 16px 10px 16px;font-size:11px;color:var(--muted2);">'+(v.vet?'<b>Vet:</b> '+escapeHtml(v.vet)+' &middot; ':'')+(v.notes?escapeHtml(v.notes):'')+'</div>';
+      });
+    }
+    h+='</div>';
+    var div=document.createElement('div'); div.innerHTML=h; el('vaccineList').appendChild(div.firstElementChild);
+  });
+}
+
+/* ── FOOTER ── */
+function footer(){
+  var f = el('appFooter'); if(!f) return;
+  var year = new Date().getFullYear();
+  var brand = document.querySelector('.brand-text');
+  var name = brand ? escapeHtml(brand.textContent || 'AppName') : 'AppName';
+  f.innerHTML =
+    '<div class="f-tag">Privacy-first micro-apps for professionals</div>' +
+    '<div class="f-priv"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Your data never leaves this device</div>' +
+    '<div class="f-rights">All rights reserved · <b>' + name + '</b> · ' + year + '</div>';
+  var pf = el('printFooterName');
+  if(pf) pf.textContent = 'Generated by ' + name;
+}
+
+(function init(){
+  setTheme(localStorage.getItem(THEME_KEY)||'light');
+  footer();
+  load();
+  buildFilterTabs();
+  buildLogForm();
+  el('notesPrintMirror').textContent = state.notes||'';
+  if(!state.pets.length&&!state.log.length){
+    loadDemo();
+  } else {
+    renderToday(); renderLogStats(); renderTable();
+  }
+
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape'){
+      ['petModal','medModal','vaccineModal','confirmModal'].forEach(function(id){
+        if(el(id).getAttribute('aria-hidden')==='false') closeModal(id);
+      });
+    }
+  });
+  document.querySelectorAll('.modal-overlay').forEach(function(o){
+    o.addEventListener('click', function(e){ if(e.target===o) closeModal(o.id); });
+  });
+
+  setInterval(function(){ var a=document.querySelector('.nav-tab.active'); if(a&&a.getAttribute('data-view')==='today') renderToday(); },60000);
+})();
+</script>
+</body>
+</html>

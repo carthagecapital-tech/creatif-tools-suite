@@ -1,0 +1,2244 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="NetWorth Pro — privacy-first, offline net worth tracker. Your financial data never leaves this device.">
+<title>NetWorth Pro — Privacy-First Financial Dashboard</title>
+<style>
+:root {
+  --bg: #f4f2ec;
+  --surface: #ffffff;
+  --surface-2: #faf8f3;
+  --text: #2c2a26;
+  --text-muted: #7a756a;
+  --border: #e5e0d5;
+  --border-strong: #d4cdb8;
+  --accent: #b8891a;
+  --accent-soft: rgba(184, 137, 26, 0.14);
+  --positive: #4f8a5b;
+  --positive-soft: rgba(79, 138, 91, 0.14);
+  --negative: #c0584f;
+  --negative-soft: rgba(192, 88, 79, 0.14);
+  --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-lg: 0 10px 30px rgba(0,0,0,0.10);
+
+  --cat-cash: #4f8a5b;
+  --cat-investments: #3d6cb4;
+  --cat-real-estate: #7a5b9b;
+  --cat-vehicles: #6e6960;
+  --cat-retirement: #b8891a;
+  --cat-crypto: #d97a3a;
+  --cat-precious-metals: #c9a83a;
+  --cat-other: #8a847a;
+  --cat-mortgage: #7a5b9b;
+  --cat-car-loan: #6e6960;
+  --cat-student-loan: #3d6cb4;
+  --cat-credit-card: #c0584f;
+  --cat-personal-loan: #b8891a;
+  --cat-other-debt: #8a847a;
+}
+
+[data-theme="dark"] {
+  --bg: #1a1815;
+  --surface: #242220;
+  --surface-2: #2c2a26;
+  --text: #ece9e2;
+  --text-muted: #9a948a;
+  --border: #3a3833;
+  --border-strong: #4a4742;
+  --accent: #d4a437;
+  --accent-soft: rgba(212, 164, 55, 0.18);
+  --positive: #7ab88a;
+  --positive-soft: rgba(122, 184, 138, 0.16);
+  --negative: #e08579;
+  --negative-soft: rgba(224, 133, 121, 0.16);
+  --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-lg: 0 10px 30px rgba(0,0,0,0.5);
+
+  --cat-cash: #7ab88a;
+  --cat-investments: #6b8fc8;
+  --cat-real-estate: #a98bc4;
+  --cat-vehicles: #9a948a;
+  --cat-retirement: #d4a437;
+  --cat-crypto: #e89a5a;
+  --cat-precious-metals: #e0c465;
+  --cat-other: #a8a298;
+  --cat-mortgage: #a98bc4;
+  --cat-car-loan: #9a948a;
+  --cat-student-loan: #6b8fc8;
+  --cat-credit-card: #e08579;
+  --cat-personal-loan: #d4a437;
+  --cat-other-debt: #a8a298;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+*:focus { outline: none; }
+*:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 999;
+}
+.skip-link:focus {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  padding: 0.5rem 1rem;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  border-radius: 7px;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+html { font-size: 15px; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+  transition: background 0.2s, color 0.2s;
+}
+
+.mono {
+  font-family: "SF Mono", "Consolas", "Menlo", "Monaco", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+button { font-family: inherit; }
+input, select, textarea { font-family: inherit; }
+
+/* ====== Header ====== */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: saturate(180%) blur(10px);
+  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.875rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+[data-theme="dark"] .app-header { background: rgba(36, 34, 32, 0.92); }
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.brand-mark {
+  width: 30px;
+  height: 30px;
+  background: var(--accent);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  font-family: Georgia, serif;
+  letter-spacing: 0;
+}
+.brand-text { color: var(--text); }
+.brand-sub {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-left: 0.5rem;
+  padding-left: 0.625rem;
+  border-left: 1px solid var(--border);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4375rem;
+}
+
+.icon-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 36px;
+  height: 36px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.icon-btn:hover { background: var(--surface-2); border-color: var(--border-strong); }
+.icon-btn svg { width: 17px; height: 17px; }
+
+.text-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.4375rem 0.8125rem;
+  border-radius: 7px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  transition: all 0.15s ease;
+}
+.text-btn:hover { background: var(--surface-2); border-color: var(--border-strong); }
+.text-btn.danger { color: var(--negative); border-color: var(--negative); }
+.text-btn.danger:hover { background: var(--negative-soft); border-color: var(--negative); }
+.text-btn svg { width: 15px; height: 15px; }
+
+.primary-btn {
+  background: var(--accent);
+  color: #fff;
+  border: 1px solid var(--accent);
+  padding: 0.5rem 0.9375rem;
+  border-radius: 7px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  transition: opacity 0.15s ease;
+}
+.primary-btn:hover { opacity: 0.9; }
+.primary-btn svg { width: 15px; height: 15px; }
+.primary-btn.danger { background: var(--negative); border-color: var(--negative); }
+
+/* ====== Main ====== */
+.app-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.print-only { display: none; }
+
+/* ====== Summary grid ====== */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.875rem;
+}
+
+.summary-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.125rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4375rem;
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+}
+.summary-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--text-muted);
+  opacity: 0.25;
+}
+.summary-card.networth::before { background: var(--text); opacity: 0.6; }
+.summary-card.assets::before { background: var(--positive); }
+.summary-card.liabilities::before { background: var(--negative); }
+.summary-card.change::before { background: var(--accent); }
+
+.summary-label {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.summary-value {
+  font-size: 1.625rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.summary-value.positive { color: var(--positive); }
+.summary-value.negative { color: var(--negative); }
+
+.summary-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+.delta-up { color: var(--positive); font-weight: 600; }
+.delta-down { color: var(--negative); font-weight: 600; }
+.delta-na { color: var(--text-muted); font-style: italic; }
+
+/* ====== Sections ====== */
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.125rem 1.25rem;
+  box-shadow: var(--shadow);
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.875rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.section-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.125rem;
+}
+.section-actions { display: flex; gap: 0.4375rem; flex-shrink: 0; }
+
+/* ====== Charts ====== */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.125rem 1.25rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+.chart-card.full { grid-column: 1 / -1; }
+.chart-container {
+  width: 100%;
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+}
+.chart-container svg { max-width: 100%; height: auto; display: block; }
+.chart-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.375rem 1rem;
+  margin-top: 1rem;
+  font-size: 0.75rem;
+}
+.chart-card.full .chart-legend { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4375rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.legend-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text);
+}
+.legend-value {
+  font-family: "SF Mono", "Consolas", "Menlo", monospace;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  font-weight: 500;
+}
+.legend-pct {
+  color: var(--text-muted);
+  font-family: "SF Mono", "Consolas", "Menlo", monospace;
+  font-variant-numeric: tabular-nums;
+  margin-left: 0.25rem;
+  min-width: 3.25rem;
+  text-align: right;
+}
+
+.donut-center-label {
+  font-size: 10px;
+  fill: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+.donut-center-value {
+  font-size: 18px;
+  font-weight: 700;
+  fill: var(--text);
+  font-family: "SF Mono", "Consolas", "Menlo", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ====== Milestones ====== */
+.milestones-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+.milestone { display: flex; flex-direction: column; gap: 0.4375rem; }
+.milestone-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.milestone-name {
+  font-weight: 500;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.milestone-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex-shrink: 0;
+}
+.milestone-dot.achieved { background: var(--positive); }
+.milestone-name.achieved { color: var(--text-muted); }
+.milestone-name.achieved .milestone-dot { background: var(--positive); }
+.milestone-actions { display: flex; gap: 0.25rem; }
+.milestone-progress-text {
+  font-family: "SF Mono", "Consolas", "Menlo", monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+.progress-bar {
+  height: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+.progress-fill.achieved { background: var(--positive); }
+
+.milestone-form {
+  display: grid;
+  grid-template-columns: 1fr 160px auto;
+  gap: 0.625rem;
+  padding: 0.875rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 0.875rem;
+}
+.milestone-form.hidden { display: none; }
+
+/* ====== Filter pills ====== */
+.filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-bottom: 0.875rem;
+}
+.pill {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.25rem 0.6875rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+.pill:hover { border-color: var(--border-strong); color: var(--text); }
+.pill.active {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
+/* ====== Forms ====== */
+.add-form {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.875rem;
+  margin-bottom: 0.875rem;
+  display: none;
+}
+.add-form.open {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0.625rem 0.75rem;
+  animation: slideDown 0.18s ease;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.form-field { display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
+.form-field.full { grid-column: 1 / -1; }
+.form-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+.form-input, .form-select, .form-textarea {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4375rem 0.6875rem;
+  font-size: 0.875rem;
+  color: var(--text);
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.form-textarea { resize: vertical; min-height: 56px; font-family: inherit; }
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+/* ====== Table ====== */
+.data-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  min-width: 640px;
+}
+.data-table th {
+  text-align: left;
+  padding: 0.625rem 0.875rem;
+  font-weight: 600;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  user-select: none;
+}
+.data-table th.sortable { cursor: pointer; }
+.data-table th.sortable:hover { color: var(--text); }
+.data-table th.sorted { color: var(--accent); }
+.data-table th .sort-arrow {
+  display: inline-block;
+  margin-left: 0.1875rem;
+  opacity: 0.35;
+  font-size: 0.625rem;
+}
+.data-table th.sorted .sort-arrow { opacity: 1; }
+.data-table th.numeric { text-align: right; }
+
+.data-table td {
+  padding: 0.6875rem 0.875rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover td { background: var(--surface-2); }
+
+.data-table td.numeric {
+  font-family: "SF Mono", "Consolas", "Menlo", monospace;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+.data-table td.numeric.positive { color: var(--positive); }
+.data-table td.numeric.negative { color: var(--negative); }
+
+.data-table td.actions { text-align: right; white-space: nowrap; }
+.data-table .notes-cell {
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-actions { display: inline-flex; gap: 0.25rem; }
+.row-action-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.row-action-btn:hover {
+  background: var(--surface-2);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+.row-action-btn.danger:hover {
+  color: var(--negative);
+  border-color: var(--negative);
+  background: var(--negative-soft);
+}
+.row-action-btn svg { width: 13px; height: 13px; }
+
+.cat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.1875rem 0.5625rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  border: 1px solid currentColor;
+  border-color: transparent;
+}
+.cat-pill::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ====== Empty state ====== */
+.empty-state {
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+.empty-state-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+.empty-state-title {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text);
+}
+.empty-state-message {
+  font-size: 0.8125rem;
+  max-width: 360px;
+  line-height: 1.5;
+}
+
+/* ====== Notes ====== */
+.notes-textarea {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 0.875rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text);
+  resize: vertical;
+  min-height: 120px;
+}
+.notes-textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  background: var(--surface);
+}
+
+/* ====== Footer ====== */
+.app-footer {
+  text-align: center;
+  padding: 1.75rem 1.5rem 1.25rem;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  border-top: 1px solid var(--border);
+  margin-top: 1.5rem;
+}
+.app-footer strong { color: var(--text); font-weight: 600; }
+
+/* ====== Modal ====== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 1rem;
+  animation: fadeIn 0.15s ease;
+}
+.modal-backdrop.open { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  animation: pop 0.18s ease;
+}
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+.modal-title {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  margin-bottom: 0.4375rem;
+}
+.modal-message {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.55;
+}
+.modal-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.hidden-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ====== Toast ====== */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  background: var(--text);
+  color: var(--bg);
+  padding: 0.625rem 1.125rem;
+  border-radius: 7px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  z-index: 300;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* ====== Responsive ====== */
+@media (max-width: 900px) {
+  .summary-grid { grid-template-columns: repeat(2, 1fr); }
+  .charts-grid { grid-template-columns: 1fr; }
+  .add-form.open { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .app-main { padding: 1rem 1rem 2rem; gap: 0.875rem; }
+  .app-header { padding: 0.75rem 1rem; }
+  .summary-grid { grid-template-columns: 1fr 1fr; gap: 0.625rem; }
+  .summary-value { font-size: 1.25rem; }
+  .add-form.open { grid-template-columns: 1fr; }
+  .text-btn .btn-label { display: none; }
+  .header-actions { gap: 0.25rem; }
+  .brand-sub { display: none; }
+  .milestone-form { grid-template-columns: 1fr; }
+  .section { padding: 1rem; }
+  .chart-card { padding: 1rem; }
+  .section-header { flex-wrap: wrap; gap: 0.5rem; }
+  .section-actions { width: 100%; }
+  .chart-legend { grid-template-columns: 1fr; }
+}
+
+/* ====== Print ====== */
+@media print {
+  :root, [data-theme="dark"] {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #f7f5ef;
+    --text: #000000;
+    --text-muted: #555555;
+    --border: #cccccc;
+    --border-strong: #888888;
+    --accent: #8a6610;
+    --positive: #2f6b3c;
+    --negative: #8a3a32;
+    --cat-cash: #2f6b3c;
+    --cat-investments: #1d4a8a;
+    --cat-real-estate: #5a3d7d;
+    --cat-vehicles: #4a463f;
+    --cat-retirement: #8a6610;
+    --cat-crypto: #a55a1a;
+    --cat-precious-metals: #8a7510;
+    --cat-other: #5a554f;
+    --cat-mortgage: #5a3d7d;
+    --cat-car-loan: #4a463f;
+    --cat-student-loan: #1d4a8a;
+    --cat-credit-card: #8a3a32;
+    --cat-personal-loan: #8a6610;
+    --cat-other-debt: #5a554f;
+    --shadow: none;
+    --shadow-lg: none;
+  }
+  body { background: #fff; color: #000; font-size: 10pt; }
+  .app-header,
+  .header-actions,
+  .icon-btn,
+  .text-btn,
+  .primary-btn,
+  .add-form,
+  .row-action-btn,
+  .filter-pills,
+  .modal-backdrop,
+  .data-table th.actions,
+  .data-table td.actions,
+  .data-table thead .row-action-btn,
+  .section-actions,
+  .print-hide { display: none !important; }
+  .app-main { max-width: 100%; padding: 0; gap: 0.625rem; }
+  .section, .summary-card, .chart-card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+    page-break-inside: avoid;
+    background: #fff;
+  }
+  .charts-grid { grid-template-columns: 1fr 1fr; }
+  .summary-grid { grid-template-columns: repeat(4, 1fr); gap: 0.4375rem; }
+  .summary-value { font-size: 1.05rem; }
+  .data-table th { background: #ece8dc; color: #000; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .data-table { min-width: 0; font-size: 9pt; }
+  .data-table th, .data-table td { padding: 0.3125rem 0.5rem; }
+  .app-footer { border-top: 1px solid #ccc; color: #555; }
+  .print-only { display: block !important; }
+  .print-notes {
+    white-space: pre-wrap;
+    font-size: 9pt;
+    line-height: 1.6;
+    color: #000;
+    padding: 0.25rem 0;
+  }
+  .print-header {
+    text-align: center;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.4375rem;
+    border-bottom: 2px solid #000;
+  }
+  .print-header h1 { font-size: 16pt; margin-bottom: 0.1875rem; }
+  .print-header p { font-size: 9pt; color: #555; }
+  .print-footer {
+    text-align: center;
+    margin-top: 1rem;
+    padding-top: 0.4375rem;
+    border-top: 1px solid #ccc;
+    font-size: 8pt;
+    color: #555;
+  }
+  .summary-card::before { display: none; }
+  svg { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .progress-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cat-pill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .legend-dot { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="app-header print-hide">
+  <div class="brand">
+    <div class="brand-mark">N</div>
+    <span class="brand-text">NetWorth Pro</span>
+    <span class="brand-sub">v1.0</span>
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn" id="theme-toggle" aria-label="Toggle light and dark theme" title="Toggle theme">
+      <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="text-btn" id="export-btn" title="Export data as JSON">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span class="btn-label">Export</span>
+    </button>
+    <button class="text-btn" id="import-btn" title="Import from JSON backup">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      <span class="btn-label">Import</span>
+    </button>
+    <button class="text-btn" id="print-btn" title="Print or save as PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      <span class="btn-label">Print</span>
+    </button>
+    <button class="text-btn danger" id="reset-btn" aria-label="Reset all data" title="Reset all data">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+      <span class="btn-label">Reset</span>
+    </button>
+  </div>
+  <input type="file" id="import-input" class="hidden-input" accept="application/json,.json">
+</header>
+
+<main class="app-main" id="main-content">
+  <div class="print-only print-header">
+    <h1>Net Worth Report</h1>
+    <p>Generated <span id="print-date"></span></p>
+  </div>
+
+  <section class="summary-grid">
+    <div class="summary-card networth">
+      <span class="summary-label">Total Net Worth</span>
+      <span class="summary-value mono" id="total-networth">$0.00</span>
+      <span class="summary-meta" id="networth-meta">—</span>
+    </div>
+    <div class="summary-card assets">
+      <span class="summary-label">Total Assets</span>
+      <span class="summary-value mono positive" id="total-assets">$0.00</span>
+      <span class="summary-meta"><span id="asset-count">0</span> items</span>
+    </div>
+    <div class="summary-card liabilities">
+      <span class="summary-label">Total Liabilities</span>
+      <span class="summary-value mono negative" id="total-liabilities">$0.00</span>
+      <span class="summary-meta"><span id="liability-count">0</span> items</span>
+    </div>
+    <div class="summary-card change">
+      <span class="summary-label">Monthly Change</span>
+      <span class="summary-value mono" id="monthly-change">—</span>
+      <span class="summary-meta" id="monthly-change-meta">vs last month</span>
+    </div>
+  </section>
+
+  <section class="charts-grid">
+    <div class="chart-card">
+      <div class="section-header" style="border-bottom:none; padding-bottom:0; margin-bottom:0.5rem;">
+        <div>
+          <div class="section-title">Asset Allocation</div>
+          <div class="section-subtitle">Breakdown by category</div>
+        </div>
+      </div>
+      <div class="chart-container" id="donut-container"></div>
+    </div>
+    <div class="chart-card">
+      <div class="section-header" style="border-bottom:none; padding-bottom:0; margin-bottom:0.5rem;">
+        <div>
+          <div class="section-title">Liabilities</div>
+          <div class="section-subtitle">Outstanding by category</div>
+        </div>
+      </div>
+      <div class="chart-container" id="bar-container"></div>
+    </div>
+    <div class="chart-card full">
+      <div class="section-header" style="border-bottom:none; padding-bottom:0; margin-bottom:0.5rem;">
+        <div>
+          <div class="section-title">Net Worth Trend</div>
+          <div class="section-subtitle">Up to 24 months of history, auto-recorded</div>
+        </div>
+      </div>
+      <div class="chart-container" id="line-container"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Milestones</div>
+        <div class="section-subtitle">Track progress toward your financial goals</div>
+      </div>
+      <div class="section-actions">
+        <button class="primary-btn" id="add-milestone-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span class="btn-label">Add goal</span>
+        </button>
+      </div>
+    </div>
+    <form class="milestone-form hidden" id="milestone-form" autocomplete="off">
+      <input class="form-input" id="milestone-name" placeholder="Goal name (e.g. Net Worth $500k)" required>
+      <input class="form-input mono" type="number" id="milestone-target" min="0" step="1000" placeholder="Target amount" required>
+      <div style="display:flex; gap:0.375rem;">
+        <button type="button" class="text-btn" id="milestone-cancel">Cancel</button>
+        <button type="submit" class="primary-btn">Add</button>
+      </div>
+    </form>
+    <div class="milestones-list" id="milestones-list"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Assets</div>
+        <div class="section-subtitle">Everything you own</div>
+      </div>
+      <div class="section-actions">
+        <button class="primary-btn" id="add-asset-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span class="btn-label">Add asset</span>
+        </button>
+      </div>
+    </div>
+    <div class="filter-pills" id="asset-filters"></div>
+    <form class="add-form" id="asset-form" autocomplete="off"></form>
+    <div id="assets-table-wrap"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Liabilities</div>
+        <div class="section-subtitle">Everything you owe</div>
+      </div>
+      <div class="section-actions">
+        <button class="primary-btn" id="add-liability-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span class="btn-label">Add liability</span>
+        </button>
+      </div>
+    </div>
+    <div class="filter-pills" id="liability-filters"></div>
+    <form class="add-form" id="liability-form" autocomplete="off"></form>
+    <div id="liabilities-table-wrap"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Notes</div>
+        <div class="section-subtitle">Private strategy, advisor contacts, account numbers. Stays on this device.</div>
+      </div>
+    </div>
+    <textarea class="notes-textarea" id="notes-input" placeholder="Financial strategy, advisor contacts, account numbers, etc."></textarea>
+    <div id="printNotes" class="print-only print-notes"></div>
+  </section>
+</main>
+
+<footer class="app-footer">
+  <strong>Privacy-first micro-apps for professionals. Your data never leaves this device.</strong><br>
+  All rights reserved &middot; NetWorth Pro &middot; 2026
+</footer>
+
+<div class="print-only print-footer">
+  Generated by NetWorth Pro
+</div>
+
+<div class="modal-backdrop" id="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+  <div class="modal">
+    <h3 class="modal-title" id="confirm-title">Confirm</h3>
+    <p class="modal-message" id="confirm-message">Are you sure?</p>
+    <div class="modal-actions">
+      <button class="text-btn" id="confirm-cancel">Cancel</button>
+      <button class="primary-btn danger" id="confirm-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+/* ============================================================
+   Constants
+   ============================================================ */
+const STORAGE_KEY = "networth_v1";
+const SCHEMA_VERSION = 1;
+
+const ASSET_CATEGORIES = [
+  { key: "Cash",                color: "var(--cat-cash)" },
+  { key: "Investments",         color: "var(--cat-investments)" },
+  { key: "Real Estate",         color: "var(--cat-real-estate)" },
+  { key: "Vehicles",            color: "var(--cat-vehicles)" },
+  { key: "Retirement",          color: "var(--cat-retirement)" },
+  { key: "Crypto",              color: "var(--cat-crypto)" },
+  { key: "Precious Metals",     color: "var(--cat-precious-metals)" },
+  { key: "Other",               color: "var(--cat-other)" }
+];
+
+const LIABILITY_CATEGORIES = [
+  { key: "Mortgage",            color: "var(--cat-mortgage)" },
+  { key: "Car Loan",            color: "var(--cat-car-loan)" },
+  { key: "Student Loan",        color: "var(--cat-student-loan)" },
+  { key: "Credit Card",         color: "var(--cat-credit-card)" },
+  { key: "Personal Loan",       color: "var(--cat-personal-loan)" },
+  { key: "Other Debt",          color: "var(--cat-other-debt)" }
+];
+
+const ICONS = {
+  empty: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>',
+  edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+  trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>'
+};
+
+/* ============================================================
+   State
+   ============================================================ */
+let state = emptyState();
+let sortAssets = { key: "value", dir: "desc" };
+let sortLiabilities = { key: "value", dir: "desc" };
+let filterAssets = "all";
+let filterLiabilities = "all";
+let editingAssetId = null;
+let editingLiabilityId = null;
+let confirmCallback = null;
+let toastTimer = null;
+
+function emptyState() {
+  return {
+    v: SCHEMA_VERSION,
+    assets: [],
+    liabilities: [],
+    snapshots: [],
+    goals: [],
+    notes: "",
+    theme: "light"
+  };
+}
+
+/* ============================================================
+   Persistence
+   ============================================================ */
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      state = getDemoState();
+      saveState();
+      return;
+    }
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object" || parsed.v !== SCHEMA_VERSION) {
+      state = getDemoState();
+      saveState();
+      return;
+    }
+    state = Object.assign(emptyState(), parsed);
+    state.assets      = Array.isArray(state.assets) ? state.assets : [];
+    state.liabilities = Array.isArray(state.liabilities) ? state.liabilities : [];
+    state.snapshots   = Array.isArray(state.snapshots) ? state.snapshots : [];
+    state.goals       = Array.isArray(state.goals) ? state.goals : [];
+    state.notes       = typeof state.notes === "string" ? state.notes : "";
+    state.theme       = state.theme === "dark" ? "dark" : "light";
+  } catch (e) {
+    state = getDemoState();
+    saveState();
+  }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    showToast("Warning: data could not be saved");
+  }
+}
+
+/* ============================================================
+   Demo data
+   ============================================================ */
+function getDemoState() {
+  const now = Date.now();
+  const uid = () => Math.random().toString(36).slice(2, 11);
+  const mkAsset = (name, cat, value, change, notes) => ({
+    id: "a" + uid(), name, category: cat, value, change, notes: notes || "",
+    created: now, updated: now
+  });
+  const mkLiab = (name, cat, value, change, notes) => ({
+    id: "l" + uid(), name, category: cat, value, change, notes: notes || "",
+    created: now, updated: now
+  });
+
+  const assets = [
+    mkAsset("Primary Residence",    "Real Estate",     380000, 0,    "3-bed suburban, est. market value"),
+    mkAsset("401(k) Retirement",    "Retirement",      95000,  850,  "Vanguard target-date 2055"),
+    mkAsset("Tesla Stock",          "Investments",     15000,  220,  "12 shares, long-term hold"),
+    mkAsset("High-Yield Savings",   "Cash",            22000,  95,   "Marcus by Goldman, 4.5% APY"),
+    mkAsset("2020 Honda Civic",     "Vehicles",        18000,  -120, "42k miles, KBB private party"),
+    mkAsset("Gold Coins (1oz)",     "Precious Metals", 7000,   35,   "5 coins, allocated storage"),
+    mkAsset("Bitcoin",              "Crypto",          4000,   -85,  "0.06 BTC, cold wallet")
+  ];
+
+  const liabilities = [
+    mkLiab("30-Year Mortgage",   "Mortgage",      305000, -480, "3.2% APR, 27yr remaining"),
+    mkLiab("Auto Loan",          "Car Loan",      11000,  -180, "Refi 2025 at 4.5%"),
+    mkLiab("Federal Student",    "Student Loan",  16000,  -210, "IBR plan, 6.0% weighted"),
+    mkLiab("Chase Sapphire",     "Credit Card",   2500,   -125, "Paid in full monthly")
+  ];
+
+  const snapshots = [
+    { month: "2025-12", assets: 470000, liabilities: 360000, netWorth: 110000, ts: Date.UTC(2025, 11, 15) },
+    { month: "2026-01", assets: 488000, liabilities: 354000, netWorth: 134000, ts: Date.UTC(2026, 0, 15) },
+    { month: "2026-02", assets: 502000, liabilities: 348000, netWorth: 154000, ts: Date.UTC(2026, 1, 15) },
+    { month: "2026-03", assets: 518000, liabilities: 343000, netWorth: 175000, ts: Date.UTC(2026, 2, 15) },
+    { month: "2026-04", assets: 528000, liabilities: 339000, netWorth: 189000, ts: Date.UTC(2026, 3, 15) },
+    { month: "2026-05", assets: 535000, liabilities: 336000, netWorth: 199000, ts: Date.UTC(2026, 4, 15) }
+  ];
+
+  const goals = [
+    { id: "g" + uid(), name: "Net Worth $100,000", target: 100000, achieved: true },
+    { id: "g" + uid(), name: "Net Worth $250,000", target: 250000, achieved: false }
+  ];
+
+  return {
+    v: SCHEMA_VERSION,
+    assets,
+    liabilities,
+    snapshots,
+    goals,
+    notes: "Long-term strategy:\n- Max 401(k) match annually\n- DCA $1,500/mo into index funds\n- Pay off auto loan by Q4 2026\n- Refinance mortgage if rates drop below 5%\n\nAdvisor: Smith Wealth Management · (555) 0123\nAccount rep: Jane Doe",
+    theme: "light"
+  };
+}
+
+/* ============================================================
+   Snapshots
+   ============================================================ */
+function getCurrentMonthKey() {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
+}
+
+function recordSnapshot() {
+  if (state.assets.length === 0 && state.liabilities.length === 0) return;
+  const month = getCurrentMonthKey();
+  if (state.snapshots.some(s => s.month === month)) return;
+  const totalAssets = state.assets.reduce((s, a) => s + (a.value || 0), 0);
+  const totalLiab = state.liabilities.reduce((s, l) => s + (l.value || 0), 0);
+  state.snapshots.push({
+    month,
+    assets: totalAssets,
+    liabilities: totalLiab,
+    netWorth: totalAssets - totalLiab,
+    ts: Date.now()
+  });
+  state.snapshots.sort((a, b) => a.month.localeCompare(b.month));
+  if (state.snapshots.length > 24) {
+    state.snapshots = state.snapshots.slice(-24);
+  }
+  saveState();
+}
+
+/* ============================================================
+   Formatting
+   ============================================================ */
+function formatCurrency(value, includeSign) {
+  const n = Number(value) || 0;
+  const abs = Math.abs(n);
+  const formatted = abs.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  let out = "$" + formatted;
+  if (n < 0) out = "−" + out;
+  else if (includeSign && n > 0) out = "+" + out;
+  return out;
+}
+
+function formatPercent(value) {
+  const n = Number(value) || 0;
+  const sign = n > 0 ? "+" : "";
+  return sign + n.toFixed(1) + "%";
+}
+
+function formatMonthKey(monthKey) {
+  if (!monthKey || !/^\d{4}-\d{2}$/.test(monthKey)) return monthKey || "";
+  const [y, m] = monthKey.split("-");
+  const date = new Date(parseInt(y, 10), parseInt(m, 10) - 1, 1);
+  return date.toLocaleString("en-US", { month: "short", year: "2-digit" });
+}
+
+function getCategoryColor(category, isLiability) {
+  const list = isLiability ? LIABILITY_CATEGORIES : ASSET_CATEGORIES;
+  const found = list.find(c => c.key === category);
+  return found ? found.color : "var(--cat-other)";
+}
+
+function escapeHtml(str) {
+  if (str == null) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function escapeAttr(str) { return escapeHtml(str); }
+
+/* ============================================================
+   Computations
+   ============================================================ */
+function totals() {
+  const totalAssets = state.assets.reduce((s, a) => s + (a.value || 0), 0);
+  const totalLiab = state.liabilities.reduce((s, l) => s + (l.value || 0), 0);
+  return { totalAssets, totalLiab, netWorth: totalAssets - totalLiab };
+}
+
+function groupByCategory(items, isLiability) {
+  const map = new Map();
+  items.forEach(it => {
+    const cat = it.category || "Other";
+    map.set(cat, (map.get(cat) || 0) + (it.value || 0));
+  });
+  return Array.from(map.entries())
+    .map(([category, value]) => ({ category, value }))
+    .sort((a, b) => b.value - a.value);
+}
+
+function getMonthlyChange() {
+  if (state.snapshots.length < 2) return null;
+  const sorted = [...state.snapshots].sort((a, b) => a.month.localeCompare(b.month));
+  const current = sorted[sorted.length - 1];
+  const previous = sorted[sorted.length - 2];
+  const delta = current.netWorth - previous.netWorth;
+  const denom = Math.abs(previous.netWorth);
+  const pct = denom > 0 ? (delta / denom) * 100 : 0;
+  return { delta, pct, current, previous };
+}
+
+/* ============================================================
+   Render orchestration
+   ============================================================ */
+function render() {
+  applyTheme();
+  renderSummary();
+  renderDonutChart();
+  renderBarChart();
+  renderLineChart();
+  renderMilestones();
+  renderAssets();
+  renderLiabilities();
+  renderNotes();
+  renderPrintDate();
+}
+
+function applyTheme() {
+  document.documentElement.setAttribute("data-theme", state.theme);
+  const sun = document.querySelector("#theme-toggle .sun-icon");
+  const moon = document.querySelector("#theme-toggle .moon-icon");
+  if (sun && moon) {
+    sun.style.display = state.theme === "light" ? "block" : "none";
+    moon.style.display = state.theme === "light" ? "none" : "block";
+  }
+}
+
+function renderSummary() {
+  const t = totals();
+  const netWorthEl = document.getElementById("total-networth");
+  netWorthEl.textContent = formatCurrency(t.netWorth);
+  netWorthEl.className = "summary-value mono " + (t.netWorth >= 0 ? "positive" : "negative");
+
+  document.getElementById("total-assets").textContent = formatCurrency(t.totalAssets);
+  document.getElementById("total-liabilities").textContent = formatCurrency(t.totalLiab);
+  document.getElementById("asset-count").textContent = state.assets.length;
+  document.getElementById("liability-count").textContent = state.liabilities.length;
+
+  const netMeta = document.getElementById("networth-meta");
+  if (state.assets.length === 0 && state.liabilities.length === 0) {
+    netMeta.innerHTML = '<span class="delta-na">No data yet</span>';
+  } else if (state.snapshots.length > 0) {
+    const latest = state.snapshots[state.snapshots.length - 1];
+    netMeta.innerHTML = "Snapshot " + formatMonthKey(latest.month);
+  } else {
+    netMeta.textContent = "—";
+  }
+
+  const change = getMonthlyChange();
+  const changeEl = document.getElementById("monthly-change");
+  const changeMeta = document.getElementById("monthly-change-meta");
+  if (!change) {
+    changeEl.textContent = "—";
+    changeEl.className = "summary-value mono";
+    changeMeta.innerHTML = '<span class="delta-na">Need more history</span>';
+  } else {
+    const cls = change.delta >= 0 ? "positive" : "negative";
+    changeEl.textContent = formatCurrency(change.delta, true);
+    changeEl.className = "summary-value mono " + cls;
+    const arrow = change.delta >= 0 ? "↑" : "↓";
+    const dCls = change.delta >= 0 ? "delta-up" : "delta-down";
+    changeMeta.innerHTML = '<span class="' + dCls + '">' + arrow + " " + formatPercent(change.pct) + '</span> · vs ' + formatMonthKey(change.previous.month);
+  }
+}
+
+/* ============================================================
+   Charts: Donut
+   ============================================================ */
+function polarToCartesian(cx, cy, r, angleDeg) {
+  const a = (angleDeg - 90) * Math.PI / 180;
+  return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+}
+
+function describeDonut(cx, cy, rOuter, rInner, startAngle, endAngle) {
+  if (endAngle - startAngle >= 359.999) {
+    return describeDonut(cx, cy, rOuter, rInner, 0, 179.999) + " " + describeDonut(cx, cy, rOuter, rInner, 180, 359.999);
+  }
+  const start = polarToCartesian(cx, cy, rOuter, startAngle);
+  const end = polarToCartesian(cx, cy, rOuter, endAngle);
+  const startInner = polarToCartesian(cx, cy, rInner, endAngle);
+  const endInner = polarToCartesian(cx, cy, rInner, startAngle);
+  const largeArc = (endAngle - startAngle) > 180 ? 1 : 0;
+  return [
+    "M", start.x, start.y,
+    "A", rOuter, rOuter, 0, largeArc, 1, end.x, end.y,
+    "L", startInner.x, startInner.y,
+    "A", rInner, rInner, 0, largeArc, 0, endInner.x, endInner.y,
+    "Z"
+  ].join(" ");
+}
+
+function renderDonutChart() {
+  const container = document.getElementById("donut-container");
+  const data = groupByCategory(state.assets, false);
+  const { totalAssets } = totals();
+
+  if (data.length === 0 || totalAssets === 0) {
+    container.innerHTML =
+      '<div class="empty-state">' +
+        '<div class="empty-state-icon">' + ICONS.empty + '</div>' +
+        '<div class="empty-state-message">No assets to display. Add an asset to see your allocation.</div>' +
+      '</div>';
+    return;
+  }
+
+  const cx = 110, cy = 110, rOuter = 88, rInner = 58;
+  let cursor = 0;
+  const paths = data.map(d => {
+    const angle = (d.value / totalAssets) * 360;
+    const seg = { ...d, startAngle: cursor, endAngle: cursor + angle };
+    cursor += angle;
+    return '<path d="' + describeDonut(cx, cy, rOuter, rInner, seg.startAngle, seg.endAngle) +
+           '" fill="' + getCategoryColor(d.category, false) + '"/>';
+  }).join("");
+
+  const legend = data.map(d => {
+    const pct = (d.value / totalAssets) * 100;
+    return '<div class="legend-item">' +
+      '<span class="legend-dot" style="background:' + getCategoryColor(d.category, false) + ';"></span>' +
+      '<span class="legend-label">' + escapeHtml(d.category) + '</span>' +
+      '<span class="legend-value">' + formatCurrency(d.value) + '</span>' +
+      '<span class="legend-pct">' + pct.toFixed(1) + '%</span>' +
+    '</div>';
+  }).join("");
+
+  container.innerHTML =
+    '<div style="display:flex; flex-direction:column; align-items:stretch; gap:1rem; width:100%;">' +
+      '<div style="display:flex; justify-content:center;">' +
+        '<svg viewBox="0 0 220 220" width="200" height="200" role="img" aria-label="Asset allocation donut chart">' +
+          paths +
+          '<text x="' + cx + '" y="' + (cy - 6) + '" text-anchor="middle"><tspan class="donut-center-label">TOTAL</tspan></text>' +
+          '<text x="' + cx + '" y="' + (cy + 16) + '" text-anchor="middle"><tspan class="donut-center-value">' + formatCurrency(totalAssets) + '</tspan></text>' +
+        '</svg>' +
+      '</div>' +
+      '<div class="chart-legend">' + legend + '</div>' +
+    '</div>';
+}
+
+/* ============================================================
+   Charts: Bar
+   ============================================================ */
+function renderBarChart() {
+  const container = document.getElementById("bar-container");
+  const data = groupByCategory(state.liabilities, true);
+  const { totalLiab } = totals();
+
+  if (data.length === 0 || totalLiab === 0) {
+    container.innerHTML =
+      '<div class="empty-state">' +
+        '<div class="empty-state-icon">' + ICONS.empty + '</div>' +
+        '<div class="empty-state-message">No liabilities to display. Add a liability to see your debt breakdown.</div>' +
+      '</div>';
+    return;
+  }
+
+  const maxVal = Math.max.apply(null, data.map(d => d.value));
+  const barH = 24;
+  const gap = 16;
+  const labelW = 100;
+  const valueW = 110;
+  const chartW = 320;
+  const totalH = data.length * (barH + gap) - gap + 8;
+  const totalW = labelW + chartW + valueW + 20;
+
+  const bars = data.map((d, i) => {
+    const y = i * (barH + gap);
+    const w = (d.value / maxVal) * chartW;
+    return '<g>' +
+      '<text x="' + (labelW - 10) + '" y="' + (y + barH / 2 + 4) + '" text-anchor="end" font-size="12" fill="var(--text)" font-weight="500">' + escapeHtml(d.category) + '</text>' +
+      '<rect x="' + labelW + '" y="' + y + '" width="' + w + '" height="' + barH + '" fill="' + getCategoryColor(d.category, true) + '" rx="3" ry="3"/>' +
+      '<text x="' + (labelW + w + 6) + '" y="' + (y + barH / 2 + 4) + '" font-size="11" fill="var(--text-muted)" font-family="SF Mono, Consolas, monospace">' + formatCurrency(d.value) + '</text>' +
+    '</g>';
+  }).join("");
+
+  container.innerHTML =
+    '<svg viewBox="0 0 ' + totalW + ' ' + totalH + '" width="100%" height="' + totalH + '" role="img" aria-label="Liabilities by category bar chart">' +
+      bars +
+    '</svg>';
+}
+
+/* ============================================================
+   Charts: Line
+   ============================================================ */
+function renderLineChart() {
+  const container = document.getElementById("line-container");
+  const data = [...state.snapshots].sort((a, b) => a.month.localeCompare(b.month)).slice(-12);
+
+  if (data.length === 0) {
+    container.innerHTML =
+      '<div class="empty-state">' +
+        '<div class="empty-state-icon">' + ICONS.empty + '</div>' +
+        '<div class="empty-state-message">No history yet. Snapshots are recorded automatically as you use the app.</div>' +
+      '</div>';
+    return;
+  }
+
+  const w = 800, h = 260;
+  const pad = { top: 24, right: 24, bottom: 36, left: 76 };
+  const values = data.map(d => d.netWorth);
+  const maxV = Math.max.apply(null, values);
+  const minV = Math.min.apply(null, values);
+  const range = maxV - minV || Math.max(Math.abs(maxV), 1);
+  const yPad = range * 0.12;
+  const yMax = maxV + yPad;
+  const yMin = Math.min(0, minV - yPad);
+  const yRange = (yMax - yMin) || 1;
+
+  const xStep = data.length > 1 ? (w - pad.left - pad.right) / (data.length - 1) : 0;
+  const x = i => pad.left + i * xStep;
+  const y = v => pad.top + (1 - (v - yMin) / yRange) * (h - pad.top - pad.bottom);
+
+  const tickCount = 4;
+  const ticks = [];
+  for (let i = 0; i <= tickCount; i++) {
+    const v = yMin + (yRange * i) / tickCount;
+    ticks.push({ y: y(v), label: formatCurrency(v) });
+  }
+
+  const yAxis = ticks.map(t =>
+    '<line x1="' + pad.left + '" y1="' + t.y + '" x2="' + (w - pad.right) + '" y2="' + t.y + '" stroke="var(--border)" stroke-dasharray="2 4" stroke-width="0.75"/>' +
+    '<text x="' + (pad.left - 10) + '" y="' + (t.y + 4) + '" text-anchor="end" font-size="10.5" fill="var(--text-muted)" font-family="SF Mono, Consolas, monospace">' + t.label + '</text>'
+  ).join("");
+
+  // Skip some x labels when crowded
+  const labelStep = data.length > 8 ? Math.ceil(data.length / 6) : 1;
+  const xLabels = data.map((d, i) => {
+    if (i % labelStep !== 0 && i !== data.length - 1) return "";
+    return '<text x="' + x(i) + '" y="' + (h - pad.bottom + 18) + '" text-anchor="middle" font-size="10.5" fill="var(--text-muted)">' + formatMonthKey(d.month) + '</text>';
+  }).join("");
+
+  let lineD, areaD;
+  if (data.length === 1) {
+    const px = x(0), py = y(data[0].netWorth);
+    lineD = "M " + px + " " + py + " L " + (px + 0.01) + " " + py;
+    areaD = "M " + px + " " + (h - pad.bottom) + " L " + px + " " + py + " L " + px + " " + (h - pad.bottom) + " Z";
+  } else {
+    lineD = data.map((d, i) => (i === 0 ? "M" : "L") + " " + x(i) + " " + y(d.netWorth)).join(" ");
+    areaD = lineD + " L " + x(data.length - 1) + " " + (h - pad.bottom) + " L " + x(0) + " " + (h - pad.bottom) + " Z";
+  }
+
+  const points = data.map((d, i) =>
+    '<circle cx="' + x(i) + '" cy="' + y(d.netWorth) + '" r="4" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"/>'
+  ).join("");
+
+  // Add zero line if yMin is negative
+  let zeroLine = "";
+  if (yMin < 0) {
+    zeroLine = '<line x1="' + pad.left + '" y1="' + y(0) + '" x2="' + (w - pad.right) + '" y2="' + y(0) + '" stroke="var(--text-muted)" stroke-width="0.75" stroke-dasharray="1 3" opacity="0.5"/>';
+  }
+
+  container.innerHTML =
+    '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" height="' + h + '" role="img" aria-label="Net worth trend line chart" preserveAspectRatio="xMidYMid meet">' +
+      yAxis +
+      zeroLine +
+      '<path d="' + areaD + '" fill="var(--accent)" fill-opacity="0.10"/>' +
+      '<path d="' + lineD + '" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+      points +
+      xLabels +
+    '</svg>';
+}
+
+/* ============================================================
+   Milestones
+   ============================================================ */
+function renderMilestones() {
+  const list = document.getElementById("milestones-list");
+  const { netWorth } = totals();
+
+  // Update achieved status
+  let changed = false;
+  state.goals.forEach(g => {
+    const achieved = netWorth >= (g.target || 0);
+    if (achieved !== !!g.achieved) {
+      g.achieved = achieved;
+      changed = true;
+    }
+  });
+  if (changed) saveState();
+
+  if (state.goals.length === 0) {
+    list.innerHTML =
+      '<div class="empty-state">' +
+        '<div class="empty-state-icon">' + ICONS.empty + '</div>' +
+        '<div class="empty-state-message">No goals yet. Add a net worth target to start tracking your progress.</div>' +
+      '</div>';
+    return;
+  }
+
+  list.innerHTML = state.goals.map(g => {
+    const target = g.target || 0;
+    const progress = target > 0 ? Math.min(100, Math.max(0, (netWorth / target) * 100)) : (g.achieved ? 100 : 0);
+    const achieved = g.achieved === true;
+    const progressText = achieved
+      ? "Achieved"
+      : formatCurrency(netWorth) + " of " + formatCurrency(target);
+    return '<div class="milestone" data-id="' + g.id + '">' +
+      '<div class="milestone-row">' +
+        '<span class="milestone-name' + (achieved ? " achieved" : "") + '">' +
+          '<span class="milestone-dot' + (achieved ? " achieved" : "") + '"></span>' +
+          escapeHtml(g.name) +
+        '</span>' +
+        '<div style="display:flex; align-items:center; gap:0.625rem;">' +
+          '<span class="milestone-progress-text">' + progressText + '</span>' +
+          '<div class="milestone-actions">' +
+            '<button class="row-action-btn danger" data-action="delete-goal" data-id="' + g.id + '" aria-label="Delete goal" title="Delete">' + ICONS.trash + '</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="progress-bar"><div class="progress-fill' + (achieved ? " achieved" : "") + '" style="width:' + progress.toFixed(1) + '%;"></div></div>' +
+    '</div>';
+  }).join("");
+}
+
+function showMilestoneForm() {
+  const form = document.getElementById("milestone-form");
+  form.classList.remove("hidden");
+  document.getElementById("milestone-name").value = "";
+  document.getElementById("milestone-target").value = "";
+  document.getElementById("milestone-name").focus();
+}
+
+function hideMilestoneForm() {
+  const form = document.getElementById("milestone-form");
+  form.classList.add("hidden");
+}
+
+/* ============================================================
+   Tables (assets / liabilities)
+   ============================================================ */
+function renderAssets() {
+  renderFilters("asset-filters", filterAssets, ASSET_CATEGORIES.map(c => c.key), key => {
+    filterAssets = key;
+    renderAssets();
+  });
+  renderItemTable({
+    items: state.assets,
+    isLiability: false,
+    filter: filterAssets,
+    sort: sortAssets,
+    wrapId: "assets-table-wrap",
+    formId: "asset-form",
+    addBtnId: "add-asset-btn",
+    type: "asset",
+    emptyTitle: "No assets yet",
+    emptyMessage: "Add your first asset to start tracking your net worth. Try the demo button below to see how it works.",
+    showDemoBtn: true
+  });
+}
+
+function renderLiabilities() {
+  renderFilters("liability-filters", filterLiabilities, LIABILITY_CATEGORIES.map(c => c.key), key => {
+    filterLiabilities = key;
+    renderLiabilities();
+  });
+  renderItemTable({
+    items: state.liabilities,
+    isLiability: true,
+    filter: filterLiabilities,
+    sort: sortLiabilities,
+    wrapId: "liabilities-table-wrap",
+    formId: "liability-form",
+    addBtnId: "add-liability-btn",
+    type: "liability",
+    emptyTitle: "No liabilities yet",
+    emptyMessage: "Add your debts to see your full net worth picture.",
+    showDemoBtn: false
+  });
+}
+
+function renderFilters(containerId, active, categories, onClick) {
+  const container = document.getElementById(containerId);
+  const allPill = '<button class="pill ' + (active === "all" ? "active" : "") + '" data-filter="all">All</button>';
+  const pills = categories.map(c =>
+    '<button class="pill ' + (active === c ? "active" : "") + '" data-filter="' + escapeAttr(c) + '">' + escapeHtml(c) + '</button>'
+  ).join("");
+  container.innerHTML = allPill + pills;
+  container.querySelectorAll(".pill").forEach(btn => {
+    btn.addEventListener("click", () => onClick(btn.dataset.filter));
+  });
+}
+
+function renderItemTable(opts) {
+  const { items, isLiability, filter, sort, wrapId, formId, addBtnId, type, emptyTitle, emptyMessage, showDemoBtn } = opts;
+
+  // Build form
+  const form = document.getElementById(formId);
+  const editing = (type === "asset" ? editingAssetId : editingLiabilityId)
+    ? items.find(i => i.id === (type === "asset" ? editingAssetId : editingLiabilityId))
+    : null;
+  const categories = isLiability ? LIABILITY_CATEGORIES : ASSET_CATEGORIES;
+
+  // Skip rebuilding form HTML if user is actively typing inside it
+  const formIsActive = form.classList.contains("open") && form.contains(document.activeElement);
+  if (!formIsActive) form.innerHTML =
+    '<div class="form-field">' +
+      '<label class="form-label" for="' + type + '-name">Name</label>' +
+      '<input class="form-input" id="' + type + '-name" required maxlength="80" value="' + (editing ? escapeAttr(editing.name) : "") + '">' +
+    '</div>' +
+    '<div class="form-field">' +
+      '<label class="form-label" for="' + type + '-category">Category</label>' +
+      '<select class="form-select" id="' + type + '-category">' +
+        categories.map(c => '<option value="' + c.key + '"' + (editing && editing.category === c.key ? " selected" : "") + '>' + c.key + '</option>').join("") +
+      '</select>' +
+    '</div>' +
+    '<div class="form-field">' +
+      '<label class="form-label" for="' + type + '-value">Value (USD)</label>' +
+      '<input class="form-input mono" type="number" id="' + type + '-value" min="0" step="0.01" required value="' + (editing ? editing.value : "") + '">' +
+    '</div>' +
+    '<div class="form-field">' +
+      '<label class="form-label" for="' + type + '-change">Monthly Δ</label>' +
+      '<input class="form-input mono" type="number" id="' + type + '-change" step="0.01" value="' + (editing && editing.change ? editing.change : "") + '" placeholder="optional">' +
+    '</div>' +
+    '<div class="form-field full">' +
+      '<label class="form-label" for="' + type + '-notes">Notes</label>' +
+      '<textarea class="form-textarea" id="' + type + '-notes" maxlength="500" placeholder="optional">' + (editing ? escapeHtml(editing.notes || "") : "") + '</textarea>' +
+    '</div>' +
+    '<div class="form-actions">' +
+      '<button type="button" class="text-btn" data-form-action="cancel">Cancel</button>' +
+      '<button type="submit" class="primary-btn">' + (editing ? "Save changes" : (isLiability ? "Add liability" : "Add asset")) + '</button>' +
+    '</div>';
+
+  // Submit handler
+  form.onsubmit = e => {
+    e.preventDefault();
+    const name = document.getElementById(type + "-name").value.trim();
+    const category = document.getElementById(type + "-category").value;
+    const valueStr = document.getElementById(type + "-value").value;
+    const changeStr = document.getElementById(type + "-change").value;
+    const notes = document.getElementById(type + "-notes").value.trim();
+
+    if (!name) { showToast("Name is required"); return; }
+    const value = parseFloat(valueStr);
+    if (isNaN(value) || value < 0) { showToast("Value must be a non-negative number"); return; }
+    const change = changeStr === "" ? 0 : parseFloat(changeStr);
+    if (isNaN(change)) { showToast("Monthly change must be a number"); return; }
+
+    if (editing) {
+      Object.assign(editing, { name, category, value, change, notes, updated: Date.now() });
+    } else {
+      const now = Date.now();
+      items.push({
+        id: (isLiability ? "l" : "a") + Math.random().toString(36).slice(2, 11),
+        name, category, value, change, notes,
+        created: now, updated: now
+      });
+    }
+    if (type === "asset") editingAssetId = null;
+    else editingLiabilityId = null;
+    saveState();
+    recordSnapshot();
+    form.classList.remove("open");
+    form.innerHTML = "";
+    render();
+    showToast(editing ? "Saved" : (isLiability ? "Liability added" : "Asset added"));
+  };
+
+  form.querySelector('[data-form-action="cancel"]').onclick = () => {
+    if (type === "asset") editingAssetId = null;
+    else editingLiabilityId = null;
+    form.classList.remove("open");
+    form.innerHTML = "";
+  };
+
+  // Render table body
+  const wrap = document.getElementById(wrapId);
+  if (items.length === 0) {
+    wrap.innerHTML =
+      '<div class="empty-state">' +
+        '<div class="empty-state-icon">' + ICONS.empty + '</div>' +
+        '<div class="empty-state-title">' + emptyTitle + '</div>' +
+        '<div class="empty-state-message">' + emptyMessage + '</div>' +
+        (showDemoBtn ? '<button class="primary-btn" data-action="load-demo">Load demo data</button>' : '') +
+      '</div>';
+    return;
+  }
+
+  let rows = items.slice();
+  if (filter && filter !== "all") rows = rows.filter(i => i.category === filter);
+  rows.sort((a, b) => {
+    const dir = sort.dir === "asc" ? 1 : -1;
+    if (sort.key === "name") return a.name.localeCompare(b.name) * dir;
+    if (sort.key === "category") return a.category.localeCompare(b.category) * dir;
+    if (sort.key === "change") return ((a.change || 0) - (b.change || 0)) * dir;
+    return ((a.value || 0) - (b.value || 0)) * dir;
+  });
+
+  const cols = [
+    { key: "name",     label: "Name",     numeric: false },
+    { key: "category", label: "Category", numeric: false },
+    { key: "value",    label: "Value",    numeric: true },
+    { key: "change",   label: "Monthly",  numeric: true },
+    { key: "notes",    label: "Notes",    numeric: false },
+    { key: "actions",  label: "",         numeric: false }
+  ];
+
+  const thead = cols.map(c => {
+    if (c.key === "actions") return '<th class="actions"></th>';
+    const sorted = sort.key === c.key;
+    const arrow = sorted ? (sort.dir === "asc" ? "▲" : "▼") : "▴";
+    return '<th class="sortable' + (sorted ? " sorted" : "") + (c.numeric ? " numeric" : "") + '" data-sort="' + c.key + '">' +
+      c.label + ' <span class="sort-arrow">' + arrow + '</span>' +
+    '</th>';
+  }).join("");
+
+  const tbody = rows.map(item => {
+    const valueCls = item.value < 0 ? "negative" : (isLiability ? "negative" : "");
+    const changeCls = item.change > 0 ? "positive" : (item.change < 0 ? "negative" : "");
+    return '<tr data-id="' + item.id + '">' +
+      '<td>' + escapeHtml(item.name) + '</td>' +
+      '<td><span class="cat-pill" style="color:' + getCategoryColor(item.category, isLiability) + ';">' + escapeHtml(item.category) + '</span></td>' +
+      '<td class="numeric ' + valueCls + '">' + formatCurrency(item.value) + '</td>' +
+      '<td class="numeric ' + changeCls + '">' + (item.change !== 0 ? formatCurrency(item.change, true) : "—") + '</td>' +
+      '<td class="notes-cell" title="' + escapeAttr(item.notes || "") + '">' + escapeHtml(item.notes || "") + '</td>' +
+      '<td class="actions">' +
+        '<div class="row-actions">' +
+          '<button class="row-action-btn" data-action="edit" data-id="' + item.id + '" data-type="' + type + '" aria-label="Edit" title="Edit">' + ICONS.edit + '</button>' +
+          '<button class="row-action-btn danger" data-action="delete" data-id="' + item.id + '" data-type="' + type + '" aria-label="Delete" title="Delete">' + ICONS.trash + '</button>' +
+        '</div>' +
+      '</td>' +
+    '</tr>';
+  }).join("");
+
+  wrap.innerHTML =
+    '<div class="data-table-wrap">' +
+      '<table class="data-table">' +
+        '<thead><tr>' + thead + '</tr></thead>' +
+        '<tbody>' + tbody + '</tbody>' +
+      '</table>' +
+    '</div>';
+}
+
+/* ============================================================
+   Notes
+   ============================================================ */
+function renderNotes() {
+  const input = document.getElementById("notes-input");
+  if (document.activeElement !== input) {
+    input.value = state.notes || "";
+  }
+  const mirror = document.getElementById("printNotes");
+  if (mirror) mirror.textContent = state.notes || "";
+}
+
+function renderPrintDate() {
+  const el = document.getElementById("print-date");
+  if (el) {
+    el.textContent = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  }
+}
+
+/* ============================================================
+   Toast
+   ============================================================ */
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
+/* ============================================================
+   Confirm modal
+   ============================================================ */
+function confirmAction(title, message, callback) {
+  document.getElementById("confirm-title").textContent = title;
+  document.getElementById("confirm-message").textContent = message;
+  document.getElementById("confirm-modal").classList.add("open");
+  confirmCallback = callback;
+}
+
+function closeConfirm() {
+  document.getElementById("confirm-modal").classList.remove("open");
+  confirmCallback = null;
+}
+
+/* ============================================================
+   Reset all data
+   ============================================================ */
+function resetAllData() {
+  confirmAction(
+    "Reset all data?",
+    "This will permanently delete all assets, liabilities, goals, notes, and snapshot history. This cannot be undone.",
+    () => {
+      const theme = state.theme;
+      state = emptyState();
+      state.theme = theme;
+      saveState();
+      editingAssetId = null;
+      editingLiabilityId = null;
+      filterAssets = "all";
+      filterLiabilities = "all";
+      document.querySelectorAll(".add-form.open").forEach(f => {
+        f.classList.remove("open");
+        f.innerHTML = "";
+      });
+      render();
+      showToast("All data cleared");
+    }
+  );
+}
+
+/* ============================================================
+   Import / Export
+   ============================================================ */
+function exportJSON() {
+  try {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "networth-backup-" + getCurrentMonthKey() + ".json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast("Backup downloaded");
+  } catch (e) {
+    showToast("Export failed");
+  }
+}
+
+function handleImport(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!data || typeof data !== "object" || data.v !== SCHEMA_VERSION) {
+        showToast("Incompatible backup file");
+        return;
+      }
+      confirmAction(
+        "Import backup?",
+        "This will replace all current data with the contents of the backup file. This cannot be undone.",
+        () => {
+          state = Object.assign(emptyState(), data);
+          state.assets      = Array.isArray(state.assets) ? state.assets : [];
+          state.liabilities = Array.isArray(state.liabilities) ? state.liabilities : [];
+          state.snapshots   = Array.isArray(state.snapshots) ? state.snapshots : [];
+          state.goals       = Array.isArray(state.goals) ? state.goals : [];
+          state.notes       = typeof state.notes === "string" ? state.notes : "";
+          state.theme       = state.theme === "dark" ? "dark" : "light";
+          saveState();
+          render();
+          showToast("Backup restored");
+        }
+      );
+    } catch (err) {
+      showToast("Invalid file format");
+    }
+  };
+  reader.onerror = () => showToast("Could not read file");
+  reader.readAsText(file);
+  e.target.value = "";
+}
+
+/* ============================================================
+   Demo loader
+   ============================================================ */
+function loadDemoData() {
+  confirmAction(
+    "Load demo data?",
+    "This will replace your current data with the sample data. You can always import a backup to restore.",
+    () => {
+      state = getDemoState();
+      saveState();
+      recordSnapshot();
+      render();
+      showToast("Demo data loaded");
+    }
+  );
+}
+
+/* ============================================================
+   Event listeners
+   ============================================================ */
+function attachEventListeners() {
+  document.getElementById("theme-toggle").addEventListener("click", () => {
+    state.theme = state.theme === "light" ? "dark" : "light";
+    saveState();
+    applyTheme();
+  });
+
+  document.getElementById("export-btn").addEventListener("click", exportJSON);
+  document.getElementById("import-btn").addEventListener("click", () => {
+    document.getElementById("import-input").click();
+  });
+  document.getElementById("import-input").addEventListener("change", handleImport);
+  document.getElementById("print-btn").addEventListener("click", () => window.print());
+  document.getElementById("reset-btn").addEventListener("click", resetAllData);
+
+  window.addEventListener("beforeprint", () => {
+    document.documentElement.setAttribute("data-theme", "light");
+  });
+  window.addEventListener("afterprint", () => {
+    document.documentElement.setAttribute("data-theme", state.theme);
+  });
+
+  document.getElementById("add-asset-btn").addEventListener("click", () => {
+    editingAssetId = null;
+    document.getElementById("asset-form").classList.add("open");
+    renderAssets();
+    const f = document.getElementById("asset-form");
+    if (f) document.getElementById("asset-name").focus();
+  });
+
+  document.getElementById("add-liability-btn").addEventListener("click", () => {
+    editingLiabilityId = null;
+    document.getElementById("liability-form").classList.add("open");
+    renderLiabilities();
+    const f = document.getElementById("liability-form");
+    if (f) document.getElementById("liability-name").focus();
+  });
+
+  document.getElementById("add-milestone-btn").addEventListener("click", showMilestoneForm);
+  document.getElementById("milestone-cancel").addEventListener("click", hideMilestoneForm);
+  document.getElementById("milestone-form").addEventListener("submit", e => {
+    e.preventDefault();
+    const name = document.getElementById("milestone-name").value.trim();
+    const target = parseFloat(document.getElementById("milestone-target").value);
+    if (!name) { showToast("Name is required"); return; }
+    if (isNaN(target) || target < 0) { showToast("Target must be a non-negative number"); return; }
+    state.goals.push({
+      id: "g" + Math.random().toString(36).slice(2, 11),
+      name, target,
+      achieved: (totals().netWorth >= target)
+    });
+    saveState();
+    hideMilestoneForm();
+    renderMilestones();
+    showToast("Goal added");
+  });
+
+  // Notes autosave
+  document.getElementById("notes-input").addEventListener("input", e => {
+    state.notes = e.target.value;
+    const mirror = document.getElementById("printNotes");
+    if (mirror) mirror.textContent = state.notes;
+    saveState();
+  });
+
+  // Delegated click handlers
+  document.body.addEventListener("click", e => {
+    const t = e.target.closest("[data-action]");
+    if (!t) return;
+    const action = t.dataset.action;
+    const id = t.dataset.id;
+    const type = t.dataset.type;
+
+    if (action === "delete") {
+      const item = type === "asset"
+        ? state.assets.find(a => a.id === id)
+        : state.liabilities.find(l => l.id === id);
+      if (!item) return;
+      confirmAction(
+        "Delete \"" + item.name + "\"?",
+        "This " + type + " will be removed permanently. This cannot be undone.",
+        () => {
+          if (type === "asset") {
+            state.assets = state.assets.filter(a => a.id !== id);
+          } else {
+            state.liabilities = state.liabilities.filter(l => l.id !== id);
+          }
+          saveState();
+          recordSnapshot();
+          render();
+          showToast("Deleted");
+        }
+      );
+    } else if (action === "edit") {
+      if (type === "asset") {
+        editingAssetId = id;
+        document.getElementById("asset-form").classList.add("open");
+        renderAssets();
+        document.getElementById("asset-name").focus();
+      } else if (type === "liability") {
+        editingLiabilityId = id;
+        document.getElementById("liability-form").classList.add("open");
+        renderLiabilities();
+        document.getElementById("liability-name").focus();
+      }
+    } else if (action === "delete-goal") {
+      const goal = state.goals.find(g => g.id === id);
+      if (!goal) return;
+      confirmAction(
+        "Delete goal \"" + goal.name + "\"?",
+        "This will remove the milestone from your dashboard.",
+        () => {
+          state.goals = state.goals.filter(g => g.id !== id);
+          saveState();
+          renderMilestones();
+          showToast("Goal removed");
+        }
+      );
+    } else if (action === "load-demo") {
+      loadDemoData();
+    }
+  });
+
+  // Sort handlers
+  document.body.addEventListener("click", e => {
+    const th = e.target.closest("th.sortable");
+    if (!th) return;
+    const key = th.dataset.sort;
+    const table = th.closest("table");
+    const isAsset = table && table.closest("#assets-table-wrap");
+    const sort = isAsset ? sortAssets : sortLiabilities;
+    if (sort.key === key) {
+      sort.dir = sort.dir === "asc" ? "desc" : "asc";
+    } else {
+      sort.key = key;
+      sort.dir = "desc";
+    }
+    if (isAsset) renderAssets();
+    else renderLiabilities();
+  });
+
+  // Modal
+  document.getElementById("confirm-cancel").addEventListener("click", closeConfirm);
+  document.getElementById("confirm-ok").addEventListener("click", () => {
+    if (confirmCallback) confirmCallback();
+    closeConfirm();
+  });
+  document.getElementById("confirm-modal").addEventListener("click", e => {
+    if (e.target.id === "confirm-modal") closeConfirm();
+  });
+
+  // Keyboard
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+      if (document.getElementById("confirm-modal").classList.contains("open")) {
+        closeConfirm();
+        return;
+      }
+      if (!document.getElementById("milestone-form").classList.contains("hidden")) {
+        hideMilestoneForm();
+        return;
+      }
+      document.querySelectorAll(".add-form.open").forEach(f => {
+        f.classList.remove("open");
+        f.innerHTML = "";
+      });
+      editingAssetId = null;
+      editingLiabilityId = null;
+    }
+  });
+}
+
+/* ============================================================
+   Init
+   ============================================================ */
+function init() {
+  loadState();
+  recordSnapshot();
+  applyTheme();
+  render();
+  attachEventListeners();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
+</script>
+
+</body>
+</html>

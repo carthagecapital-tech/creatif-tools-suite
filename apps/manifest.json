@@ -187,6 +187,23 @@
     "etsyUrl": "https://creatiftools.etsy.com/listing/4509844860"
   },
   {
+    "id": "consignpro-tracker",
+    "name": "ConsignPro Tracker",
+    "niche": "reselling",
+    "tagline": "Consignment Inventory Tracker",
+    "description": "A local-first inventory tracker for consignment shop owners. Track consigned items, sellers, and commission splits. Status tracking from intake through payout. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Track consigned items, sellers, and commission splits",
+      "Auto-calculate seller payouts after commission",
+      "Status tracking: in, sold, paid out, returned",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#78350F",
+    "monogram": "C",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513489280"
+  },
+  {
     "id": "etsy-profit-calc",
     "name": "EtsyProfit Pro",
     "niche": "reselling",
@@ -304,6 +321,176 @@
     "monogram": "F",
     "price": "$15",
     "etsyUrl": "https://creatiftools.etsy.com/listing/4510294912"
+  },
+  {
+    "id": "debt-snowball-pro",
+    "name": "DebtSnowball Pro",
+    "niche": "personal-finance",
+    "tagline": "Debt Payoff Tracker",
+    "description": "A local-first debt payoff tracker using the snowball or avalanche method. List all debts with balances and minimum payments, project your payoff timeline, and plan your monthly budget for extra payments. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "List all debts with balances and minimum payments",
+      "Snowball or Avalanche payoff calculator",
+      "Monthly budget planner for extra payments",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#1E40AF",
+    "monogram": "DS",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513501925"
+  },
+  {
+    "id": "goldbook-tracker",
+    "name": "Goldbook Tracker Pro",
+    "niche": "personal-finance",
+    "tagline": "Precious Metals Tracker",
+    "description": "A local-first precious metals holdings tracker. Track gold, silver, and platinum by purchase price and weight. Calculate cost basis, unrealized gains, and portfolio composition. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Track gold, silver, platinum by purchase price and weight",
+      "Spot price comparison (manual entry)",
+      "Cost basis and unrealized gains calculator",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#D97706",
+    "monogram": "G",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513713068"
+  },
+  {
+    "id": "networth-pro",
+    "name": "NetWorth Pro",
+    "niche": "personal-finance",
+    "tagline": "Net Worth Tracker",
+    "description": "A local-first net worth tracker. Track assets (cash, investments, property, vehicles) and liabilities across all accounts. Monthly snapshots, debt-to-asset ratio, and trend visualization. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Track assets and liabilities across all accounts",
+      "Monthly net worth snapshot with trend chart",
+      "Debt-to-asset ratio visualization",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#047857",
+    "monogram": "N",
+    "price": "$19",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4516747499"
+  },
+  {
+    "id": "dogfuel-pro",
+    "name": "DogFuel Pro",
+    "niche": "pets",
+    "tagline": "Dog Meal Formula Calculator",
+    "description": "A local-first dog meal formula and recipe calculator. Calculate caloric needs by weight, age, and activity level. Build balanced homemade dog food recipes with supplements. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Caloric needs calculator by weight, age, activity",
+      "Recipe builder with ingredient ratios and supplements",
+      "Save multiple recipes per dog",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#65A30D",
+    "monogram": "D",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513675932"
+  },
+  {
+    "id": "petmed-pro",
+    "name": "PetMed Pro",
+    "niche": "pets",
+    "tagline": "Pet Medication Tracker",
+    "description": "A local-first pet medication and health tracker. Schedule medications with dose and frequency, get refill reminders, and log vet visits and vaccinations. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Medication schedule with dose and frequency",
+      "Refill reminders and inventory tracking",
+      "Vet visit and vaccination log",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#DB2777",
+    "monogram": "P",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513981476"
+  },
+  {
+    "id": "75hard-tracker",
+    "name": "75Hard Tracker Pro",
+    "niche": "personal-habits",
+    "tagline": "75 Hard Habit Tracker",
+    "description": "A local-first habit tracker for the 75 Hard challenge. Track daily workouts, water, diet, reading, and progress photos. Streak counter, daily check-in journal, and progress visualization. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Track daily 75 Hard tasks: workouts, water, diet, reading, photo",
+      "Streak counter and progress visualization",
+      "Daily check-in journal",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#DC2626",
+    "monogram": "75",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513331055"
+  },
+  {
+    "id": "lifewheel-pro",
+    "name": "Lifewheel Pro",
+    "niche": "personal-habits",
+    "tagline": "Life Balance Wheel",
+    "description": "A local-first life balance assessment tool. Score 8 life areas (health, career, relationships, finances, growth, fun, environment, spirituality). Visualize balance with the wheel chart and track goals per area. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Score 8 life areas on a 1-10 scale",
+      "Visualize balance with the wheel chart",
+      "Track goals and reflections per area",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#A21CAF",
+    "monogram": "LW",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513936518"
+  },
+  {
+    "id": "labtrack-pro",
+    "name": "LabTrack Pro",
+    "niche": "health",
+    "tagline": "Lab Results Journal",
+    "description": "A local-first lab results and medical journal. Log blood markers with reference ranges, track symptoms, and visualize trends over time. Includes a medication tracker. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Log lab results with reference ranges and trend charts",
+      "Symptom and medication tracking",
+      "Track vitals over time",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#0891B2",
+    "monogram": "L",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513828371"
+  },
+  {
+    "id": "handyquote-pro",
+    "name": "HandyQuote Pro",
+    "niche": "home-services",
+    "tagline": "Handyman Quote Builder",
+    "description": "A local-first quote builder for handyman services. Build job-based quotes with line items for labor, materials, and time. Print or export to PDF. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Job-based quote templates for handyman services",
+      "Material + labor cost breakdown",
+      "Print or export to PDF",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#B45309",
+    "monogram": "H",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513748853"
+  },
+  {
+    "id": "junkquote-pro",
+    "name": "JunkQuote Pro",
+    "niche": "home-services",
+    "tagline": "Junk Removal Quote Builder",
+    "description": "A local-first quote builder for junk removal services. Volume-based pricing calculator with truck load estimates from single items to full loads. Print or export to PDF. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Volume-based pricing for junk removal",
+      "Truck load estimates (single item to full truck)",
+      "Print or export to PDF",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#475569",
+    "monogram": "J",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513810943"
   },
   {
     "id": "carwash-pro",
