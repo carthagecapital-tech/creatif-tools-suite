@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Lawn Care Business Apps | Creatif Tools</title>
+<meta name="description" content="Solo landscapers and small lawn care crews need the same professional tools as big companies — without the enterprise price tag. These apps help you build "/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://creatif.tools/lawn-care/"/>
+<meta name="keywords" content="lawn care apps, lawn care business apps, single file html app, local-first"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Lawn Care Business Apps"/>
+<meta property="og:description" content="Solo landscapers and small lawn care crews need the same professional tools as big companies — without the enterprise price tag. These apps help you build quotes, manage contracts, and schedule recurr"/>
+<meta property="og:url" content="https://creatif.tools/lawn-care/"/>
+<meta property="og:image" content="https://creatif.tools/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta property="og:site_name" content="Creatif.tools"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "CollectionPage", "name": "Lawn Care Business Apps", "description": "Solo landscapers and small lawn care crews need the same professional tools as big companies \u2014 without the enterprise price tag. These apps help you build quotes, manage contracts, and schedule recurr", "url": "https://creatif.tools/lawn-care/", "mainEntity": {"@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "LawnForms Pro", "url": "https://creatif.tools/lawnforms-pro/"}, {"@type": "ListItem", "position": 2, "name": "LawnQuote Pro", "url": "https://creatif.tools/lawnquote-pro/"}, {"@type": "ListItem", "position": 3, "name": "LawnSchedule Pro", "url": "https://creatif.tools/lawnschedule-pro/"}]}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f; --bg2: #0f0f16;
+      --border: rgba(255,255,255,0.07);
+      --accent: #00d4aa; --accent2: #00b894;
+      --text: #e8e8f0; --muted: #6b6b80; --card-bg: #111118;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.65; min-height: 100vh; }
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+    .top-bar { padding: 1.25rem 0; border-bottom: 1px solid var(--border); }
+    .top-bar a { color: var(--muted); text-decoration: none; font-size: 0.9rem; }
+    .top-bar a:hover { color: var(--accent); }
+    .hero { padding: 3rem 0 2rem; text-align: center; }
+    .breadcrumb { font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .niche-badge { display: inline-block; background: rgba(0, 212, 170, 0.1); border: 1px solid rgba(0, 212, 170, 0.25); padding: 0.3rem 0.85rem; border-radius: 100px; font-size: 0.75rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; }
+    h1 { font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 1rem; }
+    .lead { font-size: 1.15rem; color: var(--muted); max-width: 720px; margin: 0 auto; }
+    .app-count { display: inline-block; margin-top: 1.5rem; padding: 0.4rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 100px; font-size: 0.85rem; color: var(--muted); }
+    .app-count strong { color: var(--text); }
+    section { padding: 2.5rem 0; border-top: 1px solid var(--border); }
+    h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.25rem; }
+    p { color: var(--muted); max-width: 720px; margin-bottom: 1rem; }
+    .why-list, .tips-list { list-style: none; padding: 0; max-width: 720px; }
+    .why-list li, .tips-list li { padding: 0.7rem 0 0.7rem 1.75rem; position: relative; color: var(--text); }
+    .why-list li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .tips-list li::before { content: "✓"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; max-width: 1080px; }
+    .app-card { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.25rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; color: inherit; transition: border-color 0.2s, transform 0.15s; }
+    .app-card:hover { border-color: var(--app-color); transform: translateY(-2px); }
+    .app-icon { width: 44px; height: 44px; border-radius: 9px; display: grid; place-items: center; font-weight: 700; font-size: 0.95rem; color: #fff; flex-shrink: 0; }
+    .app-name { font-weight: 600; font-size: 1rem; margin-bottom: 2px; }
+    .app-tagline { font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; }
+    .app-price { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+    .app-price-sub { font-weight: 500; color: var(--muted); font-size: 0.75rem; }
+    .faq { max-width: 720px; margin-top: 1rem; }
+    .faq-item { padding: 1.25rem 0; border-top: 1px solid var(--border); }
+    .faq-item:last-child { border-bottom: 1px solid var(--border); }
+    .faq-q { font-weight: 600; margin-bottom: 0.5rem; }
+    .faq-a { color: var(--muted); font-size: 0.95rem; }
+    .related-niches { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+    .related-niche { padding: 0.4rem 0.85rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 100px; font-size: 0.85rem; text-decoration: none; color: var(--text); }
+    .related-niche:hover { border-color: var(--accent); color: var(--accent); }
+    footer { text-align: center; padding: 2.5rem 1rem; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--muted); }
+    footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="top-bar">
+    <a href="/">← Back to Creatif Tools</a>
+  </div>
+
+  <div class="hero">
+    <div class="breadcrumb">
+      <a href="/">Home</a> / <span>Lawn Care</span>
+    </div>
+    <span class="niche-badge">Lawn Care Business Apps</span>
+    <h1>Apps for Lawn Care Businesses</h1>
+    <p class="lead">Solo landscapers and small lawn care crews need the same professional tools as big companies — without the enterprise price tag. These apps help you build quotes, manage contracts, and schedule recurring jobs, all designed for the realities of running a lawn care business.</p>
+    <div class="app-count">
+      <strong>3</strong> apps in this collection
+    </div>
+  </div>
+
+  <section>
+    <h2>Apps in this collection</h2>
+    <div class="app-grid">
+      
+        <a href="/lawnforms-pro/" class="app-card" style="--app-color: #1F5F5B;">
+          <div class="app-icon" style="background: #1F5F5B;">L</div>
+          <div>
+            <div class="app-name">LawnForms Pro</div>
+            <div class="app-tagline">Contract Templates</div>
+            <div class="app-price">$19 <span class="app-price-sub">one-time</span></div>
+          </div>
+        </a>
+
+        <a href="/lawnquote-pro/" class="app-card" style="--app-color: #2D6A3E;">
+          <div class="app-icon" style="background: #2D6A3E;">L</div>
+          <div>
+            <div class="app-name">LawnQuote Pro</div>
+            <div class="app-tagline">Lawn Care Estimator</div>
+            <div class="app-price">$39 <span class="app-price-sub">one-time</span></div>
+          </div>
+        </a>
+
+        <a href="/lawnschedule-pro/" class="app-card" style="--app-color: #B8862E;">
+          <div class="app-icon" style="background: #B8862E;">L</div>
+          <div>
+            <div class="app-name">LawnSchedule Pro</div>
+            <div class="app-tagline">Job Scheduler</div>
+            <div class="app-price">$19 <span class="app-price-sub">one-time</span></div>
+          </div>
+        </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Why these apps</h2>
+    <p>Lawn care is a relationship business — property owners hire you season after season when you deliver consistent results. The apps here make you look more professional (clean quotes, signed contracts) and run more efficiently (job scheduling, daily route planning). They're offline-capable, so they work in the field even without signal.</p>
+  </section>
+
+  <section>
+    <h2>How to choose the right app</h2>
+    <ul class="tips-list">
+      <li>Start with an estimate/quote app — your close rate jumps when quotes look professional.</li>
+<li>Add a contract template library — get signed agreements without a lawyer.</li>
+<li>Use the job scheduler to plan weekly routes — a printed daily route sheet keeps your crew on track.</li>
+<li>For recurring service, the scheduler helps you track which properties are due each week.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      
+      <div class="faq-item">
+        <div class="faq-q">Do these work offline?</div>
+        <div class="faq-a">Yes. Once you open the app, it works without internet. Your data is saved on your device.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Can I print quotes and contracts for clients?</div>
+        <div class="faq-a">Yes. Every app in this collection has print and PDF export built in. Bring a printed quote to the property and you'll close more deals.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Is there a free trial?</div>
+        <div class="faq-a">Every app has a live demo on creatif.tools — no signup needed. Use it for 90 seconds, then buy the full version on Etsy if you want to keep using it.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Explore other niches</h2>
+    <div class="related-niches">
+      <a href="/budgeting/" class="related-niche">Budgeting</a>
+<a href="/car-wash/" class="related-niche">Car Wash</a>
+<a href="/cleaning/" class="related-niche">Cleaning</a>
+<a href="/food-business/" class="related-niche">Food Business</a>
+<a href="/health/" class="related-niche">Health</a>
+<a href="/home-services/" class="related-niche">Home Services</a>
+    </div>
+  </section>
+</div>
+
+<footer>
+  Creatif.tools — local-first apps for service businesses, resellers & personal use.<br>
+  <a href="/">Home</a> · <a href="/lawn-care/">Lawn Care</a>
+</footer>
+</body>
+</html>
