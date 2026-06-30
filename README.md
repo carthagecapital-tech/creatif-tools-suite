@@ -1,130 +1,64 @@
-# Creatif.tools
+# SEO foundation package
 
-The marketing site for the Creatif.tools app suite. Customers land here from
-Etsy, try the demo in the browser, then get sent back to Etsy to buy.
+Adds 51 new landing pages + better homepage + complete sitemap to creatif.tools.
 
-The site is data-driven: adding a new app is one entry in `apps/manifest.json`
-and one HTML file in `apps/<id>/index.html`. No HTML editing required.
+## What's in the package
 
-## File structure
+**51 new pages:**
+- 36 app landing pages (one per app in your manifest) at `creatif.tools/<app-id>/`
+- 15 niche landing pages (one per niche) at `creatif.tools/<niche>/`
 
-```
-creatif-tools-suite/
-├── index.html              ← the showcase (don't edit by hand; it loads the manifest)
-├── assets/
-│   ├── style.css           ← design system (only edit for design changes)
-│   └── app.js              ← loader, renderer, modal, Buy button
-├── apps/
-│   ├── manifest.json       ← THE source of truth — edit this to add/remove apps
-│   └── <id>/
-│       └── index.html      ← the demo file for that app
-├── robot.txt
-├── sitemap.xml
-└── README.md
-```
+**3 modified files:**
+- `creatif-tools/index.html` (better title, meta description, keywords, Schema.org JSON-LD, internal cross-links)
+- `creatif-tools/sitemap.xml` (now has 52 URLs, was 1)
+- `creatif-tools/robot.txt` (unchanged but included for completeness)
 
-## How to add a new app
+## What each new page has
 
-You don't need to touch any code. You just need:
+**App pages:**
+- Unique H1, meta description targeting "[app name] + [niche]" keywords
+- Schema.org SoftwareApplication JSON-LD (price, description, etc.)
+- 200-300 word description
+- Key features (from manifest)
+- "How it works" 3-step section
+- Embedded demo iframe (loads apps/<id>/index.html)
+- Buy on Etsy button
+- FAQ section (3 questions)
+- Related apps in same niche
 
-1. **The app's HTML file** — the single-file HTML the customer will get on Etsy
-2. **The Etsy listing URL** — where the Buy button should point
-3. (Optional) a few small details — name, color, price, short description
+**Niche pages:**
+- Unique H1, meta description targeting "[niche] apps" keywords
+- Schema.org CollectionPage + ItemList JSON-LD
+- 200-300 word intro
+- All apps in the niche as cards (with links to app pages)
+- "Why these apps" section
+- "How to choose" tips list
+- FAQ section
+- Other niches (internal cross-links)
 
-Then:
+## Apply
 
-1. **Drop the HTML file** in `apps/<your-app-id>/index.html`. The `<your-app-id>`
-   is the short identifier you'll use everywhere. Use lowercase, dashes only,
-   no spaces. Example: `poolpro`, `budgetflow`, `cleanquote-pro`.
+Extract the `creatif-tools/` folder over your existing creatif-tools repo root. The new folders/files will be added; the modified `index.html` and `sitemap.xml` will replace existing.
 
-2. **Edit `apps/manifest.json`** — add a new entry to the array. Copy-paste
-   this template and fill it in:
+Commit + push. Vercel auto-deploys.
 
-   ```json
-   {
-     "id": "your-app-id",
-     "name": "Your App Name",
-     "tagline": "Short category, e.g. 'CRM Suite'",
-     "description": "Two sentences. What does it do, and who is it for?",
-     "features": [
-       "Key feature one",
-       "Key feature two",
-       "Key feature three"
-     ],
-     "color": "#2C4A7C",
-     "monogram": "Y",
-     "price": "$29",
-     "etsyUrl": "https://www.etsy.com/listing/000000000/your-app-name"
-   }
-   ```
+## After deploy
 
-   Field reference:
-   - `id` — must match the folder name in `apps/<id>/index.html`
-   - `name` — display name (e.g. "PoolPro Manager")
-   - `tagline` — short category, shown under the name in small caps
-   - `description` — one or two short sentences, shown on the card
-   - `features` — 3 to 4 short bullets shown on the card
-   - `color` — hex color used for the card's accent stripe and icon
-   - `monogram` — 1-2 letter mark shown inside the colored icon block
-   - `price` — display string, e.g. `"$29"` or `"$19 — Lifetime"`
-   - `etsyUrl` — the full Etsy listing URL
+1. **Google Search Console** -> Sitemaps -> resubmit `https://creatif.tools/sitemap.xml`
+2. **Request indexing** for your top pages: GSC -> URL Inspection -> paste URL -> Request Indexing
+3. **Wait 2-4 weeks** for Google to crawl and index the new pages
+4. **Monitor** GSC -> Performance -> see which queries start showing your pages
 
-3. **Commit and push.** That's it. The site is fully static, so
-   GitHub Pages (or whatever host) picks up the new app automatically.
+## Expected timeline
 
-## To remove an app
+- 0-2 weeks: Google discovers the new URLs via sitemap
+- 2-6 weeks: Google starts indexing them, you see impressions in GSC
+- 6-12 weeks: You start ranking for long-tail queries, clicks begin
+- 3-6 months: Compounding effect as Google sees your site as authoritative
 
-1. Delete the entry from `apps/manifest.json`
-2. Optionally delete the `apps/<id>/` folder (it won't be referenced anymore)
+## Notes
 
-## Demo limit
-
-Every demo on the site is gated by a 90-second taste-it-then-buy-it timer,
-enforced **by the parent site, not the app**. After 90 seconds of an open
-demo, an overlay slides in asking the customer to buy on Etsy. They can
-dismiss the overlay once and keep exploring.
-
-This means:
-- Your app file is **never modified** — the version on Etsy is identical to
-  the version served in the iframe.
-- The limit is just a UX nudge, not a technical lock. A determined customer
-  could open the demo file's URL directly and use it without the gate. The
-  gate exists to convert curious browsers into buyers, not to enforce DRM.
-
-To change the timer, edit `DEMO_LIMIT_MS` near the top of `assets/app.js`
-(default: 90000 = 90 seconds). Set to `0` to disable the gate entirely.
-
----
-
-## Direct purchase (Stripe) — switching from Etsy later
-
-The Buy button is routed through a function, not a hardcoded link, so flipping
-from Etsy → Stripe is a config change, not a rewrite.
-
-In `assets/app.js`, near the top:
-
-```js
-const PURCHASE_MODE = 'etsy';  // change to 'stripe' when ready
-```
-
-When you flip to Stripe, you'll also need to:
-
-1. Add your Stripe publishable key and checkout endpoint to `STRIPE_CONFIG`
-2. Add a `stripePriceId` to each entry in `apps/manifest.json` (e.g. `"stripePriceId": "price_1AbC..."`)
-3. Implement the small serverless function that the JS calls to create a
-   Checkout Session (Netlify Function / Vercel Function / Cloudflare Worker
-   — 30 lines of code, the JS is already wired to call it)
-4. Uncomment and complete `startStripeCheckout()` in `assets/app.js`
-
-Until then, everything routes to Etsy as it does now.
-
-## Local preview
-
-```bash
-# from the repo root
-python3 -m http.server 8000
-# then open http://localhost:8000
-```
-
-You can also just open `index.html` directly in a browser, but `fetch()` for
-the manifest needs an HTTP server (it won't work via `file://`).
+- The 3 coming-soon apps (carwash-pro, pestpro, poolpro) get landing pages with "coming soon" messaging
+- The original `apps/<id>/index.html` files (iframe content) are unchanged - they still load in the modal
+- All new pages have unique content (not just templated placeholders)
+- Cross-linking between pages helps Google understand your site structure

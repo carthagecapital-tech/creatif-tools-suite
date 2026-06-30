@@ -1,0 +1,614 @@
+[
+  {
+    "id": "cleancrm-pro",
+    "name": "CleanCRM Pro",
+    "niche": "cleaning",
+    "tagline": "Client Manager",
+    "description": "A complete client and lead manager for cleaning service businesses. Track prospects through your pipeline, manage client and property profiles, and onboard new clients in 8 guided steps. Works offline, no subscription, no account.",
+    "features": [
+      "Lead pipeline from first contact to client",
+      "8-step client onboarding workflow",
+      "Client & property profiles",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#6B4A6E",
+    "monogram": "C",
+    "price": "$39",
+    "etsyUrl": "https://www.etsy.com/listing/4519939105/cleaning-client-onboarding-app-for"
+  },
+  {
+    "id": "cleanforms-pro",
+    "name": "CleanForms Pro",
+    "niche": "cleaning",
+    "tagline": "Forms Bundle",
+    "description": "A complete library of 8 cleaning business forms \u2014 client intake, service agreement, work order, and more. Fill out, print, and hand to clients. Works offline, no subscription, no account. Local-first.",
+    "features": [
+      "8 ready-to-use forms (intake, agreement, work order, and more)",
+      "Print welcome packets for new clients",
+      "Works offline \u2014 no subscription, no account",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#3D6B47",
+    "monogram": "C",
+    "price": "$29",
+    "etsyUrl": "https://www.etsy.com/listing/4518719013/cleaning-business-forms-bundle-app-for"
+  },
+  {
+    "id": "cleaning-job-pricer",
+    "name": "CleaningPricer Pro",
+    "niche": "cleaning",
+    "tagline": "Job Pricing & Quotes",
+    "description": "A local-first pricing and quote template tool for cleaning businesses. Build job-based quotes with line items, hourly rates, and material costs. Print or export to PDF. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Job-based quote templates with line items",
+      "Hourly rate + material cost breakdown",
+      "Print or export to PDF",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#92400E",
+    "monogram": "JP",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4509932551"
+  },
+  {
+    "id": "cleaninspect-pro",
+    "name": "CleanInspect Pro",
+    "niche": "cleaning",
+    "tagline": "Inspection Checklist",
+    "description": "Room-by-room quality control for cleaning pros. Run an inspection, capture inspector notes, generate a signed PDF report \u2014 all without leaving the browser. Local-first.",
+    "features": [
+      "Room-by-room inspection with sign-off",
+      "Inspector notes & issue flagging",
+      "Printable PDF report for the client",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#B8462E",
+    "monogram": "I",
+    "price": "$29",
+    "etsyUrl": "https://www.etsy.com/listing/4518461252/house-cleaning-inspection-checklist-app"
+  },
+  {
+    "id": "cleanquote-pro",
+    "name": "CleanQuote Pro",
+    "niche": "cleaning",
+    "tagline": "Quote Calculator",
+    "description": "A local-first quote builder for small cleaning businesses. No account, no server. All data stays in your browser.",
+    "features": [
+      "Build quotes with line items in seconds",
+      "Auto-apply taxes & discounts",
+      "Print or export to PDF",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#2C4A7C",
+    "monogram": "C",
+    "price": "$29",
+    "etsyUrl": "https://www.etsy.com/listing/4517517831/cleaning-service-quote-calculator"
+  },
+  {
+    "id": "cleanroute-pro",
+    "name": "CleanRoute Pro",
+    "niche": "cleaning",
+    "tagline": "Stop planning routes in your head the night before.",
+    "description": "Plan your cleaning jobs in the smartest order. Save time, save gas, finish sooner. Local-first \u2014 your data never leaves your browser.",
+    "features": [
+      "Drag-to-reorder stops",
+      "Total drive time estimate",
+      "Print-friendly route sheet",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#D17A22",
+    "monogram": "R",
+    "price": "$39",
+    "etsyUrl": "https://www.etsy.com/listing/4517754673/cleaning-service-route-planner-app-html"
+  },
+  {
+    "id": "cleanschedule-pro",
+    "name": "CleanSchedule Pro",
+    "niche": "cleaning",
+    "tagline": "Job Scheduler",
+    "description": "A complete job scheduler for cleaning service businesses. Schedule one-time and recurring jobs, print the daily route as a PDF, track actual time with a start/stop clock. Works offline, no subscription, no account.",
+    "features": [
+      "One-time and recurring job scheduling",
+      "Daily route PDF print",
+      "Start/stop time tracking per job",
+      "Works offline \u2014 no subscription, no account"
+    ],
+    "color": "#4A5AC4",
+    "monogram": "S",
+    "price": "$29",
+    "etsyUrl": "https://www.etsy.com/listing/4519362297/cleaning-schedule-app-for-service-pros"
+  },
+  {
+    "id": "lawnforms-pro",
+    "name": "LawnForms Pro",
+    "niche": "lawn-care",
+    "tagline": "Contract Templates",
+    "description": "A library of contract templates for lawn care service businesses. Pick a template, fill in the details, sign and print. Works offline, no subscription, no account. Local-first.",
+    "features": [
+      "Multiple contract templates ready to fill",
+      "Print or export to PDF",
+      "Works offline \u2014 no subscription, no account",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#1F5F5B",
+    "monogram": "L",
+    "price": "$19",
+    "etsyUrl": "https://www.etsy.com/listing/4522365713/lawn-care-contract-template-app-for"
+  },
+  {
+    "id": "lawnquote-pro",
+    "name": "LawnQuote Pro",
+    "niche": "lawn-care",
+    "tagline": "Lawn Care Estimator",
+    "description": "Build professional lawn care estimates in under a minute. Line items, taxes, discounts \u2014 all automatic. Local-first, no account, no subscription. Built for solo landscapers and small lawn care businesses.",
+    "features": [
+      "Build estimates with line items in seconds",
+      "Auto-apply taxes & discounts",
+      "Print or export to PDF",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#2D6A3E",
+    "monogram": "L",
+    "price": "$39",
+    "etsyUrl": "https://www.etsy.com/listing/4520752842/lawn-care-estimate-app-for-service-pros"
+  },
+  {
+    "id": "lawnschedule-pro",
+    "name": "LawnSchedule Pro",
+    "niche": "lawn-care",
+    "tagline": "Job Scheduler",
+    "description": "Schedule one-time and recurring lawn care jobs, keep a service log per visit, print the daily route as a PDF. Works offline, no subscription, no account. Built for solo landscapers and small lawn care businesses.",
+    "features": [
+      "One-time and recurring job scheduling",
+      "Service log per visit",
+      "Daily route PDF print",
+      "Works offline \u2014 no subscription, no account"
+    ],
+    "color": "#B8862E",
+    "monogram": "L",
+    "price": "$19",
+    "etsyUrl": "https://www.etsy.com/listing/4522639270/lawn-care-schedule-app-for-service-pros"
+  },
+  {
+    "id": "amazon-calculator",
+    "name": "AmazonCalc Pro",
+    "niche": "reselling",
+    "tagline": "Amazon FBA Profit Calculator",
+    "description": "A local-first Amazon FBA profit and fee calculator. Calculate per-product profit after Amazon referral fees, FBA fulfillment fees, storage fees, and ad spend. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Calculate per-product FBA fees (referral, fulfillment, storage)",
+      "Multi-marketplace support (US, EU, JP, AU)",
+      "Profit per unit after all Amazon fees",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#FF9900",
+    "monogram": "A",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4509844860"
+  },
+  {
+    "id": "consignpro-tracker",
+    "name": "ConsignPro Tracker",
+    "niche": "reselling",
+    "tagline": "Consignment Inventory Tracker",
+    "description": "A local-first inventory tracker for consignment shop owners. Track consigned items, sellers, and commission splits. Status tracking from intake through payout. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Track consigned items, sellers, and commission splits",
+      "Auto-calculate seller payouts after commission",
+      "Status tracking: in, sold, paid out, returned",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#78350F",
+    "monogram": "C",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513489280"
+  },
+  {
+    "id": "etsy-profit-calc",
+    "name": "EtsyProfit Pro",
+    "niche": "reselling",
+    "tagline": "Etsy Profit Calculator",
+    "description": "A local-first Etsy profit calculator with multi-country fee support. Calculate per-order profit after Etsy transaction fees, Offsite Ads costs, and shipping. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Multi-country Etsy fee support (US, UK, EU, AU)",
+      "Per-order profit after fees, Offsite Ads, and shipping",
+      "Listing price recommendations by target margin",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#F1641E",
+    "monogram": "E",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4510395297"
+  },
+  {
+    "id": "handmade-pricing-calc",
+    "name": "HandmadePrice Pro",
+    "niche": "reselling",
+    "tagline": "Handmade Goods Pricing",
+    "description": "A local-first pricing calculator for handmade goods sellers on Etsy, Shopify, and craft fairs. Calculate material costs, labor, overhead, and target margin in one click. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Material + labor + overhead cost breakdown",
+      "Target margin pricing (wholesale and retail)",
+      "Multi-platform: Etsy, Shopify, craft fairs",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#B45309",
+    "monogram": "H",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4510258431"
+  },
+  {
+    "id": "pod-profit-calculator",
+    "name": "PODProfit Pro",
+    "niche": "reselling",
+    "tagline": "Print-on-Demand Profit",
+    "description": "A local-first profit calculator for print-on-demand sellers on Etsy, Shopify, and Merch by Amazon. Calculate per-design profit after production costs, platform fees, and ads. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Per-design profit after POD production fees",
+      "Multi-platform: Etsy, Shopify, Merch by Amazon",
+      "Ad spend break-even calculator",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#7C3AED",
+    "monogram": "P",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4510236033"
+  },
+  {
+    "id": "reseller-profit-calc",
+    "name": "ResellerProfit Pro",
+    "niche": "reselling",
+    "tagline": "Multi-Platform Reseller Profit",
+    "description": "A local-first profit calculator for multi-platform resellers. Track profit per item across eBay, Etsy, Poshmark, Mercari, and Facebook Marketplace with per-platform fee rules. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Multi-platform profit: eBay, Etsy, Poshmark, Mercari",
+      "Per-item ROI after fees, shipping, and ad spend",
+      "Bulk calculate profit across your inventory",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#BE185D",
+    "monogram": "RP",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4510170252"
+  },
+  {
+    "id": "resellpro",
+    "name": "ResellPro",
+    "niche": "reselling",
+    "tagline": "Reseller Inventory & Profit",
+    "description": "A local-first inventory and profit tracker for eBay, Etsy, Poshmark, and Mercari resellers. Track items, calculate per-item profit after fees and shipping, and export CSV reports. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Track inventory across eBay, Etsy, Poshmark, Mercari",
+      "Per-item profit calculator (buy, sell, fees, shipping)",
+      "Dashboard KPIs: revenue, profit, ROI, margin",
+      "CSV export for reports and accounting"
+    ],
+    "color": "#1E5C3A",
+    "monogram": "R",
+    "price": "$19",
+    "etsyUrl": "https://www.etsy.com/listing/4528711695/reseller-spreadsheet-app-ebay-etsy"
+  },
+  {
+    "id": "couples-budget-splitter",
+    "name": "CouplesBudget Pro",
+    "niche": "budgeting",
+    "tagline": "Bill Splitter for Couples",
+    "description": "A local-first bill splitter and shared-expense tracker for couples. Track shared bills, recurring expenses, and one-off costs. Auto-calculate who owes what each month and settle up in one click. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Track shared bills and recurring expenses",
+      "Auto-calculate who owes what each month",
+      "Settle-up summary for any date range",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#0EA5E9",
+    "monogram": "CB",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4510416471"
+  },
+  {
+    "id": "food-business-cost-calc",
+    "name": "FoodCost Pro",
+    "niche": "food-business",
+    "tagline": "Recipe Cost Calculator",
+    "description": "A local-first recipe and menu cost calculator for food businesses. Break down ingredient costs per recipe, set menu prices with target margins, and scale batch costs. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Ingredient cost breakdown per recipe",
+      "Menu price with target margin",
+      "Batch cost scaling (1x, 10x, 100x)",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#DC2626",
+    "monogram": "F",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4510294912"
+  },
+  {
+    "id": "debt-snowball-pro",
+    "name": "DebtSnowball Pro",
+    "niche": "personal-finance",
+    "tagline": "Debt Payoff Tracker",
+    "description": "A local-first debt payoff tracker using the snowball or avalanche method. List all debts with balances and minimum payments, project your payoff timeline, and plan your monthly budget for extra payments. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "List all debts with balances and minimum payments",
+      "Snowball or Avalanche payoff calculator",
+      "Monthly budget planner for extra payments",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#1E40AF",
+    "monogram": "DS",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513501925"
+  },
+  {
+    "id": "goldbook-tracker",
+    "name": "Goldbook Tracker Pro",
+    "niche": "personal-finance",
+    "tagline": "Precious Metals Tracker",
+    "description": "A local-first precious metals holdings tracker. Track gold, silver, and platinum by purchase price and weight. Calculate cost basis, unrealized gains, and portfolio composition. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Track gold, silver, platinum by purchase price and weight",
+      "Spot price comparison (manual entry)",
+      "Cost basis and unrealized gains calculator",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#D97706",
+    "monogram": "G",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513713068"
+  },
+  {
+    "id": "networth-pro",
+    "name": "NetWorth Pro",
+    "niche": "personal-finance",
+    "tagline": "Net Worth Tracker",
+    "description": "A local-first net worth tracker. Track assets (cash, investments, property, vehicles) and liabilities across all accounts. Monthly snapshots, debt-to-asset ratio, and trend visualization. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Track assets and liabilities across all accounts",
+      "Monthly net worth snapshot with trend chart",
+      "Debt-to-asset ratio visualization",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#047857",
+    "monogram": "N",
+    "price": "$19",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4516747499"
+  },
+  {
+    "id": "dogfuel-pro",
+    "name": "DogFuel Pro",
+    "niche": "pets",
+    "tagline": "Dog Meal Formula Calculator",
+    "description": "A local-first dog meal formula and recipe calculator. Calculate caloric needs by weight, age, and activity level. Build balanced homemade dog food recipes with supplements. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Caloric needs calculator by weight, age, activity",
+      "Recipe builder with ingredient ratios and supplements",
+      "Save multiple recipes per dog",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#65A30D",
+    "monogram": "D",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513675932"
+  },
+  {
+    "id": "petmed-pro",
+    "name": "PetMed Pro",
+    "niche": "pets",
+    "tagline": "Pet Medication Tracker",
+    "description": "A local-first pet medication and health tracker. Schedule medications with dose and frequency, get refill reminders, and log vet visits and vaccinations. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Medication schedule with dose and frequency",
+      "Refill reminders and inventory tracking",
+      "Vet visit and vaccination log",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#DB2777",
+    "monogram": "P",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513981476"
+  },
+  {
+    "id": "75hard-tracker",
+    "name": "75Hard Tracker Pro",
+    "niche": "personal-habits",
+    "tagline": "75 Hard Habit Tracker",
+    "description": "A local-first habit tracker for the 75 Hard challenge. Track daily workouts, water, diet, reading, and progress photos. Streak counter, daily check-in journal, and progress visualization. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Track daily 75 Hard tasks: workouts, water, diet, reading, photo",
+      "Streak counter and progress visualization",
+      "Daily check-in journal",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#DC2626",
+    "monogram": "75",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513331055"
+  },
+  {
+    "id": "lifewheel-pro",
+    "name": "Lifewheel Pro",
+    "niche": "personal-habits",
+    "tagline": "Life Balance Wheel",
+    "description": "A local-first life balance assessment tool. Score 8 life areas (health, career, relationships, finances, growth, fun, environment, spirituality). Visualize balance with the wheel chart and track goals per area. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Score 8 life areas on a 1-10 scale",
+      "Visualize balance with the wheel chart",
+      "Track goals and reflections per area",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#A21CAF",
+    "monogram": "LW",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513936518"
+  },
+  {
+    "id": "labtrack-pro",
+    "name": "LabTrack Pro",
+    "niche": "health",
+    "tagline": "Lab Results Journal",
+    "description": "A local-first lab results and medical journal. Log blood markers with reference ranges, track symptoms, and visualize trends over time. Includes a medication tracker. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Log lab results with reference ranges and trend charts",
+      "Symptom and medication tracking",
+      "Track vitals over time",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#0891B2",
+    "monogram": "L",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513828371"
+  },
+  {
+    "id": "handyquote-pro",
+    "name": "HandyQuote Pro",
+    "niche": "home-services",
+    "tagline": "Handyman Quote Builder",
+    "description": "A local-first quote builder for handyman services. Build job-based quotes with line items for labor, materials, and time. Print or export to PDF. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Job-based quote templates for handyman services",
+      "Material + labor cost breakdown",
+      "Print or export to PDF",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#B45309",
+    "monogram": "H",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513748853"
+  },
+  {
+    "id": "junkquote-pro",
+    "name": "JunkQuote Pro",
+    "niche": "home-services",
+    "tagline": "Junk Removal Quote Builder",
+    "description": "A local-first quote builder for junk removal services. Volume-based pricing calculator with truck load estimates from single items to full loads. Print or export to PDF. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Volume-based pricing for junk removal",
+      "Truck load estimates (single item to full truck)",
+      "Print or export to PDF",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#475569",
+    "monogram": "J",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513810943"
+  },
+  {
+    "id": "er-nurse-desk",
+    "name": "ER NurseDesk Pro",
+    "niche": "nursing",
+    "tagline": "ER Nurse Charting",
+    "description": "A local-first ER nursing charting app. Patient tracking, vitals timeline, SBAR handoff templates, and 30+ ER forms. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Patient tracking with status, room, acuity",
+      "Vitals timeline with auto-charting",
+      "SBAR handoff template generator",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#DC2626",
+    "monogram": "ER",
+    "price": "$25",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4507208316"
+  },
+  {
+    "id": "icu-nurse-desk",
+    "name": "ICU NurseDesk Pro",
+    "niche": "nursing",
+    "tagline": "ICU Nurse Charting",
+    "description": "A local-first ICU nursing charting app. Vent/CRRT/Vasoactive drip tracking, hourly flow sheets with auto-totals, 30+ critical care forms. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Vent, CRRT, and vasoactive drip trackers",
+      "Hourly ICU flow sheet with auto-totals",
+      "30+ critical care forms and assessments",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#7C2D12",
+    "monogram": "ICU",
+    "price": "$25",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4507258152"
+  },
+  {
+    "id": "medsurg-nurse-desk",
+    "name": "MedSurg NurseDesk Pro",
+    "niche": "nursing",
+    "tagline": "Med-Surg Nurse Charting",
+    "description": "A local-first med-surg nursing charting app. 5-step shift report with auto-summary, on-call and follow-up rescheduler, 30+ med-surg forms. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "5-step shift report with auto-summary",
+      "On-call and follow-up rescheduler",
+      "30+ med-surg forms",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#0D9488",
+    "monogram": "MS",
+    "price": "$25",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4507314354"
+  },
+  {
+    "id": "vow-and-plan",
+    "name": "Vow & Plan Pro",
+    "niche": "wedding",
+    "tagline": "Offline Wedding Planner",
+    "description": "A local-first premium wedding planning app. Drag-and-drop seating chart, multi-vendor budget tracker with live charts, auto-PDF printables. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Drag-and-drop seating chart with auto-print",
+      "Multi-vendor budget tracker with live charts",
+      "Auto-PDF printables for invitations and timelines",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#BE185D",
+    "monogram": "V&P",
+    "price": "$29",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4505956290"
+  },
+  {
+    "id": "carwash-pro",
+    "name": "CarWash Pro",
+    "niche": "car-wash",
+    "tagline": "Mobile Detail Estimator",
+    "description": "A local-first quote builder for mobile car wash and auto detailing businesses. Coming soon \u2014 full feature list TBA.",
+    "features": [
+      "Quote builder for mobile car wash services",
+      "Print or export to PDF",
+      "Local-first \u2014 your data never leaves your device",
+      "Coming soon \u2014 full feature list TBA"
+    ],
+    "color": "#3B82F6",
+    "monogram": "CW",
+    "status": "coming-soon",
+    "price": "TBA"
+  },
+  {
+    "id": "pestpro",
+    "name": "PestPro",
+    "niche": "pest-control",
+    "tagline": "Service Quote Builder",
+    "description": "A local-first quote builder for pest control businesses. Coming soon \u2014 full feature list TBA.",
+    "features": [
+      "Quote builder for pest control services",
+      "Print or export to PDF",
+      "Local-first \u2014 your data never leaves your device",
+      "Coming soon \u2014 full feature list TBA"
+    ],
+    "color": "#B91C1C",
+    "monogram": "PE",
+    "status": "coming-soon",
+    "price": "TBA"
+  },
+  {
+    "id": "poolpro",
+    "name": "PoolPro",
+    "niche": "pool-cleaning",
+    "tagline": "Pool Service Estimator",
+    "description": "A local-first quote builder for pool cleaning and maintenance businesses. Coming soon \u2014 full feature list TBA.",
+    "features": [
+      "Quote builder for pool cleaning services",
+      "Print or export to PDF",
+      "Local-first \u2014 your data never leaves your device",
+      "Coming soon \u2014 full feature list TBA"
+    ],
+    "color": "#0891B2",
+    "monogram": "PL",
+    "status": "coming-soon",
+    "price": "TBA"
+  }
+]
