@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Live Demo | Creatif Tools</title>
+<meta name="robots" content="noindex, nofollow"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Creatif Tools Demo"}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0f; --bg2: #0f0f16;
+    --border: rgba(255,255,255,0.07);
+    --accent: #00d4aa; --accent2: #00b894;
+    --text: #e8e8f0; --muted: #6b6b80;
+  }
+  html, body { height: 100%; overflow: hidden; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; flex-direction: column; }
+
+  .demo-bar {
+    flex-shrink: 0;
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.6rem 1rem;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+  .demo-bar-title { font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 0.5rem; }
+  .demo-bar-title::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .demo-bar-meta { color: var(--muted); font-size: 0.8rem; }
+  .demo-bar-spacer { flex: 1; }
+  .demo-bar-btn {
+    background: transparent; border: 1px solid var(--border); color: var(--text);
+    padding: 0.4rem 0.85rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer;
+    font-family: inherit; font-weight: 500; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .demo-bar-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .demo-bar-btn-primary { background: var(--accent); color: #0a0a0f; border-color: var(--accent); }
+  .demo-bar-btn-primary:hover { background: var(--accent2); color: #0a0a0f; }
+  .demo-bar-close { width: 32px; height: 32px; padding: 0; display: grid; place-items: center; font-size: 1.2rem; line-height: 1; }
+
+  .demo-frame-wrap { flex: 1; position: relative; }
+  .demo-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #050505; }
+
+  .demo-overlay {
+    position: absolute; inset: 0; display: none;
+    align-items: center; justify-content: center;
+    background: rgba(5, 5, 15, 0.94); backdrop-filter: blur(10px);
+    z-index: 10; padding: 2rem;
+  }
+  .demo-overlay.active { display: flex; }
+  .demo-overlay-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 16px;
+    padding: 2rem 2.25rem; max-width: 460px; width: 100%; text-align: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  }
+  .demo-overlay-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(0, 212, 170, 0.12); border: 1px solid rgba(0, 212, 170, 0.3);
+    display: grid; place-items: center; margin: 0 auto 1.25rem;
+  }
+  .demo-overlay-icon svg { color: var(--accent); }
+  .demo-overlay-card h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.6rem; letter-spacing: -0.02em; }
+  .demo-overlay-card p { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.95rem; line-height: 1.55; }
+  .demo-overlay-actions { display: flex; flex-direction: column; gap: 0.6rem; }
+  .demo-overlay-btn {
+    padding: 0.85rem 1.25rem; border-radius: 10px; font-weight: 600; font-size: 0.95rem;
+    text-decoration: none; cursor: pointer; border: none; font-family: inherit;
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    transition: background 0.2s, transform 0.15s, border-color 0.2s;
+  }
+  .demo-overlay-btn-primary { background: var(--accent); color: #0a0a0f; }
+  .demo-overlay-btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+  .demo-overlay-btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .demo-overlay-btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .demo-timer {
+    color: var(--muted); font-size: 0.8rem;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .demo-timer strong { color: var(--text); font-variant-numeric: tabular-nums; }
+  .demo-timer.warning strong { color: #f59e0b; }
+</style>
+</head>
+<body>
+
+<div class="demo-bar">
+  <div class="demo-bar-title">Creatif Tools — Live Demo</div>
+  <div class="demo-bar-meta" id="appName">Loading…</div>
+  <div class="demo-bar-spacer"></div>
+  <div class="demo-timer" id="timer">⏱ <strong id="timerSeconds">90</strong>s left</div>
+  <a href="#" id="buyBtn" target="_blank" rel="noopener" class="demo-bar-btn demo-bar-btn-primary" style="display: none;">Buy on Etsy →</a>
+  <a href="/" class="demo-bar-btn">← All apps</a>
+  <button class="demo-bar-btn demo-bar-close" id="closeBtn" title="Close demo" aria-label="Close demo">×</button>
+</div>
+
+<div class="demo-frame-wrap">
+  <iframe class="demo-frame" id="demoFrame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="App demo"></iframe>
+  <div class="demo-overlay" id="demoOverlay">
+    <div class="demo-overlay-card">
+      <div class="demo-overlay-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 7L9 18l-5-5"/>
+        </svg>
+      </div>
+      <h3>Enjoying the demo?</h3>
+      <p>You've had a taste. The full app is yours to keep forever — buy it on Etsy and own every feature, no limits.</p>
+      <div class="demo-overlay-actions">
+        <a href="#" id="overlayBuy" target="_blank" rel="noopener" class="demo-overlay-btn demo-overlay-btn-primary">
+          Buy on Etsy
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+        <button id="overlayDismiss" class="demo-overlay-btn demo-overlay-btn-secondary" type="button">Keep exploring</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // Parse the app id from the URL: /demo.html?app=cleanquote-pro
+  const params = new URLSearchParams(window.location.search);
+  const appId = params.get('app') || '';
+
+  // Manifest metadata for the apps (display name, tagline, price, etsy url)
+  // Sourced from apps/manifest.json — embedded here so the demo page works without
+  // a separate fetch and so we can show the app name in the demo bar
+  const APP_META = {
+  "cleancrm-pro": {
+    "name": "CleanCRM Pro",
+    "tagline": "Client Manager",
+    "price": "$39",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4519939105"
+  },
+  "cleanforms-pro": {
+    "name": "CleanForms Pro",
+    "tagline": "Forms Bundle",
+    "price": "$29",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4518719013"
+  },
+  "cleaning-job-pricer": {
+    "name": "CleaningPricer Pro",
+    "tagline": "Job Pricing & Quotes",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4509932551"
+  },
+  "cleaninspect-pro": {
+    "name": "CleanInspect Pro",
+    "tagline": "Inspection Checklist",
+    "price": "$29",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4518461252"
+  },
+  "cleanquote-pro": {
+    "name": "CleanQuote Pro",
+    "tagline": "Quote Calculator",
+    "price": "$29",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4517517831"
+  },
+  "cleanroute-pro": {
+    "name": "CleanRoute Pro",
+    "tagline": "Stop planning routes in your head the night before.",
+    "price": "$39",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4517754673"
+  },
+  "cleanschedule-pro": {
+    "name": "CleanSchedule Pro",
+    "tagline": "Job Scheduler",
+    "price": "$29",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4519362297"
+  },
+  "lawnforms-pro": {
+    "name": "LawnForms Pro",
+    "tagline": "Contract Templates",
+    "price": "$19",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4522365713"
+  },
+  "lawnquote-pro": {
+    "name": "LawnQuote Pro",
+    "tagline": "Lawn Care Estimator",
+    "price": "$39",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4520752842"
+  },
+  "lawnschedule-pro": {
+    "name": "LawnSchedule Pro",
+    "tagline": "Job Scheduler",
+    "price": "$19",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4522639270"
+  },
+  "amazon-calculator": {
+    "name": "AmazonCalc Pro",
+    "tagline": "Amazon FBA Profit Calculator",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4509844860"
+  },
+  "consignpro-tracker": {
+    "name": "ConsignPro Tracker",
+    "tagline": "Consignment Inventory Tracker",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513489280"
+  },
+  "etsy-profit-calc": {
+    "name": "EtsyProfit Pro",
+    "tagline": "Etsy Profit Calculator",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4510395297"
+  },
+  "handmade-pricing-calc": {
+    "name": "HandmadePrice Pro",
+    "tagline": "Handmade Goods Pricing",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4510258431"
+  },
+  "pod-profit-calculator": {
+    "name": "PODProfit Pro",
+    "tagline": "Print-on-Demand Profit",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4510236033"
+  },
+  "reseller-profit-calc": {
+    "name": "ResellerProfit Pro",
+    "tagline": "Multi-Platform Reseller Profit",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4510170252"
+  },
+  "resellpro": {
+    "name": "ResellPro",
+    "tagline": "Reseller Inventory & Profit",
+    "price": "$19",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4528711695"
+  },
+  "couples-budget-splitter": {
+    "name": "CouplesBudget Pro",
+    "tagline": "Bill Splitter for Couples",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4510416471"
+  },
+  "food-business-cost-calc": {
+    "name": "FoodCost Pro",
+    "tagline": "Recipe Cost Calculator",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4510294912"
+  },
+  "debt-snowball-pro": {
+    "name": "DebtSnowball Pro",
+    "tagline": "Debt Payoff Tracker",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513501925"
+  },
+  "goldbook-tracker": {
+    "name": "Goldbook Tracker Pro",
+    "tagline": "Precious Metals Tracker",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513713068"
+  },
+  "networth-pro": {
+    "name": "NetWorth Pro",
+    "tagline": "Net Worth Tracker",
+    "price": "$19",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4516747499"
+  },
+  "dogfuel-pro": {
+    "name": "DogFuel Pro",
+    "tagline": "Dog Meal Formula Calculator",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513675932"
+  },
+  "petmed-pro": {
+    "name": "PetMed Pro",
+    "tagline": "Pet Medication Tracker",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513981476"
+  },
+  "75hard-tracker": {
+    "name": "75Hard Tracker Pro",
+    "tagline": "75 Hard Habit Tracker",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513331055"
+  },
+  "lifewheel-pro": {
+    "name": "Lifewheel Pro",
+    "tagline": "Life Balance Wheel",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513936518"
+  },
+  "labtrack-pro": {
+    "name": "LabTrack Pro",
+    "tagline": "Lab Results Journal",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513828371"
+  },
+  "handyquote-pro": {
+    "name": "HandyQuote Pro",
+    "tagline": "Handyman Quote Builder",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513748853"
+  },
+  "junkquote-pro": {
+    "name": "JunkQuote Pro",
+    "tagline": "Junk Removal Quote Builder",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4513810943"
+  },
+  "er-nurse-desk": {
+    "name": "ER NurseDesk Pro",
+    "tagline": "ER Nurse Charting",
+    "price": "$25",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4507208316"
+  },
+  "icu-nurse-desk": {
+    "name": "ICU NurseDesk Pro",
+    "tagline": "ICU Nurse Charting",
+    "price": "$25",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4507258152"
+  },
+  "medsurg-nurse-desk": {
+    "name": "MedSurg NurseDesk Pro",
+    "tagline": "Med-Surg Nurse Charting",
+    "price": "$25",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4507314354"
+  },
+  "vow-and-plan": {
+    "name": "Vow & Plan Pro",
+    "tagline": "Offline Wedding Planner",
+    "price": "$29",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4505956290"
+  },
+  "carwash-pro": {
+    "name": "CarWash Pro",
+    "tagline": "Mobile Detail Estimator",
+    "price": "TBA",
+    "etsyUrl": "#"
+  },
+  "pestpro": {
+    "name": "PestPro",
+    "tagline": "Service Quote Builder",
+    "price": "TBA",
+    "etsyUrl": "#"
+  },
+  "poolpro": {
+    "name": "PoolPro",
+    "tagline": "Pool Service Estimator",
+    "price": "TBA",
+    "etsyUrl": "#"
+  }
+};
+
+  if (!appId || !APP_META[appId]) {
+    document.getElementById('appName').textContent = 'Unknown app';
+    document.getElementById('demoFrame').remove();
+    document.body.insertAdjacentHTML('beforeend',
+      '<div style="padding:3rem;text-align:center;color:#888;font-family:Inter,sans-serif;">No app specified. <a href="/" style="color:#00d4aa;">Back to apps</a></div>');
+    return;
+  }
+
+  const meta = APP_META[appId];
+  const appName = meta.name;
+  const appPrice = meta.price;
+  const etsyUrl = meta.etsyUrl;
+
+  // Set the iframe to the app file
+  const frame = document.getElementById('demoFrame');
+  frame.src = `/apps/${appId}/index.html`;
+
+  // Update UI
+  document.getElementById('appName').textContent = `${appName} · ${meta.tagline || ''}`;
+  const buyBtn = document.getElementById('buyBtn');
+  const overlayBuy = document.getElementById('overlayBuy');
+  buyBtn.href = etsyUrl;
+  overlayBuy.href = etsyUrl;
+  buyBtn.textContent = `Buy on Etsy — ${appPrice} →`;
+  document.title = `${appName} — Live Demo | Creatif Tools`;
+
+  // Close button
+  document.getElementById('closeBtn').addEventListener('click', () => {
+    if (window.opener) {
+      window.close();
+    } else {
+      window.location.href = '/';
+    }
+  });
+
+  // 90-second demo timer
+  const DEMO_LIMIT_MS = 90 * 1000;
+  const overlay = document.getElementById('demoOverlay');
+  const timerEl = document.getElementById('timer');
+  const timerSeconds = document.getElementById('timerSeconds');
+  const dismissBtn = document.getElementById('overlayDismiss');
+  const dismissedKey = `creatif_demo_dismissed_${appId}`;
+
+  // If user already dismissed in this session, don't re-trigger
+  let dismissed = sessionStorage.getItem(dismissedKey) === '1';
+
+  let remaining = Math.floor(DEMO_LIMIT_MS / 1000);
+
+  const tick = setInterval(() => {
+    remaining--;
+    if (remaining <= 0) {
+      clearInterval(tick);
+      timerSeconds.textContent = '0';
+      timerEl.classList.add('warning');
+      if (!dismissed) overlay.classList.add('active');
+    } else {
+      timerSeconds.textContent = String(remaining);
+      if (remaining <= 15) timerEl.classList.add('warning');
+    }
+  }, 1000);
+
+  // "Keep exploring" button
+  dismissBtn.addEventListener('click', () => {
+    dismissed = true;
+    sessionStorage.setItem(dismissedKey, '1');
+    overlay.classList.remove('active');
+  });
+})();
+</script>
+</body>
+</html>
