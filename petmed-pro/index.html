@@ -63,7 +63,18 @@
     .how-step-num { display: inline-block; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-color); color: #fff; font-weight: 700; font-size: 0.85rem; line-height: 28px; text-align: center; margin-bottom: 0.6rem; }
     .how-step h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
     .how-step p { font-size: 0.85rem; color: var(--muted); margin: 0; }
-    .demo-frame { width: 100%; height: 700px; border: 1px solid var(--border); border-radius: 14px; background: #050505; }
+    .demo-wrap { position: relative; width: 100%; }
+    .demo-frame { width: 100%; height: 700px; border: 1px solid var(--border); border-radius: 14px; background: #050505; display: block; }
+    .demo-banner { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 0.5rem; font-size: 0.8rem; color: var(--muted); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+    .demo-banner strong { color: var(--text); font-weight: 600; }
+    .demo-banner a { color: var(--accent); text-decoration: none; font-weight: 600; margin-left: auto; }
+    .demo-overlay { position: absolute; inset: 0; background: rgba(5, 5, 15, 0.92); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; border-radius: 14px; z-index: 10; padding: 2rem; }
+    .demo-overlay.active { display: flex; }
+    .demo-overlay-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; max-width: 420px; text-align: center; }
+    .demo-overlay-card h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text); }
+    .demo-overlay-card p { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .demo-overlay-card .overlay-actions { display: flex; gap: 0.75rem; flex-direction: column; }
+    .demo-overlay-card .btn { width: 100%; justify-content: center; }
     .faq { max-width: 720px; margin-top: 1rem; }
     .faq-item { padding: 1.25rem 0; border-top: 1px solid var(--border); }
     .faq-item:last-child { border-bottom: 1px solid var(--border); }
@@ -97,7 +108,7 @@
     <h1>PetMed Pro</h1>
     <p class="tagline">A local-first pet medication and health tracker.</p>
     <div class="cta-row">
-      <a href="https://creatif.tools/apps/petmed-pro/index.html" class="btn btn-primary" target="_blank" rel="noopener">
+      <a href="#try-demo" class="btn btn-primary">
         ▶ Try the live demo
       </a>
       <a href="https://creatiftools.etsy.com/listing/4513981476" class="btn btn-secondary" target="_blank" rel="noopener">
@@ -133,7 +144,7 @@
       <div class="how-step">
         <span class="how-step-num">1</span>
         <h3>Try the demo</h3>
-        <p>Open the live demo in your browser. No signup, no install. Explore the features for 90 seconds.</p>
+        <p>Open the live demo below. No signup, no install. Explore the features for 90 seconds.</p>
       </div>
       <div class="how-step">
         <span class="how-step-num">2</span>
@@ -148,10 +159,29 @@
     </div>
   </section>
 
-  <section class="content">
+  <section class="content" id="try-demo">
     <h2>Try it now</h2>
-    <p style="margin-bottom: 1.5rem;">Click below to open the full app demo in a new tab. No signup, no install — works in any modern browser.</p>
-    <iframe class="demo-frame" src="/apps/petmed-pro/index.html" title="PetMed Pro live demo" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" loading="lazy"></iframe>
+    <p style="margin-bottom: 1rem;">The full app runs right here. After 90 seconds, you'll get a taste-it-then-buy-it prompt. Or skip ahead and <a href="https://creatiftools.etsy.com/listing/4513981476" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none; font-weight: 600;">buy the full version on Etsy →</a></p>
+    <div class="demo-wrap">
+      <div class="demo-banner">
+        <span>⏱ <strong>Demo mode</strong> · 90 seconds to explore</span>
+        <a href="https://creatiftools.etsy.com/listing/4513981476" target="_blank" rel="noopener">Skip — Buy now →</a>
+      </div>
+      <iframe id="demoFrame" class="demo-frame" src="/apps/petmed-pro/index.html" title="PetMed Pro live demo" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" loading="lazy"></iframe>
+      <div class="demo-overlay" id="demoOverlay">
+        <div class="demo-overlay-card">
+          <h3>Enjoying the demo?</h3>
+          <p>You've had a taste. The full PetMed Pro is yours to keep forever — buy it on Etsy and own every feature, no limits.</p>
+          <div class="overlay-actions">
+            <a href="https://creatiftools.etsy.com/listing/4513981476" class="btn btn-primary" target="_blank" rel="noopener">
+              Buy on Etsy — $15
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+            </a>
+            <button class="btn btn-secondary" id="keepExploring" type="button">Keep exploring</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section class="content">
@@ -192,5 +222,33 @@
   Creatif.tools — local-first apps for service businesses, resellers & personal use.<br>
   <a href="/">Home</a> · <a href="/pets/">Pets</a> · <a href="https://creatif.tools">All apps</a>
 </footer>
+
+<script>
+(function() {
+  const DEMO_LIMIT_MS = 90 * 1000; // 90 seconds
+  const overlay = document.getElementById('demoOverlay');
+  const keepBtn = document.getElementById('keepExploring');
+  const dismissedKey = 'demo_dismissed_petmed-pro';
+
+  // If user already dismissed the overlay this session, don't re-trigger
+  let dismissed = sessionStorage.getItem(dismissedKey) === '1';
+
+  function showOverlay() {
+    if (!dismissed) overlay.classList.add('active');
+  }
+
+  // Wait 90 seconds, then show the overlay
+  setTimeout(showOverlay, DEMO_LIMIT_MS);
+
+  // "Keep exploring" button — dismisses for this session only
+  if (keepBtn) {
+    keepBtn.addEventListener('click', () => {
+      dismissed = true;
+      sessionStorage.setItem(dismissedKey, '1');
+      overlay.classList.remove('active');
+    });
+  }
+})();
+</script>
 </body>
 </html>
