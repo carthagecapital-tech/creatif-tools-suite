@@ -523,6 +523,9 @@
     const validNiche = APPS.some((a) => (a.niche || '').toLowerCase() === hash);
     if (validNiche) {
       setActiveNiche(hash);
+      // Also reset status to "all" on deep-link entry so a shared #nursing
+      // link shows all nursing apps, not whatever status was last picked.
+      setActiveStatus('all');
       // Scroll the apps section into view so the user sees the result
       const section = document.getElementById('apps');
       if (section) setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
