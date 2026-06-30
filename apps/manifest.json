@@ -493,6 +493,74 @@
     "etsyUrl": "https://creatiftools.etsy.com/listing/4513810943"
   },
   {
+    "id": "er-nurse-desk",
+    "name": "ER NurseDesk Pro",
+    "niche": "nursing",
+    "tagline": "ER Nurse Charting",
+    "description": "A local-first ER nursing charting app. Patient tracking, vitals timeline, SBAR handoff templates, and 30+ ER forms. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Patient tracking with status, room, acuity",
+      "Vitals timeline with auto-charting",
+      "SBAR handoff template generator",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#DC2626",
+    "monogram": "ER",
+    "price": "$25",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4507208316"
+  },
+  {
+    "id": "icu-nurse-desk",
+    "name": "ICU NurseDesk Pro",
+    "niche": "nursing",
+    "tagline": "ICU Nurse Charting",
+    "description": "A local-first ICU nursing charting app. Vent/CRRT/Vasoactive drip tracking, hourly flow sheets with auto-totals, 30+ critical care forms. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Vent, CRRT, and vasoactive drip trackers",
+      "Hourly ICU flow sheet with auto-totals",
+      "30+ critical care forms and assessments",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#7C2D12",
+    "monogram": "ICU",
+    "price": "$25",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4507258152"
+  },
+  {
+    "id": "medsurg-nurse-desk",
+    "name": "MedSurg NurseDesk Pro",
+    "niche": "nursing",
+    "tagline": "Med-Surg Nurse Charting",
+    "description": "A local-first med-surg nursing charting app. 5-step shift report with auto-summary, on-call and follow-up rescheduler, 30+ med-surg forms. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "5-step shift report with auto-summary",
+      "On-call and follow-up rescheduler",
+      "30+ med-surg forms",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#0D9488",
+    "monogram": "MS",
+    "price": "$25",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4507314354"
+  },
+  {
+    "id": "vow-and-plan",
+    "name": "Vow & Plan Pro",
+    "niche": "wedding",
+    "tagline": "Offline Wedding Planner",
+    "description": "A local-first premium wedding planning app. Drag-and-drop seating chart, multi-vendor budget tracker with live charts, auto-PDF printables. No account, no subscription, all data stays in your browser.",
+    "features": [
+      "Drag-and-drop seating chart with auto-print",
+      "Multi-vendor budget tracker with live charts",
+      "Auto-PDF printables for invitations and timelines",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#BE185D",
+    "monogram": "V&P",
+    "price": "$29",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4505956290"
+  },
+  {
     "id": "carwash-pro",
     "name": "CarWash Pro",
     "niche": "car-wash",
