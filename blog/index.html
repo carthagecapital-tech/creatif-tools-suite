@@ -38,39 +38,28 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .top-bar a{color:var(--muted);font-size:0.9rem;font-weight:500;text-decoration:none}
 .top-bar a:hover{color:var(--accent)}
 .hero{padding:3rem 0 1.5rem}
-  .breadcrumb { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1.25rem; }
-  .breadcrumb a { color: var(--muted); text-decoration: none; transition: color .2s; padding: 0.15rem 0; border-bottom: 1px solid transparent; }
-  .breadcrumb a:hover { color: var(--accent); border-bottom-color: var(--accent); }
-  .breadcrumb span { color: var(--text); font-weight: 600; }
-  .breadcrumb-sep { color: rgba(255,255,255,0.18); margin: 0 0.4rem; }
+.breadcrumb{font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:1.25rem}
+.breadcrumb a{color:var(--muted);text-decoration:none;transition:color .2s;padding:0.15rem 0;border-bottom:1px solid transparent}
+.breadcrumb a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.breadcrumb span{color:var(--text);font-weight:600}
 .badge{display:inline-block;background:rgba(0,212,170,0.1);border:1px solid rgba(0,212,170,0.25);padding:0.3rem 0.85rem;border-radius:100px;font-size:0.75rem;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:1rem}
 h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:800;letter-spacing:-0.025em;line-height:1.15;margin-bottom:0.75rem}
 .lead{font-size:1.15rem;color:var(--muted);max-width:680px;margin-bottom:2rem}
 .posts{display:flex;flex-direction:column;gap:1rem;margin:2rem 0}
-.post-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem 1.75rem;text-decoration:none;color:inherit;display:block;transition:border-color .2s,transform .15s}
-.post-card:hover{border-color:var(--accent);transform:translateY(-2px);text-decoration:none}
-
-
-
-
-.post-card:hover 
-footer{text-align:center;padding:2.5rem 1rem;border-top:1px solid var(--border);font-size:0.85rem;color:var(--muted);margin-top:3rem}
-footer a{color:var(--accent);text-decoration:none}
-@media(max-width:600px){.posts{display:flex;flex-direction:column;gap:1rem;margin:2rem 0}}
-
-.posts{display:flex;flex-direction:column;gap:1rem;margin:2rem 0}
-.blog-card{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--bc,#00d4aa);border-radius:12px;padding:1.5rem 1.75rem;text-decoration:none;color:inherit;display:grid;grid-template-columns:64px 1fr auto;gap:1.5rem;align-items:center;transition:border-color .2s,transform .15s,background .2s}
-.blog-card:hover{border-color:var(--bc,#00d4aa);background:#13131c;transform:translateY(-1px);text-decoration:none}
-.blog-card:hover .blog-title{color:var(--bc,#00d4aa)}
-.blog-card-icon{width:64px;height:64px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:1.15rem;color:#fff;background:var(--bc,#00d4aa);flex-shrink:0;letter-spacing:-0.02em}
+.blog-card{--bc:#00d4aa;background:var(--card);border:1px solid var(--border);border-left:4px solid var(--bc);border-radius:12px;padding:1.5rem 1.75rem;text-decoration:none;color:inherit;display:grid;grid-template-columns:64px 1fr auto;gap:1.5rem;align-items:center;transition:border-color .2s,transform .15s,background .2s}
+.blog-card:hover{border-color:var(--bc);background:#13131c;transform:translateY(-1px);text-decoration:none}
+.blog-card:hover .blog-card-title{color:var(--bc)}
+.blog-card-icon{width:64px;height:64px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:1.15rem;color:#fff;background:var(--bc);flex-shrink:0;letter-spacing:-0.02em}
 .blog-card-content{min-width:0;flex:1}
 .blog-card-meta{display:flex;align-items:center;gap:0.65rem;margin-bottom:0.5rem;font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted)}
-.blog-card-cat{color:var(--bc,#00d4aa)}
+.blog-card-cat{color:var(--bc)}
 .blog-card-dot{color:rgba(255,255,255,0.2)}
-.blog-card-title{font-size:1.25rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.4rem;color:#fff;line-height:1.25}
+.blog-card-title{font-size:1.25rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.4rem;color:#fff;line-height:1.25;transition:color .2s}
 .blog-card-desc{color:var(--muted);font-size:0.92rem;line-height:1.5}
-.blog-card-cta{color:var(--bc,#00d4aa);font-weight:600;font-size:0.9rem;display:inline-flex;align-items:center;gap:0.3rem;white-space:nowrap;padding:0.4rem 0}
+.blog-card-cta{color:var(--bc);font-weight:600;font-size:0.9rem;display:inline-flex;align-items:center;gap:0.3rem;white-space:nowrap;padding:0.4rem 0}
 .blog-card-cta svg{width:14px;height:14px}
+footer{text-align:center;padding:2.5rem 1rem;border-top:1px solid var(--border);font-size:0.85rem;color:var(--muted);margin-top:3rem}
+footer a{color:var(--accent);text-decoration:none}
 @media(max-width:600px){.blog-card{grid-template-columns:48px 1fr;gap:1rem;padding:1.25rem 1.4rem}.blog-card-icon{width:48px;height:48px;font-size:0.95rem}.blog-card-cta{grid-column:2;font-size:0.85rem;padding:0.25rem 0 0}.blog-card-title{font-size:1.1rem}.blog-card-desc{font-size:0.88rem}}
 </style>
 </head>
@@ -86,6 +75,7 @@ footer a{color:var(--accent);text-decoration:none}
   </div>
 
   <div class="posts">
+
       <a class="blog-card" href="/blog/how-to-price-a-house-cleaning-job/" style="--bc: #6B4A6E;">
         <div class="blog-card-icon">PH</div>
         <div class="blog-card-content">
@@ -125,32 +115,7 @@ footer a{color:var(--accent);text-decoration:none}
         </div>
         <span class="blog-card-cta">Read <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
       </a>
-    </div>
-      <div class="post-title">How to Price a House Cleaning Job: Step-by-Step Formula (2026)</div>
-      <div class="post-desc">A practical, no-fluff formula for pricing a house cleaning job. Real numbers by home size, frequency, and job type — plus the exact hourly rate formula and a free quote calculator.</div>
-      <div class="post-meta">9 min read &middot; Last updated June 30, 2026</div>
-    </a>
 
-        <a class="post-card" href="/blog/how-to-get-your-first-10-cleaning-clients/">
-      <div class="post-cat">Cleaning Business</div>
-      <div class="post-title">How to Get Your First 10 Cleaning Clients: 90-Day Plan + Real Examples (2026)</div>
-      <div class="post-desc">A 90-day, channel-by-channel playbook for landing your first 10 cleaning clients. Real scripts, exact week-by-week plan, and the referrals-vs-paid-ads tradeoff that decides whether you grow or stall.</div>
-      <div class="post-meta">10 min read &middot; Published July 1, 2026</div>
-    </a>
-
-        <a class="post-card" href="/blog/google-business-profile-for-cleaning-companies/">
-      <div class="post-cat">Cleaning Business</div>
-      <div class="post-title">Google Business Profile for Cleaning Companies: Complete Setup Guide (2026)</div>
-      <div class="post-desc">Step-by-step guide to setting up Google Business Profile for your cleaning company. Rank in 'cleaning service near me' searches, get 5-star reviews, and turn GBP into your #1 free source of clients.</div>
-      <div class="post-meta">11 min read &middot; Published July 1, 2026</div>
-    </a>
-
-    <a class="post-card" href="/blog/cleaning-business-pricing-guide/">
-      <div class="post-cat">Cleaning Business</div>
-      <div class="post-title">Cleaning Business Pricing Guide: How to Set Your Rates for Profit (2026)</div>
-      <div class="post-desc">The exact formulas, the math, and the decision framework that working cleaning businesses actually use. Includes the hourly cost formula, flat-rate pricing, and a 30-day action plan.</div>
-      <div class="post-meta">11 min read &middot; Last updated June 30, 2026</div>
-    </a>
   </div>
 </div>
 
