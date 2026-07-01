@@ -1,0 +1,278 @@
+================================================================================
+  BillOfSale Pro - Frequently Asked Questions
+================================================================================
+
+
+GETTING STARTED
+===============
+
+Q: How do I open the file?
+A: Double-click billofsale-pro.html. It opens in your default browser.
+   If it opens in a text editor instead, right-click the file, choose
+   "Open With", and pick Chrome, Firefox, Safari, or Edge.
+
+Q: Do I need to install anything?
+A: No. The app is a single HTML file. It runs entirely in your browser.
+   No installation, no plugins, no extensions.
+
+Q: Do I need an internet connection?
+A: Only for the first download. After saving billofsale-pro.html to your
+   device, you can use it offline forever.
+
+Q: Does this work on my phone or tablet?
+A: Yes. The app is fully responsive and works on iPhone, iPad, and
+   Android devices. Open the file in your mobile browser (Safari on
+   iOS, Chrome on Android).
+
+Q: Does this work on Mac / Windows / Linux / Chromebook?
+A: Yes to all. Any modern operating system with a modern browser works.
+
+
+LEGAL QUESTIONS
+===============
+
+Q: Is this a legal document?
+A: The bill of sale produced by this app is a printable form that you
+   can use for private vehicle sales. It includes federal odometer
+   disclosure and state-specific disclosures for 12 US states. However:
+
+   - It is NOT legal advice.
+   - It is NOT a substitute for an attorney.
+   - It may not satisfy every requirement for unusual transactions
+     (lien sales, estate sales with multiple heirs, sales involving
+     trusts, sales to out-of-state buyers, etc.).
+
+   For unusual situations, consult a licensed attorney in your state.
+
+Q: Do I need to notarize the bill of sale?
+A: Three US states REQUIRE notarization for vehicle bill of sale:
+
+     - Florida
+     - Pennsylvania
+     - North Carolina
+
+   For other states, notarization is optional. Some buyers or sellers
+   choose to notarize voluntarily for extra legal protection.
+
+Q: Is this valid for out-of-state sales?
+A: The bill of sale is generated based on the state YOU select in the
+   app. If the buyer is from a different state, check both states'
+   requirements. Most states accept a bill of sale from another state
+   as long as it includes the basic transaction details, but verify
+   with both DMVs to be safe.
+
+Q: What about emissions / smog requirements?
+A: BillOfSale Pro does NOT generate a smog certificate or emissions test
+   result. These are separate documents handled by licensed test
+   stations. Some states require them at the time of sale - the
+   relevant state's disclosure (if pre-filled) will mention this.
+
+Q: What about liens on the vehicle?
+A: If the vehicle has an outstanding lien (loan), the lien must be
+   satisfied BEFORE the sale. The buyer needs a clean title. Some
+   states require an additional "lien release" document from the
+   lienholder. BillOfSale Pro has a "lienholder" field in the Car
+   vehicle type for record-keeping, but does not generate the lien
+   release document itself.
+
+Q: What if I'm gifting the vehicle to a family member?
+A: Use the "Gift transfer" toggle in Section 04 (Sale). The bill of
+   sale will show "$0.00 - Gift" as the price. Some states require
+   additional paperwork for gift transfers (to document that no sales
+   tax is owed). Check your state DMV's gift transfer requirements.
+
+Q: What if there's a trade-in?
+A: Use the "Trade-in involved" toggle in Section 04 (Sale). A sub-form
+   appears for the trade-in vehicle (VIN, description, value). The
+   printed bill of sale shows both vehicles and the net sale price.
+
+Q: What about vehicles over 10 years old?
+A: The federal odometer disclosure requirement applies to vehicles
+   under 10 model years old AND under 16,000 lbs GVWR. For older
+   vehicles, the odometer disclosure is optional but still
+   recommended. The app includes the field either way.
+
+Q: What about vehicles sold for parts only / not operational?
+A: BillOfSale Pro is designed for vehicles being sold "as is" for
+   normal use. For parts-only sales or non-operational vehicles,
+   consider having an attorney draft a specific bill of sale that
+   includes the parts-only disclaimer.
+
+
+TECHNICAL QUESTIONS
+===================
+
+Q: Why is the file one big HTML file? Can I split it?
+A: It's a single file by design. This makes it portable (email it,
+   drop it on a USB stick, store it anywhere) and ensures it works
+   offline. Splitting the file would break the portability.
+
+Q: Why doesn't it have a download button / fancy installer?
+A: Same reason - single file = portable, offline, simple. Many
+   buyers prefer a file they own and control over a subscription
+   or web app.
+
+Q: Can I customize the design / add my branding?
+A: The HTML and CSS are editable. If you're comfortable with HTML,
+   you can open billofsale-pro.html in any text editor and modify
+   colors, fonts, or layout. The navy color is set via CSS variables
+   near the top of the file. Be careful - changes may break the
+   print layout.
+
+Q: Can I add my own state disclosures?
+A: Yes, if you're comfortable with JavaScript. Open the file in a
+   text editor, find the STATE_DISCLOSURES section (search for that
+   word), and add your state following the same pattern as the
+   existing 12 states.
+
+Q: Can I save data to a server instead of just localStorage?
+A: Not without modifying the source code. The app is intentionally
+   offline-only for privacy reasons. If you need server-side
+   storage, consider a different product.
+
+Q: Why does it use localStorage instead of files on my disk?
+A: Browser security model. JavaScript in a webpage cannot write files
+   directly to your disk without a download dialog. localStorage is
+   the standard way to persist data in a web app. Your data stays
+   on your device, in your browser's storage for this file.
+
+Q: How do I backup my drafts?
+A: BillOfSale Pro stores drafts in localStorage, which is bound to
+   your browser and device. To back up:
+
+     1. Use the app, fill in a draft
+     2. Print to PDF (Ctrl/Cmd + P > Save as PDF) - this gives you
+        a permanent copy of that draft as a bill of sale document
+     3. Save the PDF somewhere safe (cloud drive, USB stick, etc.)
+
+   The PDF is the actual bill of sale, not the editable form data.
+   If you need to come back and edit the draft later, you can either
+   re-fill the form or use the in-app drafts (if you're still on the
+   same browser/device).
+
+Q: Does it work in Chrome / Firefox / Safari / Edge?
+A: Yes to all four. Tested on the latest versions of each. Internet
+   Explorer is NOT supported (it's been retired by Microsoft).
+
+Q: Does it work on mobile browsers?
+A: Yes. The layout adapts to phone and tablet screens. On small
+   screens, the form appears above the preview with a floating
+   "Preview" button to jump to the document.
+
+Q: How big is the file? Will it load fast?
+A: The HTML file is approximately 100-120 KB. It loads instantly
+   on any device with any modern browser. No large assets, no
+   external scripts, no CDN calls.
+
+
+PRINTING AND PDF
+================
+
+Q: How do I save as PDF?
+A: Open the print dialog (Ctrl/Cmd + P or click "Print / PDF" in
+   the top bar), then:
+     - Chrome: change Destination to "Save as PDF"
+     - Edge: change Printer to "Microsoft Print to PDF"
+     - Firefox: change Printer to "Microsoft Print to PDF" or use
+       the "Save" option in the print dialog
+     - Safari: click the PDF dropdown at the bottom of the print
+       dialog, choose "Save as PDF"
+
+Q: The PDF has weird margins / doesn't fit on one page
+A: Make sure your browser's print scale is set to 100% (not "Fit
+   to page" or "Shrink to fit"). The bill of sale is already sized
+   for US Letter paper.
+
+Q: Can I print on A4 paper (Europe / international)?
+A: Yes. In the print dialog, change the paper size to A4. The
+   document layout will reflow automatically.
+
+Q: Why does the print have a copyright footer on every page?
+A: This is intentional. Legal documents often include provenance
+   information (when and by whom it was generated). The footer
+   also includes page numbers, which is standard for multi-page
+   documents.
+
+Q: Can I remove the footer from the printed document?
+A: Not without modifying the source code. The footer is in the
+   @media print CSS block at the top of billofsale-pro.html.
+
+
+BUYING AND DOWNLOADING
+======================
+
+Q: I lost my download. How do I get the file again?
+A: Go to your Etsy Purchases page (you must be logged in). Find
+   the BillOfSale Pro order. Click "Download Files" again.
+
+Q: Can I share the file with friends / family?
+A: The license is for your personal use on your transactions.
+   Reselling or redistributing the source file is not permitted.
+   However, you can absolutely help a friend fill out their bill
+   of sale using your copy.
+
+Q: Can I use this for my business (car dealership, etc.)?
+A: Yes, for generating bills of sale for your business transactions.
+   You may NOT resell the source file itself.
+
+Q: Do you offer refunds?
+A: Since this is a digital download, all sales are typically final.
+   If the file has a defect (won't open, missing features, etc.),
+   message me on Etsy and I'll send a replacement.
+
+Q: Can I get a custom version with my logo / business info?
+A: Not directly, but the HTML file is editable. If you're
+   comfortable with HTML/CSS, you can add your logo and contact
+   info to the print output by editing the file. If you need
+   significant customization, contact me to discuss a custom order.
+
+
+STATE COVERAGE
+==============
+
+Q: Why does my state not have pre-filled disclosures?
+A: Twelve US states have full pre-filled disclosure data: CA, NY,
+   FL, TX, IL, OH, PA, WA, GA, NC, AZ, MI. These were chosen
+   because they represent the highest-volume states and the states
+   with the most distinctive bill-of-sale requirements.
+
+   For other states, the app shows a verification notice reminding
+   you to check your state DMV. The basic bill of sale form is
+   still produced - it just doesn't include state-specific
+   clauses.
+
+Q: Can you add my state?
+A: Message me on Etsy with your state and any specific requirements
+   you'd like included. I add states based on buyer requests.
+
+Q: Does this work for the District of Columbia?
+A: Yes. DC is included in the state selector.
+
+
+SUPPORT
+=======
+
+Q: I found a bug. How do I report it?
+A: Message me on Etsy with:
+     - What you were doing when the bug happened
+     - What you expected to happen
+     - What actually happened
+     - Your browser and operating system (e.g., "Chrome 119 on
+       Windows 11")
+     - A screenshot if possible
+
+Q: I have a feature request.
+A: Message me on Etsy. I read every note and prioritize requests
+   based on how many buyers ask for the same thing.
+
+Q: Is there a community / forum for BillOfSale Pro users?
+A: Not currently. Message me directly with questions.
+
+Q: What if my question isn't answered here?
+A: Read User_guide.txt for the full walkthrough. If you still have
+   a question, message me on Etsy.
+
+
+================================================================================
+  Thanks for using BillOfSale Pro. Safe selling!
+================================================================================

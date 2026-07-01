@@ -610,5 +610,22 @@
     "monogram": "PL",
     "status": "coming-soon",
     "price": "TBA"
+  },
+  {
+    "id": "bill-of-sale",
+    "name": "Bill of Sale Pro",
+    "niche": "legal",
+    "tagline": "Vehicle Bill of Sale Generator",
+    "description": "Generate a state-aware vehicle bill of sale in minutes. Printable forms for car, motorcycle, trailer, boat, RV, and horse sales. Includes federal odometer disclosure and state-specific disclosures for CA, NY, FL, TX, and 45 more states.",
+    "features": [
+      "State-aware disclosures for all 50 states + DC",
+      "Federal odometer disclosure built in (vehicles under 10 years)",
+      "7 vehicle types with conditional fields (HIN, GVWR, breed, etc.)",
+      "Local-first \u2014 your data never leaves your device"
+    ],
+    "color": "#1E3A5F",
+    "monogram": "B",
+    "price": "$15",
+    "etsyUrl": "https://creatiftools.etsy.com/listing/4530701155"
   }
 ]

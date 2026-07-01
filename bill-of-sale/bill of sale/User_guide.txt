@@ -1,0 +1,447 @@
+================================================================================
+  BillOfSale Pro - User Guide
+  Full walkthrough of every feature
+================================================================================
+
+TABLE OF CONTENTS
+--------------------------------------------------------------------------------
+
+  1. Opening the app
+  2. The interface (sidebar, topbar, workspace)
+  3. Vehicle types and type-specific fields
+  4. Filling the common sections (seller, buyer, sale)
+  5. State disclosures and notarization
+  6. Special transactions (gifts, trade-ins)
+  7. Signatures and witness lines
+  8. Saving and loading drafts
+  9. Printing and saving as PDF
+  10. CSV export (for power users)
+  11. Light and dark mode
+  12. Keyboard shortcuts (full list)
+  13. Troubleshooting
+  14. Data privacy and storage
+
+================================================================================
+1. OPENING THE APP
+================================================================================
+
+BillOfSale Pro is a single HTML file. There is nothing to install.
+
+  - Double-click billofsale-pro.html. It opens in your default browser.
+  - If it opens in a text editor instead, right-click the file, choose
+    "Open With", and pick your browser (Chrome, Firefox, Safari, Edge).
+
+The app works on:
+  - macOS (any version from the last 5 years)
+  - Windows (Windows 10 and 11)
+  - Linux (Ubuntu, Fedora, etc.)
+  - ChromeOS
+  - iPhone and iPad (Safari)
+  - Android phones and tablets (Chrome)
+
+The app needs a modern browser. If your browser is more than 3 years old,
+update it for the best experience.
+
+After the first open, you do NOT need an internet connection. The app
+runs entirely on your device.
+
+================================================================================
+2. THE INTERFACE
+================================================================================
+
+The app has four areas:
+
+  SIDEBAR (left)
+    Brand mark, search trigger, vehicle type list, system actions
+    (drafts, reset, help). Click any vehicle type to switch.
+
+  TOPBAR (top)
+    Breadcrumb showing where you are, page title, state selector,
+    save draft button, print/PDF button.
+
+  VEHICLE TABS (just below the topbar)
+    Same as the sidebar vehicle list - shown as horizontal tabs.
+    Useful on mobile when the sidebar collapses.
+
+  WORKSPACE (main area, two columns)
+    LEFT: the fillable form
+    RIGHT: the live bill of sale document preview
+
+On screens wider than 1100 pixels, both columns are side by side. On
+smaller screens (tablets, phones), the form appears first and the preview
+is below it. A floating "Preview" button in the bottom-right corner of
+mobile scrolls to the preview when tapped.
+
+================================================================================
+3. VEHICLE TYPES AND TYPE-SPECIFIC FIELDS
+================================================================================
+
+Seven vehicle types are supported. Each has its own field set under
+section 01 "Vehicle". The type-specific fields adapt automatically.
+
+  CAR
+    VIN, year, make, model, color, odometer, odometer status,
+    federal odometer disclosure, title number, body style, license
+    plate, lienholder (optional).
+
+  MOTORCYCLE
+    VIN, engine number, year, make, model, color, odometer,
+    engine displacement (cc), title number.
+
+  TRAILER
+    VIN, GVWR (gross vehicle weight rating), axle count, trailer type
+    (utility, cargo, boat, travel, livestock, flatbed, horse),
+    length, empty weight, title number.
+
+  BOAT
+    HIN (Hull Identification Number), year, make, model, length,
+    hull material, propulsion type, engine details,
+    trailer included (optional sub-section), title number.
+
+  RV
+    VIN, year, make, model, class (A, B, C, travel trailer,
+    fifth wheel, pop-up), length, odometer, sleeps-how-many,
+    title number.
+
+  HORSE
+    Animal name, breed, age, sex, color/markings, height (in hands),
+    registration/microchip number (optional), health certificate date
+    (optional), brand/tattoo (optional), tack included (checkboxes).
+
+  EQUIPMENT (GENERAL)
+    Item description, make, model, serial number, year (optional),
+    condition (new/used/refurbished), hours of use (optional),
+    manual included, warranty remaining.
+
+To switch vehicle type, click any item in the sidebar or the horizontal
+tabs. The vehicle section updates immediately. Other sections (seller,
+buyer, sale, etc.) keep their values.
+
+NOTE: switching vehicle type does NOT erase your seller, buyer, or sale
+data. Only the vehicle-specific fields change.
+
+================================================================================
+4. FILLING THE COMMON SECTIONS
+================================================================================
+
+Sections 02 (Seller), 03 (Buyer), 04 (Sale), and 06 (Signatures) are the
+same for all vehicle types.
+
+  SELLER (Section 02)
+    Full legal name, street address, city, ZIP, phone (optional),
+    email (optional).
+
+  BUYER (Section 03)
+    Same fields as Seller.
+
+  SALE (Section 04)
+    Sale date (defaults to today).
+    Sale price in US dollars (numeric, no commas).
+    Payment method (cash, check, money order, wire, PayPal, Venmo,
+    Zelle, or other).
+    Gift transfer checkbox (see Section 6).
+    Trade-in involved checkbox (see Section 6).
+
+  STATE DISCLOSURES (Section 05)
+    Auto-populated when you select a state. See Section 5 below.
+
+  SIGNATURES (Section 06)
+    Notarize toggle (see Section 5).
+    Witness toggle (see Section 7).
+
+All required fields are marked with a red asterisk (*).
+
+================================================================================
+5. STATE DISCLOSURES AND NOTARIZATION
+================================================================================
+
+Twelve US states carry pre-filled state-specific disclosure data:
+
+  California, New York, Florida, Texas, Illinois, Ohio, Pennsylvania,
+  Washington, Georgia, North Carolina, Arizona, Michigan.
+
+For these states, Section 05 of the form shows the relevant disclosures
+as checkboxes or notices. The disclosure clauses also appear inline in
+the printed bill of sale.
+
+For all other states (38 remaining US states + DC), the form shows a
+verification notice. You should still confirm requirements with your
+state DMV before finalizing.
+
+NOTARIZATION
+------------
+Three states require notarization of a vehicle bill of sale:
+
+  Florida (FL)
+  Pennsylvania (PA)
+  North Carolina (NC)
+
+When you select one of these states, the "Include notary block" toggle
+under Section 06 (Signatures) is automatically enabled. The notary block
+also appears in the printed bill of sale.
+
+The notary block includes:
+  - State and county lines
+  - Subscribed-and-sworn statement with date
+  - Notary signature line and commission expiration
+  - Visual placeholder for the notary seal
+
+You can manually toggle the notary block on or off for any state if you
+have a specific reason (e.g., voluntary notarization in a state that
+doesn't require it).
+
+================================================================================
+6. SPECIAL TRANSACTIONS
+================================================================================
+
+GIFT TRANSFER
+-------------
+When the buyer is a family member and no money changes hands:
+
+  1. Fill in seller and buyer sections normally.
+  2. Under Sale (Section 04), check the "Gift transfer" box.
+  3. Leave the sale price field empty or enter 0.
+  4. The bill of sale renders with price "$0.00 - Gift".
+
+Some states require an additional "gift letter" for tax purposes. Check
+your state's DMV rules.
+
+TRADE-IN
+--------
+When the buyer is trading in their old vehicle as part of the payment:
+
+  1. Fill in seller and buyer sections normally.
+  2. Under Sale (Section 04), check the "Trade-in involved" box.
+  3. A sub-section appears asking for the trade-in vehicle:
+     - Trade-in vehicle VIN (or description if no VIN)
+     - Trade-in vehicle description (year/make/model)
+     - Trade-in value (the dollar amount credited toward this sale)
+  4. The bill of sale includes the trade-in details and shows the net
+     sale price (sale price minus trade-in value).
+
+================================================================================
+7. SIGNATURES AND WITNESS LINES
+================================================================================
+
+After printing the bill of sale, both seller and buyer sign with a pen.
+For high-value transactions or per state requirements, a witness or
+notary may also sign.
+
+WITNESS SIGNATURE
+-----------------
+For sales over a few thousand dollars, or for any transaction where you
+want extra legal protection, have a neutral third party witness the
+signatures. Toggle "Include witness signature line" under Section 06.
+The witness line appears in the printed document.
+
+NOTARY ACKNOWLEDGMENT
+----------------------
+Required in Florida, Pennsylvania, and North Carolina for vehicle bill
+of sale. Auto-enabled when you select one of those states. See Section 5.
+
+To use the notary block:
+  1. Print the bill of sale with the notary block visible.
+  2. Both seller and buyer sign in the presence of a notary public.
+  3. The notary fills in state, county, date, signs, dates, and applies
+     their official seal.
+
+Most banks, UPS stores, and shipping centers offer notary services for
+a small fee (typically $5-$15 per signature).
+
+================================================================================
+8. SAVING AND LOADING DRAFTS
+================================================================================
+
+BillOfSale Pro keeps up to 5 saved drafts in your browser's localStorage.
+
+SAVING A DRAFT
+--------------
+  - Click "Save draft" in the top bar (or press Ctrl/Cmd + S).
+  - The current form state is captured (all fields, vehicle type, state).
+  - The status bar at the bottom shows "draft saved" with the current time.
+  - If you already have 5 drafts, the oldest is automatically removed.
+
+VIEWING AND LOADING DRAFTS
+--------------------------
+  - Click the "drafts" item in the sidebar (or press Ctrl/Cmd + K and
+    search for a draft).
+  - The Drafts modal shows your saved drafts sorted by date (newest first).
+  - Each draft shows vehicle type, state, and a preview (VIN, seller name,
+    or "Empty form" if you haven't filled much yet).
+  - Click "Load" to load a draft into the app. Your current form state is
+    REPLACED with the draft.
+  - Click "Delete" to permanently remove a draft (asks first).
+
+AUTOSAVE
+--------
+The current form is auto-saved to localStorage every time you change a
+field (debounced 500ms). This is different from a "draft" - autosave is
+always the latest state, while drafts are snapshots you explicitly save.
+
+If you close the browser and reopen the file later, your form is exactly
+where you left it.
+
+================================================================================
+9. PRINTING AND SAVING AS PDF
+================================================================================
+
+The print output is a clean, single-page (or multi-page if needed) legal
+document. All app interface elements (sidebar, topbar, form fields,
+buttons) are hidden in print. Only the bill of sale document itself
+prints.
+
+TO PRINT ON PAPER:
+  1. Connect your printer.
+  2. Click "Print / PDF" in the top bar (or press Ctrl/Cmd + P).
+  3. In your browser's print dialog, select your printer.
+  4. Click Print.
+
+TO SAVE AS PDF:
+  1. Click "Print / PDF" (or press Ctrl/Cmd + P).
+  2. In your browser's print dialog, change the "Destination" to
+     "Save as PDF" (Chrome/Edge) or use "PDF > Save as PDF" (Safari).
+  3. Choose where to save the file.
+  4. Click Save.
+
+PRINT FOOTER:
+-------------
+Every printed page includes a footer with:
+  - Copyright notice (C 2026 BillOfSale Pro - All Rights Reserved)
+  - Generation date (the date you printed)
+  - Page numbers (Page 1, Page 2, etc.)
+
+This is standard for legal documents and helps establish provenance.
+
+PAGE SIZE:
+----------
+The print stylesheet uses US Letter (8.5 x 11 inches). If you're in a
+country that uses A4, you can change the page size in your browser's
+print dialog under "More settings" or "Paper size".
+
+================================================================================
+10. CSV EXPORT
+================================================================================
+
+For users handling multiple transactions (small dealers, fleet managers,
+estate executors), the CSV export saves the current form as one row in
+a spreadsheet-friendly format.
+
+  1. Fill in the form for one transaction.
+  2. Press Ctrl/Cmd + E (or find Export in the menu - if implemented).
+  3. A CSV file downloads with all the form fields as columns.
+
+To export multiple transactions: fill, export, clear form (Ctrl/Cmd + R),
+repeat. Each CSV file represents one transaction.
+
+The CSV file can be opened in Excel, Google Sheets, Numbers, or any
+spreadsheet app.
+
+NOTE: CSV export saves the current form state only. It does NOT save
+drafts. To preserve a transaction for later editing, save it as a draft
+(Ctrl/Cmd + S).
+
+================================================================================
+11. LIGHT AND DARK MODE
+================================================================================
+
+The app supports both light and dark themes.
+
+  - The default matches your operating system preference (detected on
+    first open).
+  - Click the theme toggle button in the top-right corner of the app
+    (looks like a moon or sun) to switch manually.
+  - Or press Ctrl/Cmd + Shift + L.
+  - Your choice is remembered for next time.
+
+For printing, the app automatically switches to light mode (white
+background, black text) regardless of your theme setting. This produces
+the cleanest printed output and saves printer ink.
+
+================================================================================
+12. KEYBOARD SHORTCUTS
+================================================================================
+
+  Ctrl/Cmd + K          Open search palette
+  Ctrl/Cmd + S          Save current form as a draft
+  Ctrl/Cmd + P          Print or save as PDF
+  Ctrl/Cmd + E          Export current form as CSV
+  Ctrl/Cmd + Shift + R  Reset form (asks first)
+  Ctrl/Cmd + Shift + L  Toggle light/dark theme
+  ?                     Open help dialog
+  Esc                   Close any open dialog
+
+The app also supports standard browser shortcuts (Ctrl/Cmd + T for new
+tab, Ctrl/Cmd + W to close tab, etc.).
+
+On macOS, "Cmd" is used. On Windows and Linux, "Ctrl" is used.
+
+================================================================================
+13. TROUBLESHOOTING
+================================================================================
+
+THE FILE OPENS IN A TEXT EDITOR INSTEAD OF A BROWSER
+  - Right-click billofsale-pro.html, choose "Open With", pick your browser.
+  - On Windows: you may need to check "Always use this app" the first time.
+
+THE PRINT DIALOG DOESN'T SHOW "SAVE AS PDF"
+  - You're probably using a very old browser. Update Chrome, Edge, or
+    Firefox to the latest version.
+  - On Safari (macOS), use the PDF dropdown at the bottom of the print
+    dialog.
+
+MY FORM DATA DISAPPEARED
+  - BillOfSale Pro stores data in your browser's localStorage. If you:
+    * Cleared your browser data/history
+    * Used "Private" or "Incognito" browsing mode
+    * Switched browsers
+  - Your drafts and autosaved form are gone. This is by design - your
+    data stays on your device, not on any server.
+
+THE LIVE PREVIEW IS NOT UPDATING
+  - Make sure JavaScript is enabled in your browser. The app needs it
+    for the live preview and state disclosures.
+  - Try refreshing the page (F5 or Ctrl/Cmd + R).
+
+THE BILL OF SALE LOOKS WRONG IN PRINT
+  - Make sure your browser's print scale is set to 100% (not "Fit to
+    page"). The document is already sized for US Letter.
+
+A SPECIFIC STATE'S DISCLOSURE IS NOT SHOWING
+  - Only 12 states have full pre-filled disclosures (see Section 5).
+    For other states, the app shows a verification notice. You should
+    confirm requirements with your state DMV.
+
+================================================================================
+14. DATA PRIVACY AND STORAGE
+================================================================================
+
+BillOfSale Pro does NOT collect, transmit, or store any of your data
+on any server. All your data stays on your device.
+
+What's stored on your device (in browser localStorage):
+  - Your current form state (autosaved)
+  - Your saved drafts (up to 5)
+  - Your theme preference (light or dark)
+  - Your last selected vehicle type and state
+
+What's NOT stored or transmitted:
+  - No analytics
+  - No cookies
+  - No tracking pixels
+  - No account creation
+  - No email collection
+  - No server-side processing
+
+To permanently delete all stored data:
+  - Open the app, click "reset" in the sidebar (or Ctrl/Cmd + Shift + R)
+  - Confirm the reset
+  - All form data, drafts, and preferences are erased
+
+Or:
+  - Clear your browser's localStorage for this file's URL
+  - Or clear all browser data (this affects other sites too)
+
+================================================================================
+  That's everything. Enjoy your BillOfSale Pro.
+  Questions? See FAQ.txt. Found a bug or have feedback? Message me on Etsy.
+================================================================================

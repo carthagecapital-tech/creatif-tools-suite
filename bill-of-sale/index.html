@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Bill of Sale Pro — Vehicle Bill of Sale Generator | Creatif Tools</title>
+<meta name="description" content="Generate a state-aware vehicle bill of sale in minutes. Printable forms for car, motorcycle, trailer, boat, RV, and horse sales. Includes federal odometer disclosure and state-specific disclosures for CA, NY, FL, TX, and 45 more states."/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://creatif.tools/bill-of-sale/"/>
+<meta name="keywords" content="bill of sale, vehicle bill of sale, motorcycle bill of sale, boat bill of sale, RV bill of sale, trailer bill of sale, horse bill of sale, bill of sale generator, printable bill of sale, state bill of sale, odometer disclosure"/>
+<meta property="og:type" content="product"/>
+<meta property="og:title" content="Bill of Sale Pro — Vehicle Bill of Sale Generator"/>
+<meta property="og:description" content="Generate a state-aware vehicle bill of sale in minutes. Printable forms for car, motorcycle, trailer, boat, RV, and horse sales. Includes federal odometer disclosure and state-specific disclosures for CA, NY, FL, TX, and 45 more states."/>
+<meta property="og:url" content="https://creatif.tools/bill-of-sale/"/>
+<meta property="og:image" content="https://creatif.tools/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta property="og:site_name" content="Creatif.tools"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png"/>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+  <link rel="shortcut icon" href="/favicon.svg"/>
+<link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Bill of Sale Pro","description":"Generate a state-aware vehicle bill of sale in minutes. Printable forms for car, motorcycle, trailer, boat, RV, and horse sales. Includes federal odometer disclosure and state-specific disclosures for CA, NY, FL, TX, and 45 more states.","applicationCategory":"BusinessApplication","operatingSystem":"Web (any modern browser)","offers":{"@type":"Offer","price":"15","priceCurrency":"USD"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://creatif.tools/"},{"@type":"ListItem","position":2,"name":"Legal","item":"https://creatif.tools/legal/"},{"@type":"ListItem","position":3,"name":"Bill of Sale Pro","item":"https://creatif.tools/bill-of-sale/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does it work for all 50 states?","acceptedAnswer":{"@type":"Answer","text":"Yes. Bill of Sale Pro covers all 50 states plus DC. 12 states (CA, NY, FL, TX, IL, OH, PA, WA, GA, NC, AZ, MI) include full disclosure data. The remaining 38 states show a verify-with-DMV notice so you're never misled about what's required."}},{"@type":"Question","name":"What vehicle types are supported?","acceptedAnswer":{"@type":"Answer","text":"Car, motorcycle, trailer, boat (with HIN), RV, horse (with breed/age), and general equipment. Each vehicle type has its own conditional fields — for example, boats require the Hull Identification Number (HIN), and horses require breed and registration info."}},{"@type":"Question","name":"Does it include the federal odometer disclosure?","acceptedAnswer":{"@type":"Answer","text":"Yes. The federal odometer disclosure is required for vehicles under 10 years old, and Bill of Sale Pro includes it automatically. The disclosure tracks the odometer reading at time of sale, accuracy declaration, and both buyer and seller signatures."}},{"@type":"Question","name":"Can I save my work and come back?","acceptedAnswer":{"@type":"Answer","text":"Yes. The app auto-saves to your browser every time you change a field. You can also save named drafts (up to 5) and load them later. Your data never leaves your device."}},{"@type":"Question","name":"How do I print or save as PDF?","acceptedAnswer":{"@type":"Answer","text":"Press ⌘P (or click 'Print / PDF' in the topbar). The app strips all the UI chrome and prints a clean, single-page bill of sale ready for signatures. Most browsers let you 'Save as PDF' from the print dialog."}}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f; --bg2: #0f0f16; --bg3: #14141e;
+      --border: rgba(255,255,255,0.07);
+      --accent: #00d4aa; --accent2: #00b894;
+      --accent-color: #1E3A5F;
+      --text: #e8e8f0; --muted: #6b6b80; --card-bg: #111118;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.65; min-height: 100vh; }
+    .container { max-width: 920px; margin: 0 auto; padding: 0 1.5rem; }
+    .top-bar { padding: 1.25rem 0; border-bottom: 1px solid var(--border); }
+    .top-bar a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .top-bar a:hover { color: var(--accent); }
+    .hero { padding: 3rem 0 2rem; }
+    .breadcrumb { font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .app-badge { display: inline-flex; align-items: center; gap: 0.6rem; background: rgba(0, 212, 170, 0.08); border: 1px solid rgba(0, 212, 170, 0.2); padding: 0.3rem 0.8rem; border-radius: 100px; font-size: 0.75rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; }
+    .app-badge::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+    h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 0.75rem; }
+    .tagline { font-size: 1.25rem; color: var(--muted); margin-bottom: 1.5rem; max-width: 640px; }
+    .cta-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 1.5rem; border-radius: 10px; font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; font-family: inherit; }
+    .btn-primary { background: var(--accent); color: #0a0a0f; }
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--accent-color); color: var(--accent-color); }
+    .price-tag { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; color: var(--muted); }
+    .price-tag strong { color: var(--text); font-size: 1.05rem; }
+    section.content { padding: 2rem 0; border-top: 1px solid var(--border); }
+    section.content h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: var(--text); }
+    section.content p { color: var(--muted); margin-bottom: 1rem; max-width: 720px; }
+    .features { list-style: none; padding: 0; }
+    .features li { padding: 0.6rem 0; padding-left: 1.5rem; position: relative; color: var(--text); }
+    .features li::before { content: "✓"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .how-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+    .how-step { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+    .how-step-num { display: inline-block; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-color); color: #fff; font-weight: 700; font-size: 0.85rem; line-height: 28px; text-align: center; margin-bottom: 0.6rem; }
+    .how-step h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .how-step p { font-size: 0.85rem; color: var(--muted); margin: 0; }
+    .states-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.5rem; margin: 1rem 0; max-width: 720px; }
+    .state-chip { padding: 0.5rem 0.8rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; color: var(--text); text-align: center; }
+    .state-chip.full { border-color: var(--accent); color: var(--accent); }
+    .vehicle-types { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; max-width: 720px; }
+    .vehicle-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; }
+    .vehicle-name { font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
+    .vehicle-desc { font-size: 0.82rem; color: var(--muted); }
+    .demo-cta { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 2.5rem 2rem; text-align: center; }
+    .demo-cta h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text); }
+    .demo-cta p { color: var(--muted); margin-bottom: 1.5rem; max-width: 480px; margin-left: auto; margin-right: auto; font-size: 0.95rem; }
+    .demo-cta .btn { margin: 0 auto; }
+    .faq { max-width: 720px; margin-top: 1rem; }
+    .faq-item { padding: 1.25rem 0; border-top: 1px solid var(--border); }
+    .faq-item:last-child { border-bottom: 1px solid var(--border); }
+    .faq-q { font-weight: 600; color: var(--text); margin-bottom: 0.5rem; font-size: 1.05rem; }
+    .faq-a { color: var(--muted); font-size: 0.95rem; }
+    .related-section { padding: 2rem 0 3rem; border-top: 1px solid var(--border); }
+    .related-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; }
+    .text-muted { color: var(--muted); }
+    footer { text-align: center; padding: 2.5rem 1rem; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--muted); }
+    footer a { color: var(--accent); text-decoration: none; }
+    @media(max-width:600px) { .cta-row { flex-direction: column; } .btn { width: 100%; justify-content: center; } .states-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); } }
+</style>
+
+  <!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-AjVqr2icdV_VPRQDlx4SD.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+</head>
+<body>
+<div class="container">
+  <div class="top-bar">
+    <a href="/">← Back to Creatif Tools</a> &middot; <a href="/blog/" style="font-weight:600;color:var(--accent);">Blog</a>
+  </div>
+
+  <div class="hero">
+    <div class="breadcrumb">
+      <a href="/">Home</a> / <a href="/legal/">Legal</a> / <span>Bill of Sale Pro</span>
+    </div>
+    <span class="app-badge">Pro App</span>
+    <h1>Bill of Sale Pro</h1>
+    <p class="tagline">Generate a state-aware vehicle bill of sale in minutes.</p>
+    <div class="cta-row">
+      <a href="/demo.html?app=bill-of-sale" target="_blank" rel="noopener" class="btn btn-primary">
+        ▶ Try the live demo (new tab)
+      </a>
+      <a href="https://creatiftools.etsy.com/listing/4530701155" target="_blank" rel="noopener" class="btn btn-secondary">
+        Buy on Etsy →
+      </a>
+    </div>
+    <div class="price-tag">
+      <span>One-time payment</span>
+      <strong>$15</strong>
+      <span style="color: var(--muted);">· No subscription</span>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>What is Bill of Sale Pro?</h2>
+    <p>Bill of Sale Pro is a state-aware vehicle bill of sale generator that produces print-ready, legally-sound documents for private party sales. Whether you're selling a car, motorcycle, boat, RV, trailer, or horse, the app walks you through every required field and pre-fills the right state-specific disclosures.</p>
+    <p>The federal odometer disclosure is built in (required for vehicles under 10 years old), and the app tracks 12 states with full disclosure data — California, New York, Florida, Texas, Illinois, Ohio, Pennsylvania, Washington, Georgia, North Carolina, Arizona, and Michigan. For the remaining 38 states, the app shows a verify-with-DMV notice so you're never misled about what's required.</p>
+    <p>Unlike online bill-of-sale templates that require uploading your data or paying monthly fees, <strong>Bill of Sale Pro</strong> runs entirely in your browser. All your data stays on your device. No account. No subscription. No tracking.</p>
+  </section>
+
+  <section class="content">
+    <h2>Vehicle types supported</h2>
+    <p>Each vehicle type has its own conditional fields — boats need the Hull Identification Number, horses need breed and registration info, trailers need GVWR, and so on.</p>
+    <div class="vehicle-types">
+      <div class="vehicle-card">
+        <div class="vehicle-name">Car</div>
+        <div class="vehicle-desc">VIN, year, make, model, odometer, title #</div>
+      </div>
+      <div class="vehicle-card">
+        <div class="vehicle-name">Motorcycle</div>
+        <div class="vehicle-desc">VIN, engine #, odometer, title #</div>
+      </div>
+      <div class="vehicle-card">
+        <div class="vehicle-name">Trailer</div>
+        <div class="vehicle-desc">VIN, GVWR, axle count, title #</div>
+      </div>
+      <div class="vehicle-card">
+        <div class="vehicle-name">Boat</div>
+        <div class="vehicle-desc">HIN, year, length, propulsion, title #</div>
+      </div>
+      <div class="vehicle-card">
+        <div class="vehicle-name">RV</div>
+        <div class="vehicle-desc">VIN, class (A/B/C), odometer, title #</div>
+      </div>
+      <div class="vehicle-card">
+        <div class="vehicle-name">Horse</div>
+        <div class="vehicle-desc">Breed, age, registration, microchip #</div>
+      </div>
+      <div class="vehicle-card">
+        <div class="vehicle-name">Equipment</div>
+        <div class="vehicle-desc">Serial #, make, model, hours, condition</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <h2>States with full disclosure data</h2>
+    <p>These 12 states have state-specific bill of sale requirements fully integrated — the app renders the exact disclosures your state requires.</p>
+    <div class="states-grid">
+      <div class="state-chip full">CA</div>
+      <div class="state-chip full">NY</div>
+      <div class="state-chip full">FL</div>
+      <div class="state-chip full">TX</div>
+      <div class="state-chip full">IL</div>
+      <div class="state-chip full">OH</div>
+      <div class="state-chip full">PA</div>
+      <div class="state-chip full">WA</div>
+      <div class="state-chip full">GA</div>
+      <div class="state-chip full">NC</div>
+      <div class="state-chip full">AZ</div>
+      <div class="state-chip full">MI</div>
+    </div>
+    <p style="font-size: 0.9rem; color: var(--muted);">The remaining 38 states + DC use a fallback disclosure with a verify-with-DMV notice.</p>
+  </section>
+
+  <section class="content">
+    <h2>Key features</h2>
+    <ul class="features">
+<li>State-aware disclosures for all 50 states + DC</li>
+<li>Federal odometer disclosure built in (vehicles under 10 years)</li>
+<li>7 vehicle types with conditional fields (HIN, GVWR, breed, etc.)</li>
+<li>Auto-save to your browser — never lose your work</li>
+<li>Save up to 5 named drafts and load them later</li>
+<li>Print / PDF output — clean single-page document with signatures</li>
+<li>Local-first — your data never leaves your device</li>
+    </ul>
+  </section>
+
+  <section class="content">
+    <h2>How it works</h2>
+    <div class="how-steps">
+      <div class="how-step">
+        <span class="how-step-num">1</span>
+        <h3>Try the demo</h3>
+        <p>Click "Try the live demo" above — it opens in a new tab. You get 90 seconds to explore every feature.</p>
+      </div>
+      <div class="how-step">
+        <span class="how-step-num">2</span>
+        <h3>Buy on Etsy</h3>
+        <p>One-time $15 payment, you own the file forever. We email you a download link instantly.</p>
+      </div>
+      <div class="how-step">
+        <span class="how-step-num">3</span>
+        <h3>Use forever</h3>
+        <p>Open the file in any browser, anytime. Your data stays on your device. No subscription, ever.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="demo-cta">
+      <h2>Ready to try it?</h2>
+      <p>The full app opens in a new tab. You get 90 seconds to explore every feature, fill out a sample bill of sale, and see the print-ready output.</p>
+      <a href="/demo.html?app=bill-of-sale" target="_blank" rel="noopener" class="btn btn-primary">
+        ▶ Open the live demo
+      </a>
+    </div>
+  </section>
+
+  <section class="content">
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <div class="faq-q">Does it work for all 50 states?</div>
+        <div class="faq-a">Yes. Bill of Sale Pro covers all 50 states plus DC. 12 states (CA, NY, FL, TX, IL, OH, PA, WA, GA, NC, AZ, MI) include full disclosure data. The remaining 38 states show a verify-with-DMV notice so you're never misled about what's required.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What vehicle types are supported?</div>
+        <div class="faq-a">Car, motorcycle, trailer, boat (with HIN), RV, horse (with breed/age), and general equipment. Each vehicle type has its own conditional fields — for example, boats require the Hull Identification Number (HIN), and horses require breed and registration info.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Does it include the federal odometer disclosure?</div>
+        <div class="faq-a">Yes. The federal odometer disclosure is required for vehicles under 10 years old, and Bill of Sale Pro includes it automatically. The disclosure tracks the odometer reading at time of sale, accuracy declaration, and both buyer and seller signatures.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can I save my work and come back?</div>
+        <div class="faq-a">Yes. The app auto-saves to your browser every time you change a field. You can also save named drafts (up to 5) and load them later. Your data never leaves your device.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How do I print or save as PDF?</div>
+        <div class="faq-a">Press ⌘P (or click 'Print / PDF' in the topbar). The app strips all the UI chrome and prints a clean, single-page bill of sale ready for signatures. Most browsers let you 'Save as PDF' from the print dialog.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related-section">
+    <p class="text-muted">More apps in this niche coming soon.</p>
+    <p style="margin-top: 1.5rem;"><a href="/legal/" style="color: var(--accent); text-decoration: none; font-weight: 500;">View all Legal apps →</a></p>
+  </section>
+</div>
+
+<footer>
+  Creatif.tools — local-first apps for service businesses, resellers & personal use.<br>
+  <a href="/">Home</a> · <a href="/legal/">Legal</a> · <a href="https://creatif.tools">All apps</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,3004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BillOfSale Pro — Vehicle Bill of Sale Generator</title>
+<meta name="description" content="Generate a state-aware vehicle bill of sale in minutes. Printable forms for car, motorcycle, trailer, boat, RV, and horse sales. Includes federal odometer disclosure and state-specific disclosures for CA, NY, FL, TX, and 45 more states.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%231E3A5F'/><text x='16' y='22' font-family='ui-monospace,monospace' font-size='18' font-weight='700' fill='%23C9A961' text-anchor='middle'>B</text></svg>">
+<script>
+  /* Pre-paint theme to prevent FOUC — respects system preference */
+  (function () {
+    try {
+      var stored = localStorage.getItem('billofsale-theme');
+      if (stored) {
+        document.documentElement.setAttribute('data-theme', stored);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    } catch (e) {}
+  })();
+</script>
+<style>
+/* ============================================================
+   BILLOFSALE PRO v1.0.0 — PRO BUILD
+   Fork of billofsale-base.html — same design system, same component
+   patterns, all 6 STUBS implemented (STATE_DISCLOSURES, generateForm,
+   renderStateDisclosures, renderPreview, doSearch, exportCSV).
+
+   THE DESIGN SYSTEM IS FIXED. Do not modify --accent or component CSS.
+
+   ACCENT:
+     BillOfSale Pro   light #1E3A5F  · dark #2D5687   deep navy (legal/official)
+
+   VEHICLE TYPES:    car, motorcycle, trailer, boat, rv, horse, equipment —
+                    each with type-specific fields, defined in
+                    VEHICLE_FIELD_DEFS and rendered by generateForm(type).
+   STATES:          50 states + DC. 12 states carry full disclosure data
+                    (CA, NY, FL, TX, IL, OH, PA, WA, GA, NC, AZ, MI);
+                    remaining states show a fallback verify-with-DMV notice.
+
+   DARK MODE:
+     - Fixed button top-right corner, or press ⌘⇧L
+     - System preference detected on first visit
+     - Choice persists in localStorage under 'billofsale-theme'
+     - Dark → light swap is automatic before printing
+
+   SEARCH PALETTE:  ⌘K — searches vehicle types, states, and saved drafts
+   HELP MODAL:      ? key or click "? help" in status bar
+   PRINT / PDF:     ⌘P or click "Print / PDF" in topbar — only the bill-of-sale
+                    document prints, all chrome stripped
+   CSV EXPORT:      ⌘E — exports the current form as a one-row CSV download
+   TOAST SYSTEM:    toast(msg, type) — type: 'info' | 'success' | 'error'
+   CONFIRM MODAL:   confirmAction(msg, onConfirm) — replaces native confirm()
+   STATE PERSIST:   vehicle tab + form state via localStorage
+   FONT NOTE:       Pure system monospace — zero CDN, zero external requests,
+                    100% offline-portable.
+   ============================================================ */
+
+:root {
+  /* base palette — never change between variants */
+  --bg: #F2EFE8;
+  --surface: #FBFAF6;
+  --ink: #1A1A1A;
+  --ink-2: #4A4A4A;
+  --ink-3: #8A8A8A;
+  --line: #D9D4C7;
+  --line-soft: #E8E3D6;
+  --red: #C8442A;
+  --green: #3D7A4E;
+
+  /* ACCENT — light variant (deep navy = legal/official) */
+  --accent: #1E3A5F;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E0E5EE;
+
+  /* typography — pure monospace, no Google Fonts */
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-base: 13px;
+  --fs-md: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 24px;
+
+  /* spacing */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+
+  /* layout */
+  --sidebar-w: 240px;
+  --footer-h: 36px;
+}
+
+[data-theme="dark"] {
+  --bg: #1A1815;
+  --surface: #25231E;
+  --ink: #F0EDE5;
+  --ink-2: #A8A499;
+  --ink-3: #6E6A60;
+  --line: #3A3733;
+  --line-soft: #2D2B26;
+  --red: #E85A3D;
+  --green: #5BAE6E;
+  --accent: #2D5687;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #2A3850;
+}
+
+/* === RESET === */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+*:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: var(--fs-base);
+  line-height: 1.5;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background 0.2s, color 0.2s;
+}
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+input, select, textarea { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; margin: 0; padding: 0; }
+i { font-style: normal; }
+
+/* === SKIP LINK === */
+.skip-link {
+  position: absolute; left: -9999px; top: var(--sp-2); z-index: 9999;
+  padding: var(--sp-2) var(--sp-3); background: var(--accent); color: var(--accent-ink);
+  font-family: var(--mono); font-size: var(--fs-sm);
+}
+.skip-link:focus { left: var(--sp-2); }
+
+/* === TYPOGRAPHY HELPERS === */
+.label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.muted { color: var(--ink-3); }
+.mono-num { font-variant-numeric: tabular-nums; }
+
+/* === LAYOUT === */
+.app {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  min-height: calc(100vh - var(--footer-h));
+  min-height: calc(100dvh - var(--footer-h));
+}
+@media (max-width: 900px) {
+  .app { grid-template-columns: 1fr; }
+}
+
+/* === SIDEBAR === */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  padding: var(--sp-4) var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-height: calc(100vh - var(--footer-h));
+  min-height: calc(100dvh - var(--footer-h));
+  position: sticky;
+  top: 0;
+  align-self: start;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .sidebar { position: static; min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); max-height: none; }
+}
+
+.brand {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--line-soft);
+}
+.brand-mark {
+  width: 32px;
+  height: 32px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: var(--fs-md);
+  flex-shrink: 0;
+}
+.brand-text { line-height: 1.2; }
+.brand-name {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.brand-sub {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+.brand-version {
+  margin-left: auto;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  font-size: var(--fs-sm);
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.search:hover { border-color: var(--ink-2); }
+.search-icon { color: var(--ink-3); }
+.search-text { flex: 1; }
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  font-size: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+}
+
+/* === NAV === */
+.nav-group + .nav-group { margin-top: var(--sp-2); }
+.nav-label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  margin-bottom: var(--sp-1);
+  padding: 0 var(--sp-3);
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 6px var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.nav-item:hover { background: var(--bg); color: var(--ink); }
+.nav-item.active {
+  color: var(--ink);
+  background: var(--bg);
+  border-left-color: var(--accent);
+}
+.nav-num { color: var(--ink-3); width: 22px; font-variant-numeric: tabular-nums; }
+.nav-text { flex: 1; }
+.nav-badge {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+/* === THEME TOGGLE — fixed top-right === */
+.theme-toggle-fixed {
+  position: fixed; top: 16px; right: 16px; z-index: 100;
+  width: 36px; height: 36px; display: grid; place-items: center;
+  background: var(--surface); border: 1px solid var(--line);
+  color: var(--ink-2); cursor: pointer; font-size: 16px;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.theme-toggle-fixed:hover { border-color: var(--ink-2); color: var(--ink); background: var(--bg); }
+@media (max-width: 900px) { .theme-toggle-fixed { top: 12px; right: 12px; width: 32px; height: 32px; font-size: 14px; } }
+
+.sidebar-status {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+@keyframes dot-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.35; transform: scale(0.75); }
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.dot.green {
+  background: var(--green);
+  animation: dot-pulse 1.8s ease-in-out infinite;
+}
+.dot.red { background: var(--red); }
+
+/* === MAIN === */
+.main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topbar {
+  padding: var(--sp-5) var(--sp-6) var(--sp-4);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-5);
+  flex-wrap: wrap;
+}
+.breadcrumb {
+  width: 100%;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--sp-2);
+}
+.title-block { flex: 1; min-width: 200px; }
+.title {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.title em {
+  font-style: normal;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.actions {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* === STATE SELECTOR (in topbar actions) === */
+.state-pick {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+}
+.state-pick-label {
+  padding: var(--sp-2) var(--sp-3);
+  border-right: 1px solid var(--line);
+  color: var(--ink-3);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.state-pick select {
+  border: none;
+  background: var(--surface);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--ink);
+  cursor: pointer;
+  outline: none;
+  font-family: var(--mono);
+  min-width: 140px;
+}
+/* Native <select> popup list — explicit colors so it never renders as
+   unreadable white-on-light / light-on-white regardless of OS/browser theme */
+select option {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+/* === BUTTONS === */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.15s;
+  color: var(--ink);
+}
+.btn:hover { background: var(--bg); border-color: var(--ink-2); }
+.btn-primary {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+.btn-primary:hover { background: var(--ink-2); border-color: var(--ink-2); }
+.btn-accent {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+.btn-accent:hover { filter: brightness(1.08); border-color: var(--accent); }
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-2);
+  border-color: transparent;
+}
+.btn-ghost:hover { color: var(--ink); background: var(--bg); }
+.btn .kbd {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.25);
+  color: inherit;
+}
+.btn:not(.btn-primary):not(.btn-accent) .kbd {
+  background: var(--bg);
+  border-color: var(--line);
+  color: var(--ink-2);
+}
+.btn-primary .kbd {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.2);
+  color: inherit;
+}
+.btn-danger {
+  background: var(--surface);
+  color: var(--red);
+  border-color: var(--line);
+}
+.btn-danger:hover { background: var(--bg); border-color: var(--red); }
+
+/* === VEHICLE TABS (horizontal strip below topbar) === */
+.vehicle-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  padding: 0 var(--sp-6);
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+@media (max-width: 700px) { .vehicle-tabs { padding: 0 var(--sp-4); } }
+.vehicle-tab {
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  transition: background 0.1s, color 0.1s, border-color 0.15s;
+}
+.vehicle-tab:hover { color: var(--ink); background: var(--bg); }
+.vehicle-tab.active {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+  font-weight: 700;
+}
+.vehicle-tab .vt-num {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* === MAIN CONTENT (form + preview two-column) === */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: var(--sp-5);
+  padding: var(--sp-5) var(--sp-6) var(--sp-6);
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .workspace { grid-template-columns: 1fr; padding: var(--sp-4); }
+}
+
+/* === FORM AREA === */
+.form-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.form-section {
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.form-section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--bg);
+  border: none;
+  border-bottom: 1px solid var(--line);
+  width: 100%;
+  text-align: left;
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.form-section-header:hover { background: var(--line-soft); }
+.form-section-header[aria-expanded="false"] { border-bottom-color: transparent; }
+.form-section-header .fsn {
+  font-size: var(--fs-xs);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.form-section-header .fst { flex: 1; }
+.form-section-header .chevron {
+  font-size: 10px;
+  color: var(--ink-3);
+  transition: transform 0.15s;
+}
+.form-section-header[aria-expanded="false"] .chevron { transform: rotate(-90deg); }
+
+.form-section-body {
+  padding: var(--sp-4);
+}
+.form-section-body[hidden] { display: none; }
+
+.form-hint {
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+  padding: var(--sp-2) var(--sp-3);
+  margin-bottom: var(--sp-3);
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+}
+.form-grid .full { grid-column: 1 / -1; }
+@media (max-width: 600px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+.field { display: flex; flex-direction: column; gap: var(--sp-1); }
+.field label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.field label .req { color: var(--red); margin-left: 2px; }
+
+.field input,
+.field select,
+.field textarea {
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  font-size: var(--fs-sm);
+  color: var(--ink);
+  font-family: var(--mono);
+  transition: border-color 0.1s, background 0.1s;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface);
+}
+[data-theme="dark"] .field input,
+[data-theme="dark"] .field select,
+[data-theme="dark"] .field textarea {
+  background: var(--bg);
+  color: var(--ink);
+}
+.field input::placeholder,
+.field textarea::placeholder { color: var(--ink-3); }
+
+.field .help { font-size: var(--fs-xs); color: var(--ink-3); }
+.field .help.error { color: var(--red); }
+
+.checkbox-field {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+.checkbox-field input[type="checkbox"] {
+  margin-top: 2px;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  accent-color: var(--accent);
+}
+.checkbox-field .cb-text {
+  font-size: var(--fs-xs);
+  color: var(--ink);
+  line-height: 1.5;
+}
+.checkbox-field .cb-help {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  margin-top: 2px;
+}
+
+/* === PREVIEW AREA === */
+.preview-area {
+  position: sticky;
+  top: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+@media (max-width: 1100px) {
+  .preview-area { position: static; }
+}
+.preview-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--sp-2);
+}
+.preview-head .label { font-weight: 700; color: var(--ink); }
+.preview-head .preview-state {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The actual bill-of-sale document — looks like paper */
+.preview-doc {
+  background: white;
+  color: #1a1a1a;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 56px 64px;
+  border: 1px solid var(--line);
+  min-height: 900px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+@media (max-width: 700px) {
+  .preview-doc { padding: 32px 24px; }
+}
+.preview-doc .doc-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0 0 4px 0;
+}
+.preview-doc .doc-subtitle {
+  text-align: center;
+  font-size: 12px;
+  color: #555;
+  margin: 0 0 32px 0;
+  font-style: italic;
+}
+.preview-doc .doc-hr {
+  border: none;
+  border-top: 1px solid #999;
+  margin: 20px 0;
+}
+.preview-doc .doc-hr-accent {
+  border: none;
+  border-top: 2px solid #1E3A5F;
+  margin: 18px 0;
+}
+.preview-doc .doc-parties {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-bottom: 18px;
+}
+.preview-doc .doc-party-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 4px;
+  font-family: var(--mono);
+}
+.preview-doc .doc-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #555;
+  margin: 18px 0 8px 0;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 4px;
+  font-family: var(--mono);
+}
+.preview-doc .doc-field {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 8px;
+  margin: 3px 0;
+  font-size: 12px;
+}
+.preview-doc .doc-field-label { color: #555; }
+.preview-doc .doc-field-value { color: #1a1a1a; font-weight: 500; }
+.preview-doc .doc-placeholder { color: #bbb; font-style: italic; font-weight: normal !important; }
+.preview-doc .doc-clause {
+  font-size: 12px;
+  margin: 8px 0;
+  padding-left: 18px;
+  text-indent: -18px;
+  line-height: 1.5;
+}
+.preview-doc .doc-sig-block {
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  gap: 16px;
+  margin: 14px 0;
+  align-items: end;
+}
+.preview-doc .doc-sig-line {
+  border-bottom: 1px solid #1a1a1a;
+  height: 26px;
+}
+.preview-doc .doc-sig-caption {
+  font-size: 10px;
+  color: #555;
+  margin-top: 4px;
+  font-family: var(--mono);
+}
+.preview-doc .doc-notary-block {
+  margin-top: 28px;
+  padding: 14px 16px;
+  border: 1px dashed #888;
+  background: #fafafa;
+}
+.preview-doc .doc-notary-title {
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 11px;
+  margin-bottom: 12px;
+  font-family: var(--mono);
+}
+.preview-doc .doc-seal-placeholder {
+  margin-top: 12px;
+  width: 90px;
+  height: 90px;
+  border: 2px dashed #aaa;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  color: #aaa;
+  text-align: center;
+  font-family: var(--mono);
+}
+
+/* === STATUS BAR === */
+.statusbar {
+  margin-top: auto;
+  padding: var(--sp-2) var(--sp-6);
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+@media (max-width: 700px) { .statusbar { padding: var(--sp-2) var(--sp-4); } }
+.statusbar .grow { flex: 1; }
+.statusbar .right { display: flex; gap: var(--sp-4); align-items: center; }
+.statusbar #save-status { font-variant-numeric: tabular-nums; }
+
+/* === FOOTER (legal) === */
+.app-footer {
+  height: var(--footer-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--sp-4);
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+.app-footer .app-name {
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.app-footer .sep {
+  margin: 0 var(--sp-2);
+  color: var(--ink-3);
+}
+
+/* === TOAST SYSTEM === */
+.toast-host {
+  position: fixed;
+  bottom: calc(var(--footer-h) + var(--sp-4));
+  right: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  z-index: 1000;
+  pointer-events: none;
+  max-width: 360px;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--ink);
+  color: var(--bg);
+  font-size: var(--fs-sm);
+  min-width: 200px;
+  pointer-events: auto;
+  border: 1px solid var(--ink);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  animation: toast-in 0.2s ease-out;
+}
+.toast.is-leaving { animation: toast-out 0.2s ease-in forwards; }
+.toast .toast-icon {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.toast.success .toast-icon { background: var(--green); }
+.toast.info .toast-icon { background: var(--accent); }
+.toast.error .toast-icon { background: var(--red); }
+.toast .toast-msg { flex: 1; }
+
+@keyframes toast-in {
+  from { transform: translateY(8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes toast-out {
+  to { transform: translateY(8px); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast { animation: none; }
+}
+
+/* === MODAL SYSTEM === */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 900; display: none; }
+.modal-backdrop.is-open { display: block; }
+.modal {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background: var(--surface); border: 1px solid var(--line);
+  z-index: 901; display: none; max-width: 90vw; max-height: 90vh;
+  overflow: auto; min-width: 400px;
+}
+.modal.is-open { display: block; }
+.modal-header { padding: var(--sp-4); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-size: var(--fs-md); font-weight: 700; }
+.modal-close { font-size: var(--fs-lg); color: var(--ink-3); cursor: pointer; line-height: 1; }
+.modal-close:hover { color: var(--ink); }
+.modal-body { padding: var(--sp-4); }
+.modal-footer { padding: var(--sp-4); border-top: 1px solid var(--line); display: flex; gap: var(--sp-2); justify-content: flex-end; }
+@media (max-width: 600px) { .modal { min-width: 90vw; } }
+
+/* === DRAFTS LIST === */
+.drafts-empty {
+  text-align: center;
+  padding: var(--sp-5);
+  color: var(--ink-3);
+  font-size: var(--fs-sm);
+}
+.draft-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  margin-bottom: var(--sp-2);
+}
+.draft-item-info { flex: 1; min-width: 0; }
+.draft-item-title {
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  color: var(--ink);
+}
+.draft-item-meta {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  margin-top: 2px;
+}
+
+/* === SEARCH PALETTE === */
+.search-palette {
+  position: fixed; top: 20%; left: 50%; transform: translateX(-50%);
+  width: 500px; max-width: 90vw; background: var(--surface);
+  border: 1px solid var(--line); z-index: 902; display: none;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+}
+.search-palette.is-open { display: block; }
+.search-palette-input {
+  width: 100%; padding: var(--sp-3) var(--sp-4);
+  border: none; border-bottom: 1px solid var(--line);
+  background: var(--bg); font-size: var(--fs-md); color: var(--ink);
+  font-family: var(--mono); outline: none;
+}
+.search-palette-results { max-height: 300px; overflow: auto; }
+.search-palette-item { padding: var(--sp-3) var(--sp-4); cursor: pointer; display: flex; align-items: center; gap: var(--sp-3); }
+.search-palette-item:hover { background: var(--bg); }
+.search-palette-item.is-selected { background: var(--bg); outline: 2px solid var(--accent); outline-offset: -2px; }
+.search-palette-item-key { margin-left: auto; font-size: var(--fs-xs); color: var(--ink-3); }
+
+/* === HELP MODAL === */
+.help-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+@media (max-width: 600px) { .help-grid { grid-template-columns: 1fr; } }
+.help-item { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-2) 0; }
+.help-key { display: flex; gap: 2px; }
+.help-section-title {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  margin: 0 0 var(--sp-3);
+}
+.help-section-title.with-gap { margin-top: var(--sp-5); }
+.help-steps {
+  margin: 0 0 var(--sp-2);
+  padding: 0;
+  list-style: none;
+  counter-reset: help-step;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.help-steps li {
+  counter-increment: help-step;
+  display: flex;
+  gap: var(--sp-3);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+.help-steps li::before {
+  content: counter(help-step, decimal-leading-zero);
+  flex-shrink: 0;
+  width: 20px;
+  color: var(--accent);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.help-steps li strong { color: var(--ink); }
+
+/* === PRINT / PDF === */
+.print-footer { display: none; }
+@media print {
+  @page {
+    margin: 15mm 15mm 20mm 15mm;
+    size: auto;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 10pt;
+  }
+  /* hide all UI chrome */
+  .sidebar, .actions, .vehicle-tabs, .state-pick, .statusbar, .theme-toggle-fixed,
+  .no-print, .app-footer, .toast-host, .modal-backdrop, .modal, .search-palette,
+  .form-area, .preview-head, .skip-link { display: none !important; }
+  /* simplify layout */
+  .app {
+    display: block !important;
+    min-height: 0 !important;
+  }
+  .main { border: 0 !important; }
+  .topbar {
+    border: 0 !important;
+    padding: 0 0 8pt !important;
+    border-bottom: 1px solid #999 !important;
+    margin-bottom: 12pt !important;
+  }
+  .breadcrumb { color: #666 !important; }
+  .title em { color: #666 !important; }
+  .workspace { display: block !important; padding: 0 !important; gap: 0 !important; }
+  /* preview doc prints clean */
+  .preview-area { position: static !important; }
+  .preview-doc {
+    border: none !important;
+    box-shadow: none !important;
+    background: white !important;
+    color: black !important;
+    padding: 0 !important;
+    font-size: 11pt !important;
+    line-height: 1.4 !important;
+    min-height: 0 !important;
+  }
+  .preview-doc .doc-title { font-size: 16pt !important; }
+  .preview-doc .doc-parties { gap: 16pt !important; }
+  .preview-doc .doc-field { font-size: 10pt !important; }
+  .preview-doc .doc-notary-block { page-break-inside: avoid !important; }
+  /* print footer with copyright + page numbers, repeats on every page */
+  .print-footer {
+    display: flex !important;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 8pt;
+    color: #666;
+    border-top: 1px solid #ccc;
+    padding: 4pt 10mm;
+  }
+  .print-footer .page-num::after {
+    content: "Page " counter(page);
+  }
+}
+/* === UTILITY === */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+</style>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:;">
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<button class="theme-toggle-fixed" id="theme-toggle-btn" title="Toggle dark mode (⌘⇧L)" aria-label="Toggle dark mode">
+  <span id="theme-toggle-icon">☾</span>
+</button>
+
+<div class="app" id="app-root">
+
+  <!-- ============================================================
+       SIDEBAR
+       ============================================================ -->
+  <aside class="sidebar" aria-label="Application sidebar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">B</div>
+      <div class="brand-text">
+        <div class="brand-name">BillOfSale</div>
+        <div class="brand-sub">vehicle suite</div>
+      </div>
+      <div class="brand-version">v1.0</div>
+    </div>
+
+    <div class="search" id="search-trigger" role="button" tabindex="0" aria-label="Open search palette, Command K">
+      <span class="search-icon" aria-hidden="true">⏵</span>
+      <span class="search-text">jump to anything</span>
+      <span class="kbd" aria-hidden="true">⌘</span><span class="kbd" aria-hidden="true">K</span>
+    </div>
+
+    <nav aria-label="Vehicle type and actions">
+      <div class="nav-group">
+        <div class="nav-label" aria-hidden="true">-- vehicle type</div>
+        <ul role="list">
+          <li class="nav-item active" data-type="car" role="button" tabindex="0" aria-current="page" aria-label="Car bill of sale">
+            <span class="nav-num" aria-hidden="true">01</span>
+            <span class="nav-text">car</span>
+          </li>
+          <li class="nav-item" data-type="motorcycle" role="button" tabindex="0" aria-label="Motorcycle bill of sale">
+            <span class="nav-num" aria-hidden="true">02</span>
+            <span class="nav-text">motorcycle</span>
+          </li>
+          <li class="nav-item" data-type="trailer" role="button" tabindex="0" aria-label="Trailer bill of sale">
+            <span class="nav-num" aria-hidden="true">03</span>
+            <span class="nav-text">trailer</span>
+          </li>
+          <li class="nav-item" data-type="boat" role="button" tabindex="0" aria-label="Boat bill of sale">
+            <span class="nav-num" aria-hidden="true">04</span>
+            <span class="nav-text">boat</span>
+          </li>
+          <li class="nav-item" data-type="rv" role="button" tabindex="0" aria-label="RV bill of sale">
+            <span class="nav-num" aria-hidden="true">05</span>
+            <span class="nav-text">RV</span>
+          </li>
+          <li class="nav-item" data-type="horse" role="button" tabindex="0" aria-label="Horse bill of sale">
+            <span class="nav-num" aria-hidden="true">06</span>
+            <span class="nav-text">horse</span>
+          </li>
+          <li class="nav-item" data-type="equipment" role="button" tabindex="0" aria-label="Equipment bill of sale">
+            <span class="nav-num" aria-hidden="true">07</span>
+            <span class="nav-text">equipment</span>
+          </li>
+        </ul>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label" aria-hidden="true">-- system</div>
+        <ul role="list">
+          <li class="nav-item" id="nav-drafts" role="button" tabindex="0" aria-label="Open saved drafts">
+            <span class="nav-num" aria-hidden="true">08</span>
+            <span class="nav-text">drafts</span>
+            <span class="nav-badge" id="drafts-badge" hidden aria-hidden="true">0</span>
+          </li>
+          <li class="nav-item" id="nav-reset" role="button" tabindex="0" aria-label="Reset form">
+            <span class="nav-num" aria-hidden="true">09</span>
+            <span class="nav-text">reset</span>
+          </li>
+          <li class="nav-item" id="nav-help" role="button" tabindex="0" aria-label="Help and keyboard shortcuts">
+            <span class="nav-num" aria-hidden="true">10</span>
+            <span class="nav-text">help</span>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-status">
+        <span class="dot green" aria-hidden="true"></span>
+        <span>local-only · data on device</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       MAIN
+       ============================================================ -->
+  <main class="main" id="main-content" tabindex="-1">
+    <header class="topbar" aria-label="Page header">
+      <div class="breadcrumb" aria-hidden="true">SUITE / BILLOFSALE / <span id="bc-type">CAR</span> / <span id="bc-state">CALIFORNIA</span></div>
+      <div class="title-block">
+        <h1 class="title" id="page-title">Vehicle bill of sale <em>— fill, sign, print</em></h1>
+      </div>
+      <div class="actions" role="toolbar" aria-label="Page actions">
+        <div class="state-pick">
+          <span class="state-pick-label" aria-hidden="true">State</span>
+          <select id="state-select" aria-label="Select state for bill of sale">
+            <option value="AL">Alabama</option>
+            <option value="AK">Alaska</option>
+            <option value="AZ">Arizona</option>
+            <option value="AR">Arkansas</option>
+            <option value="CA" selected>California</option>
+            <option value="CO">Colorado</option>
+            <option value="CT">Connecticut</option>
+            <option value="DE">Delaware</option>
+            <option value="DC">District of Columbia</option>
+            <option value="FL">Florida</option>
+            <option value="GA">Georgia</option>
+            <option value="HI">Hawaii</option>
+            <option value="ID">Idaho</option>
+            <option value="IL">Illinois</option>
+            <option value="IN">Indiana</option>
+            <option value="IA">Iowa</option>
+            <option value="KS">Kansas</option>
+            <option value="KY">Kentucky</option>
+            <option value="LA">Louisiana</option>
+            <option value="ME">Maine</option>
+            <option value="MD">Maryland</option>
+            <option value="MA">Massachusetts</option>
+            <option value="MI">Michigan</option>
+            <option value="MN">Minnesota</option>
+            <option value="MS">Mississippi</option>
+            <option value="MO">Missouri</option>
+            <option value="MT">Montana</option>
+            <option value="NE">Nebraska</option>
+            <option value="NV">Nevada</option>
+            <option value="NH">New Hampshire</option>
+            <option value="NJ">New Jersey</option>
+            <option value="NM">New Mexico</option>
+            <option value="NY">New York</option>
+            <option value="NC">North Carolina</option>
+            <option value="ND">North Dakota</option>
+            <option value="OH">Ohio</option>
+            <option value="OK">Oklahoma</option>
+            <option value="OR">Oregon</option>
+            <option value="PA">Pennsylvania</option>
+            <option value="RI">Rhode Island</option>
+            <option value="SC">South Carolina</option>
+            <option value="SD">South Dakota</option>
+            <option value="TN">Tennessee</option>
+            <option value="TX">Texas</option>
+            <option value="UT">Utah</option>
+            <option value="VT">Vermont</option>
+            <option value="VA">Virginia</option>
+            <option value="WA">Washington</option>
+            <option value="WV">West Virginia</option>
+            <option value="WI">Wisconsin</option>
+            <option value="WY">Wyoming</option>
+          </select>
+        </div>
+        <button class="btn" id="btn-save" title="Save current form as a draft (⌘S)" aria-label="Save current form as draft">
+          <span aria-hidden="true">§</span>
+          <span>Save draft</span>
+          <span class="kbd" aria-hidden="true">⌘</span><span class="kbd" aria-hidden="true">S</span>
+        </button>
+        <button class="btn" onclick="window.print()" title="Print or save as PDF (⌘P)" aria-label="Print or save as PDF, Command P">
+          <span aria-hidden="true">⎙</span>
+          <span>Print / PDF</span>
+          <span class="kbd" aria-hidden="true">⌘</span><span class="kbd" aria-hidden="true">P</span>
+        </button>
+      </div>
+    </header>
+
+    <nav class="vehicle-tabs" id="vehicle-tabs" role="tablist" aria-label="Vehicle type">
+      <div class="vehicle-tab active" data-type="car" role="tab" aria-selected="true" tabindex="0">
+        <span class="vt-num">01</span> car
+      </div>
+      <div class="vehicle-tab" data-type="motorcycle" role="tab" aria-selected="false" tabindex="-1">
+        <span class="vt-num">02</span> motorcycle
+      </div>
+      <div class="vehicle-tab" data-type="trailer" role="tab" aria-selected="false" tabindex="-1">
+        <span class="vt-num">03</span> trailer
+      </div>
+      <div class="vehicle-tab" data-type="boat" role="tab" aria-selected="false" tabindex="-1">
+        <span class="vt-num">04</span> boat
+      </div>
+      <div class="vehicle-tab" data-type="rv" role="tab" aria-selected="false" tabindex="-1">
+        <span class="vt-num">05</span> RV
+      </div>
+      <div class="vehicle-tab" data-type="horse" role="tab" aria-selected="false" tabindex="-1">
+        <span class="vt-num">06</span> horse
+      </div>
+      <div class="vehicle-tab" data-type="equipment" role="tab" aria-selected="false" tabindex="-1">
+        <span class="vt-num">07</span> equipment
+      </div>
+    </nav>
+
+    <section class="workspace">
+
+      <!-- ====== FORM AREA ====== -->
+      <div class="form-area" aria-label="Bill of sale form">
+
+        <!-- § 1 Vehicle -->
+        <section class="form-section">
+          <button class="form-section-header" type="button" aria-expanded="true" aria-controls="section-vehicle">
+            <span class="fsn">§ 01</span>
+            <span class="fst">vehicle</span>
+            <span class="chevron" aria-hidden="true">▼</span>
+          </button>
+          <div class="form-section-body" id="section-vehicle" role="region">
+            <div class="form-hint" id="vehicle-hint">Currently showing fields for car. The full build adapts fields per vehicle type (HIN for boats, breed/age for horses, GVWR for trailers, etc.).</div>
+            <div class="form-grid">
+              <div class="field full">
+                <label for="vehicle-vin">VIN <span class="req">*</span></label>
+                <input type="text" id="vehicle-vin" maxlength="17" placeholder="17-character VIN" autocomplete="off">
+                <span class="help">Vehicle Identification Number — found on dashboard or driver-side door jamb</span>
+              </div>
+              <div class="field">
+                <label for="vehicle-year">Year <span class="req">*</span></label>
+                <input type="number" id="vehicle-year" min="1900" max="2030" placeholder="2020">
+              </div>
+              <div class="field">
+                <label for="vehicle-make">Make <span class="req">*</span></label>
+                <input type="text" id="vehicle-make" placeholder="Toyota" autocomplete="off">
+              </div>
+              <div class="field">
+                <label for="vehicle-model">Model <span class="req">*</span></label>
+                <input type="text" id="vehicle-model" placeholder="Camry" autocomplete="off">
+              </div>
+              <div class="field">
+                <label for="vehicle-color">Color</label>
+                <input type="text" id="vehicle-color" placeholder="Silver">
+              </div>
+              <div class="field">
+                <label for="vehicle-odo">Odometer reading</label>
+                <input type="number" id="vehicle-odo" placeholder="45000">
+                <span class="help">Required for cars & motorcycles under 10 years</span>
+              </div>
+              <div class="field full">
+                <label class="checkbox-field" for="vehicle-odo-actual">
+                  <input type="checkbox" id="vehicle-odo-actual" checked>
+                  <span>
+                    <span class="cb-text">Federal odometer disclosure</span>
+                    <span class="cb-help">I certify the odometer reading reflects the actual mileage of the vehicle, unless marked "Not Actual" below.</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- § 2 Seller -->
+        <section class="form-section">
+          <button class="form-section-header" type="button" aria-expanded="true" aria-controls="section-seller">
+            <span class="fsn">§ 02</span>
+            <span class="fst">seller</span>
+            <span class="chevron" aria-hidden="true">▼</span>
+          </button>
+          <div class="form-section-body" id="section-seller" role="region">
+            <div class="form-grid">
+              <div class="field full">
+                <label for="seller-name">Full legal name <span class="req">*</span></label>
+                <input type="text" id="seller-name" placeholder="Jane A. Seller" autocomplete="name">
+              </div>
+              <div class="field full">
+                <label for="seller-address">Street address <span class="req">*</span></label>
+                <input type="text" id="seller-address" placeholder="123 Main Street" autocomplete="street-address">
+              </div>
+              <div class="field">
+                <label for="seller-city">City <span class="req">*</span></label>
+                <input type="text" id="seller-city" placeholder="Los Angeles" autocomplete="address-level2">
+              </div>
+              <div class="field">
+                <label for="seller-zip">ZIP <span class="req">*</span></label>
+                <input type="text" id="seller-zip" maxlength="10" placeholder="90001" autocomplete="postal-code">
+              </div>
+              <div class="field">
+                <label for="seller-phone">Phone</label>
+                <input type="tel" id="seller-phone" placeholder="(555) 123-4567" autocomplete="tel">
+              </div>
+              <div class="field">
+                <label for="seller-email">Email</label>
+                <input type="email" id="seller-email" placeholder="[email protected]" autocomplete="email">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- § 3 Buyer -->
+        <section class="form-section">
+          <button class="form-section-header" type="button" aria-expanded="true" aria-controls="section-buyer">
+            <span class="fsn">§ 03</span>
+            <span class="fst">buyer</span>
+            <span class="chevron" aria-hidden="true">▼</span>
+          </button>
+          <div class="form-section-body" id="section-buyer" role="region">
+            <div class="form-grid">
+              <div class="field full">
+                <label for="buyer-name">Full legal name <span class="req">*</span></label>
+                <input type="text" id="buyer-name" placeholder="John B. Buyer" autocomplete="name">
+              </div>
+              <div class="field full">
+                <label for="buyer-address">Street address <span class="req">*</span></label>
+                <input type="text" id="buyer-address" placeholder="456 Oak Avenue" autocomplete="street-address">
+              </div>
+              <div class="field">
+                <label for="buyer-city">City <span class="req">*</span></label>
+                <input type="text" id="buyer-city" placeholder="San Francisco" autocomplete="address-level2">
+              </div>
+              <div class="field">
+                <label for="buyer-zip">ZIP <span class="req">*</span></label>
+                <input type="text" id="buyer-zip" maxlength="10" placeholder="94101" autocomplete="postal-code">
+              </div>
+              <div class="field">
+                <label for="buyer-phone">Phone</label>
+                <input type="tel" id="buyer-phone" placeholder="(555) 987-6543" autocomplete="tel">
+              </div>
+              <div class="field">
+                <label for="buyer-email">Email</label>
+                <input type="email" id="buyer-email" placeholder="[email protected]" autocomplete="email">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- § 4 Sale -->
+        <section class="form-section">
+          <button class="form-section-header" type="button" aria-expanded="true" aria-controls="section-sale">
+            <span class="fsn">§ 04</span>
+            <span class="fst">sale</span>
+            <span class="chevron" aria-hidden="true">▼</span>
+          </button>
+          <div class="form-section-body" id="section-sale" role="region">
+            <div class="form-grid">
+              <div class="field">
+                <label for="sale-date">Sale date <span class="req">*</span></label>
+                <input type="date" id="sale-date">
+              </div>
+              <div class="field">
+                <label for="sale-price">Sale price (USD) <span class="req">*</span></label>
+                <input type="number" id="sale-price" min="0" step="0.01" placeholder="8500.00">
+              </div>
+              <div class="field full">
+                <label for="sale-payment">Payment method</label>
+                <select id="sale-payment">
+                  <option value="">— select —</option>
+                  <option value="cash">Cash</option>
+                  <option value="check">Check</option>
+                  <option value="money-order">Money order</option>
+                  <option value="wire">Wire transfer</option>
+                  <option value="paypal">PayPal</option>
+                  <option value="venmo">Venmo</option>
+                  <option value="zelle">Zelle</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label class="checkbox-field" for="sale-gift">
+                  <input type="checkbox" id="sale-gift">
+                  <span>
+                    <span class="cb-text">Gift transfer (no money exchanged)</span>
+                    <span class="cb-help">Sale price will be recorded as $0.00 — Gift.</span>
+                  </span>
+                </label>
+              </div>
+              <div class="field full">
+                <label class="checkbox-field" for="sale-tradein-toggle">
+                  <input type="checkbox" id="sale-tradein-toggle">
+                  <span>
+                    <span class="cb-text">Trade-in vehicle involved</span>
+                    <span class="cb-help">Adds a trade-in vehicle description and value to this sale.</span>
+                  </span>
+                </label>
+              </div>
+              <div class="form-grid full" id="tradein-subform" hidden style="grid-column:1 / -1;border-top:1px solid var(--line-soft);padding-top:var(--sp-3);margin-top:var(--sp-1);">
+                <div class="field full">
+                  <label for="tradein-desc">Trade-in vehicle (year / make / model)</label>
+                  <input type="text" id="tradein-desc" placeholder="2018 Honda Civic">
+                </div>
+                <div class="field">
+                  <label for="tradein-vin">Trade-in VIN/HIN/serial</label>
+                  <input type="text" id="tradein-vin" maxlength="17" placeholder="optional">
+                </div>
+                <div class="field">
+                  <label for="tradein-value">Trade-in value (USD)</label>
+                  <input type="number" id="tradein-value" min="0" step="0.01" placeholder="3000.00">
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- § 5 State Disclosures -->
+        <section class="form-section">
+          <button class="form-section-header" type="button" aria-expanded="true" aria-controls="section-state">
+            <span class="fsn">§ 05</span>
+            <span class="fst">state disclosures</span>
+            <span class="chevron" aria-hidden="true">▼</span>
+          </button>
+          <div class="form-section-body" id="section-state" role="region">
+            <div class="form-hint" id="state-hint">Showing state-specific disclosures for California. These auto-update when you change the state selector above.</div>
+            <div id="state-disclosures-form">
+              <!-- Populated by renderStateDisclosures() -->
+            </div>
+          </div>
+        </section>
+
+        <!-- § 6 Signatures -->
+        <section class="form-section">
+          <button class="form-section-header" type="button" aria-expanded="true" aria-controls="section-signatures">
+            <span class="fsn">§ 06</span>
+            <span class="fst">signatures</span>
+            <span class="chevron" aria-hidden="true">▼</span>
+          </button>
+          <div class="form-section-body" id="section-signatures" role="region">
+            <div class="form-grid">
+              <div class="field full">
+                <label class="checkbox-field" for="notarize-toggle">
+                  <input type="checkbox" id="notarize-toggle">
+                  <span>
+                    <span class="cb-text">Include notary block</span>
+                    <span class="cb-help">Some states require notarization. Check your state's requirements above.</span>
+                  </span>
+                </label>
+              </div>
+              <div class="field full">
+                <label class="checkbox-field" for="witness-toggle">
+                  <input type="checkbox" id="witness-toggle">
+                  <span>
+                    <span class="cb-text">Include witness signature line</span>
+                    <span class="cb-help">Optional, but recommended for high-value transactions.</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ====== PREVIEW AREA ====== -->
+      <aside class="preview-area" aria-label="Live bill of sale preview">
+        <div class="preview-head">
+          <span class="label">§ preview · live</span>
+          <span class="preview-state" id="preview-state">CA · car</span>
+        </div>
+        <div class="preview-doc" id="preview-doc">
+          <!-- Populated by renderPreview() -->
+        </div>
+        <div class="sr-only" id="preview-status" role="status" aria-live="polite" aria-atomic="true"></div>
+      </aside>
+
+    </section>
+
+    <div class="statusbar">
+      <span id="app-appname-display">app</span> pro v<span id="app-version-display">1.0.0</span>
+      <span class="grow"></span>
+      <div class="right">
+        <span>autosave: <span id="save-status" class="muted">—</span></span>
+        <button class="btn" id="btn-help" style="padding:2px 6px;font-size:var(--fs-xs);" title="Keyboard shortcuts (?)" aria-label="Open keyboard shortcuts help">
+          <span class="kbd" aria-hidden="true">?</span> help
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<!-- ============================================================
+     FOOTER (legal)
+     ============================================================ -->
+<footer class="app-footer">
+  <span>©</span>
+  <span class="sep">2026</span>
+  <span class="app-name">BillOfSale Pro</span>
+  <span class="sep">·</span>
+  <span>All Rights Reserved</span>
+</footer>
+
+<!-- Print-only footer (repeats on every page) -->
+<div class="print-footer">
+  <span class="copyright">© 2026 <span class="app-name">BillOfSale Pro</span> · All Rights Reserved · Generated <span id="print-date"></span></span>
+  <span class="page-num"></span>
+</div>
+
+<!-- ============================================================
+     MODALS + SEARCH PALETTE + TOAST HOST
+     ============================================================ -->
+<div class="modal-backdrop" id="modal-backdrop" aria-hidden="true"></div>
+
+<div class="search-palette" id="search-palette" role="dialog" aria-modal="true" aria-label="Search">
+  <input type="text" class="search-palette-input" id="search-input"
+         placeholder="Type to search..." aria-label="Search all content"
+         autocomplete="off" spellcheck="false">
+  <div class="search-palette-results" id="search-results"
+       role="listbox" aria-label="Search results" aria-live="polite"></div>
+</div>
+
+<div class="modal" id="modal-help" style="width:600px;" role="dialog" aria-modal="true" aria-labelledby="help-modal-title">
+  <div class="modal-header">
+    <div class="modal-title" id="help-modal-title">Help</div>
+    <button class="modal-close" data-action="close-modal" aria-label="Close dialog">×</button>
+  </div>
+  <div class="modal-body">
+    <div class="help-section-title">How to use BillOfSale Pro</div>
+    <ol class="help-steps">
+      <li><span><strong>Pick a vehicle type.</strong> Use the sidebar or the tab strip — car, motorcycle, trailer, boat, RV, horse, or equipment. The form fields below adjust automatically.</span></li>
+      <li><span><strong>Pick a state.</strong> Use the selector in the top-right. State-specific disclosures and notarization requirements update automatically.</span></li>
+      <li><span><strong>Fill in the form.</strong> Vehicle details, seller, buyer, sale terms, and signatures. The document on the right updates live as you type.</span></li>
+      <li><span><strong>Save a draft anytime</strong> with <span class="kbd">⌘</span><span class="kbd">S</span> — your last 5 drafts are kept and can be reloaded from the sidebar.</span></li>
+      <li><span><strong>Print or save as PDF</strong> with <span class="kbd">⌘</span><span class="kbd">P</span> — only the clean document prints, with no app chrome.</span></li>
+    </ol>
+    <div class="help-section-title with-gap">Keyboard shortcuts</div>
+    <div class="help-grid">
+      <div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">K</span></div><span>Open search</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">S</span></div><span>Save draft</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">P</span></div><span>Print / PDF</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">⇧</span><span class="kbd">⌦</span></div><span>Reset form</span></div>
+      </div>
+      <div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">⇧</span><span class="kbd">L</span></div><span>Toggle theme</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">⌘</span><span class="kbd">E</span></div><span>Export CSV</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">?</span></div><span>Show help</span></div>
+        <div class="help-item"><div class="help-key"><span class="kbd">Esc</span></div><span>Close modal</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-action="close-modal">Close</button>
+  </div>
+</div>
+
+<div class="modal" id="modal-drafts" style="width:560px;" role="dialog" aria-modal="true" aria-labelledby="drafts-modal-title">
+  <div class="modal-header">
+    <div class="modal-title" id="drafts-modal-title">Saved drafts</div>
+    <button class="modal-close" data-action="close-modal" aria-label="Close drafts">×</button>
+  </div>
+  <div class="modal-body">
+    <div id="drafts-list">
+      <!-- Populated by renderDrafts() -->
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-action="close-modal">Close</button>
+  </div>
+</div>
+
+<div class="modal" id="modal-confirm" style="width:420px;" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+  <div class="modal-header">
+    <div class="modal-title" id="confirm-modal-title">Confirm</div>
+    <button class="modal-close" data-action="close-modal" aria-label="Close dialog">×</button>
+  </div>
+  <div class="modal-body">
+    <p id="confirm-modal-text" style="margin:0;font-size:var(--fs-sm);"></p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-action="close-modal">Cancel</button>
+    <button class="btn btn-accent" id="confirm-modal-ok">Confirm</button>
+  </div>
+</div>
+
+<div class="toast-host" id="toast-host" role="status" aria-live="polite" aria-atomic="false"></div>
+
+<script>
+'use strict';
+
+/* === APP VERSION + NAME (drives status bar) === */
+var APP_VERSION = '1.0.0';
+var APP_NAME_SHORT = 'BillOfSale';
+var APP_NAME = 'BillOfSale Pro';
+
+(function updateAppVersionDisplay() {
+  var s = document.getElementById('app-version-display');
+  if (s) s.textContent = APP_VERSION;
+  var n = document.getElementById('app-appname-display');
+  if (n) n.textContent = APP_NAME_SHORT;
+})();
+
+/* === STORAGE KEYS === */
+var STORAGE_KEYS = {
+  current:    'billofsale-current',
+  drafts:     'billofsale-drafts',
+  theme:      'billofsale-theme',
+  activeType: 'billofsale-active-type',
+  state:      'billofsale-state'
+};
+var MAX_DRAFTS = 5;
+
+/* === VEHICLE TYPE LIST === */
+var VEHICLE_TYPES = ['car', 'motorcycle', 'trailer', 'boat', 'rv', 'horse', 'equipment'];
+var VEHICLE_TYPE_LABELS = {
+  car: 'Car',
+  motorcycle: 'Motorcycle',
+  trailer: 'Trailer',
+  boat: 'Boat',
+  rv: 'RV',
+  horse: 'Horse',
+  equipment: 'Equipment'
+};
+var VEHICLE_TYPE_DOC_LABELS = {
+  car: 'Motor Vehicle',
+  motorcycle: 'Motorcycle',
+  trailer: 'Trailer',
+  boat: 'Watercraft',
+  rv: 'Recreational Vehicle',
+  horse: 'Equine / Horse',
+  equipment: 'General Equipment'
+};
+
+/* === APP STATE === */
+var state = {
+  type: 'car',
+  selectedState: 'CA',
+  data: {
+    vehicle: { odoActual: true },
+    seller: {},
+    buyer: {},
+    sale: {},
+    disclosures: {},
+    options: { notarize: false, witness: false }
+  }
+};
+
+/* === THEME MANAGEMENT === */
+function getTheme() {
+  return document.documentElement.getAttribute('data-theme') || 'light';
+}
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  try { localStorage.setItem(STORAGE_KEYS.theme, theme); } catch (e) {}
+  updateToggleUI();
+}
+function toggleTheme() {
+  var next = getTheme() === 'dark' ? 'light' : 'dark';
+  setTheme(next);
+  toast('theme: ' + next, 'info');
+}
+function updateToggleUI() {
+  var t = getTheme();
+  var icon = document.getElementById('theme-toggle-icon');
+  var btn = document.getElementById('theme-toggle-btn');
+  if (icon) icon.textContent = t === 'dark' ? '☀' : '☾';
+  if (btn) {
+    btn.setAttribute('aria-label', t === 'dark' ? 'Toggle light mode' : 'Toggle dark mode');
+    btn.title = t === 'dark' ? 'Toggle light mode (⌘⇧L)' : 'Toggle dark mode (⌘⇧L)';
+  }
+}
+updateToggleUI();
+
+/* === PRINT THEME SWAP + PRINT DATE (#22) === */
+window.addEventListener('beforeprint', function () {
+  var pd = document.getElementById('print-date');
+  if (pd) pd.textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  var t = document.documentElement.getAttribute('data-theme');
+  if (t) {
+    document.documentElement.setAttribute('data-print-theme', t);
+    document.documentElement.removeAttribute('data-theme');
+  }
+});
+window.addEventListener('afterprint', function () {
+  var saved = document.documentElement.getAttribute('data-print-theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  document.documentElement.removeAttribute('data-print-theme');
+});
+
+/* === TOAST SYSTEM === */
+function toast(message, type) {
+  type = type || 'info';
+  var host = document.getElementById('toast-host');
+  if (!host) { host = document.createElement('div'); host.className = 'toast-host'; host.id = 'toast-host'; document.body.appendChild(host); }
+  var el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = '<span class="toast-icon"></span><span class="toast-msg"></span>';
+  el.querySelector('.toast-msg').textContent = message;
+  host.appendChild(el);
+  setTimeout(function () { el.classList.add('is-leaving'); setTimeout(function () { el.remove(); }, 200); }, 2300);
+}
+
+/* === MODAL SYSTEM === */
+var activeTrapHandler = null;
+var modalTriggerEl = null; /* #5 — save trigger for focus restore */
+
+function trapModalFocus(modal) {
+  var sel = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  var focusable = Array.prototype.slice.call(modal.querySelectorAll(sel));
+  if (!focusable.length) return;
+  var first = focusable[0];
+  var last = focusable[focusable.length - 1];
+  if (activeTrapHandler) document.removeEventListener('keydown', activeTrapHandler);
+  activeTrapHandler = function (e) {
+    if (e.key !== 'Tab') return;
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  };
+  document.addEventListener('keydown', activeTrapHandler);
+}
+
+function openModal(id) {
+  modalTriggerEl = document.activeElement; /* #5 */
+  document.getElementById('modal-backdrop').classList.add('is-open');
+  /* #7 — hide app content from AT while modal is open */
+  var app = document.getElementById('app-root');
+  if (app) app.setAttribute('aria-hidden', 'true');
+  var modal = document.getElementById(id);
+  if (!modal) return;
+  modal.classList.add('is-open');
+  setTimeout(function () {
+    var firstInput = modal.querySelector('input:not([disabled]), select:not([disabled]), textarea:not([disabled])');
+    var firstFocusable = firstInput || modal.querySelector('button:not([disabled])');
+    if (firstFocusable) firstFocusable.focus();
+    trapModalFocus(modal);
+  }, 50);
+}
+
+function closeAllModals() {
+  document.querySelectorAll('.modal, .search-palette').forEach(function (m) { m.classList.remove('is-open'); });
+  document.getElementById('modal-backdrop').classList.remove('is-open');
+  /* #7 — restore app to AT */
+  var app = document.getElementById('app-root');
+  if (app) app.removeAttribute('aria-hidden');
+  if (activeTrapHandler) { document.removeEventListener('keydown', activeTrapHandler); activeTrapHandler = null; }
+  /* #5 — restore focus to the element that opened the modal */
+  if (modalTriggerEl && typeof modalTriggerEl.focus === 'function') {
+    setTimeout(function () { modalTriggerEl.focus(); modalTriggerEl = null; }, 0);
+  }
+}
+
+/* === CONFIRM MODAL (replaces native confirm()) === */
+var confirmCallback = null;
+function confirmAction(message, onConfirm) {
+  document.getElementById('confirm-modal-text').textContent = message;
+  confirmCallback = onConfirm;
+  openModal('modal-confirm');
+}
+document.getElementById('confirm-modal-ok').addEventListener('click', function () {
+  var cb = confirmCallback;
+  confirmCallback = null;
+  closeAllModals();
+  if (cb) cb();
+});
+
+/* === SEARCH PALETTE (⌘K) === */
+var searchSelectedIdx = -1;
+
+function openSearchPalette() {
+  searchSelectedIdx = -1;
+  modalTriggerEl = document.activeElement; /* restore focus on close */
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results').innerHTML = '';
+  document.getElementById('modal-backdrop').classList.add('is-open');
+  var app = document.getElementById('app-root');
+  if (app) app.setAttribute('aria-hidden', 'true');
+  document.getElementById('search-palette').classList.add('is-open');
+  document.getElementById('search-input').focus();
+  trapModalFocus(document.getElementById('search-palette'));
+}
+
+function updateSearchSelection(items) {
+  items.forEach(function (item, i) {
+    item.classList.toggle('is-selected', i === searchSelectedIdx);
+    if (i === searchSelectedIdx) item.scrollIntoView({ block: 'nearest' });
+  });
+}
+
+/* ==== doSearch() ====
+   Searches vehicle types (jump to tab), states (jump to selector), and drafts (by identifier/seller/buyer). */
+function doSearch() {
+  searchSelectedIdx = -1;
+  var q = document.getElementById('search-input').value.toLowerCase().trim();
+  var results = document.getElementById('search-results');
+  results.innerHTML = '';
+  if (!q) return;
+
+  var items = [];
+
+  VEHICLE_TYPES.forEach(function (type) {
+    if (VEHICLE_TYPE_LABELS[type].toLowerCase().indexOf(q) !== -1) {
+      items.push({
+        label: VEHICLE_TYPE_LABELS[type] + ' bill of sale', meta: 'vehicle type',
+        action: function () { setVehicleType(type); closeAllModals(); }
+      });
+    }
+  });
+
+  Object.keys(STATE_DISCLOSURES).forEach(function (code) {
+    var name = STATE_DISCLOSURES[code].name;
+    if (name.toLowerCase().indexOf(q) !== -1 || code.toLowerCase() === q) {
+      items.push({
+        label: name, meta: 'state',
+        action: function () {
+          var sel = document.getElementById('state-select');
+          sel.value = code;
+          sel.dispatchEvent(new Event('change'));
+          closeAllModals();
+        }
+      });
+    }
+  });
+
+  loadDrafts().forEach(function (d, idx) {
+    var idVal = (d.data && d.data.vehicle && d.data.vehicle[PRIMARY_ID_FIELD[d.type]]) || '';
+    var sellerName = (d.data && d.data.seller && d.data.seller.name) || '';
+    var buyerName = (d.data && d.data.buyer && d.data.buyer.name) || '';
+    var hay = (idVal + ' ' + sellerName + ' ' + buyerName).toLowerCase();
+    if (hay.indexOf(q) !== -1) {
+      var label = (sellerName || 'Untitled draft') + (buyerName ? (' \u2192 ' + buyerName) : '');
+      items.push({
+        label: label, meta: 'draft \u00b7 ' + (VEHICLE_TYPE_LABELS[d.type] || d.type),
+        action: function () { loadDraftByIndex(idx); }
+      });
+    }
+  });
+
+  if (items.length === 0) {
+    results.innerHTML = '<div class="search-palette-item"><span class="muted">No matches for "' + escapeHtml(q) + '"</span></div>';
+    return;
+  }
+
+  results.innerHTML = items.map(function (item, i) {
+    return '<div class="search-palette-item" data-idx="' + i + '" role="option">' +
+      '<span>' + escapeHtml(item.label) + '</span>' +
+      '<span class="search-palette-item-key">' + escapeHtml(item.meta) + '</span>' +
+    '</div>';
+  }).join('');
+
+  Array.prototype.slice.call(results.querySelectorAll('[data-idx]')).forEach(function (el, i) {
+    el.addEventListener('click', function () { items[i].action(); });
+  });
+}
+
+/* ==== exportCSV() ====
+   Exports the current form state as a downloadable CSV row. */
+var CSV_HEADERS = ['Type', 'State', 'Identifier', 'Year', 'Make/Model', 'Seller Name', 'Seller Address', 'Buyer Name', 'Buyer Address', 'Sale Date', 'Sale Price', 'Payment Method', 'Gift', 'Trade-in'];
+function csvEscape(v) {
+  v = (v === undefined || v === null) ? '' : String(v);
+  if (/[",\n]/.test(v)) v = '"' + v.replace(/"/g, '""') + '"';
+  return v;
+}
+function exportCSV() {
+  var v = state.data.vehicle || {};
+  var idField = PRIMARY_ID_FIELD[state.type];
+  var row = [
+    VEHICLE_TYPE_LABELS[state.type] || state.type,
+    state.selectedState,
+    v[idField] || '',
+    v.year || '',
+    [v.make, v.model].filter(Boolean).join(' '),
+    state.data.seller.name || '',
+    [state.data.seller.address, state.data.seller.city, state.data.seller.zip].filter(Boolean).join(', '),
+    state.data.buyer.name || '',
+    [state.data.buyer.address, state.data.buyer.city, state.data.buyer.zip].filter(Boolean).join(', '),
+    state.data.sale.date || '',
+    state.data.sale.gift ? '0.00' : (state.data.sale.price || ''),
+    paymentLabel(state.data.sale.payment) || '',
+    state.data.sale.gift ? 'Yes' : 'No',
+    state.data.sale.tradeinInvolved ? (state.data.sale.tradeinDesc || 'Yes') : 'No'
+  ].map(csvEscape).join(',');
+
+  var csv = CSV_HEADERS.map(csvEscape).join(',') + '\n' + row + '\n';
+  try {
+    var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' }); /* #19 BOM for Excel */
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'billofsale-' + state.type + '-' + (state.data.sale.date || new Date().toISOString().slice(0, 10)) + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    toast('CSV exported', 'success');
+  } catch (e) {
+    toast('CSV export failed', 'error');
+  }
+}
+
+/* ============================================================
+   APP LOGIC — vehicle tabs, state selector, form binding, preview, drafts
+   ============================================================ */
+
+/* === VEHICLE TYPE SWITCHING (sidebar + horizontal tabs stay in sync) === */
+function setVehicleType(type) {
+  if (!VEHICLE_TYPES.includes(type)) return;
+  state.type = type;
+  // Update sidebar nav
+  document.querySelectorAll('.nav-item[data-type]').forEach(function (n) {
+    var isActive = n.dataset.type === type;
+    n.classList.toggle('active', isActive);
+    if (isActive) n.setAttribute('aria-current', 'page');
+    else n.removeAttribute('aria-current');
+  });
+  // Update horizontal tabs
+  document.querySelectorAll('.vehicle-tab').forEach(function (t) {
+    var isActive = t.dataset.type === type;
+    t.classList.toggle('active', isActive);
+    t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+  });
+  // Update breadcrumb + page title
+  var bcType = document.getElementById('bc-type');
+  if (bcType) bcType.textContent = VEHICLE_TYPE_LABELS[type].toUpperCase();
+  var pt = document.getElementById('page-title');
+  if (pt) pt.innerHTML = VEHICLE_TYPE_DOC_LABELS[type].toLowerCase() + ' bill of sale <em>— fill, sign, print</em>';
+  // Update preview state label
+  var ps = document.getElementById('preview-state');
+  if (ps) ps.textContent = state.selectedState + ' · ' + VEHICLE_TYPE_LABELS[type].toLowerCase();
+  // Trigger form regen + preview
+  generateForm(type);
+  renderStateDisclosures();
+  renderPreview();
+  scheduleAutoSave();
+  try { localStorage.setItem(STORAGE_KEYS.activeType, type); } catch (e) {}
+}
+
+/* === STATE SELECTOR === */
+function bindStateSelector() {
+  var sel = document.getElementById('state-select');
+  sel.value = state.selectedState;
+  sel.addEventListener('change', function () {
+    state.selectedState = sel.value;
+    var bcState = document.getElementById('bc-state');
+    if (bcState) bcState.textContent = (STATE_DISCLOSURES[sel.value]?.name || sel.value).toUpperCase();
+    var ps = document.getElementById('preview-state');
+    if (ps) ps.textContent = sel.value + ' · ' + VEHICLE_TYPE_LABELS[state.type].toLowerCase();
+    renderStateDisclosures();
+    renderPreview();
+    scheduleAutoSave();
+    try { localStorage.setItem(STORAGE_KEYS.state, sel.value); } catch (e) {}
+  });
+}
+
+/* === COLLAPSIBLE FORM SECTIONS === */
+function bindSectionToggles() {
+  document.querySelectorAll('.form-section-header').forEach(function (header) {
+    var bodyId = header.getAttribute('aria-controls');
+    var body = bodyId ? document.getElementById(bodyId) : null;
+    header.addEventListener('click', function () {
+      var expanded = header.getAttribute('aria-expanded') === 'true';
+      header.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      if (body) body.hidden = expanded;
+    });
+  });
+}
+
+/* === FORM INPUT BINDING === */
+var FIELD_MAP = {
+  'seller-name':        ['seller', 'name'],
+  'seller-address':     ['seller', 'address'],
+  'seller-city':        ['seller', 'city'],
+  'seller-zip':         ['seller', 'zip'],
+  'seller-phone':       ['seller', 'phone'],
+  'seller-email':       ['seller', 'email'],
+  'buyer-name':         ['buyer', 'name'],
+  'buyer-address':      ['buyer', 'address'],
+  'buyer-city':         ['buyer', 'city'],
+  'buyer-zip':          ['buyer', 'zip'],
+  'buyer-phone':        ['buyer', 'phone'],
+  'buyer-email':        ['buyer', 'email'],
+  'sale-date':          ['sale', 'date'],
+  'sale-price':         ['sale', 'price'],
+  'sale-payment':       ['sale', 'payment'],
+  'sale-gift':          ['sale', 'gift'],
+  'sale-tradein-toggle':['sale', 'tradeinInvolved'],
+  'tradein-desc':       ['sale', 'tradeinDesc'],
+  'tradein-vin':        ['sale', 'tradeinVin'],
+  'tradein-value':      ['sale', 'tradeinValue'],
+  'notarize-toggle':    ['options', 'notarize'],
+  'witness-toggle':     ['options', 'witness']
+};
+
+function bindFormInputs() {
+  Object.keys(FIELD_MAP).forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var section = FIELD_MAP[id][0], key = FIELD_MAP[id][1];
+    var event = (el.type === 'checkbox' || el.type === 'radio' || el.tagName === 'SELECT') ? 'change' : 'input';
+    el.addEventListener(event, function () {
+      if (!state.data[section]) state.data[section] = {};
+      state.data[section][key] = (el.type === 'checkbox') ? el.checked : el.value;
+      schedulePreviewRender();
+      scheduleAutoSave();
+    });
+  });
+}
+
+function applyStateToInputs() {
+  Object.keys(FIELD_MAP).forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var section = FIELD_MAP[id][0], key = FIELD_MAP[id][1];
+    var value = state.data[section]?.[key];
+    if (value === undefined || value === null) return;
+    if (el.type === 'checkbox') el.checked = !!value;
+    else el.value = value;
+  });
+  syncSaleConditionals();
+}
+
+/* === SALE SECTION CONDITIONALS (trade-in subform, gift price) === */
+function syncSaleConditionals() {
+  var tradein = document.getElementById('tradein-subform');
+  if (tradein) tradein.hidden = !state.data.sale.tradeinInvolved;
+  var priceField = document.getElementById('sale-price');
+  if (priceField) {
+    var isGift = !!state.data.sale.gift;
+    priceField.disabled = isGift;
+    priceField.setAttribute('aria-disabled', isGift ? 'true' : 'false');
+    var wrap = priceField.closest('.field');
+    if (wrap) wrap.classList.toggle('muted', isGift);
+  }
+}
+function bindSaleConditionals() {
+  var toggle = document.getElementById('sale-tradein-toggle');
+  if (toggle) toggle.addEventListener('change', syncSaleConditionals);
+  var gift = document.getElementById('sale-gift');
+  if (gift) gift.addEventListener('change', syncSaleConditionals);
+}
+
+/* === PREVIEW RENDERING (debounced) === */
+var previewTimer = null;
+function schedulePreviewRender() {
+  if (previewTimer) clearTimeout(previewTimer);
+  previewTimer = setTimeout(function () { renderPreview(); previewTimer = null; }, 100);
+}
+
+/* === LOCAL STORAGE — autosave + drafts === */
+var saveTimer = null;
+function scheduleAutoSave() {
+  if (saveTimer) clearTimeout(saveTimer);
+  var status = document.getElementById('save-status');
+  if (status) status.textContent = 'saving…';
+  saveTimer = setTimeout(function () {
+    saveCurrent();
+    if (status) status.textContent = 'just now';
+    saveTimer = null;
+  }, 500);
+}
+
+function saveCurrent() {
+  try {
+    var snapshot = { type: state.type, selectedState: state.selectedState, data: state.data, savedAt: Date.now() };
+    localStorage.setItem(STORAGE_KEYS.current, JSON.stringify(snapshot));
+  } catch (e) {}
+}
+
+function loadCurrent() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEYS.current);
+    if (!raw) return;
+    var snapshot = JSON.parse(raw);
+    if (snapshot.type) state.type = snapshot.type;
+    if (snapshot.selectedState) state.selectedState = snapshot.selectedState;
+    if (snapshot.data) {
+      Object.keys(snapshot.data).forEach(function (k) {
+        state.data[k] = Object.assign(state.data[k] || {}, snapshot.data[k]);
+      });
+    }
+  } catch (e) {}
+}
+
+function loadDrafts() {
+  try { var raw = localStorage.getItem(STORAGE_KEYS.drafts); return raw ? JSON.parse(raw) : []; }
+  catch (e) { return []; }
+}
+function saveDrafts(drafts) {
+  try { localStorage.setItem(STORAGE_KEYS.drafts, JSON.stringify(drafts)); } catch (e) {}
+}
+
+function renderDrafts() {
+  var list = document.getElementById('drafts-list');
+  if (!list) return;
+  var drafts = loadDrafts();
+  if (drafts.length === 0) {
+    list.innerHTML = '<div class="drafts-empty">No drafts saved yet. Fill in some details and click <strong>Save draft</strong> in the topbar.</div>';
+    return;
+  }
+  list.innerHTML = drafts.map(function (d, idx) {
+    var when = new Date(d.savedAt);
+    var dateStr = when.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    var timeStr = when.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    var typeLabel = escapeHtml(VEHICLE_TYPE_LABELS[d.type] || d.type);
+    var stateName = escapeHtml(STATE_DISCLOSURES[d.selectedState]?.name || d.selectedState);
+    var rawId   = d.data?.vehicle?.[PRIMARY_ID_FIELD[d.type]];
+    var rawSeller = d.data?.seller?.name;
+    var rawBuyer  = d.data?.buyer?.name;
+    var preview = rawId
+      ? (escapeHtml(PRIMARY_ID_LABEL[d.type] || 'ID') + ' ' + escapeHtml(rawId))
+      : rawSeller
+        ? (escapeHtml(rawSeller) + ' \u2192 ' + escapeHtml(rawBuyer || 'buyer'))
+        : 'Empty form';
+    return '<div class="draft-item">' +
+      '<div class="draft-item-info">' +
+        '<div class="draft-item-title">' + typeLabel + ' \u00b7 ' + stateName + '</div>' +
+        '<div class="draft-item-meta">' + preview + '</div>' +
+        '<div class="draft-item-meta">saved ' + escapeHtml(dateStr) + ' at ' + escapeHtml(timeStr) + '</div>' +
+      '</div>' +
+      '<button class="btn" data-load-draft="' + idx + '">Load</button>' +
+      '<button class="btn btn-danger" data-delete-draft="' + idx + '">Delete</button>' +
+    '</div>';
+  }).join('');
+}
+
+function updateDraftsBadge() {
+  var badge = document.getElementById('drafts-badge');
+  var drafts = loadDrafts();
+  if (drafts.length === 0) { badge.hidden = true; }
+  else { badge.hidden = false; badge.textContent = String(drafts.length); }
+}
+
+/* ============================================================
+   STATE DISCLOSURE DATA + DOCUMENT GENERATION
+   ============================================================ */
+
+var STATE_DISCLOSURES = {
+  CA: {
+    name: 'California',
+    notarization_required: false,
+    disclosures: [
+      { id: 'ca-smog', type: 'notice', title: 'Smog certification',
+        text: 'If the seller is a California resident and the vehicle is 8 or more model years old, a smog certificate must be provided to the buyer at the time of sale.' },
+      { id: 'ca-notice', type: 'notice', title: 'Notice of transfer',
+        text: 'The seller must file a Notice of Transfer and Release of Liability (NRL) with the California DMV within 5 calendar days of the sale date.' },
+      { id: 'ca-lien', type: 'checkbox', title: 'No outstanding liens',
+        text: 'Seller certifies the vehicle is free of all liens and encumbrances. If liens exist, attach a lien release from the lienholder.' }
+    ]
+  },
+  NY: {
+    name: 'New York',
+    notarization_required: false,
+    disclosures: [
+      { id: 'ny-dtf802', type: 'notice', title: 'DTF-802 required',
+        text: 'A completed DMV Form DTF-802 (Statement of Transaction) must accompany this bill of sale to calculate sales tax due at registration.' },
+      { id: 'ny-odo', type: 'checkbox', title: 'Odometer disclosure mandatory',
+        text: 'Seller certifies the odometer reading on this bill of sale is accurate as required by New York law.' },
+      { id: 'ny-1973', type: 'notice', title: 'Model year requirement',
+        text: 'A bill of sale is required by the New York DMV for vehicles model year 1973 or newer.' }
+    ]
+  },
+  FL: {
+    name: 'Florida',
+    notarization_required: true,
+    disclosures: [
+      { id: 'fl-hsmv', type: 'notice', title: 'HSMV 82050 required',
+        text: 'Florida requires form HSMV 82050 (Notice of Sale) in addition to this bill of sale to transfer title.' },
+      { id: 'fl-odo', type: 'checkbox', title: 'Odometer disclosure required',
+        text: 'Federal and Florida law require an odometer disclosure for vehicles under 10 years old. Seller certifies the reading above is accurate.' },
+      { id: 'fl-notary', type: 'notice', title: 'Notarization required',
+        text: 'Florida requires this bill of sale to be notarized. See the notary acknowledgment block below.' }
+    ]
+  },
+  TX: {
+    name: 'Texas',
+    notarization_required: false,
+    disclosures: [
+      { id: 'tx-vtr41', type: 'notice', title: 'VTR-41 required',
+        text: 'Texas requires Form VTR-41 (Application for Texas Title) to be filed by the buyer in addition to this bill of sale.' },
+      { id: 'tx-copy', type: 'notice', title: 'Seller retains a copy',
+        text: 'Texas recommends the seller retain a signed copy of this bill of sale for their records. Notarization is not required.' }
+    ]
+  },
+  IL: {
+    name: 'Illinois',
+    notarization_required: false,
+    disclosures: [
+      { id: 'il-rut50', type: 'notice', title: 'RUT-50 required',
+        text: 'The buyer must file Form RUT-50 (Private Party Vehicle Use Tax Transaction) with the Illinois Department of Revenue.' },
+      { id: 'il-odo', type: 'checkbox', title: 'Odometer disclosure required',
+        text: 'Seller certifies the odometer reading on this bill of sale is accurate as required by Illinois law.' }
+    ]
+  },
+  OH: {
+    name: 'Ohio',
+    notarization_required: false,
+    disclosures: [
+      { id: 'oh-bos', type: 'notice', title: 'Bill of sale required',
+        text: 'Ohio requires a bill of sale for title transfer processed through the county clerk of courts title office.' },
+      { id: 'oh-notary', type: 'notice', title: 'Notarization optional',
+        text: 'Notarization of this bill of sale is optional in Ohio but may be requested by the county clerk in some cases.' }
+    ]
+  },
+  PA: {
+    name: 'Pennsylvania',
+    notarization_required: true,
+    disclosures: [
+      { id: 'pa-mv1', type: 'notice', title: 'MV-1 required',
+        text: 'Pennsylvania requires Form MV-1 (Application for Certificate of Title) to be filed alongside this bill of sale.' },
+      { id: 'pa-notary', type: 'notice', title: 'Notarization required',
+        text: 'Pennsylvania requires the seller\u2019s signature on this bill of sale to be notarized. See the notary acknowledgment block below.' }
+    ]
+  },
+  WA: {
+    name: 'Washington',
+    notarization_required: false,
+    disclosures: [
+      { id: 'wa-age', type: 'notice', title: 'Bill of sale required for older vehicles',
+        text: 'Washington requires a bill of sale for vehicles 15 years old or older when transferring title through the Department of Licensing (DOL).' },
+      { id: 'wa-dol', type: 'notice', title: 'DOL title transfer',
+        text: 'Buyer must complete title transfer with the Washington DOL within 15 days of the sale date.' }
+    ]
+  },
+  GA: {
+    name: 'Georgia',
+    notarization_required: false,
+    disclosures: [
+      { id: 'ga-t7', type: 'notice', title: 'Form T-7 (TAVT)',
+        text: 'Georgia requires Form T-7 to calculate the Title Ad Valorem Tax (TAVT) due at registration.' },
+      { id: 'ga-bos', type: 'notice', title: 'Bill of sale if title unavailable',
+        text: 'A bill of sale is required by the Georgia DMV if the original title is unavailable at the time of sale.' }
+    ]
+  },
+  NC: {
+    name: 'North Carolina',
+    notarization_required: true,
+    disclosures: [
+      { id: 'nc-mvr1', type: 'notice', title: 'MVR-1 required',
+        text: 'North Carolina requires Form MVR-1 (Title Application) to be filed alongside this bill of sale.' },
+      { id: 'nc-notary', type: 'notice', title: 'Notarization required for newer vehicles',
+        text: 'North Carolina requires notarization of this bill of sale for vehicles 5 model years old or newer.' }
+    ]
+  },
+  AZ: {
+    name: 'Arizona',
+    notarization_required: false,
+    disclosures: [
+      { id: 'az-9602', type: 'notice', title: 'Form 96-0236',
+        text: 'Arizona provides Form 96-0236 as a standard bill of sale template accepted by the MVD; this document satisfies the same requirement.' },
+      { id: 'az-emissions', type: 'notice', title: 'Emissions testing',
+        text: 'Vehicles registered in Maricopa or Pima counties may require an emissions test before registration is completed.' }
+    ]
+  },
+  MI: {
+    name: 'Michigan',
+    notarization_required: false,
+    disclosures: [
+      { id: 'mi-tr', type: 'notice', title: 'TR-11 / TR-12',
+        text: 'Michigan uses Form TR-11 or TR-12 for title transfer in addition to this bill of sale, depending on transaction type.' },
+      { id: 'mi-emissions', type: 'notice', title: 'No statewide emissions testing',
+        text: 'Michigan does not require statewide emissions testing for vehicle registration.' }
+    ]
+  }
+};
+// Provide name fallback for any state not in the map
+/* Full state name map for the 39 jurisdictions without disclosure data */
+var STATE_NAMES = {
+  AL:'Alabama', AK:'Alaska', AR:'Arkansas', CO:'Colorado', CT:'Connecticut',
+  DE:'Delaware', DC:'District of Columbia', HI:'Hawaii', ID:'Idaho', IN:'Indiana',
+  IA:'Iowa', KS:'Kansas', KY:'Kentucky', LA:'Louisiana', ME:'Maine', MD:'Maryland',
+  MA:'Massachusetts', MN:'Minnesota', MS:'Mississippi', MO:'Missouri', MT:'Montana',
+  NE:'Nebraska', NV:'Nevada', NH:'New Hampshire', NJ:'New Jersey', NM:'New Mexico',
+  ND:'North Dakota', OK:'Oklahoma', OR:'Oregon', RI:'Rhode Island', SC:'South Carolina',
+  SD:'South Dakota', TN:'Tennessee', UT:'Utah', VT:'Vermont', VA:'Virginia',
+  WV:'West Virginia', WI:'Wisconsin', WY:'Wyoming'
+};
+['AL','AK','AR','CO','CT','DE','DC','HI','ID','IN','IA','KS','KY','LA','ME','MD','MA','MN','MS','MO','MT','NE','NV','NH','NJ','NM','ND','OK','OR','RI','SC','SD','TN','UT','VT','VA','WV','WI','WY'].forEach(function (code) {
+  if (!STATE_DISCLOSURES[code]) STATE_DISCLOSURES[code] = { name: STATE_NAMES[code] || code, notarization_required: false, disclosures: [] };
+});
+
+/* ============================================================
+   VEHICLE TYPE FIELD DEFINITIONS (spec §5) + GENERIC FIELD ENGINE
+   ============================================================ */
+
+var YEAR_MAX = new Date().getFullYear() + 5;
+var ODO_STATUS_OPTIONS = [
+  { value: 'actual', label: 'Actual' },
+  { value: 'exceeds', label: 'Exceeds Mechanical Limits' },
+  { value: 'not-actual', label: 'Not Actual' }
+];
+
+var VEHICLE_FIELD_DEFS = {
+  car: [
+    { key: 'vin', label: 'VIN', type: 'text', maxlength: 17, required: true, full: true, placeholder: '17-character VIN', help: 'Vehicle Identification Number — found on dashboard or driver-side door jamb' },
+    { key: 'year', label: 'Year', type: 'number', min: 1950, max: YEAR_MAX, required: true, placeholder: '2020' },
+    { key: 'make', label: 'Make', type: 'text', required: true, placeholder: 'Toyota' },
+    { key: 'model', label: 'Model', type: 'text', required: true, placeholder: 'Camry' },
+    { key: 'color', label: 'Color', type: 'text', placeholder: 'Silver' },
+    { key: 'odo', label: 'Odometer reading (mi)', type: 'number', min: 0, placeholder: '45000', help: 'Required for vehicles under 10 years old' },
+    { key: 'odoStatus', label: 'Odometer status', type: 'select', default: 'actual', options: ODO_STATUS_OPTIONS },
+    { key: 'odoActual', label: 'Federal odometer disclosure', type: 'checkbox', default: true, full: true, help: 'I certify the odometer reading reflects the actual mileage of the vehicle, unless marked otherwise above.' },
+    { key: 'title', label: 'Title number', type: 'text' },
+    { key: 'bodyStyle', label: 'Body style', type: 'select', placeholder: '— select —', options: [
+      { value: 'sedan', label: 'Sedan' }, { value: 'suv', label: 'SUV' }, { value: 'truck', label: 'Truck' },
+      { value: 'coupe', label: 'Coupe' }, { value: 'wagon', label: 'Wagon' }, { value: 'van', label: 'Van' }, { value: 'hatchback', label: 'Hatchback' }
+    ] },
+    { key: 'plateState', label: 'License plate state', type: 'text', maxlength: 2, placeholder: 'CA' },
+    { key: 'plateNumber', label: 'License plate number', type: 'text' },
+    { key: 'lienholder', label: 'Lienholder', type: 'text', full: true, help: 'Leave blank if the vehicle has no lien' },
+    { key: 'lienDetails', label: 'Lien details / payoff info', type: 'text', full: true, showIf: { key: 'lienholder', notEmpty: true } }
+  ],
+  motorcycle: [
+    { key: 'vin', label: 'VIN', type: 'text', maxlength: 17, required: true, full: true, placeholder: '17-character VIN' },
+    { key: 'engineNumber', label: 'Engine number', type: 'text' },
+    { key: 'year', label: 'Year', type: 'number', min: 1950, max: YEAR_MAX, required: true, placeholder: '2020' },
+    { key: 'make', label: 'Make', type: 'text', required: true, placeholder: 'Harley-Davidson' },
+    { key: 'model', label: 'Model', type: 'text', required: true, placeholder: 'Sportster' },
+    { key: 'color', label: 'Color', type: 'text' },
+    { key: 'odo', label: 'Odometer reading (mi)', type: 'number', min: 0, placeholder: '12000' },
+    { key: 'displacement', label: 'Engine displacement (cc)', type: 'number', min: 0, placeholder: '883', help: 'Used for state registration categories' },
+    { key: 'title', label: 'Title number', type: 'text' }
+  ],
+  trailer: [
+    { key: 'vin', label: 'VIN', type: 'text', maxlength: 17, required: true, full: true, placeholder: 'Up to 17 characters', help: 'Small/older trailers may have a shorter VIN — that\u2019s normal' },
+    { key: 'gvwr', label: 'GVWR (lbs)', type: 'number', min: 0, placeholder: '7000' },
+    { key: 'axleCount', label: 'Axle count', type: 'select', placeholder: '— select —', options: [
+      { value: '1', label: '1' }, { value: '2', label: '2' }, { value: '3', label: '3' }
+    ] },
+    { key: 'trailerType', label: 'Trailer type', type: 'select', placeholder: '— select —', options: [
+      { value: 'utility', label: 'Utility' }, { value: 'cargo', label: 'Cargo' }, { value: 'boat', label: 'Boat' },
+      { value: 'travel', label: 'Travel' }, { value: 'livestock', label: 'Livestock' }, { value: 'flatbed', label: 'Flatbed' }, { value: 'horse', label: 'Horse' }
+    ] },
+    { key: 'length', label: 'Length (ft)', type: 'number', min: 0, step: '0.1' },
+    { key: 'emptyWeight', label: 'Empty weight (lbs)', type: 'number', min: 0 },
+    { key: 'title', label: 'Title number', type: 'text' }
+  ],
+  boat: [
+    { key: 'hin', label: 'HIN', type: 'text', maxlength: 12, required: true, full: true, placeholder: '12-character HIN', help: 'Hull Identification Number — format MIC + 5 characters + date + model year' },
+    { key: 'year', label: 'Year', type: 'number', min: 1950, max: YEAR_MAX, placeholder: '2020' },
+    { key: 'make', label: 'Make', type: 'text', placeholder: 'Bayliner' },
+    { key: 'model', label: 'Model', type: 'text' },
+    { key: 'length', label: 'Length (ft)', type: 'number', min: 0, step: '0.1' },
+    { key: 'hullMaterial', label: 'Hull material', type: 'select', placeholder: '— select —', options: [
+      { value: 'fiberglass', label: 'Fiberglass' }, { value: 'aluminum', label: 'Aluminum' }, { value: 'wood', label: 'Wood' }, { value: 'steel', label: 'Steel' }, { value: 'other', label: 'Other' }
+    ] },
+    { key: 'propulsion', label: 'Propulsion', type: 'select', placeholder: '— select —', options: [
+      { value: 'outboard', label: 'Outboard' }, { value: 'inboard', label: 'Inboard' }, { value: 'jet', label: 'Jet' }, { value: 'sail', label: 'Sail' }
+    ] },
+    { key: 'engineMake', label: 'Engine make', type: 'text' },
+    { key: 'engineModel', label: 'Engine model', type: 'text' },
+    { key: 'engineHours', label: 'Engine hours', type: 'number', min: 0 },
+    { key: 'title', label: 'Title number', type: 'text' },
+    { key: 'trailerIncluded', label: 'Trailer included with sale', type: 'checkbox', full: true },
+    { key: 'boatTrailerVin', label: 'Trailer VIN', type: 'text', maxlength: 17, showIf: { key: 'trailerIncluded', equals: true } },
+    { key: 'boatTrailerAxles', label: 'Trailer axle count', type: 'select', options: [
+      { value: '1', label: '1' }, { value: '2', label: '2' }, { value: '3', label: '3' }
+    ], showIf: { key: 'trailerIncluded', equals: true } }
+  ],
+  rv: [
+    { key: 'vin', label: 'VIN', type: 'text', maxlength: 17, required: true, full: true, placeholder: '17-character VIN' },
+    { key: 'year', label: 'Year', type: 'number', min: 1950, max: YEAR_MAX, required: true },
+    { key: 'make', label: 'Make', type: 'text', required: true },
+    { key: 'model', label: 'Model', type: 'text', required: true },
+    { key: 'rvClass', label: 'Class', type: 'select', placeholder: '— select —', options: [
+      { value: 'a', label: 'Class A' }, { value: 'b', label: 'Class B' }, { value: 'c', label: 'Class C' },
+      { value: 'travel-trailer', label: 'Travel trailer' }, { value: 'fifth-wheel', label: 'Fifth wheel' }, { value: 'pop-up', label: 'Pop-up' }
+    ] },
+    { key: 'length', label: 'Length (ft)', type: 'number', min: 0, step: '0.1' },
+    { key: 'odo', label: 'Odometer reading (mi)', type: 'number', min: 0 },
+    { key: 'sleeps', label: 'Sleeps how many', type: 'number', min: 0, max: 20 },
+    { key: 'title', label: 'Title number', type: 'text' }
+  ],
+  horse: [
+    { key: 'animalName', label: 'Animal name', type: 'text', required: true, full: true, placeholder: 'Thunder' },
+    { key: 'breed', label: 'Breed', type: 'select', placeholder: '— select —', options: [
+      { value: 'qh', label: 'Quarter Horse' }, { value: 'tb', label: 'Thoroughbred' }, { value: 'arabian', label: 'Arabian' },
+      { value: 'paint', label: 'Paint' }, { value: 'appaloosa', label: 'Appaloosa' }, { value: 'andalusian', label: 'Andalusian' },
+      { value: 'miniature', label: 'Miniature' }, { value: 'other', label: 'Other' }
+    ] },
+    { key: 'age', label: 'Age (years)', type: 'number', min: 0, max: 60 },
+    { key: 'sex', label: 'Sex', type: 'select', placeholder: '— select —', options: [
+      { value: 'mare', label: 'Mare' }, { value: 'stallion', label: 'Stallion' }, { value: 'gelding', label: 'Gelding' }, { value: 'filly', label: 'Filly' }, { value: 'colt', label: 'Colt' }
+    ] },
+    { key: 'colorMarkings', label: 'Color / markings', type: 'text', full: true, placeholder: 'Bay with white blaze' },
+    { key: 'height', label: 'Height (hands)', type: 'number', min: 0, max: 25, step: '0.1', placeholder: '15.2' },
+    { key: 'regMicrochip', label: 'Registration / microchip number', type: 'text' },
+    { key: 'healthCertDate', label: 'Health certificate date', type: 'date' },
+    { key: 'brandTattoo', label: 'Brand / tattoo', type: 'text' },
+    { key: 'tackSaddle', label: 'Saddle included', type: 'checkbox' },
+    { key: 'tackBridle', label: 'Bridle included', type: 'checkbox' },
+    { key: 'tackBlanket', label: 'Blanket included', type: 'checkbox' },
+    { key: 'tackHalter', label: 'Halter included', type: 'checkbox' },
+    { key: 'tackOther', label: 'Other tack included', type: 'checkbox' }
+  ],
+  equipment: [
+    { key: 'itemName', label: 'Item name / description', type: 'text', required: true, full: true, placeholder: 'Tractor, generator, compressor, etc.' },
+    { key: 'make', label: 'Make', type: 'text' },
+    { key: 'model', label: 'Model', type: 'text' },
+    { key: 'serial', label: 'Serial number', type: 'text', required: true },
+    { key: 'year', label: 'Year', type: 'number', min: 1900, max: YEAR_MAX },
+    { key: 'condition', label: 'Condition', type: 'select', placeholder: '— select —', options: [
+      { value: 'new', label: 'New' }, { value: 'used', label: 'Used' }, { value: 'refurbished', label: 'Refurbished' }
+    ] },
+    { key: 'hours', label: 'Hours of use', type: 'number', min: 0 },
+    { key: 'manualIncluded', label: 'Manual included', type: 'checkbox' },
+    { key: 'warranty', label: 'Warranty remaining', type: 'text', full: true, placeholder: 'e.g. 6 months manufacturer warranty' }
+  ]
+};
+
+var VEHICLE_HINTS = {
+  car: 'Fields cover VIN, title, plate, and the federal odometer disclosure required for cars under 10 years old.',
+  motorcycle: 'Fields cover VIN, engine number, and displacement for state registration categories.',
+  trailer: 'Fields cover GVWR, axle count, and trailer type. Short VINs on older trailers are expected.',
+  boat: 'Fields cover the Hull Identification Number (HIN), propulsion, and an optional included trailer.',
+  rv: 'Fields cover class, length, sleeping capacity, and odometer reading.',
+  horse: 'Fields cover breed, age, height in hands, and any tack included with the sale.',
+  equipment: 'Fields cover serial number, condition, and included documentation.'
+};
+
+/* Primary identifier per type — used in drafts list, search, and CSV export */
+var PRIMARY_ID_FIELD = { car: 'vin', motorcycle: 'vin', trailer: 'vin', boat: 'hin', rv: 'vin', horse: 'animalName', equipment: 'serial' };
+var PRIMARY_ID_LABEL = { car: 'VIN', motorcycle: 'VIN', trailer: 'VIN', boat: 'HIN', rv: 'VIN', horse: 'Animal', equipment: 'Serial #' };
+
+function fieldElId(prefix, key) { return prefix + '-' + key; }
+
+function renderFieldHTML(prefix, def, rawValue) {
+  var id = fieldElId(prefix, def.key);
+  var reqMark = def.required ? ' <span class="req" aria-label="required">*</span>' : '';
+  var fullClass = def.full ? ' full' : '';
+  var showAttr = '';
+  if (def.showIf) {
+    showAttr = ' data-showif-key="' + def.showIf.key + '" data-showif-equals="' +
+      (def.showIf.equals !== undefined ? String(def.showIf.equals) : '') +
+      '" data-showif-nonempty="' + (def.showIf.notEmpty ? '1' : '0') + '"';
+  }
+
+  if (def.type === 'checkbox') {
+    var checked = rawValue === undefined ? !!def.default : !!rawValue;
+    return '<div class="field' + fullClass + '" id="wrap-' + id + '"' + showAttr + (def.showIf ? ' hidden' : '') + '>' +
+      '<label class="checkbox-field" for="' + id + '">' +
+        '<input type="checkbox" id="' + id + '" data-key="' + def.key + '"' + (checked ? ' checked' : '') + '>' +
+        '<span><span class="cb-text">' + def.label + reqMark + '</span>' +
+        (def.help ? '<span class="cb-help">' + def.help + '</span>' : '') + '</span>' +
+      '</label></div>';
+  }
+
+  var v = (rawValue !== undefined && rawValue !== null && rawValue !== '') ? rawValue : (def.default !== undefined ? def.default : '');
+  var inputHTML;
+  if (def.type === 'select') {
+    inputHTML = '<select id="' + id + '" data-key="' + def.key + '">' +
+      (def.placeholder ? '<option value="">' + def.placeholder + '</option>' : '') +
+      def.options.map(function (o) {
+        return '<option value="' + o.value + '"' + (String(v) === String(o.value) ? ' selected' : '') + '>' + o.label + '</option>';
+      }).join('') +
+      '</select>';
+  } else {
+    var attrs = ' type="' + def.type + '" id="' + id + '" data-key="' + def.key + '"';
+    if (def.required) attrs += ' required aria-required="true"';
+    if (def.maxlength) attrs += ' maxlength="' + def.maxlength + '"';
+    if (def.min !== undefined) attrs += ' min="' + def.min + '"';
+    if (def.max !== undefined) attrs += ' max="' + def.max + '"';
+    if (def.step !== undefined) attrs += ' step="' + def.step + '"';
+    if (def.placeholder) attrs += ' placeholder="' + def.placeholder + '"';
+    attrs += ' value="' + escapeHtml(v) + '" autocomplete="off"';
+    inputHTML = '<input' + attrs + '>';
+  }
+
+  return '<div class="field' + fullClass + '" id="wrap-' + id + '"' + showAttr + (def.showIf ? ' hidden' : '') + '>' +
+    '<label for="' + id + '">' + def.label + reqMark + '</label>' +
+    inputHTML +
+    '<span class="help" id="' + id + '-help">' + (def.help || '') + '</span>' +
+    '</div>';
+}
+
+function buildFieldsGrid(prefix, defs, dataObj) {
+  return defs.map(function (def) { return renderFieldHTML(prefix, def, dataObj ? dataObj[def.key] : undefined); }).join('');
+}
+
+function applyConditionalVisibility(prefix, defs) {
+  defs.forEach(function (def) {
+    if (!def.showIf) return;
+    var wrap = document.getElementById('wrap-' + fieldElId(prefix, def.key));
+    var ctrl = document.getElementById(fieldElId(prefix, def.showIf.key));
+    if (!wrap || !ctrl) return;
+    var visible;
+    if (def.showIf.notEmpty) visible = !!(ctrl.value && ctrl.value.trim());
+    else visible = String(ctrl.type === 'checkbox' ? ctrl.checked : ctrl.value) === String(def.showIf.equals);
+    wrap.hidden = !visible;
+  });
+}
+
+function checkOdometerWarning(prefix, defs, sectionKey) {
+  var hasYear = defs.some(function (d) { return d.key === 'year'; });
+  var hasOdo = defs.some(function (d) { return d.key === 'odo'; });
+  var hasFederal = defs.some(function (d) { return d.key === 'odoActual'; });
+  if (!hasYear || !hasOdo || !hasFederal) return;
+  var odoHelp = document.getElementById(fieldElId(prefix, 'odo') + '-help');
+  if (!odoHelp) return;
+  var yearVal = parseInt(state.data[sectionKey].year, 10);
+  var odoVal = state.data[sectionKey].odo;
+  var currentYear = new Date().getFullYear();
+  var odoDef = defs.filter(function (d) { return d.key === 'odo'; })[0];
+  if (yearVal && (currentYear - yearVal) < 10 && !odoVal) {
+    odoHelp.classList.add('error');
+    odoHelp.textContent = 'Required: federal law mandates an odometer disclosure for vehicles under 10 years old';
+  } else {
+    odoHelp.classList.remove('error');
+    odoHelp.textContent = (odoDef && odoDef.help) || '';
+  }
+}
+
+function validateDynamicField(el, def) {
+  if (def.type === 'checkbox') return;
+  var helpEl = document.getElementById(el.id + '-help');
+  var val = el.value.trim();
+  var msg = '';
+  if (def.required && !val) {
+    msg = def.label + ' is required';
+  } else if (def.key === 'vin' && val && state.type !== 'trailer' && val.length !== 17) {
+    msg = 'VIN is usually 17 characters';
+  } else if (def.key === 'vin' && val && /[ioq]/i.test(val)) {
+    msg = 'VIN should not contain I, O, or Q';
+  } else if (def.key === 'hin' && val && val.length !== 12) {
+    msg = 'HIN should be 12 characters';
+  }
+  /* #9 — always keep aria-describedby pointing to the help element */
+  el.setAttribute('aria-describedby', el.id + '-help');
+  if (msg) {
+    el.setAttribute('aria-invalid', 'true');
+    if (helpEl) { helpEl.classList.add('error'); helpEl.textContent = msg; }
+  } else {
+    el.removeAttribute('aria-invalid');
+    if (helpEl) { helpEl.classList.remove('error'); helpEl.textContent = def.help || ''; }
+  }
+}
+
+function bindDynamicFields(prefix, defs, sectionKey) {
+  defs.forEach(function (def) {
+    var el = document.getElementById(fieldElId(prefix, def.key));
+    if (!el) return;
+    var evt = (def.type === 'checkbox' || def.type === 'select') ? 'change' : 'input';
+    el.addEventListener(evt, function () {
+      if (!state.data[sectionKey]) state.data[sectionKey] = {};
+      state.data[sectionKey][def.key] = (def.type === 'checkbox') ? el.checked : el.value;
+      validateDynamicField(el, def);
+      applyConditionalVisibility(prefix, defs);
+      checkOdometerWarning(prefix, defs, sectionKey);
+      schedulePreviewRender();
+      scheduleAutoSave();
+    });
+  });
+}
+
+/* ==== generateForm(type) ====
+   Rebuilds #section-vehicle .form-grid for the selected vehicle type. */
+function generateForm(type) {
+  var grid = document.querySelector('#section-vehicle .form-grid');
+  var hint = document.getElementById('vehicle-hint');
+  var defs = VEHICLE_FIELD_DEFS[type] || [];
+  if (grid) grid.innerHTML = buildFieldsGrid('vehicle', defs, state.data.vehicle);
+  if (hint) hint.textContent = VEHICLE_HINTS[type] || ('Showing fields for ' + (VEHICLE_TYPE_LABELS[type] || type).toLowerCase() + '.');
+  bindDynamicFields('vehicle', defs, 'vehicle');
+  applyConditionalVisibility('vehicle', defs);
+  checkOdometerWarning('vehicle', defs, 'vehicle');
+  defs.forEach(function (def) {
+    var el = document.getElementById(fieldElId('vehicle', def.key));
+    if (el) validateDynamicField(el, def);
+  });
+}
+
+/* ==== renderStateDisclosures() ====
+   Renders state-specific checkboxes/notices into #state-disclosures-form. */
+function renderStateDisclosures() {
+  var container = document.getElementById('state-disclosures-form');
+  var hint = document.getElementById('state-hint');
+  if (!container) return;
+  var data = STATE_DISCLOSURES[state.selectedState];
+  var list = (data && data.disclosures) || [];
+  var stateName = (data && data.name) || state.selectedState;
+
+  if (hint) {
+    hint.textContent = list.length > 0
+      ? 'Showing state-specific disclosures for ' + stateName + '. These appear in the live preview automatically.'
+      : 'No state-specific disclosures are pre-filled for ' + stateName + '. Buyers and sellers should verify requirements with their state DMV.';
+  }
+
+  if (list.length === 0) {
+    container.innerHTML = '<p class="muted" style="font-size:var(--fs-xs);margin:0;">No state-specific disclosures are pre-filled for ' + stateName + '. Verify requirements with the ' + stateName + ' DMV before signing.</p>';
+  } else {
+    container.innerHTML = list.map(function (d) {
+      if (d.type === 'checkbox') {
+        var checked = !!(state.data.disclosures && state.data.disclosures[d.id]);
+        return '<div class="field full"><label class="checkbox-field" for="disc-' + d.id + '">' +
+          '<input type="checkbox" id="disc-' + d.id + '" data-disc-id="' + d.id + '"' + (checked ? ' checked' : '') + '>' +
+          '<span><span class="cb-text">' + d.title + '</span><span class="cb-help">' + d.text + '</span></span>' +
+          '</label></div>';
+      }
+      return '<div class="field full"><div class="form-hint" style="margin-bottom:0;"><strong>' + d.title + '.</strong> ' + d.text + '</div></div>';
+    }).join('');
+  }
+
+  if (data && data.notarization_required) {
+    container.innerHTML += '<p class="help" style="color:var(--accent);margin:var(--sp-2) 0 0;">Notarization is required in ' + stateName + ' — the notary block below has been enabled.</p>';
+    /* #10 — only auto-enable if user has not explicitly set a preference */
+    if (state.data.options.notarize === false) {
+      var notarizeEl = document.getElementById('notarize-toggle');
+      if (notarizeEl) { notarizeEl.checked = true; state.data.options.notarize = true; }
+    }
+  }
+
+  container.querySelectorAll('[data-disc-id]').forEach(function (el) {
+    el.addEventListener('change', function () {
+      if (!state.data.disclosures) state.data.disclosures = {};
+      state.data.disclosures[el.dataset.discId] = el.checked;
+      schedulePreviewRender();
+      scheduleAutoSave();
+    });
+  });
+}
+
+/* ==== PREVIEW HELPERS ==== */
+function escapeHtml(str) {
+  if (str === undefined || str === null) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+var PAYMENT_LABELS = { cash: 'Cash', check: 'Check', 'money-order': 'Money order', wire: 'Wire transfer', paypal: 'PayPal', venmo: 'Venmo', zelle: 'Zelle', other: 'Other' };
+function paymentLabel(v) { return v ? (PAYMENT_LABELS[v] || v) : null; }
+function formatPrice(val) {
+  var n = parseFloat(val);
+  if (isNaN(n)) return null;
+  return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function formatDateLong(iso) {
+  if (!iso) return null;
+  var parts = String(iso).split('-');
+  if (parts.length !== 3) return escapeHtml(iso);
+  var d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+  if (isNaN(d.getTime())) return escapeHtml(iso);
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+function docField(label, value, mono) {
+  var hasValue = value !== undefined && value !== null && value !== '';
+  var v = hasValue
+    ? ('<span class="doc-field-value"' + (mono ? ' style="font-family:var(--mono);"' : '') + '>' + escapeHtml(value) + '</span>')
+    : '<span class="doc-placeholder">[' + escapeHtml(label.replace(/:$/, '')) + ']</span>';
+  return '<div class="doc-field"><span class="doc-field-label">' + escapeHtml(label) + '</span>' + v + '</div>';
+}
+function partyBlock(label, p) {
+  p = p || {};
+  var phoneEmail = [p.phone, p.email].filter(Boolean).join('  ·  ');
+  return '<div>' +
+    '<div class="doc-party-label">' + escapeHtml(label) + '</div>' +
+    '<div>' + (p.name ? escapeHtml(p.name) : '<span class="doc-placeholder">[' + escapeHtml(label) + ' name]</span>') + '</div>' +
+    '<div>' + (p.address ? escapeHtml(p.address) : '<span class="doc-placeholder">[Address]</span>') + '</div>' +
+    '<div>' + (p.city ? escapeHtml(p.city) : '<span class="doc-placeholder">[City]</span>') + ', ' + escapeHtml(state.selectedState) + ' ' + (p.zip ? escapeHtml(p.zip) : '<span class="doc-placeholder">[ZIP]</span>') + '</div>' +
+    (phoneEmail ? '<div>' + escapeHtml(phoneEmail) + '</div>' : '<div class="doc-placeholder">[Phone] [Email]</div>') +
+  '</div>';
+}
+function buildVehicleInfoRows() {
+  var defs = VEHICLE_FIELD_DEFS[state.type] || [];
+  var v = state.data.vehicle || {};
+  var rows = '';
+  defs.forEach(function (def) {
+    if (def.type === 'checkbox') return; // federal disclosure handled in certification clause
+    if (def.showIf) {
+      var ctrlVal = v[def.showIf.key];
+      var show = def.showIf.notEmpty ? !!(ctrlVal && String(ctrlVal).trim()) : String(!!ctrlVal) === String(def.showIf.equals);
+      if (!show) return;
+    }
+    var raw = v[def.key];
+    var display = raw;
+    if (def.type === 'select' && raw) {
+      var opt = (def.options || []).filter(function (o) { return String(o.value) === String(raw); })[0];
+      display = opt ? opt.label : raw;
+    }
+    var mono = (def.key === 'vin' || def.key === 'hin' || def.key === 'title' || def.key === 'serial' || def.key === 'engineNumber' || def.key === 'boatTrailerVin');
+    rows += docField(def.label + ':', display, mono);
+  });
+  return rows;
+}
+function buildDisclosureClauses() {
+  var data = STATE_DISCLOSURES[state.selectedState];
+  var name = (data && data.name) || state.selectedState;
+  var list = (data && data.disclosures) || [];
+  if (list.length === 0) {
+    return '<div class="doc-clause">No state-specific disclosures are pre-filled for ' + escapeHtml(name) + '. Buyer and Seller should verify requirements with their state DMV.</div>';
+  }
+  return list.map(function (d) {
+    var box = d.type === 'checkbox' ? (((state.data.disclosures && state.data.disclosures[d.id]) ? '\u2611' : '\u2610') + ' ') : '';
+    return '<div class="doc-clause">' + box + '<strong>' + escapeHtml(d.title) + '.</strong> ' + escapeHtml(d.text) + '</div>';
+  }).join('');
+}
+
+/* ==== renderPreview() ====
+   Renders the full bill-of-sale document into #preview-doc from state.data. */
+function renderPreview() {
+  var doc = document.getElementById('preview-doc');
+  if (!doc) return;
+  var stateInfo = STATE_DISCLOSURES[state.selectedState];
+  var stateName = (stateInfo && stateInfo.name) || state.selectedState;
+  var typeLabel = VEHICLE_TYPE_DOC_LABELS[state.type] || state.type;
+
+  var saleHTML = docField('Date of Sale:', formatDateLong(state.data.sale.date));
+  if (state.data.sale.gift) {
+    saleHTML += '<div class="doc-field"><span class="doc-field-label">Sale Price:</span><span class="doc-field-value">$0.00 — Gift</span></div>';
+  } else {
+    saleHTML += docField('Sale Price:', formatPrice(state.data.sale.price));
+  }
+  saleHTML += docField('Payment Method:', paymentLabel(state.data.sale.payment));
+  if (state.data.sale.tradeinInvolved) {
+    var tDesc = [state.data.sale.tradeinDesc, state.data.sale.tradeinVin ? ('VIN/HIN ' + state.data.sale.tradeinVin) : null].filter(Boolean).join(' — ');
+    var tVal = formatPrice(state.data.sale.tradeinValue);
+    saleHTML += '<div class="doc-field"><span class="doc-field-label">Trade-in:</span><span class="doc-field-value">' +
+      escapeHtml(tDesc || 'Vehicle traded in') + (tVal ? ' (valued at ' + tVal + ')' : '') + '</span></div>';
+  }
+
+  var sellerName = state.data.seller.name ? escapeHtml(state.data.seller.name) : 'the Seller';
+  var certHTML = '<div class="doc-clause">I, ' + sellerName + ', certify that the odometer reading shown above is the actual mileage of the property, unless marked otherwise. The property is sold <strong>"AS IS"</strong> with no warranties, express or implied. The Buyer has inspected the property and accepts it in its current condition.</div>';
+
+  var sigHTML = '<div class="doc-sig-block"><div><div class="doc-sig-line"></div><div class="doc-sig-caption">Seller Signature</div></div><div><div class="doc-sig-line"></div><div class="doc-sig-caption">Date</div></div></div>' +
+    '<div class="doc-sig-block"><div><div class="doc-sig-line"></div><div class="doc-sig-caption">Buyer Signature</div></div><div><div class="doc-sig-line"></div><div class="doc-sig-caption">Date</div></div></div>';
+  if (state.data.options.witness) {
+    sigHTML += '<div class="doc-sig-block"><div><div class="doc-sig-line"></div><div class="doc-sig-caption">Witness Signature</div></div><div><div class="doc-sig-line"></div><div class="doc-sig-caption">Date</div></div></div>';
+  }
+
+  var notaryHTML = state.data.options.notarize ?
+    '<div class="doc-notary-block">' +
+      '<div class="doc-notary-title">Notary acknowledgment</div>' +
+      '<div>State of ' + escapeHtml(stateName) + ', County of _______________</div>' +
+      '<div style="margin-top:8px;">Subscribed and sworn before me this _____ day of _______________, 20____</div>' +
+      '<div style="margin-top:16px;"><div class="doc-sig-line"></div><div class="doc-sig-caption">Notary Public Signature · Commission Expires: ___________</div></div>' +
+      '<div class="doc-seal-placeholder">NOTARY<br>SEAL</div>' +
+    '</div>' : '';
+
+  doc.innerHTML =
+    '<div class="doc-title">' + escapeHtml(typeLabel) + ' Bill of Sale</div>' +
+    '<div class="doc-subtitle">State of ' + escapeHtml(stateName) + '</div>' +
+    '<div class="doc-parties">' + partyBlock('Seller', state.data.seller) + partyBlock('Buyer', state.data.buyer) + '</div>' +
+    '<div class="doc-section-title">' + escapeHtml(typeLabel) + ' information</div>' +
+    buildVehicleInfoRows() +
+    '<div class="doc-section-title">Sale details</div>' +
+    saleHTML +
+    '<div class="doc-hr-accent"></div>' +
+    '<div class="doc-section-title">State disclosures — ' + escapeHtml(stateName) + '</div>' +
+    buildDisclosureClauses() +
+    '<div class="doc-section-title">Certification</div>' +
+    certHTML +
+    '<div class="doc-section-title">Signatures</div>' +
+    sigHTML +
+    notaryHTML;
+  /* Announce to screen readers that preview has updated (#8) */
+  var ps = document.getElementById('preview-status');
+  if (ps) { ps.textContent = ''; requestAnimationFrame(function () { ps.textContent = 'Preview updated'; }); }
+}
+
+/* ============================================================
+   WIRING
+   ============================================================ */
+
+/* Sidebar nav vehicle-type clicks */
+document.querySelectorAll('.nav-item[data-type]').forEach(function (item) {
+  item.addEventListener('click', function () { setVehicleType(item.dataset.type); });
+  item.addEventListener('keydown', function (e) {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); item.click(); }
+  });
+});
+
+/* Horizontal vehicle-tabs — full ARIA tab pattern (#4 roving tabindex + arrow keys) */
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.vehicle-tab'));
+  function activateTab(tab) { tab.click(); }
+  function focusTab(tab) {
+    tabs.forEach(function (t) { t.setAttribute('tabindex', '-1'); });
+    tab.setAttribute('tabindex', '0');
+    tab.focus();
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { setVehicleType(t.dataset.type); });
+    t.addEventListener('keydown', function (e) {
+      var cur = tabs.indexOf(document.activeElement);
+      if (e.key === 'ArrowRight') { e.preventDefault(); focusTab(tabs[(cur + 1) % tabs.length]); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); focusTab(tabs[(cur - 1 + tabs.length) % tabs.length]); }
+      else if (e.key === 'Home') { e.preventDefault(); focusTab(tabs[0]); }
+      else if (e.key === 'End') { e.preventDefault(); focusTab(tabs[tabs.length - 1]); }
+      else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); activateTab(t); }
+    });
+  });
+  /* Keep tabindex=0 on the active tab in sync with setVehicleType */
+  var _origSetVehicleType = setVehicleType;
+  setVehicleType = function (type) {
+    _origSetVehicleType(type);
+    tabs.forEach(function (t) { t.setAttribute('tabindex', t.dataset.type === type ? '0' : '-1'); });
+  };
+}());
+
+/* Sidebar system actions */
+document.getElementById('nav-help').addEventListener('click', function () { openModal('modal-help'); });
+document.getElementById('nav-help').addEventListener('keydown', function (e) {
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); openModal('modal-help'); }
+});
+document.getElementById('nav-drafts').addEventListener('click', function () { renderDrafts(); openModal('modal-drafts'); });
+document.getElementById('nav-drafts').addEventListener('keydown', function (e) {
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); renderDrafts(); openModal('modal-drafts'); }
+});
+document.getElementById('nav-reset').addEventListener('click', function () {
+  confirmAction('Reset the entire form? Your current draft will be cleared from autosave.', function () {
+    state.data = { vehicle: { odoActual: true }, seller: {}, buyer: {}, sale: {}, disclosures: {}, options: { notarize: false, witness: false } };
+    try { localStorage.removeItem(STORAGE_KEYS.current); } catch (e) {}
+    document.querySelectorAll('.field input, .field select, .field textarea').forEach(function (el) {
+      if (el.type === 'checkbox') el.checked = false;
+      else el.value = '';
+    });
+    generateForm(state.type);
+    syncSaleConditionals();
+    renderPreview();
+    document.getElementById('save-status').textContent = 'form reset';
+    toast('form reset', 'info');
+  });
+});
+
+/* Save Draft button */
+document.getElementById('btn-save').addEventListener('click', function () {
+  var drafts = loadDrafts();
+  var snapshot = {
+    id: Date.now().toString(36),
+    savedAt: Date.now(),
+    type: state.type,
+    selectedState: state.selectedState,
+    data: JSON.parse(JSON.stringify(state.data))
+  };
+  drafts.unshift(snapshot);
+  while (drafts.length > MAX_DRAFTS) drafts.pop();
+  saveDrafts(drafts);
+  updateDraftsBadge();
+  var status = document.getElementById('save-status');
+  if (status) status.textContent = 'draft saved · ' + new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  toast('draft saved', 'success');
+});
+
+/* Drafts list interactions (event delegation) */
+function loadDraftByIndex(idx) {
+  var drafts = loadDrafts();
+  var draft = drafts[idx];
+  if (!draft) return;
+  state.type = draft.type;
+  state.selectedState = draft.selectedState;
+  state.data = { vehicle: { odoActual: true }, seller: {}, buyer: {}, sale: {}, disclosures: {}, options: { notarize: false, witness: false } };
+  Object.keys(draft.data).forEach(function (k) { state.data[k] = Object.assign(state.data[k] || {}, draft.data[k]); });
+  document.getElementById('state-select').value = state.selectedState;
+  var bcState = document.getElementById('bc-state');
+  if (bcState) bcState.textContent = (STATE_DISCLOSURES[state.selectedState]?.name || state.selectedState).toUpperCase();
+  applyStateToInputs();
+  setVehicleType(state.type);
+  closeAllModals();
+  toast('draft loaded', 'success');
+}
+document.getElementById('drafts-list').addEventListener('click', function (e) {
+  var loadIdx = e.target.dataset.loadDraft;
+  var deleteIdx = e.target.dataset.deleteDraft;
+  if (loadIdx !== undefined) loadDraftByIndex(parseInt(loadIdx, 10));
+  if (deleteIdx !== undefined) {
+    confirmAction('Delete this draft? This cannot be undone.', function () {
+      var drafts = loadDrafts();
+      drafts.splice(parseInt(deleteIdx, 10), 1);
+      saveDrafts(drafts);
+      renderDrafts();
+      updateDraftsBadge();
+      toast('draft deleted', 'info');
+    });
+  }
+});
+
+/* Search palette wiring */
+document.getElementById('search-trigger').addEventListener('click', openSearchPalette);
+document.getElementById('search-trigger').addEventListener('keydown', function (e) {
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); openSearchPalette(); }
+});
+document.getElementById('search-input').addEventListener('input', doSearch);
+document.getElementById('search-input').addEventListener('keydown', function (e) {
+  var items = document.querySelectorAll('#search-results .search-palette-item[data-idx]');
+  if (e.key === 'Escape') { closeAllModals(); return; }
+  if (!items.length) return;
+  if (e.key === 'ArrowDown') { e.preventDefault(); searchSelectedIdx = Math.min(searchSelectedIdx + 1, items.length - 1); updateSearchSelection(items); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); searchSelectedIdx = Math.max(searchSelectedIdx - 1, 0); updateSearchSelection(items); }
+  else if (e.key === 'Enter') { if (searchSelectedIdx >= 0 && items[searchSelectedIdx]) items[searchSelectedIdx].click(); }
+});
+
+document.getElementById('btn-help').addEventListener('click', function () { openModal('modal-help'); });
+document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
+document.getElementById('modal-backdrop').addEventListener('click', closeAllModals);
+
+document.querySelectorAll('.modal').forEach(function (modal) {
+  modal.addEventListener('click', function (e) {
+    if (e.target.closest('[data-action="close-modal"]')) closeAllModals();
+  });
+});
+
+/* === KEYBOARD SHORTCUTS === */
+document.addEventListener('keydown', function (e) {
+  var inInput = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT';
+  if (e.key === 'Escape') closeAllModals();
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearchPalette(); }
+  if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'l') { e.preventDefault(); toggleTheme(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); document.getElementById('btn-save').click(); }
+  if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'Delete') { e.preventDefault(); document.getElementById('nav-reset').click(); }
+  if (inInput) return;
+  if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'e') { e.preventDefault(); exportCSV(); }
+  if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'p') { e.preventDefault(); toast('opening print dialog…', 'info'); window.print(); }
+  if (!e.metaKey && !e.ctrlKey && e.key === '?') { e.preventDefault(); openModal('modal-help'); }
+});
+
+/* Set print date */
+(function () {
+  var pd = document.getElementById('print-date');
+  if (pd) pd.textContent = new Date().toISOString().slice(0, 10);
+})();
+
+/* === INIT === */
+(function init() {
+  // Load state from localStorage
+  loadCurrent();
+  try {
+    var savedType = localStorage.getItem(STORAGE_KEYS.activeType);
+    if (savedType && VEHICLE_TYPES.includes(savedType)) state.type = savedType;
+    var savedStateCode = localStorage.getItem(STORAGE_KEYS.state);
+    if (savedStateCode) state.selectedState = savedStateCode;
+  } catch (e) {}
+
+  // Default sale date to today
+  if (!state.data.sale.date) {
+    var today = new Date().toISOString().slice(0, 10);
+    state.data.sale.date = today;
+  }
+
+  // Wire all interactions
+  bindStateSelector();
+  bindSectionToggles();
+  bindFormInputs();
+  bindSaleConditionals();
+
+  // Apply initial state
+  document.getElementById('state-select').value = state.selectedState;
+  var bcState = document.getElementById('bc-state');
+  if (bcState) bcState.textContent = (STATE_DISCLOSURES[state.selectedState]?.name || state.selectedState).toUpperCase();
+  applyStateToInputs();
+  setVehicleType(state.type);
+  updateDraftsBadge();
+})();
+</script>
+</body>
+</html>

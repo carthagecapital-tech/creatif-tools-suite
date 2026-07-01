@@ -1,0 +1,101 @@
+================================================================================
+  BillOfSale Pro - Quick Guide
+  1-page reference
+================================================================================
+
+WHAT IS THIS
+------------
+  A printable, state-aware vehicle bill of sale generator. One file,
+  runs in any browser, no installation. Works offline.
+
+--------------------------------------------------------------------------------
+THE 4 STEPS
+--------------------------------------------------------------------------------
+
+  1. PICK VEHICLE TYPE
+     Sidebar on the left or the tab strip across the top.
+     7 types: car, motorcycle, trailer, boat, RV, horse, equipment.
+
+  2. PICK STATE
+     Dropdown in the top right. 50 US states + DC.
+     The form auto-loads state-specific disclosures (CA, NY, FL, TX, IL,
+     OH, PA, WA, GA, NC, AZ, MI have full disclosure data; other states
+     show a verification notice).
+
+  3. FILL THE FORM
+     Six sections, marked with section numbers:
+       01 Vehicle    (type-specific fields)
+       02 Seller     (name, address, phone, email)
+       03 Buyer      (same fields)
+       04 Sale       (date, price, payment method)
+       05 State      (auto-loaded, edit if needed)
+       06 Signatures (notarize + witness toggles)
+     Required fields are marked with a red asterisk (*).
+     The bill of sale on the right updates live as you type.
+
+  4. PRINT OR SAVE AS PDF
+     Click "Print / PDF" in the top bar OR press Ctrl/Cmd + P.
+     In the print dialog, choose "Save as PDF" as the destination.
+     Only the clean document prints - no app interface.
+
+--------------------------------------------------------------------------------
+KEYBOARD SHORTCUTS
+--------------------------------------------------------------------------------
+
+  Ctrl/Cmd + K    Open search (jump to vehicle type, state, or draft)
+  Ctrl/Cmd + S    Save current form as a draft (keeps last 5)
+  Ctrl/Cmd + P    Print or save as PDF
+  Ctrl/Cmd + E    Export current form as CSV (one row per sale)
+  Ctrl/Cmd + R    Reset form (asks first)
+  Ctrl/Cmd + L    Toggle light/dark theme
+  ?               Open this help dialog
+  Esc             Close any open dialog
+
+--------------------------------------------------------------------------------
+COMMON WORKFLOWS
+--------------------------------------------------------------------------------
+
+  STANDARD PRIVATE SALE
+    Pick vehicle type > pick state > fill seller/buyer/sale > print PDF >
+    sign with pen.
+
+  GIFT TRANSFER (FAMILY)
+    Same as above but check the "Gift transfer" box under Sale details.
+    The price renders as "$0.00 - Gift" in the printed document.
+
+  TRADE-IN AT A DEALER
+    Pick vehicle type > check "Trade-in involved" under Sale details >
+    fill in the trade-in vehicle's VIN, description, and trade value.
+
+  NOTARIZED SALE (FL, PA, NC REQUIRE THIS)
+    Pick one of those states - the notary block auto-appears in the
+    preview and prints in the document. Bring the printed bill of sale
+    to a notary public to complete.
+
+  HIGH-VALUE TRANSACTION
+    Toggle "Include witness signature line" under Signatures. Have a
+    neutral third party sign as witness.
+
+--------------------------------------------------------------------------------
+YOUR DATA STAYS ON YOUR DEVICE
+--------------------------------------------------------------------------------
+
+  All form data, drafts, and theme preference are stored in your browser's
+  localStorage. Nothing is uploaded. Nothing is sent to any server.
+  Clearing your browser data will erase saved drafts.
+
+--------------------------------------------------------------------------------
+WHAT'S NOT IN THIS APP
+--------------------------------------------------------------------------------
+
+  - It does NOT submit your bill of sale to your state DMV. You'll need
+    your state's title transfer form for that (links provided in the
+    app under the state-specific disclosures).
+  - It does NOT generate a smog certificate or emissions test result.
+  - It does NOT replace legal advice for unusual transactions (lien
+    sales, estate sales with multiple heirs, etc.).
+
+================================================================================
+  For full details on every feature, read User_guide.txt.
+  For common questions, read FAQ.txt.
+================================================================================
